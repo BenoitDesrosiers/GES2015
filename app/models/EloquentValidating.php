@@ -8,6 +8,8 @@
  * objet est bonne. 
  * Si il y'a des erreurs, les messages seront conservés dans la $validationMessages. 
  * 
+ * Cette technique est similaire à celle-ci: https://github.com/JeffreyWay/Laravel-Model-Validation
+ * 
  * @author benou
  * @version 0.1
  */
@@ -18,6 +20,9 @@ private $valMessages;
 /**
  * Attache les "model event" creating et updating. 
  * La fonction isValid sera appelée sur cette objet chaque fois que save() sera appelé.  
+ * 
+ * voir http://laravel.com/docs/4.2/eloquent#model-events
+ * 
  * @return boolean
  */
 public static function boot()
