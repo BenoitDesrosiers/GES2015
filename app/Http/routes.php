@@ -12,7 +12,7 @@ use App\Http\Controllers\Auth\AuthController;
 | and give it the Closure to execute when that URI is requested.
 |
 */
-getRoute::get('/','HomeController@index');
+Route::get('/','HomeController@index');
 
 Route::group(['middleware'=>'auth'], function() {
 	
