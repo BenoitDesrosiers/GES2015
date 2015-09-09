@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\User;
+
 class DatabaseSeeder extends Seeder {
 
 	/**
@@ -39,12 +41,11 @@ class UserTableSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('users')->delete();
-		DB::table('password_reminders')->delete();
+		DB::table('password_resets')->delete();
 		$user = new User();
-		$user->username = 'usager';
+		$user->name = 'usager';
 		$user->email = 'usager@chose.com';
-		$user->password = 'usager';
-		$user->password_confirmation = 'usager';
+		$user->password = Hash::make('usager');
 		$user->save();
 	}
 }
