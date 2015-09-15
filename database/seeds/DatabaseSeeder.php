@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder {
 	 * lors de l'ajout d'un nouveau seeder, il faut exécuter "composer dump-autoload"
 	 * sinon, vous risquez d'avoir l'erreur "Cannot redeclare class DatabaseSeeder".
 	 */
-	public function run()
+	public function run() 
 	{
         Model::unguard();
 		
