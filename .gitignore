@@ -1,4 +1,6 @@
 /vendor
 /node_modules
 Homestead.yaml
-#.env   <<<<< a remettre plus tard, je l'ai enlevé juste pour que ca soit moins compliqué pour le étudiants. 
+#.env 
+composer.lock
+
