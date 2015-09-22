@@ -17,10 +17,11 @@ Route::get('/','HomeController@index');
 Route::group(['middleware'=>'auth'], function() {
 	
 	Route::resource('sports','SportsController');
-	Route::resource('sports.epreuves','SportsEpreuvesController');
+	Route::resource('sports.epreuves','SportsEpreuvesontroller');
 	Route::resource('epreuves','EpreuvesController');
 	Route::resource('participants','ParticipantsController');
 	Route::resource('resultats','ResultatsController');
+	Route::resource('terrains','TerrainsController');
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
