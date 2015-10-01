@@ -48,7 +48,9 @@ public function validationRules() {
 		'nom' => 'required',
 		'prenom' => 'required',
 		'numero' => 'required',
-		'region_id' => 'required',
+        'region_id' => 'required',
+        'sexe' => 'required',
+        'naissance' => 'required'
 		];
 }
 
