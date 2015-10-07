@@ -14,8 +14,7 @@ class InfosParticipant extends Migration
     {
         Schema::table('participants',function($table)
         {
-            $table->unsignedInteger('sexe');
-            // Pour gérer les cas de troisième genre, utiliser un int plutot qu'un booleen
+            $table->boolean('sexe');
             $table->date('naissance');
             $table->string('adresse')->nullable();
             $table->string('nom_parent')->nullable();
@@ -30,7 +29,7 @@ class InfosParticipant extends Migration
      */
     public function down()
     {
-        Schema::table('epreuves', function($table)
+        Schema::table('participants', function($table)
         {
             $table->dropColumn('sexe');
             $table->dropColumn('naissance');
