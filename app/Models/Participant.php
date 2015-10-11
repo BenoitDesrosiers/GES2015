@@ -32,6 +32,19 @@ public function epreuves() {
 public function region() {
 	return $this->belongsTo('Region');
 }
+
+
+protected $fillable = [
+        'equipe',
+        'nom',
+        'prenom',
+        'telephone',
+        'nom_parent',
+        'numero',
+        'sexe',
+        'naissance',
+        'adresse'
+];
 	
 /**
  * Validation
@@ -47,7 +60,8 @@ public function validationRules() {
 	return [
 		'nom' => 'required',
 		'prenom' => 'required',
-		'numero' => 'required',
+        'numero' => 'required',
+        'equipe' => 'required',
         'region_id' => 'required',
         'sexe' => 'required',
         'naissance' => 'required'
