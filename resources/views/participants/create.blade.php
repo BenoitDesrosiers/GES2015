@@ -52,9 +52,9 @@
             {{ $errors->first('numero') }}
         </div>
         <div class="form-group">
-            {!! Form::label('sexe', 'Genre:') !!}
+            {!! Form::label('sexe', '*Genre:') !!}
             <br/>
-            {!! Form::radio('sexe', 0) !!}
+            {!! Form::radio('sexe', 0, true) !!}
             {!! Form::label('homme', 'Homme') !!}
             <br/>
             {!! Form::radio('sexe', 1) !!}

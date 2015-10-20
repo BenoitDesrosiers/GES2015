@@ -32,7 +32,7 @@
         @endif
 		<p>Numéro: {{ $participant->numero }}</p>
         <p>Région: {{ $region->nom }}</p>
-		<p>Sports: <ul><?php foreach($participantSports as $sport) { echo "<li>".$sport->nom."</li>"; } ?></ul></p>
+        <p>Sports: <ul><?php foreach($participantSports as $sport) { echo "<li>".$sport->nom."</li>"; } ?></ul></p>
 	</div>
 </div>
 @stop

@@ -6,13 +6,6 @@
 	</div>
 	<div class="panel-body">
 		{!! Form::open(['action'=> array('ParticipantsController@update', $participant->id), 'method' => 'PUT', 'class' => 'form']) !!}
-        @if (session('erreurs'))
-            @foreach(session('erreurs') as $erreur)
-                <div class="alert alert-danger">
-                    {{ $erreur }}
-                </div>
-            @endforeach
-        @endif
         @foreach ($errors as $error)
             <p class="alert alert-danger">{{ $error }}</p>
         @endforeach
