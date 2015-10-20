@@ -48,10 +48,11 @@ class ParticipantsController extends BaseController {
         $regions = Region::all();
         $sports = Sport::all();
         
+        $sexeDefaut = false;
         $anneeDefaut = date('Y')- 20;
         $moisDefaut = 0;
         $jourDefaut = 0;
-        
+
         $listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
         $listeMois = ParticipantsController::generer_liste(1, 12);
         $listeJours = ParticipantsController::generer_liste(1, 31);
@@ -66,100 +67,38 @@ class ParticipantsController extends BaseController {
 	 */
 	public function store()
 	{
-// 		$input = Input::all();
-// 		if(isset($input['equipe'])) {				
-// 			$input['equipe'] = '1';
-// 		} else {
-// 			$input['equipe'] = '0';
-// 		} 
-// 
-// 		$participant = new Participant;
-// 		$participant->nom = $input['nom'];
-// 		$participant->prenom = $input['prenom'];
-// 		$participant->numero = $input['numero'];
-// 		$participant->region_id = $input['region_id'];
-// 		$participant->equipe = $input['equipe'];
-// 		
-// 		if($participant->save()) {
-// 			if (is_array(Input::get('sport'))) {
-// 				$participant->sports()->attach(array_keys(Input::get('sport')));
-// 			}
-// 			return Redirect::action('ParticipantsController@index');
-// 		} else {
-// 			return Redirect::back()->withInput()->withErrors($participant->validationMessages);
-// 		}	
-        $erreurs = array();
         $input = Input::all();
         $participant = new Participant;
+
         if(Input::has('equipe')) {
             $participant->equipe = true;
         } else {
             $participant->equipe = false;
         }
-        if ($input['nom'] != '') {
-            $participant->nom = $input['nom'];
-        } else {
-            $erreurs['nom'] = 'Nom invalide!';
-        }
-        if ($input['prenom'] != '') {
-            $participant->prenom = $input['prenom'];
-        } else {
-            $erreurs['prenom'] = 'Prénom invalide!';
-        }
-        if ($input['telephone'] != '') {
-            $participant->telephone = $input['telephone'];
-        }
-        if ($input['nom_parent'] != '') {
-            $participant->nom_parent = $input['nom_parent'];
-        }
-        if ($input['numero'] != '') {
-            $participant->numero = $input['numero'];
-        } else {
-            $erreurs['numero'] = 'Numéro invalide!';
-        }
-        if ($input['sexe'] != '') {
-            $participant->sexe = $input['sexe'];
-        } else {
-            $erreurs['sexe'] = 'Genre invalide!';
-        }
-        if ($input['adresse'] != '') {
-            $participant->adresse = $input['adresse'];
-        }
-        if ($input['region_id'] != '') {
-            $participant->region_id = $input['region_id'];
-        } else {
-            $erreurs['region_id'] = 'Région invalide!';
-        }
+        $participant->nom = $input['nom'];
+        $participant->prenom = $input['prenom'];
+        $participant->telephone = $input['telephone'];
+        $participant->nom_parent = $input['nom_parent'];
+        $participant->numero = $input['numero'];
+        $participant->sexe = $input['sexe'];
+        $participant->adresse = $input['adresse'];
+        $participant->region_id = $input['region_id'];
 
-        $anneeString = $input['annee_naissance']-1;
-        $moisString = $input['mois_naissance']-1;
-        $jourString = $input['jour_naissance']-1;
+        $dateTest = new DateTime;
+        $dateTest->setDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
+        $participant->naissance=$dateTest;
 
-        if (ParticipantsController::jour_valide($anneeString, $moisString, $jourString)) {
-            $dateTest = new DateTime;
-            $dateTest->setDate($anneeString, $moisString, $jourString);
-            $participant->naissance=$dateTest;
-        } else {
-            $erreurs['naissance'] = 'Date de naissance invalide!';
-        }
-        
-        if(count($erreurs) == 0) {
-            if($participant->save()) {
-                if (is_array(Input::get('sport'))) {
-                    $participant->sports()->sync(array_keys(Input::get('sport')));
-                } else {
-                    $participant->sports()->detach();
-                }
-                return Redirect::action('ParticipantsController@create')->with ( 'status', 'Le partipant a été créé!' );
+        if($participant->save()) {
+            if (is_array(Input::get('sport'))) {
+                $participant->sports()->sync(array_keys(Input::get('sport')));
             } else {
-                return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+                $participant->sports()->detach();
             }
+            return Redirect::action('ParticipantsController@create')->with ( 'status', 'Le partipant a été créé!' );
         } else {
-            return Redirect::action('ParticipantsController@create', $participant->id)->with ( 'erreurs', $erreurs );
+            return Redirect::back()->withInput()->withErrors($participant->validationMessages);
         }
-		
 	}
-
 
 	/**
 	 * Affiche un seul participant.
@@ -180,7 +119,6 @@ class ParticipantsController extends BaseController {
 		return View::make('participants.show', compact('participant', 'region', 'sports', 'participantSports'));
 	}
 
-
 	/**
 	 * Affiche le formulaire pour éditer un participant.
 	 *
@@ -193,7 +131,7 @@ class ParticipantsController extends BaseController {
 		$regions = Region::all();
         $sports = Sport::all();
 		$participantSports = Participant::find($id)->sports;
-        
+
         $anneeDefaut = date('Y')- 20;
         $moisDefaut = 0;
         $jourDefaut = 0;
@@ -203,13 +141,21 @@ class ParticipantsController extends BaseController {
             $moisDefaut = $stringsDate[1]+1;
             $jourDefaut = $stringsDate[2]+1;
         }
-        
+
         $listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
         $listeMois = ParticipantsController::generer_liste(1, 12);
         $listeJours = ParticipantsController::generer_liste(1, 31);
 		return View::make('participants.edit', compact('participant', 'regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
 	}
-    
+
+
+    /**
+     * Construit une liste continue d'entiers sur un intervalle donné
+     *
+     * @param int $debut La valeur de dépar
+     * @param int $n     Le nombre de valeurs à inclure
+     * @return La liste remplie
+     */
     private function generer_liste($debut, $n) {
         $liste = array();
         $fin = $debut+$n-1;
@@ -235,66 +181,29 @@ class ParticipantsController extends BaseController {
         } else {
             $participant->equipe = false;
         }
-        if ($input['nom'] != '') {
-            $participant->nom = $input['nom'];
-        } else {
-            $erreurs['nom'] = 'Nom invalide!';
-        }
-        if ($input['prenom'] != '') {
-            $participant->prenom = $input['prenom'];
-        } else {
-            $erreurs['prenom'] = 'Prénom invalide!';
-        }
-        if ($input['telephone'] != '') {
-            $participant->telephone = $input['telephone'];
-        }
-        if ($input['nom_parent'] != '') {
-            $participant->nom_parent = $input['nom_parent'];
-        }
-        if ($input['numero'] != '') {
-            $participant->numero = $input['numero'];
-        } else {
-            $erreurs['numero'] = 'Numéro invalide!';
-        }
-        if ($input['sexe'] != '') {
-            $participant->sexe = $input['sexe'];
-        } else {
-            $erreurs['sexe'] = 'Genre invalide!';
-        }
-        if ($input['adresse'] != '') {
-            $participant->adresse = $input['adresse'];
-        }
-        if ($input['region_id'] != '') {
-            $participant->region_id = $input['region_id'];
-        } else {
-            $erreurs['region_id'] = 'Région invalide!';
-        }
 
-        $anneeString = $input['annee_naissance']-1;
-        $moisString = $input['mois_naissance']-1;
-        $jourString = $input['jour_naissance']-1;
+        $participant->nom = $input['nom'];
+        $participant->prenom = $input['prenom'];
+        $participant->telephone = $input['telephone'];
+        $participant->nom_parent = $input['nom_parent'];
+        $participant->numero = $input['numero'];
+        $participant->sexe = $input['sexe'];
+        $participant->adresse = $input['adresse'];
+        $participant->region_id = $input['region_id'];
 
-        if (ParticipantsController::jour_valide($anneeString, $moisString, $jourString)) {
-            $dateTest = new DateTime;
-            $dateTest->setDate($anneeString, $moisString, $jourString);
-            $participant->naissance=$dateTest;
-        } else {
-            $erreurs['naissance'] = 'Date de naissance invalide!';
-        }
-        
-        if(count($erreurs) == 0) {
-            if($participant->save()) {
-                if (is_array(Input::get('sport'))) {
-                    $participant->sports()->sync(array_keys(Input::get('sport')));
-                } else {
-                    $participant->sports()->detach();
-                }
-                return Redirect::action('ParticipantsController@edit', $participant->id)->with ( 'status', 'Le partipant ' . $id . ' a été mis a jour!' );
+        $dateTest = new DateTime;
+        $dateTest->setDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
+        $participant->naissance=$dateTest;
+
+        if($participant->save()) {
+            if (is_array(Input::get('sport'))) {
+                $participant->sports()->sync(array_keys(Input::get('sport')));
             } else {
-                return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+                $participant->sports()->detach();
             }
+            return Redirect::action('ParticipantsController@edit', $participant->id)->with ( 'status', 'Le partipant ' . $id . ' a été mis a jour!' );
         } else {
-            return Redirect::action('ParticipantsController@edit', $participant->id)->with ( 'erreurs', $erreurs );
+            return Redirect::back()->withInput()->withErrors($participant->validationMessages);
         }
     }
 
@@ -311,29 +220,6 @@ class ParticipantsController extends BaseController {
 		
 		return Redirect::action('ParticipantsController@index');
 	}
-
-
-    /**
-     * Vérifie que le mois peut inclure le jour
-     * @param  int $annee l'annee a verifier (pour annees bisextiles)
-     * @param  int $mois le numero du mois a verifier
-     * @param  int $jour le numero du jours a valider
-     * @return Response
-     */
-    private function jour_valide($annee, $mois, $jour)
-    {
-        $mois31 = array(1, 3, 5, 7, 8, 10, 12);
-        $mois30 = array(4, 6, 9, 11);
-        if (in_array($mois, $mois31)) {
-            return $jour <= 31;
-        } elseif (in_array($mois, $mois30)) {
-            return $jour <= 30;
-        } elseif ($annee % 4 == 0) {
-            return $jour <= 29;
-        } else {
-            return $jour <= 28;
-        }
-    }
 
 
 }

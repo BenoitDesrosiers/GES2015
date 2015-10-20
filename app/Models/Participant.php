@@ -43,8 +43,10 @@ protected $fillable = [
         'numero',
         'sexe',
         'naissance',
-        'adresse'
-];
+        'adresse',
+        'region_id',
+        'sports'
+    ];
 	
 /**
  * Validation
@@ -58,13 +60,13 @@ public $validationMessages;
 
 public function validationRules() {
 	return [
-		'nom' => 'required',
-		'prenom' => 'required',
-        'numero' => 'required',
-        'equipe' => 'required',
-        'region_id' => 'required',
-        'sexe' => 'required',
-        'naissance' => 'required'
+		'nom' => 'required|string',
+		'prenom' => 'required|string',
+        'numero' => 'required|integer',
+        'equipe' => 'required|boolean',
+        'region_id' => 'required|integer',
+        'sexe' => 'required|boolean',
+        'naissance' => 'required|date'
 		];
 }
 
