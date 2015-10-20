@@ -6,14 +6,17 @@
 	</div>
 	<div class="panel-body">
 		{!! Form::open(['action'=> array('ParticipantsController@update', $participant->id), 'method' => 'PUT', 'class' => 'form']) !!}
+<!--    Affiche les messages d'erreur après un enregistrement raté -->
         @foreach ($errors as $error)
             <p class="alert alert-danger">{{ $error }}</p>
         @endforeach
+<!--    Affiche un message de confirmation après un enregistrement réussi -->
         @if (session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}
             </div>
         @endif
+<!--    Les champs explicitement requis sont précédés d'un astérisque -->
         <div class="form-group">
             {!! Form::label('equipe', 'Équipe:') !!}
             <input type="checkbox" name="equipe" @if ($participant->equipe) checked @endif >
@@ -25,7 +28,7 @@
 			{{ $errors->first('nom') }}
 		</div>
 		<div class="form-group">
-			{!! Form::label('prenom', '*Prenom:') !!} 
+			{!! Form::label('prenom', '*Prénom:') !!} 
 			{!! Form::text('prenom',$participant->prenom, ['class' => 'form-control']) !!}
 			{{ $errors->first('prenom') }}
 		</div>
@@ -44,6 +47,7 @@
             {!! Form::text('numero',$participant->numero, ['class' => 'form-control']) !!}
             {{ $errors->first('numero') }}
         </div>
+<!--    Le sexe est entré via 2 boutons radio -->
         <div class="form-group">
             {!! Form::label('sexe', '*Genre:') !!}
             <br/>
@@ -55,6 +59,7 @@
             <br/>
             {{ $errors->first('sexe') }}
         </div>
+<!--    La date est entrée via 3 comboboxes -->
         <div class="form-group">
             {!! Form::label('naissance', '*Date de naissance:') !!}
             <br/>

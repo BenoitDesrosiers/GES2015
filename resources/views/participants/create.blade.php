@@ -6,16 +6,11 @@
 	</div>
 	<div class="panel-body">
 		{!! Form::open(['action'=> 'ParticipantsController@index', 'class' => 'form']) !!}
-		@if (session('erreurs'))
-            @foreach(session('erreurs') as $erreur)
-                <div class="alert alert-danger">
-                    {{ $erreur }}
-                </div>
-            @endforeach
-        @endif
+<!--    Affiche les messages d'erreur après un enregistrement raté -->
         @foreach ($errors as $error)
             <p class="alert alert-danger">{{ $error }}</p>
         @endforeach
+<!--    Affiche un message de confirmation après un enregistrement réussi -->
         @if (session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}

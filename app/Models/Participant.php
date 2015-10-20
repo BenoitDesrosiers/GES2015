@@ -33,7 +33,9 @@ public function region() {
 	return $this->belongsTo('Region');
 }
 
-
+/**
+ * Identifie les colonnes qui peuvent être modifiées
+ */
 protected $fillable = [
         'equipe',
         'nom',
@@ -44,19 +46,15 @@ protected $fillable = [
         'sexe',
         'naissance',
         'adresse',
-        'region_id',
-        'sports'
+        'region_id'
     ];
-	
-/**
- * Validation
- *
- * un participant doit avoir:
- *  - nom: obligatoire, et unique pour un sport donné, mais je n'ai pas trouvé comment exprimer ca avec les règles de Laravel
- *  - Les autres champs sont falcultatifs.
- */
 
 public $validationMessages;
+
+/** 
+ * Les champs nom, prénom, numéro, équipe, région_id, sexe, naissance sont requis
+ * Les champs téléphone, nom_parent et adresse ne le sont pas
+ */
 
 public function validationRules() {
 	return [
