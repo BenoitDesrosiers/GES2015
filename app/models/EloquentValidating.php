@@ -13,14 +13,14 @@
  * @author benou
  * @version 0.1
  */
-
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Validator;
 
 class EloquentValidating extends Model {
 	
-private $valMessages;
+protected  $valMessages;
 
 /**
  * Attache les "model event" creating et updating. 
@@ -52,7 +52,7 @@ public static function boot()
  * @param array
  */
 public function setValidationMessages($messages) {
-	$valMessages = $messages;
+	$this->valMessages = $messages;
 }
 
 /**
@@ -62,7 +62,7 @@ public function setValidationMessages($messages) {
  * @return array
  */
 public function validationMessages() {
-	return $valMessages;
+	return $this->valMessages;
 }
 
 /**

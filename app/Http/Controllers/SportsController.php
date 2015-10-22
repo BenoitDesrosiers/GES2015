@@ -6,7 +6,7 @@ use View;
 use Redirect;
 use Input;
 
-use Sport;
+use App\Models\Sport;
 
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -68,7 +68,7 @@ class SportsController extends BaseController {
 		if($sport->save()) {
 			return Redirect::action('SportsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($sport->validationMessages);
+			return Redirect::back()->withInput()->withErrors($sport->validationMessages());
 		}	
 		
 	}
@@ -130,7 +130,7 @@ class SportsController extends BaseController {
 		if($sport->save()) {
 			return Redirect::action('SportsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($sport->validationMessages);
+			return Redirect::back()->withInput()->withErrors($sport->validationMessages());
 		}
 	}
 
