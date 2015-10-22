@@ -125,6 +125,11 @@ class ParticipantsController extends BaseController {
 	public function update($id)
 	{
 		$input = Input::all();
+		if(isset($input['equipe'])) {
+			$input['equipe'] = '1';
+		} else {
+			$input['equipe'] = '0';
+		}
 		$participant = Participant::findOrFail($id);
 		$participant->nom = $input['nom'];
 		$participant->prenom = $input['prenom'];
