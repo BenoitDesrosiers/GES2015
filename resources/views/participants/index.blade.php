@@ -13,10 +13,46 @@
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<th>Nom, Prenom</th>
-				<th class="hidden-xs">Numéro</th>
-				<th class="hidden-sm hidden-xs">Région</th>
-				<th class="hidden-sm hidden-xs">Équipe</th>
+				<th>
+					<!-- Création des liens pour trier la colonne Nom -->
+					{!! 
+						link_to_action(
+							$colonnesTriees["colNom"]["contrl"],
+							$colonnesTriees["colNom"]["texteAffiche"],
+							$colonnesTriees["colNom"]["trie"]
+						)
+					!!}
+				</th>
+				<th class="hidden-xs">
+					<!-- Création des liens pour trier la colonne Numéro -->
+					{!! 
+						link_to_action(
+							$colonnesTriees["colNum"]["contrl"],
+							$colonnesTriees["colNum"]["texteAffiche"],
+							$colonnesTriees["colNum"]["trie"]
+						)
+					!!}
+				</th>
+				<th class="hidden-sm hidden-xs">
+					<!-- Création des liens pour trier la colonne Région -->
+					{!! 
+						link_to_action(
+							$colonnesTriees["colRegion"]["contrl"],
+							$colonnesTriees["colRegion"]["texteAffiche"],
+							$colonnesTriees["colRegion"]["trie"]
+						)
+					!!}
+				</th>
+				<th class="hidden-sm hidden-xs">
+					<!-- Création des liens pour trier la colonne Équipe -->
+					{{
+						link_to_action(
+							$colonnesTriees["colEquipe"]["contrl"],
+							$colonnesTriees["colEquipe"]["texteAffiche"],
+							$colonnesTriees["colEquipe"]["trie"]
+						)
+					}}
+				</th>
 				<th></th>
 				<th></th>
 			</tr>
