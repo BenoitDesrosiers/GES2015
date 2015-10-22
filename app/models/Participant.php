@@ -14,13 +14,16 @@
  * @author BinarMorker
  * @version 0.0.1 rev 1
  */
+
+
 class Participant extends EloquentValidating {
 	protected $guarded = array('id');
+	
 
 /** 
  * Eloquent relationship: un participant appartient à un sport
  */
-
+ 
 public function sports() {
 	return $this->belongsToMany('Sport');
 }

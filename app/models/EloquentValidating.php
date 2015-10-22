@@ -13,7 +13,12 @@
  * @author benou
  * @version 0.1
  */
-class EloquentValidating extends Eloquent {
+
+
+use Illuminate\Database\Eloquent\Model;
+
+
+class EloquentValidating extends Model {
 	
 private $valMessages;
 
