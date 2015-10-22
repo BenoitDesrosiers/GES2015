@@ -145,7 +145,7 @@ class ParticipantsController extends BaseController {
 			}
 			return Redirect::action('ParticipantsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+			return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 		}
 	}
 
