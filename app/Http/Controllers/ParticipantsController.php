@@ -71,19 +71,20 @@ class ParticipantsController extends BaseController {
 			$colonneChangee = "colNom";
 		}
 		
+		# Changement de la direction pour la colonne qui a été triée.
+		if ($direction == 'asc'){
+			$prochaineDirection = 'desc';
+		} else {
+			$direction = 'desc';
+			$prochaineDirection = 'asc';
+		}
+		
 		# Si un tri est sélectionné, on lance la requête OrderBy, sinon on retourne
 		# tous les participants.
 		if ($parametreDeTri && $direction) {
 			$participants = Participant::orderBy($parametreDeTri, $direction)->get();
 		} else {
 			$participants = Participant::get();
-		}
-		
-		# Changement de la direction pour la colonne qui a été triée.
-		if ($direction == 'asc'){
-			$prochaineDirection = 'desc';
-		} else {
-			$prochaineDirection = 'asc';
 		}
 		
 		# Changement de la direction dans le liens qui va être créé par la View.

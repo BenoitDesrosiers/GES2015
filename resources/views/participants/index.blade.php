@@ -46,13 +46,13 @@
 				</th>
 				<th class="hidden-sm hidden-xs">
 					<!-- Création des liens pour trier la colonne Équipe -->
-					{{
+					{!!
 						link_to_action(
 							$colonnesTriees["colEquipe"]["contrl"],
 							$colonnesTriees["colEquipe"]["texteAffiche"],
 							$colonnesTriees["colEquipe"]["trie"]
 						)
-					}}
+					!!}
 				</th>
 				<th></th>
 				<th></th>
