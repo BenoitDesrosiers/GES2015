@@ -3,6 +3,9 @@
  * @author BinarMorker
  * @version 0.0.1 rev 1
  */
+
+namespace App\Models;
+
 class Evenement extends EloquentValidating {
 	protected $guarded = array('id');
 

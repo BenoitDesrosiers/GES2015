@@ -14,6 +14,9 @@
  * @author BinarMorker
  * @version 0.0.1 rev 1
  */
+
+namespace App\Models;
+
 class Region extends EloquentValidating {
 	protected $guarded = array('id');
 
@@ -22,7 +25,7 @@ class Region extends EloquentValidating {
  */
 
 public function participants() {
-	return $this->hasMany('Participant');
+	return $this->hasMany('App\Models\Participant');
 }
 	
 /**
