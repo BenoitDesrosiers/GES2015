@@ -6,9 +6,9 @@ use View;
 use Redirect;
 use Input;
 
-use Participant;
-use Region;
-use Sport;
+use App\Models\Participant;
+use App\Models\Region;
+use App\Models\Sport;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
@@ -130,12 +130,12 @@ class ParticipantsController extends BaseController {
 		$participant->equipe = $input['equipe'];
 		
 		if($participant->save()) {
-			if (is_array(Input::get('sport'))) {
+			if (is_array(Input::get('sport'))) { //Sauvegarde les sports associés au participant
 				$participant->sports()->attach(array_keys(Input::get('sport')));
 			}
 			return Redirect::action('ParticipantsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+			return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 		}	
 		
 	}
@@ -186,6 +186,11 @@ class ParticipantsController extends BaseController {
 	public function update($id)
 	{
 		$input = Input::all();
+		if(isset($input['equipe'])) {
+			$input['equipe'] = '1';
+		} else {
+			$input['equipe'] = '0';
+		}
 		$participant = Participant::findOrFail($id);
 		$participant->nom = $input['nom'];
 		$participant->prenom = $input['prenom'];
@@ -201,7 +206,7 @@ class ParticipantsController extends BaseController {
 			}
 			return Redirect::action('ParticipantsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+			return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 		}
 	}
 
