@@ -11,6 +11,7 @@ use Region;
 use Sport;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Collection;
 /**
  * Le controller pour les participants
  * 
@@ -27,8 +28,10 @@ class ParticipantsController extends BaseController {
 	public function index()
 	{
 		$participants = Participant::all();
-		
-		return View::make('participants.index', compact('participants'));
+		$listeFiltres = ['Nom', 'Prénom', 'Numéro', 'Région', 'Équipe'];
+		$valeurFiltre = 0;
+		$valeurTexte = "";
+		return View::make('participants.index', compact('participants', 'listeFiltres', 'valeurFiltre', 'valeurTexte'));
 		
 	}
 
@@ -151,14 +154,52 @@ class ParticipantsController extends BaseController {
 	 * @param  int $id l'id du participant à effacer
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($participantId)
 	{
-		$participant = Participant::findOrFail($id);
+		$participant = Participant::findOrFail($participantIdId);
 		$participant->delete();
 		
 		return Redirect::action('ParticipantsController@index');
 	
 	}
-
-
+	
+	/**
+	 * Recherche une entrée de la bd.
+	 *
+	 * 
+	 */
+	public function recherche()
+	{
+// 		$participants = Participant::all();
+ 		$listeFiltres = ['Nom', 'Prénom', 'Numéro', 'Région', 'Équipe'];
+//		$vue = ParticipantsController::index();
+		
+		$input = Input::all();
+		$valeurFiltre = $input['listeFiltres'];
+		$valeurTexte = $input['texteRecherche'];
+		
+		
+		if ($valeurTexte != '') {
+			if ($valeurFiltre == 0) {
+				$participants = Participant::where('nom', 'like', $valeurTexte . '%')->get();
+			} elseif ($valeurFiltre == 1) {
+				$participants = Participant::where('prenom', 'like', $valeurTexte . '%')->get();			
+			} elseif ($valeurFiltre == 2) {
+				$participants = Participant::where('numero', 'like', $valeurTexte . '%')->get();	
+			} elseif ($valeurFiltre == 3) {
+				$region = Region::where('nom_court', 'like', $valeurTexte . '%')->first();
+				if ($region) {
+					$participants = $region->participants()->get();
+				} else {
+					$participants = new \Illuminate\Database\Eloquent\Collection;
+				}
+			} elseif ($valeurFiltre == 4) {
+				$participants = Participant::where('equipe', 'like', $valeurTexte . '%')->get();	
+			}
+		} else {
+			$participants = Participant::all();
+		}
+		
+		return View::make('participants.index', compact('participants', 'listeFiltres', 'valeurFiltre', 'valeurTexte'));
+	}
 }

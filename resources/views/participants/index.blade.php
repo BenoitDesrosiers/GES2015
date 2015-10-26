@@ -3,8 +3,22 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Liste des participants</h2>
-		<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>						
+		<div class="row">
+			<div class="col-md-7" id="bouton-créer">
+				<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>
+			</div> <!-- bouton créer -->
+			{!! Form::open(['action'=> array('ParticipantsController@recherche'), 'method' => 'POST', 'class' => 'form']) !!}
+			<div class="col-md-2" id="liste-filtres">
+				{!! Form::select('listeFiltres', $listeFiltres, $valeurFiltre, ['style' => 'width:100%;margin-top:2px;']) !!}
+			</div> <!-- liste-filtres -->
+    		<div class="input-append" id="recherche">
+    			{!! Form::text('texteRecherche', $valeurTexte)!!}
+    			{!! Form::button('Recherche', ['type' => 'submit'])!!}
+    		</div><!-- buttonRecherche -->
+    		{!! Form::close() !!}
+		</div>				
 	</div>
+	
 @if ($participants->isEmpty())
 	<div class="panel-body">
 		<p>Aucun participant</p>
@@ -22,7 +36,7 @@
 			</tr>
 		</thead>
 		<tbody>
-@foreach($participants as $participant)
+		@foreach($participants as $participant)
 			<tr>
 				<td><a href="{{ action('ParticipantsController@show', $participant->id) }}">{{ $participant->nom }}, {{ $participant->prenom }}</a></td>
 				<td class="hidden-xs">{{ $participant->numero }}</td>
@@ -34,14 +48,14 @@
 					{!! Form::close() !!}
 				</td>
 			</tr>
-@endforeach
+		@endforeach
 		</tbody>
-	</table>
-	<script>
-		$(function () {
-			$('[data-toggle="tooltip"]').tooltip()
-		})
-	</script>
+		</table>
+		<script>
+			$(function () {
+				$('[data-toggle="tooltip"]').tooltip()
+			})
+		</script>
 @endif
 </div>
 @stop

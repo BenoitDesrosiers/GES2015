@@ -24,6 +24,7 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
+	Route::post('participants/recherche','ParticipantsController@recherche');
 	Route::post('resultatPourEvenementResultats', 'ResultatsController@resultatPourEvenement');
 	
 });
