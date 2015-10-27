@@ -29,8 +29,10 @@
           			<li<?php if ($route == "participants") { ?> class="active"<?php } ?>><a href="{{ action('ParticipantsController@index') }}">Participants</a></li>
           			<li<?php if ($route == "resultats") { ?> class="active"<?php } ?>><a href="{{ action('ResultatsController@index') }}">Résultat</a></li>
 
-                    <!-- MON AJOUT --> <li<?php if ($route == "terrains") { ?> class="active"<?php } ?>><a href="{{ action('TerrainsController@index') }}">Terrains</a></li>
-                    
+                    <!-- Début de mes ajouts (FUZZ) --> 
+                    <li<?php if ($route == "terrains") { ?> class="active"<?php } ?>><a href="{{ action('TerrainsController@index') }}">Terrains</a></li>
+                    <!-- Fin de mes ajouts (FUZZ) -->
+
           			<?php if (Auth::user() == "") { ?>
           			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Connexion</a></li>
           			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Inscription</a></li>

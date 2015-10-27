@@ -6,6 +6,7 @@ use View;
 use Redirect;
 use Input;
 
+use Terrain;
 use Sport;
 
 
@@ -39,7 +40,8 @@ class SportsController extends BaseController {
 	 */
 	public function create()
 	{
-		return View::make('sports.create');	
+		$terrains = Terrain::all();
+		return View::make('sports.create', compact('terrains'));	
 	}
 
 
@@ -66,6 +68,9 @@ class SportsController extends BaseController {
 		$sport->tournoi = $input['tournoi'];
 		
 		if($sport->save()) {
+			if (is_array(Input::get('terrain'))) {
+                $sport->terrains()->attach(array_keys(Input::get('terrain')));
+            }
 			return Redirect::action('SportsController@index');
 		} else {
 			return Redirect::back()->withInput()->withErrors($sport->validationMessages);
@@ -83,11 +88,12 @@ class SportsController extends BaseController {
 	public function show($id)
 	{
 		try {
+			$terrainSports = Sport::find($id)->terrains;
 			$sport = Sport::findOrFail($id);
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		return View::make('sports.show', compact('sport'));
+		return View::make('sports.show', compact('sport', 'terrainSports'));
 	}
 
 
@@ -99,8 +105,10 @@ class SportsController extends BaseController {
 	 */
 	public function edit($id)
 	{
+		$terrains = Terrain::all();
+		$terrainSports = Sport::find($id)->terrains;
 		$sport = Sport::findOrFail($id);
-		return View::make('sports.edit', compact('sport'));
+		return View::make('sports.edit', compact('sport', 'terrains', 'terrainSports'));
 	}
 
 
@@ -128,6 +136,11 @@ class SportsController extends BaseController {
 		$sport->tournoi = $input['tournoi'];
 		
 		if($sport->save()) {
+			if (is_array(Input::get('terrain'))) {
+                $sport->terrains()->sync(array_keys(Input::get('terrain')));
+            } else {
+                $sport->terrains()->detach();
+            }
 			return Redirect::action('SportsController@index');
 		} else {
 			return Redirect::back()->withInput()->withErrors($sport->validationMessages);

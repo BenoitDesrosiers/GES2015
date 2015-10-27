@@ -13,6 +13,7 @@ class Sport extends EloquentValidating {
 	/**
 	 * Eloquent relationship: un sport a plusieurs épreuves
 	 */ 
+	
 	public function epreuves() {
 		return $this->hasMany('Epreuve');
 	}

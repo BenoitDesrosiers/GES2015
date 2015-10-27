@@ -17,13 +17,11 @@
             {!! Form::text('adresse',null, ['class' => 'form-control']) !!}
             {{ $errors->first('adresse') }}
         </div>
-
         <div class="form-group">
-            {!! Form::label('description_courte', 'Description:') !!} 
-            {!! Form::text('description_courte',null, ['class' => 'form-control']) !!}
-            {{ $errors->first('description_courte') }}
+            {!! Form::label('ville', 'Ville:') !!} 
+            {!! Form::text('ville', null, ['class' => 'form-control']) !!}
+            {{ $errors->first('ville') }}
         </div>
-
         <?php
             $regionArray = array();
             for ($i=0; $i<count($regions); $i++) {
@@ -36,20 +34,9 @@
             {{ $errors->first('region_id') }}
         </div>
         <div class="form-group">
-            {!! Form::label('sports', 'Sports:') !!} 
-            <div class="row">
-                <?php
-                    foreach ($sports as $sport) {
-                ?>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
-                    <label class="btn btn-default btn-block">
-                        <input name="sport[{{ $sport->id }}]" type="checkbox"> {{ $sport->nom }}
-                    </label><br/>
-                </div>
-                <?php
-                    }
-                ?>
-            </div>
+            {!! Form::label('description_courte', 'Description:') !!} 
+            {!! Form::text('description_courte',null, ['class' => 'form-control']) !!}
+            {{ $errors->first('description_courte') }}
         </div>
         <div class="form-group">
             {!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}

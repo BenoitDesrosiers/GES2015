@@ -8,29 +8,42 @@ class TerrainsTableSeeder extends Seeder {
 
     public function run()
     {
+        // Suppression de la base de données
         DB::table('terrains')->delete();
 
+        // Création de la variable sport qui correspond aux 
+        // informations de la table 'sport' de la base de données
+        $sports=DB::table('sports');
+
+        // Création de la variable 'terrain' qui correspond à la 
+        // liste des champs à 'seeder' dans la base de données
         $terrains = [
-        //nom, tournoi (1=oui, 0=non)
-        ["Football 1 Cégep de Drummondville","960 Rue Saint-Georges, Drummondville, QC J2C 6A2", "118"],
-        ["Football 2 Cégep de Drummondville","960 Rue Saint-Georges, Drummondville, QC J2C 6A2", "118"],
-        ["Football 3 Cégep de Drummondville","960 Rue Saint-Georges, Drummondville, QC J2C 6A2", "118"],
-        ["Soccer 1 Cégep de Drummondville","960 Rue Saint-Georges, Drummondville, QC J2C 6A2", "118"],
-        ["Soccer 2 Cégep de Drummondville","960 Rue Saint-Georges, Drummondville, QC J2C 6A2", "118"],
-        ["Football 1 Marie-Rivier","265 Rue Saint Félix, Drummondville, QC J2C 5M1", "118"],
-        ["Football 2 Marie-Rivier","265 Rue Saint Félix, Drummondville, QC J2C 5M1", "118"],
-        ["Football 3 Marie-Rivier","265 Rue Saint Félix, Drummondville, QC J2C 5M1", "118"],
-        ["Soccer 1 Marie-Rivier","265 Rue Saint Félix, Drummondville, QC J2C 5M1", "118"],
-        ["Soccer 2 Marie-Rivier","265 Rue Saint Félix, Drummondville, QC J2C 5M1", "118"],
-        ["Football 1 Jean-Raimbault","175 Pelletier, Drummondville, QC J2C 2W1", "118"],
-        ["Football 2 Jean-Raimbault","175 Pelletier, Drummondville, QC J2C 2W0", "118"],
-        ["Football 3 Jean-Raimbault","175 Pelletier, Drummondville, QC J2C 2W1", "118"],
-        ["Soccer 1 Jean-Raimbault","175 Pelletier, Drummondville, QC J2C 2W1", "118"],
-        ["Soccer 2 Jean-Raimbault","177 Pelletier, Drummondville, QC J2C 2W1", "118"],
+        ["Football 1 Cégep de Drummondville",   "960 Rue Saint-Georges",    "Drummondville", "4"],
+        ["Football 2 Cégep de Drummondville",   "960 Rue Saint-Georges",    "Drummondville", "4"],
+        ["Football 3 Cégep de Drummondville",   "960 Rue Saint-Georges",    "Drummondville", "4"],
+        ["Soccer 1 Cégep de Drummondville",     "960 Rue Saint-Georges",    "Drummondville", "4"],
+        ["Soccer 2 Cégep de Drummondville",     "960 Rue Saint-Georges",    "Drummondville", "4"],
+        ["Football 1 Marie-Rivier",             "265 Rue Saint Félix",      "Drummondville", "4"],
+        ["Football 2 Marie-Rivier",             "265 Rue Saint Félix",      "Drummondville", "4"],
+        ["Football 3 Marie-Rivier",             "265 Rue Saint Félix",      "Drummondville", "4"],
+        ["Soccer 1 Marie-Rivier",               "265 Rue Saint Félix",      "Drummondville", "4"],
+        ["Soccer 2 Marie-Rivier",               "265 Rue Saint Félix",      "Drummondville", "4"],
+        ["Football 1 Jean-Raimbault",           "175 Rue Pelletier",        "Drummondville", "4"],
+        ["Football 2 Jean-Raimbault",           "175 Rue Pelletier",        "Drummondville", "4"],
+        ["Football 3 Jean-Raimbault",           "175 Rue Pelletier",        "Drummondville", "4"],
+        ["Soccer 1 Jean-Raimbault",             "175 Rue Pelletier",        "Drummondville", "4"],
+        ["Soccer 2 Jean-Raimbault",             "177 Rue Pelletier",        "Drummondville", "4"]
         ];
 
+        // 'seed' de la base de données
         foreach($terrains as $terrain) {
-            Terrain::create(array('nom'=>$terrain[0],'adresse'=>$terrain[1],'region_id'=>$terrain[2]));
+            Terrain::create(
+                array(
+                    'nom'=>$terrain[0], 
+                    'adresse'=>$terrain[1], 
+                    'ville'=>$terrain[2],  
+                    'region_id'=>$terrain[3])
+                );
         }
     }
 }

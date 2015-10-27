@@ -56,18 +56,18 @@ class TerrainsController extends BaseController {
     public function store()
     {
         $input = Input::all();
-        
         $terrain = new Terrain;
         $terrain->nom = $input['nom'];
         $terrain->adresse = $input['adresse'];
-        $terrain->description_courte = $input['description_courte'];
+        $terrain->ville = $input['ville'];
         $terrain->region_id = $input['region_id'];
+        $terrain->description_courte = $input['description_courte'];
         
         if($terrain->save()) {
             if (is_array(Input::get('sport'))) {
                 $terrain->sports()->attach(array_keys(Input::get('sport')));
             }
-            return Redirect::action('TerrainsController@index');
+            return Redirect::action('TerrainsController@index')->with('status', 'Terrain ajouté!');
         } else {
             return Redirect::back()->withInput()->withErrors($terrain->validationMessages);
         }   
@@ -86,10 +86,11 @@ class TerrainsController extends BaseController {
         try {
             $terrain = Terrain::findOrFail($id);
             $region = Region::findOrFail($terrain->region_id);
+            $sports = Sport::all();
         } catch(ModelNotFoundException $e) {
             App::abort(404);
         }
-        return View::make('terrains.show', compact('terrain', 'region'));
+        return View::make('terrains.show', compact('terrain', 'region', 'sports'));
     }
 
 
@@ -102,7 +103,9 @@ class TerrainsController extends BaseController {
     public function edit($id)
     {
         $terrain = Terrain::findOrFail($id);
-        return View::make('terrains.edit', compact('terrain'));
+        $regions = Region::all();
+        $sports = Sport::all();
+        return View::make('terrains.edit', compact('terrain', 'regions', 'sports'));
     }
 
 
@@ -115,20 +118,15 @@ class TerrainsController extends BaseController {
     public function update($id)
     {
         $input = Input::all();
-        /*
-        if(isset($input['tournoi'])) {              
-            $input['tournoi'] = '1';
-        } else {
-            $input['tournoi'] = '0';
-        } 
-        */
         $terrain = Terrain::findOrFail($id);
         $terrain->nom = $input['nom'];
         $terrain->adresse = $input['adresse'];
+        $terrain->ville = $input['ville'];
+        $terrain->region_id = $input['region_id'];
         $terrain->description_courte = $input['description_courte'];
         
         if($terrain->save()) {
-            return Redirect::action('TerrainsController@index');
+            return Redirect::action('TerrainsController@index')->with('status', 'Terrain mis à jour!');
         } else {
             return Redirect::back()->withInput()->withErrors($terrain->validationMessages);
         }
@@ -146,7 +144,7 @@ class TerrainsController extends BaseController {
         $terrain = Terrain::findOrFail($id);
         $terrain->delete();
         
-        return Redirect::action('TerrainsController@index');
+        return Redirect::action('TerrainsController@index')->with('status', 'Terrain détruit!');
     
     }
 

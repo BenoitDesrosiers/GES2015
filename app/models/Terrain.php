@@ -12,29 +12,34 @@ class Terrain extends EloquentValidating {
 
     /**
      * Eloquent relationship: un terrain peut supporter plusieurs sports différents
-     *
-     * public function sports() {
-     *     return $this->hasMany('Sport');
-     * }
-     * 
-     * public function participants() {
-     *    return $this->belongsToMany('Participant');
-     * }
     */
+
+    public function sports() {
+        return $this->belongsToMany('Sport');
+    }
+
+    public function region() {
+        return $this->belongsTo('Region');
+    }
 
 /**
  * Validation
  *
- * un sport doit avoir:
+ * un terrain doit avoir:
  * - nom: obligatoire, et unique dans toute la table
- * - saison : obligatoire, e (été), ou h (hiver)
- * - tournoi : obligatoire, booléen
- * - Les autres champs sont falcultatifs.
+ * - adresse : obligatoire
+ * - ville : obligatoire
+ * - region : obligatoire
  */
+
+    public $validationMessages;
 
     public function validationRules() {
         return [
-            'nom' => 'required|unique:terrains,nom'.($this->id ? ",$this->id" : '')
+            'nom' => 'required|unique:terrains,nom'.($this->id ? ",$this->id" : ''),
+            'adresse' => 'required',
+            'ville' => 'required',
+            'region_id' => 'required'
             ];
     }
 

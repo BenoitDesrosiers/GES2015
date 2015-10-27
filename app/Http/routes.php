@@ -13,11 +13,12 @@ use App\Http\Controllers\Auth\AuthController;
 |
 */
 Route::get('/','HomeController@index');
+Route::get('/home','HomeController@index');
 
 Route::group(['middleware'=>'auth'], function() {
 	
 	Route::resource('sports','SportsController');
-	Route::resource('sports.epreuves','SportsEpreuvesontroller');
+	Route::resource('sports.epreuves','SportsEpreuvesController');
 	Route::resource('epreuves','EpreuvesController');
 	Route::resource('participants','ParticipantsController');
 	Route::resource('resultats','ResultatsController');
