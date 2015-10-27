@@ -28,7 +28,7 @@
 			{{ $errors->first('region_id') }}
 		</div>
 		<div class="form-group">
-			{!! Form::label('numero_accreditation', 'Numéro d'accréditation :') !!} 
+			{!! Form::label('numero_accreditation', 'Numéro accréditation :') !!} 
 			{!! Form::text('numero_accreditation',$arbitre->numero_accreditation, ['class' => 'form-control']) !!}
 			{{ $errors->first('numero_accreditation') }}
 		</div>

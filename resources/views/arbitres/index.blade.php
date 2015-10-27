@@ -1,5 +1,6 @@
 @extends('layout')
 @section('content')
+<?php use App\Models\Region; //TODO: enlever le code qui accède directement à Région de la view, et passer les régions en paramètre, une fois fait, enlever cette ligne?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Liste des arbitres</h2>

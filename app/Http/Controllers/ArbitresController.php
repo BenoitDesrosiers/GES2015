@@ -6,8 +6,8 @@ use View;
 use Redirect;
 use Input;
 
-use Arbitre;
-use Region;
+use App\Models\Arbitre;
+use App\Models\Region;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -130,7 +130,7 @@ class ArbitresController extends BaseController {
 		if($arbitre->save()) {
 			return Redirect::action('ArbitresController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($arbitre->validationMessages);
+			return Redirect::back()->withInput()->withErrors($arbitre->validationMessages());
 		}
 	}
 
