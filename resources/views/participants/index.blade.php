@@ -4,7 +4,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Liste des participants</h2>
-		<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>						
+		<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>
 	</div>
 @if ($participants->isEmpty())
 	<div class="panel-body">
