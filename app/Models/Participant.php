@@ -64,7 +64,7 @@ public function validationRules() {
 	return [
 		'nom' => 'required|string',
 		'prenom' => 'required|string',
-        'numero' => 'required|integer|unique:participants',
+        'numero' => 'required|integer',
         'equipe' => 'required|boolean',
         'region_id' => 'required|integer',
         'sexe' => 'required|boolean',
