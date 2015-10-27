@@ -94,7 +94,7 @@ class ParticipantsController extends BaseController {
 //          Message de confirmation si la sauvegarde a réussi
             return Redirect::action('ParticipantsController@create')->with ( 'status', 'Le partipant a été créé!' );
         } else {
-            return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+            return Redirect::back()->withInput()->withErrors($participant->validationMessages());
         }
 	}
 
@@ -206,7 +206,7 @@ class ParticipantsController extends BaseController {
 //          Message de confirmation si la sauvegarde a réussi
             return Redirect::action('ParticipantsController@edit', $participant->id)->with ( 'status', 'Le partipant ' . $id . ' a été mis a jour!' );
         } else {
-            return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+            return Redirect::back()->withInput()->withErrors($participant->validationMessages());
         }
     }
 

@@ -7,7 +7,7 @@
 	<div class="panel-body">
 		{!! Form::open(['action'=> array('ParticipantsController@update', $participant->id), 'method' => 'PUT', 'class' => 'form']) !!}
 <!--    Affiche les messages d'erreur après un enregistrement raté -->
-        @foreach ($errors as $error)
+        @foreach ($errors->all() as $error)
             <p class="alert alert-danger">{{ $error }}</p>
         @endforeach
 <!--    Affiche un message de confirmation après un enregistrement réussi -->
