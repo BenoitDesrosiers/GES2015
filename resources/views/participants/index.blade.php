@@ -1,5 +1,6 @@
 @extends('layout')
 @section('content')
+<?php use App\Models\Region;//TODO: enlever le code qui accède directement à Région de la view, et passer les régions en paramètre, une fois fait, enlever cette ligne?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Liste des participants</h2>
@@ -27,10 +28,46 @@
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<th>Nom, Prenom</th>
-				<th class="hidden-xs">Numéro</th>
-				<th class="hidden-sm hidden-xs">Région</th>
-				<th class="hidden-sm hidden-xs">Équipe</th>
+				<th>
+					<!-- Création des liens pour trier la colonne Nom -->
+					{!! 
+						link_to_action(
+							$routeActionName,
+							$infosTri["nom"]["texteAffiche"],
+							$infosTri["nom"]["trie"]
+						)
+					!!}
+				</th>
+				<th class="hidden-xs">
+					<!-- Création des liens pour trier la colonne Numéro -->
+					{!! 
+						link_to_action(
+							$routeActionName,
+							$infosTri["numero"]["texteAffiche"],
+							$infosTri["numero"]["trie"]
+						)
+					!!}
+				</th>
+				<th class="hidden-sm hidden-xs">
+					<!-- Création des liens pour trier la colonne Région -->
+					{!! 
+						link_to_action(
+							$routeActionName,
+							$infosTri["region_id"]["texteAffiche"],
+							$infosTri["region_id"]["trie"]
+						)
+					!!}
+				</th>
+				<th class="hidden-sm hidden-xs">
+					<!-- Création des liens pour trier la colonne Équipe -->
+					{!!
+						link_to_action(
+							$routeActionName,
+							$infosTri["equipe"]["texteAffiche"],
+							$infosTri["equipe"]["trie"]
+						)
+					!!}
+				</th>
 				<th></th>
 				<th></th>
 			</tr>

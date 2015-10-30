@@ -5,10 +5,11 @@ use App\Http\Controllers\BaseController;
 use View;
 use Redirect;
 use Input;
+use App;
 
-use Participant;
-use Region;
-use Sport;
+use App\Models\Participant;
+use App\Models\Region;
+use App\Models\Sport;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,12 +28,15 @@ class ParticipantsController extends BaseController {
 	 */
 	public function index()
 	{
+		$routeActionName = 'ParticipantsController@index';
 		$participants = Participant::all();
 		$listeFiltres = ['Nom', 'Prénom', 'Numéro', 'Région', 'Équipe'];
 		$valeurFiltre = 0;
 		$valeurTexte = "";
-		return View::make('participants.index', compact('participants', 'listeFiltres', 'valeurFiltre', 'valeurTexte'));
+		$infosTri = ParticipantsController::getInfosTri();
+		$participants = ParticipantsController::trierColonnes($participants);
 		
+		return View::make('participants.index', compact('participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurTexte'));	
 	}
 
 
@@ -72,12 +76,12 @@ class ParticipantsController extends BaseController {
 		$participant->equipe = $input['equipe'];
 		
 		if($participant->save()) {
-			if (is_array(Input::get('sport'))) {
+			if (is_array(Input::get('sport'))) { //Sauvegarde les sports associés au participant
 				$participant->sports()->attach(array_keys(Input::get('sport')));
 			}
 			return Redirect::action('ParticipantsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+			return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 		}	
 		
 	}
@@ -128,6 +132,11 @@ class ParticipantsController extends BaseController {
 	public function update($id)
 	{
 		$input = Input::all();
+		if(isset($input['equipe'])) {
+			$input['equipe'] = '1';
+		} else {
+			$input['equipe'] = '0';
+		}
 		$participant = Participant::findOrFail($id);
 		$participant->nom = $input['nom'];
 		$participant->prenom = $input['prenom'];
@@ -143,7 +152,7 @@ class ParticipantsController extends BaseController {
 			}
 			return Redirect::action('ParticipantsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+			return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 		}
 	}
 
@@ -170,14 +179,12 @@ class ParticipantsController extends BaseController {
 	 */
 	public function recherche()
 	{
-// 		$participants = Participant::all();
+		$routeActionName = 'ParticipantsController@index';
  		$listeFiltres = ['Nom', 'Prénom', 'Numéro', 'Région', 'Équipe'];
-//		$vue = ParticipantsController::index();
-		
+ 		$infosTri = ParticipantsController::getInfosTri();
 		$input = Input::all();
 		$valeurFiltre = $input['listeFiltres'];
 		$valeurTexte = $input['texteRecherche'];
-		
 		
 		if ($valeurTexte != '') {
 			if ($valeurFiltre == 0) {
@@ -185,7 +192,7 @@ class ParticipantsController extends BaseController {
 			} elseif ($valeurFiltre == 1) {
 				$participants = Participant::where('prenom', 'like', $valeurTexte . '%')->get();			
 			} elseif ($valeurFiltre == 2) {
-				$participants = Participant::where('numero', 'like', $valeurTexte . '%')->get();	
+				$participants = Participant::where('numero', $valeurTexte . '%')->get();	
 			} elseif ($valeurFiltre == 3) {
 				$region = Region::where('nom_court', 'like', $valeurTexte . '%')->first();
 				if ($region) {
@@ -200,6 +207,60 @@ class ParticipantsController extends BaseController {
 			$participants = Participant::all();
 		}
 		
-		return View::make('participants.index', compact('participants', 'listeFiltres', 'valeurFiltre', 'valeurTexte'));
+		$participants = ParticipantsController::trierColonnes($participants);
+		
+		return View::make('participants.index', compact('participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurTexte'));
+	}
+	
+	public function trierColonnes($listeNonTriee)
+	{		
+ 		# Paramêtres récupérés dans le liens du titre de la colonne sélectionnée.
+ 		$parametreDeTri = Input::get('parametreDeTri');
+		$direction = Input::get('direction');
+ 		
+ 		if ($direction == 'desc'){
+			$listeTriee = $listeNonTriee->sortByDesc($parametreDeTri);
+		} else {
+			$listeTriee = $listeNonTriee->sortBy($parametreDeTri);
+		}
+		
+		return $listeTriee;
+	}
+	
+	public function getInfosTri(){
+		$parametreDeTri = Input::get('parametreDeTri');
+		$direction = Input::get('direction');
+		$infosTri = [
+				'nom' => [
+						'texteAffiche'=>'Nom, Prenom',
+						'trie'=>[
+								'parametreDeTri'=>'nom',
+								'direction'=>'asc']],
+				'numero' => [
+						'texteAffiche'=>'Numéro',
+						'trie'=>[
+								'parametreDeTri'=>'numero',
+								'direction'=>'asc']],
+				'region_id' => [
+						'texteAffiche'=>'Région',
+						'trie'=>[
+								'parametreDeTri'=>'region_id',
+								'direction'=>'asc']],
+				'equipe' => [
+						'texteAffiche'=>'Équipe',
+						'trie'=>[
+								'parametreDeTri'=>'equipe',
+								'direction'=>'asc']]
+		];
+		
+		if($parametreDeTri){
+			if($direction == 'asc'){
+				$infosTri[$parametreDeTri]['trie']['direction'] = 'desc';
+			} else {
+				$infosTri[$parametreDeTri]['trie']['direction'] = 'asc';
+			}
+		}
+		
+		return $infosTri;
 	}
 }

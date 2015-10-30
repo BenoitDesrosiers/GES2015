@@ -14,6 +14,9 @@
  * @author benou
  * @version 0.1
  */
+
+namespace App\Models;
+
 class Epreuve extends EloquentValidating {
 	protected $guarded = array('id');
 
