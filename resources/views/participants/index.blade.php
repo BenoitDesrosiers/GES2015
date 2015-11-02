@@ -92,10 +92,6 @@
 			$(function() {
 				$('[data-toggle="tooltip"]').tooltip()
 			})
-			
-			function chargerListe() {
-				var valeurFiltre
-			}
 		</script>
 @endif
 </div>
