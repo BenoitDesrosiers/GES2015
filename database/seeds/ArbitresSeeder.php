@@ -15,7 +15,7 @@ class ArbitresSeeder extends Seeder {
 		$numero_accreditation = ["1357059", "2584612", "1473546", "0145678", "2316580", "1567308"];
 		
 		//nom, prenom, region, numero_accreditation, association et numero_telephone
-		for($i=0;$i<10;$i++) {
+		for($i=0;$i<6;$i++) {
 			
 			$regionid=DB::table('regions')->where('nom_court',$regions[rand(0,18)])->pluck('id');
 			DB::table('arbitres')->insert(array('nom' => $noms[rand(0,8)], 
@@ -23,7 +23,8 @@ class ArbitresSeeder extends Seeder {
 												'region_id'=>$regionid, 
 												'numero_accreditation'=>$numero_accreditation[$i],
 												'association'=>$noms[rand(0,5)],
-												'numero_telephone'=>"1234567890"));
+												'numero_telephone'=>"1234567890",
+												'sexe'=>rand(0,1)));
 			
 		}
 	}

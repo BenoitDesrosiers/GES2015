@@ -19,10 +19,10 @@ class CreateArbitresTable extends Migration
             $table->unsignedInteger('region_id');
             $table->string('numero_accreditation');
             $table->string('association');
+            $table->boolean('sexe');->nullable();
             $table->string('numero_telephone');
             $table->string('adresse')->nullable();
-            $table->string('sexe')->nullable();
-            $table->string('date_naissance')->nullable();
+            $table->date('date_naissance')->nullable();
             $table->timestamps();
 
             $table->foreign('region_id')

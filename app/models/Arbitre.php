@@ -12,35 +12,53 @@ namespace App\Models;
 class Arbitre extends EloquentValidating {
 	protected $guarded = array('id');
 
-/** 
- * Eloquent relationship: un arbitre est associé à une région
- */
+	/** 
+	 * Eloquent relationship: un arbitre est associé à une région
+	 */
 
 
-public function region() {
-	return $this->belongsTo('App\Models\Region');
-}
-	
-/**
- * Validation
- *
- * Un arbitre doit avoir:
- *  - nom, prenom, region_id, numero_accreditation, association et numero_telephone
- *  - Les autres champs sont falcultatifs.
- */
+	public function region() {
+		return $this->belongsTo('App\Models\Region');
+	}
 
-public $validationMessages;
+	/**
+	 * Identifie les colonnes qui peuvent être modifiées
+	 */
+	protected $fillable = [
+	        'prenom',
+	        'nom',
+	        'region_id',
+	        'numero_accreditation',
+	        'association',
+	        'sexe',
+	        'numero_telephone',
+	        'adresse',
+	        'date_naissance'
+	    ];
+		
+	/**
+	 * Validation
+	 *
+	 * Un arbitre doit avoir:
+	 *  - nom, prenom, region_id, numero_accreditation, association et numero_telephone
+	 *  - Les autres champs sont falcultatifs.
+	 */
 
-public function validationRules() {
-	return [
-		'nom' => 'required|string',
-		'prenom' => 'required',
-		'region_id' => 'required|integer',
-		'numero_accreditation' => 'required',
-		'association' => 'required',
-		'numero_telephone' => 'required'
+	public $validationMessages;
+
+	public function validationRules() {
+		return [
+			'prenom' => 'required|string',
+			'nom' => 'required|string',
+			'region_id' => 'required|integer',
+			'numero_accreditation' => 'required|string',
+			'association' => 'required|string',
+			'sexe' => 'boolean',
+			'numero_telephone' => 'required|string',
+			'adresse' => 'string',
+			'date_naissance' => 'string'
 		];
-}
+	}
 
 
 }
