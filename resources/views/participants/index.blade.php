@@ -10,10 +10,10 @@
 			</div> <!-- bouton créer -->
 			{!! Form::open(['action'=> array('ParticipantsController@recherche'), 'method' => 'POST', 'class' => 'form']) !!}
 			<div class="col-md-2" id="liste-filtres">
-				{!! Form::select('listeFiltres', $listeFiltres, $valeurFiltre, ['style' => 'width:100%;margin-top:2px;']) !!}
+				{!! Form::select('listeFiltres', $listeFiltres, $valeurFiltre, ['style' => 'width:100%;margin-top:2px;', 'id' => 'listeFiltres']) !!}
 			</div> <!-- liste-filtres -->
     		<div class="input-append" id="recherche">
-    			{!! Form::text('texteRecherche', $valeurTexte)!!}
+    			{!! Form::text('texteRecherche', $valeurTexte, ['id' => 'texteRecherche'])!!}
     			{!! Form::button('Recherche', ['type' => 'submit'])!!}
     		</div><!-- buttonRecherche -->
     		{!! Form::close() !!}
@@ -90,8 +90,32 @@
 		</table>
 		<script>
 			$(function () {
-				$('[data-toggle="tooltip"]').tooltip()
+				$('[data-toggle="tooltip"]').tooltip();
 			})
+			
+			$("#listeFiltres").change(function(event) {
+				var valeurFiltre = $("option:selected", this).val();
+				
+				if (valeurFiltre == 0 || valeurFiltre == 1 || valeurFiltre == 2) {
+					console.log($("option:selected", this).val());
+				} else if (valeurFiltre == 3) {
+					var data = {
+						    "foo": "bar",
+						    "foo2": "baz"
+						}
+
+					var s = $("<select />");
+
+					for(var val in data) {
+					    $("<option />", {value: val, text: data[val]}).appendTo(s);
+					}
+					console.log(s);
+					console.log($("#texteRecherche"));
+					console.log($("option:selected", this).val());
+				} else if (valeurFiltre == 4) {
+					console.log($("option:selected", this).val());
+				}
+			});
 		</script>
 @endif
 </div>
