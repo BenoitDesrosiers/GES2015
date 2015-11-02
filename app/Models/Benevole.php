@@ -27,9 +27,10 @@ class Benevole extends EloquentValidating {
     public function validationRules() {
 	    return [
 		    'nom' => 'required',
+            'prenom' => 'required',
      		'adresse' => 'required',
-            'telephone' => 'required',
-		    'accreditation' => 'required|int'
+            'numTel' => 'required|int',
+		    'accreditation' => 'required'
 		    ];
     }
 

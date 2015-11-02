@@ -15,8 +15,8 @@ class CreateBenevolesTable extends Migration
         Schema::create('benevoles', function($table)
 		{
 			$table->increments('id');
-			$table->string('prenom');
 			$table->string('nom');
+            $table->string('prenom');
 			$table->string('adresse');
 			$table->integer('numTel');
 			$table->integer('numCell')->nullable();
@@ -35,6 +35,6 @@ class CreateBenevolesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sports');
+        Schema::drop('benevoles');
     }
 }

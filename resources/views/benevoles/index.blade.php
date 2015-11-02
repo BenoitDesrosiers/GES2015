@@ -14,23 +14,27 @@
 		<thead>
 			<tr>
 				<th>Nom</th>
-				<th class="hidden-xs">Adresse</th>
-				<th class="hidden-xs">Numéro de Téléphone</th>
-				<th class="hidden-sm hidden-xs">Numéro de Cellulaire</th>
-				<th class="hidden-sm hidden-xs">Courriel</th>
-				<th class="hidden-xs">Disponibilité</th>
+                <th class="hidden-sm hidden-xs"></th>
                 <th class="hidden-xs">Accréditation</th>
                 <th class="hidden-xs">Vérification</th>
-				<th></th>
-				<th></th>
-				<th></th>
+                <th></th>				
+                <th></th>
 			</tr>
 		</thead>
 		<tbody>
 @foreach($benevoles as $benevole)
 			<tr>
-				<td><a href="{{ action('BenevolesController@show', $benevole->id) }}">{{ $benevole->nom }}</a></td>
-
+				<td><a href="{{ action('BenevolesController@show', $benevole->id) }}">{{ $benevole->nom }}, {{ $benevole->prenom }}</a></td>
+                <!--Bouton qui ne fait strictement rien! Préparation en vue de ma deuxième fonctionnalité : Associer des disponibilités à un bénévole.-->
+                <td class="hidden-sm hidden-xs"><a href="{{ action('BenevolesController@index',$benevole->id) }}" class="btn btn-info">Disponibilités</a></td>
+                <td class="hidden-xs">{{ $benevole->accreditation }}</td>
+                <td class="hidden-xs">{{ $benevole->verification }}</td>
+                <td><a href="{{ action('BenevolesController@edit',$benevole->id) }}" class="btn btn-info">Modifier</a></td>
+				<td>{!! Form::open(array('action' => array('BenevolesController@destroy',$benevole->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}
+					<button type="submit" href="{{ URL::route('benevoles.destroy', $benevole->id) }}" class="btn btn-danger btn-mini">Effacer</button>
+					{!! Form::close() !!}   {{-- méthode pour faire le delete tel que décrit sur http://www.codeforest.net/laravel-4-tutorial-part-2 , 
+											un script js est appelé pour tous les form qui ont un "data-confirm" (voir assets/js/script.js) --}}
+				</td>
 			</tr>
 @endforeach
 		</tbody>

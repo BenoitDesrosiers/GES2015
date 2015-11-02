@@ -60,7 +60,7 @@ class BenevolesController extends BaseController {
         $benevole->numCell = $input['numCell'];
         $benevole->courriel = $input['courriel'];
 		$benevole->disponibilite = $input['disponibilite'];
-		$benevole->accreditation = $input['accreditaiton'];
+		$benevole->accreditation = $input['accreditation'];
 		$benevole->verification = $input['verification'];
 		
 		if($benevole->save()) {
