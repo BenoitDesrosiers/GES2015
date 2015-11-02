@@ -41,11 +41,14 @@
 			{!! Form::text('accreditation',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('accreditation') }}
 		</div>
+        
         <div class="form-group">
 			{!! Form::label('verification', 'Vérification :') !!} 
-			{!! Form::checkbox('verification',null, ['class' => 'form-control']) !!}
-			{{ $errors->first('verification') }}
-		</div>	
+			{!! Form::radio('verification','af', true, ['id'=>'afaire', 'class' => 'radio-inline']) !!} À faire
+			{!! Form::radio('verification','ea', false, ['id'=>'enattente', 'class' => 'radio-inline']) !!} En attente
+			{!! Form::radio('verification','f', false, ['id'=>'fait', 'class' => 'radio-inline']) !!} Fait
+			{{ $errors->first('benevole') }}				
+		</div>
 		<div class="form-group">
 			{!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
