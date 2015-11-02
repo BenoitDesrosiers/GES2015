@@ -90,7 +90,7 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Affiche un seul participant.
 	 *
-	 * @param  int  $id l'id du participant à afficher
+	 * @param  int  $id. L'id du participant à afficher.
 	 * @return Response
 	 */
 	public function show($id)
@@ -110,7 +110,7 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Affiche le formulaire pour éditer un participant.
 	 *
-	 * @param  int $id l'id du participant à éditer 
+	 * @param  int $id. L'id du participant à éditer. 
 	 * @return Response
 	 */
 	public function edit($id)
@@ -126,7 +126,7 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Mise à jour du participant dans la bd.
 	 *
-	 * @param  int $id l'id du participant à changer.
+	 * @param  int $id. L'id du participant à changer.
 	 * @return Response
 	 */
 	public function update($id)
@@ -160,12 +160,12 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Efface un participant de la bd.
 	 *
-	 * @param  int $id l'id du participant à effacer
+	 * @param  int $id. L'id du participant à effacer.
 	 * @return Response
 	 */
-	public function destroy($participantId)
+	public function destroy($id)
 	{
-		$participant = Participant::findOrFail($participantIdId);
+		$participant = Participant::findOrFail($id);
 		$participant->delete();
 		
 		return Redirect::action('ParticipantsController@index');
@@ -175,7 +175,7 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Recherche une entrée de la bd.
 	 *
-	 * 
+	 * @return Response
 	 */
 	public function recherche()
 	{
@@ -201,7 +201,18 @@ class ParticipantsController extends BaseController {
 					$participants = new \Illuminate\Database\Eloquent\Collection;
 				}
 			} elseif ($valeurFiltre == 4) {
-				$participants = Participant::where('equipe', 'like', $valeurTexte . '%')->get();	
+				$temporaire = $valeurTexte;
+				if (is_string($valeurTexte)){
+					if (strtolower($valeurTexte) == 'oui') {
+						$valeurTexte = 1;
+					} elseif (strtolower($valeurTexte) == 'non'){
+						$valeurTexte = 0;
+					}
+				}
+				$participants = Participant::where('equipe', 'like', $valeurTexte . '%')->get();
+				$valeurTexte = $temporaire;
+			} else {
+				$participants = new \Illuminate\Database\Eloquent\Collection;
 			}
 		} else {
 			$participants = Participant::all();
@@ -212,21 +223,32 @@ class ParticipantsController extends BaseController {
 		return View::make('participants.index', compact('participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurTexte'));
 	}
 	
-	public function trierColonnes($listeNonTriee)
+	/**
+	 * Trie une collection.
+	 *
+	 * @param Collection $collectionNonTriee. Collection à trier selon le paramètre de tri et la direction.
+	 * @return Collection $collectionTriee. Collection trier selon le paramètre de tri et la direction.
+	 */
+	public function trierColonnes($collectionNonTriee)
 	{		
  		# Paramêtres récupérés dans le liens du titre de la colonne sélectionnée.
  		$parametreDeTri = Input::get('parametreDeTri');
 		$direction = Input::get('direction');
  		
  		if ($direction == 'desc'){
-			$listeTriee = $listeNonTriee->sortByDesc($parametreDeTri);
+			$collectionTriee = $collectionNonTriee->sortByDesc($parametreDeTri);
 		} else {
-			$listeTriee = $listeNonTriee->sortBy($parametreDeTri);
+			$collectionTriee = $collectionNonTriee->sortBy($parametreDeTri);
 		}
 		
-		return $listeTriee;
+		return $collectionTriee;
 	}
 	
+	/**
+	 * Retourne les informations de tri.
+	 *
+	 * @return Array $infosTri. Contient les informations de tri.
+	 */
 	public function getInfosTri(){
 		$parametreDeTri = Input::get('parametreDeTri');
 		$direction = Input::get('direction');

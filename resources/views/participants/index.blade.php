@@ -89,9 +89,13 @@
 		</tbody>
 		</table>
 		<script>
-			$(function () {
+			$(function() {
 				$('[data-toggle="tooltip"]').tooltip()
 			})
+			
+			function chargerListe() {
+				var valeurFiltre
+			}
 		</script>
 @endif
 </div>
