@@ -28,6 +28,7 @@
           			<li<?php if ($route == "epreuves") { ?> class="active"<?php } ?>><a href="{{ action('EpreuvesController@index') }}">Épreuves</a></li>
           			<li<?php if ($route == "participants") { ?> class="active"<?php } ?>><a href="{{ action('ParticipantsController@index') }}">Participants</a></li>
           			<li<?php if ($route == "resultats") { ?> class="active"<?php } ?>><a href="{{ action('ResultatsController@index') }}">Résultat</a></li>
+					<li<?php if ($route == "roles") { ?> class="active"<?php } ?>><a href="{{ action('RolesController@index') }}">Rôles</a></li>
           			<?php if (Auth::user() == "") { ?>
           			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Connexion</a></li>
           			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Inscription</a></li>
