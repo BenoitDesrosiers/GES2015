@@ -184,7 +184,7 @@ class ParticipantsController extends BaseController {
  		$infosTri = ParticipantsController::getInfosTri();
 		$input = Input::all();
 		$valeurFiltre = $input['listeFiltres'];
-		$valeurTexte = $input['texteRecherche'];
+		$valeurTexte = $input['valeurRecherche'];
 		
 		if ($valeurTexte != '') {
 			if ($valeurFiltre == 0) {

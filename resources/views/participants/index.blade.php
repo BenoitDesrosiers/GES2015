@@ -10,11 +10,11 @@
 			</div> <!-- bouton créer -->
 			{!! Form::open(['action'=> array('ParticipantsController@recherche'), 'method' => 'POST', 'class' => 'form']) !!}
 			<div class="col-md-2" id="liste-filtres">
-				{!! Form::select('listeFiltres', $listeFiltres, $valeurFiltre, ['style' => 'width:100%;margin-top:2px;', 'id' => 'listeFiltres']) !!}
+				{!! Form::select('listeFiltres', $listeFiltres, $valeurFiltre, ['style' => 'width:100%; height:25px;', 'id' => 'listeFiltres']) !!}
 			</div> <!-- liste-filtres -->
-    		<div class="input-append" id="recherche">
-    			{!! Form::text('texteRecherche', $valeurTexte, ['id' => 'texteRecherche'])!!}
-    			{!! Form::button('Recherche', ['type' => 'submit'])!!}
+    		<div class="input-append col-md-3" id="recherche">
+    			{!! Form::text('valeurRecherche', $valeurTexte, ['style' => 'height:25px; width:60%;', 'id' => 'valeurRecherche'])!!}
+    			{!! Form::button('Recherche', ['type' => 'submit','style' => 'height:25px;'])!!}
     		</div><!-- buttonRecherche -->
     		{!! Form::close() !!}
 		</div>				
@@ -31,41 +31,25 @@
 				<th>
 					<!-- Création des liens pour trier la colonne Nom -->
 					{!! 
-						link_to_action(
-							$routeActionName,
-							$infosTri["nom"]["texteAffiche"],
-							$infosTri["nom"]["trie"]
-						)
+						link_to_action($routeActionName, $infosTri["nom"]["texteAffiche"], $infosTri["nom"]["trie"])
 					!!}
 				</th>
 				<th class="hidden-xs">
 					<!-- Création des liens pour trier la colonne Numéro -->
 					{!! 
-						link_to_action(
-							$routeActionName,
-							$infosTri["numero"]["texteAffiche"],
-							$infosTri["numero"]["trie"]
-						)
+						link_to_action($routeActionName, $infosTri["numero"]["texteAffiche"], $infosTri["numero"]["trie"])
 					!!}
 				</th>
 				<th class="hidden-sm hidden-xs">
 					<!-- Création des liens pour trier la colonne Région -->
 					{!! 
-						link_to_action(
-							$routeActionName,
-							$infosTri["region_id"]["texteAffiche"],
-							$infosTri["region_id"]["trie"]
-						)
+						link_to_action($routeActionName, $infosTri["region_id"]["texteAffiche"], $infosTri["region_id"]["trie"])
 					!!}
 				</th>
 				<th class="hidden-sm hidden-xs">
 					<!-- Création des liens pour trier la colonne Équipe -->
 					{!!
-						link_to_action(
-							$routeActionName,
-							$infosTri["equipe"]["texteAffiche"],
-							$infosTri["equipe"]["trie"]
-						)
+						link_to_action($routeActionName, $infosTri["equipe"]["texteAffiche"], $infosTri["equipe"]["trie"])
 					!!}
 				</th>
 				<th></th>
@@ -97,23 +81,34 @@
 				var valeurFiltre = $("option:selected", this).val();
 				
 				if (valeurFiltre == 0 || valeurFiltre == 1 || valeurFiltre == 2) {
-					console.log($("option:selected", this).val());
+					var champTexte = $("<input id='valeurRecherche' type='text' name='valeurRecherche' style='width:60%; height:25px;'/>");
+
+					$("#valeurRecherche").remove();
+				    $("#recherche").prepend(champTexte);
 				} else if (valeurFiltre == 3) {
 					var data = {
-						    "foo": "bar",
-						    "foo2": "baz"
-						}
-
-					var s = $("<select />");
+							"lsl":"LSL",
+							"edq":"EDQ"
+							};
+					var selecteur = $("<select id='valeurRecherche' name='valeurRecherche' style='width:60%; height:25px;'/>");
 
 					for(var val in data) {
-					    $("<option />", {value: val, text: data[val]}).appendTo(s);
+					    $("<option />", {value: val, text: data[val]}).appendTo(selecteur);
 					}
-					console.log(s);
-					console.log($("#texteRecherche"));
-					console.log($("option:selected", this).val());
+					$("#valeurRecherche").remove();
+				    $("#recherche").prepend(selecteur);
 				} else if (valeurFiltre == 4) {
-					console.log($("option:selected", this).val());
+					var data = {
+							"non":"Non",
+							"oui":"Oui"
+							};
+					var selecteur = $("<select id='valeurRecherche' name='valeurRecherche' style='width:60%; height:25px;'/>");
+
+					for(var val in data) {
+					    $("<option />", {value: val, text: data[val]}).appendTo(selecteur);
+					}
+					$("#valeurRecherche").remove();
+				    $("#recherche").prepend(selecteur);
 				}
 			});
 		</script>
