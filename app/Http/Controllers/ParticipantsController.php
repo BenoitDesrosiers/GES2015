@@ -32,11 +32,11 @@ class ParticipantsController extends BaseController {
 		$participants = Participant::all();
 		$listeFiltres = ['Nom', 'Prénom', 'Numéro', 'Région', 'Équipe'];
 		$valeurFiltre = 0;
-		$valeurTexte = "";
+		$valeurRecherche = "";
 		$infosTri = ParticipantsController::getInfosTri();
 		$participants = ParticipantsController::trierColonnes($participants);
 		
-		return View::make('participants.index', compact('participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurTexte'));	
+		return View::make('participants.index', compact('participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurRecherche'));	
 	}
 
 
@@ -184,24 +184,33 @@ class ParticipantsController extends BaseController {
  		$infosTri = ParticipantsController::getInfosTri();
 		$input = Input::all();
 		$valeurFiltre = $input['listeFiltres'];
-		$valeurTexte = $input['valeurRecherche'];
+		$valeurRecherche = $input['champRecherche'];
 		
-		if ($valeurTexte != '') {
+		if ($valeurRecherche != '') {
 			if ($valeurFiltre == 0) {
-				$participants = Participant::where('nom', 'like', $valeurTexte . '%')->get();
+				$participants = Participant::where('nom', 'like', $valeurRecherche . '%')->get();
 			} elseif ($valeurFiltre == 1) {
-				$participants = Participant::where('prenom', 'like', $valeurTexte . '%')->get();			
+				$participants = Participant::where('prenom', 'like', $valeurRecherche . '%')->get();			
 			} elseif ($valeurFiltre == 2) {
-				$participants = Participant::where('numero', $valeurTexte . '%')->get();	
+				$participants = Participant::where('numero', $valeurRecherche . '%')->get();	
 			} elseif ($valeurFiltre == 3) {
-				$region = Region::where('nom_court', 'like', $valeurTexte . '%')->first();
+				$region = Region::where('nom_court', 'like', $valeurRecherche . '%')->first();
 				if ($region) {
 					$participants = $region->participants()->get();
 				} else {
 					$participants = new \Illuminate\Database\Eloquent\Collection;
 				}
 			} elseif ($valeurFiltre == 4) {
-				$participants = Participant::where('equipe', 'like', $valeurTexte . '%')->get();	
+				$temporaire = $valeurRecherche;
+				if (is_string($valeurRecherche)){
+					if (strtolower($valeurRecherche) == 'oui') {
+						$valeurRecherche = 1;
+					} elseif (strtolower($valeurRecherche) == 'non'){
+						$valeurRecherche = 0;
+					}
+				}
+				$participants = Participant::where('equipe', 'like', $valeurRecherche . '%')->get();
+				$valeurRecherche = $temporaire;	
 			}
 		} else {
 			$participants = Participant::all();
@@ -209,7 +218,7 @@ class ParticipantsController extends BaseController {
 		
 		$participants = ParticipantsController::trierColonnes($participants);
 		
-		return View::make('participants.index', compact('participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurTexte'));
+		return View::make('participants.index', compact('participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurRecherche'));
 	}
 	
 	public function trierColonnes($listeNonTriee)
