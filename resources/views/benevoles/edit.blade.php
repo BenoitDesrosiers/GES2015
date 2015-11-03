@@ -60,7 +60,7 @@
 		</div>
 		<div class="form-group">
 			{!! Form::button('Modifier', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
+            <a href="{{ action('BenevolesController@show',$benevole->id) }}" class="btn btn-danger">Annuler</a>
 		</div>
 		{!! Form::close() !!}
 	</div>

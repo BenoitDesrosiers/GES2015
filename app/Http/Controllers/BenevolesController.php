@@ -25,8 +25,11 @@ class BenevolesController extends BaseController {
 	 */
 	public function index()
 	{
-		$benevoles = Benevole::all();
-		
+        try {
+		    $benevoles = Benevole::all();
+		} catch(ModelNotFoundException $e) {
+			App::abort(404);
+		}
 		return View::make('benevoles.index', compact('benevoles'));
 		
 	}
@@ -96,7 +99,11 @@ class BenevolesController extends BaseController {
 	 */
 	public function edit($id)
 	{
-		$benevole = Benevole::findOrFail($id);
+        try{
+		    $benevole = Benevole::findOrFail($id);
+        } catch(ModelNotFoundException $e) {
+            App::abort(404);
+        }
 		return View::make('benevoles.edit', compact('benevole'));
 	}
 
@@ -138,9 +145,12 @@ class BenevolesController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		$benevole = Benevole::findOrFail($id);
-		$benevole->delete();
-		
+        try{
+		    $benevole = Benevole::findOrFail($id);
+		    $benevole->delete();
+		 } catch(ModelNotFoundException $e) {
+            App::abort(404);
+        }
 		return Redirect::action('BenevolesController@index');
 	
 	}

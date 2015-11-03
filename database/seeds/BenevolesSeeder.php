@@ -14,11 +14,11 @@ class BenevolesTableSeeder extends Seeder {
 
 		$benevoles = [
 		//nom, prenom, adresse, numTel, numCell, courriel, disponibilite, accreditation, verification
-		["Desrosiers", "Jérémi", "123 rue Dupuis, Drummondville, J2C 1A1", "8191234567", "8198181234", "j.desrosiers@evenementsportif.ca", "En tout temps", "00000A1", "À faire"],
-		["Pedneault", "Eric", "222 rue du Cégep, Drummondville, J2B 1B3", "8190001234", "8198167770", "e.pedneault@evenementsportif.ca", "Le matin seulement", "012003A1", "En attente"],
-		["Girardin", "Simon", "242 rue de Lamarre, Drummondville, J2C 1A8", "8190341234", "8198179870", "s.girardin@evenementsportif.ca", "En tout temps sauf le jeudi!", "012023A1", "Fait" ],
-        ["Lehoux", "Alexandre", "1443 boul. Lemire, Drummondville, J2B 3G7", "8195678934", "8198111110", "a.lehoux@evenementsportif.ca", "Tous les midis", "BP2003A3", "Fait"],
-        ["Bear", "John", "20 boul. Delamarde, Drummondville, J2B 4F5", "8195338934", "8198111234", "j.bear@evenementsportif.ca", "Tous les soirs", "DDD003A3", "Fait"]
+		["Desrosiers", "Jérémi", "123 rue Duniquab, Drummondville, J2C 1A1", "8194771234", "8198181234", "j.desrosiers@evenement-sportif.ca", "Tous les matins", "000A123", "À faire"],
+		["Pedneault", "Eric", "124 rue Petinichon, Drummondville, J2C 1A2", "8194772345", "8198182345", "e.pedneault@evenement-sportif.ca", "Tous les soirs", "000B123", "En attente"],
+		["Girardin", "Simon", "125 rue Sainte-Paire, Drummondville, J2C 1A3", "8194773456", "8198183456", "s.girardin@evenement-sportif.ca", "Mercredi seulement", "000C123", "Fait" ],
+        ["Lehoux", "Alexandre", "126 boul. Delamarde, Drummondville, J2C 1A4", "8194774567", "8198184567", "a.lehoux@evenement-sportif.ca", "En tous temps", "000D123", "Fait"],
+        ["Dubé", "Sarah", "127 rue Dunimportequoi, Drummondville, J2C 1A5", "8194775678", "8198185678", "s.dube@evenement-sportif.ca", "En tous temps, sauf le mardi", "000E123", "Fait"],
 		];
 
 		foreach($benevoles as $benevole) {
