@@ -21,10 +21,16 @@ class CreateBenevolesTable extends Migration
 			$table->integer('numTel');
 			$table->integer('numCell')->nullable();
 			$table->string('courriel')->nullable();
-            $table->string('disponibilite')->nullable();
+            $table->unsignedInteger('disponibiliteId')->nullable();
             $table->string('accreditation');
             $table->string('verification')->nullable();
 			$table->timestamps();
+
+            $table->foreign('disponibiliteId')
+					->references('id')
+					->on('disponibilites')
+					->onDelete('cascade')
+					->onUpdate('cascade');
 		});
     }
 
