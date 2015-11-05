@@ -16,12 +16,17 @@
 		<tr>
 			<td><p> {{ $region->nom }}</p></td>
 			<tr>
+			<?php $flag = 0 ?>
 				@foreach($participants as $participant)
 					@if($participant->region_id == $region->id)
+					<?php $flag = 1 ?>
 						<tr> </tr>
-						<td><p> {{ $participant->nom }}, {{ $participant->prenom }}</p></td> 
+						<td><p> {{ $participant->nom }}, {{ $participant->prenom }}</p></td> 					
 					@endif
-				@endforeach					
+				@endforeach		
+					@if($flag == 0)
+					<td><p>aucun participant pour cette région</p></td>
+					@endif
 			</tr>
 		</tr>
 @endforeach	

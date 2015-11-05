@@ -7,9 +7,9 @@ use View;
 use Redirect;
 use Input;
 
-use Participant;
-use Region;
-use Sport;
+use App\Models\Participant;
+use App\Models\Region;
+use App\Models\Sport;
 
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
