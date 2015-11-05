@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Resultat;
+
 class ResultatTournoisTableSeeder extends Seeder {
 
 
