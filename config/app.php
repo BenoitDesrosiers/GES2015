@@ -147,14 +147,8 @@ return [
     	 * Pour réintroduire les helpers HTML et FORM
     	 */
     	'Illuminate\Html\HtmlServiceProvider',
-<<<<<<< HEAD
         
         'MaddHatter\LaravelFullcalendar\ServiceProvider',
-=======
-
-        'MaddHatter\LaravelFullcalendar\ServiceProvider',
-    		
->>>>>>> f3631a48272119ac83cd1c3f268eeab16cfb7ae6
 
     ],
 
