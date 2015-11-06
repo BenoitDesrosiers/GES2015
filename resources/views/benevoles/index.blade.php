@@ -26,7 +26,7 @@
 			<tr>
 				<td><a href="{{ action('BenevolesController@show', $benevole->id) }}">{{ $benevole->nom }}, {{ $benevole->prenom }}</a></td>
                 <!--Bouton qui ne fait strictement rien! Préparation en vue de ma deuxième fonctionnalité : Associer des disponibilités à un bénévole.-->
-                <td class="hidden-sm hidden-xs"><a href="{{ action('BenevolesController@index',$benevole->id) }}" class="btn btn-info">Disponibilités</a></td>
+                <td class="hidden-sm hidden-xs"><a href="{{ action('DisponibilitesController@show',$benevole->id) }}" class="btn btn-info">Disponibilités</a></td>
                 <td class="hidden-xs">{{ $benevole->accreditation }}</td>
                 <td class="hidden-xs">{{ $benevole->verification }}</td>
                 <td><a href="{{ action('BenevolesController@edit',$benevole->id) }}" class="btn btn-info">Modifier</a></td>
