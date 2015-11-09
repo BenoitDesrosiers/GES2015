@@ -30,12 +30,13 @@
         </thead>
         <tbody>
 @foreach($terrains as $terrain)
+
         <!-- Ajout de chaque terrain de la base de données dans table des terrains -->
             <tr>
                 <td><a href="{{ action('TerrainsController@show', $terrain->id) }}">{{ $terrain->nom }}</a></td>
                 <td class="hidden-xs"><?php if ($terrain->adresse == "") {echo "Aucune adresse";} else {echo $terrain->adresse;} ?></td>
                 <td class="hidden-xs"><?php if ($terrain->ville == "") {echo "Aucune ville";} else {echo $terrain->ville;} ?></td>
-                <td class="hidden-xs"><span>{{ Region::where('id', '=', $terrain->region_id)->get()[0]->nom_court }}</span></td>
+                <td class="hidden-xs"><span>{{$terrain->region->nom_court}}</span></td>
                 <td class="hidden-sm hidden-xs"><?php if ($terrain->description_courte == "") {echo "Aucune description";} else {echo $terrain->description_courte;} ?></td>
                 <td><a href="{{ action('TerrainsController@edit',$terrain->id) }}" class="btn btn-info">Modifier</a></td>
                 <td>{!! Form::open(array('action' => array('TerrainsController@destroy',$terrain->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}

@@ -6,9 +6,9 @@ use View;
 use Redirect;
 use Input;
 
-use Participant;
-use Region;
-use Sport;
+use App\Models\Participant;
+use App\Models\Region;
+use App\Models\Sport;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
@@ -26,9 +26,71 @@ class ParticipantsController extends BaseController {
 	 */
 	public function index()
 	{
-		$participants = Participant::all();
+		# Paramêtres récupérés dans le liens du titre de la colonne sélectionnée.
+		$parametreDeTri = Input::get('parametreDeTri');
+		$direction = Input::get('direction');
 		
-		return View::make('participants.index', compact('participants'));
+		# Tableau qui possède toutes les informations nécessaire pour la gestion
+		# des tris des colonnes.
+		$colonnesTriees = [
+		"colNom" => [
+					"contrl"=>'ParticipantsController@index',
+					"texteAffiche"=>'Nom, Prenom',
+					"trie"=>[
+						"parametreDeTri"=>'nom',
+						"direction"=>'asc']],
+		"colNum" => [
+					"contrl"=>'ParticipantsController@index',
+					"texteAffiche"=>'Numéro',
+					"trie"=>[
+						"parametreDeTri"=>'numero',
+						"direction"=>'asc']],
+		"colRegion" => [
+					"contrl"=>'ParticipantsController@index',
+					"texteAffiche"=>'Région',
+					"trie"=>[
+						"parametreDeTri"=>'region_id',
+						"direction"=>'asc']],
+		"colEquipe" => [
+					"contrl"=>'ParticipantsController@index',
+					"texteAffiche"=>'Équipe',
+					"trie"=>[
+						"parametreDeTri"=>'equipe',
+						"direction"=>'asc']]
+		];
+
+		# Détermination de la colonne qui a été triée.
+		if ($parametreDeTri == "numero") {
+			$colonneChangee = "colNum";
+		} elseif ($parametreDeTri == "region_id") {
+			$colonneChangee = "colRegion";
+		} elseif ($parametreDeTri == "equipe") {
+			$colonneChangee = "colEquipe";
+		} else {
+			$parametreDeTri = "nom";
+			$colonneChangee = "colNom";
+		}
+		
+		# Changement de la direction pour la colonne qui a été triée.
+		if ($direction == 'asc'){
+			$prochaineDirection = 'desc';
+		} else {
+			$direction = 'desc';
+			$prochaineDirection = 'asc';
+		}
+		
+		# Si un tri est sélectionné, on lance la requête OrderBy, sinon on retourne
+		# tous les participants.
+		if ($parametreDeTri && $direction) {
+			$participants = Participant::orderBy($parametreDeTri, $direction)->get();
+		} else {
+			$participants = Participant::get();
+		}
+		
+		# Changement de la direction dans le liens qui va être créé par la View.
+		$colonnesTriees[$colonneChangee]['trie']['direction'] = $prochaineDirection;
+		
+		return View::make('participants.index', compact('participants', 'colonnesTriees'));
 		
 	}
 
@@ -69,12 +131,12 @@ class ParticipantsController extends BaseController {
 		$participant->equipe = $input['equipe'];
 		
 		if($participant->save()) {
-			if (is_array(Input::get('sport'))) {
+			if (is_array(Input::get('sport'))) { //Sauvegarde les sports associés au participant
 				$participant->sports()->attach(array_keys(Input::get('sport')));
 			}
 			return Redirect::action('ParticipantsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+			return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 		}	
 		
 	}
@@ -145,7 +207,7 @@ class ParticipantsController extends BaseController {
 			}
 			return Redirect::action('ParticipantsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($participant->validationMessages);
+			return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 		}
 	}
 

@@ -10,6 +10,7 @@
 		<p>Logo: <img src="{{ $sport->url_logo }}" alt="Logo du sport"/></p>
 		<p>Page officielle: <a href="{{ $sport->url_page_officielle }}">Lien</a></p>
 		<p>Tournoi: <?php if ($sport->tournoi == 1) {echo "Oui";} else {echo "Non";} ?></p>
+		<p>Terrains: <ul><?php foreach($terrainSports as $terrain) { echo "<li>".$terrain->nom."</li>"; } ?></ul></p>
 	</div>
 </div>
 @stop

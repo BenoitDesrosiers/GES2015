@@ -7,11 +7,11 @@ use View;
 use Redirect;
 use Input;
 
-use Resultat;
-use Sport;
-use Evenement;
-use Participant;
-use Epreuve;
+use App\Models\Resultat;
+use App\Models\Sport;
+use App\Models\Evenement;
+use App\Models\Participant;
+use App\Models\Epreuve;
 use Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;

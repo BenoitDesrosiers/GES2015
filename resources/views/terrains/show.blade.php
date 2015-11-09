@@ -6,9 +6,10 @@
     </div>
     <div class="panel-body">
         <p>Région: {{ $region->nom }}</p>
-        <p>Adresse: <?php if ($terrain->adresse == "") {echo "Aucune adresse";} else {echo $terrain->adresse;} ?></p>
-        <p>Ville: <?php if ($terrain->ville == "") {echo "Aucune ville";} else {echo $terrain->ville;} ?></p>
-        <p>Description: <?php if ($terrain->description_courte == "") {echo "Aucune description";} else {echo $terrain->description_courte;} ?></p>
+        <p>Adresse: {{ $terrain->adresse }}</p>
+        <p>Ville: {{ $terrain->ville }}</p>
+        <p>Description: {{ $terrain->description_courte }}</p>
+        <p>Sports: <ul><?php foreach($terrainSports as $sport) { echo "<li>".$sport->nom."</li>"; } ?></ul></p>
     </div>
 </div>
 @stop

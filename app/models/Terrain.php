@@ -6,6 +6,9 @@
  * @author FUZZ
  * @version 0.1
  */
+
+namespace App\Models;
+
 class Terrain extends EloquentValidating {
     protected $guarded = array('id');
 
@@ -15,11 +18,11 @@ class Terrain extends EloquentValidating {
     */
 
     public function sports() {
-        return $this->belongsToMany('Sport');
+        return $this->belongsToMany('App\Models\Sport');
     }
 
     public function region() {
-        return $this->belongsTo('Region');
+        return $this->belongsTo('App\Models\Region');
     }
 
 /**

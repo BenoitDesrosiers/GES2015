@@ -6,9 +6,8 @@ use View;
 use Redirect;
 use Input;
 
-use Terrain;
-use Sport;
-
+use App\Models\Sport;
+use App\Models\Terrain;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
@@ -73,7 +72,7 @@ class SportsController extends BaseController {
             }
 			return Redirect::action('SportsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($sport->validationMessages);
+			return Redirect::back()->withInput()->withErrors($sport->validationMessages());
 		}	
 		
 	}
@@ -143,7 +142,7 @@ class SportsController extends BaseController {
             }
 			return Redirect::action('SportsController@index');
 		} else {
-			return Redirect::back()->withInput()->withErrors($sport->validationMessages);
+			return Redirect::back()->withInput()->withErrors($sport->validationMessages());
 		}
 	}
 

@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Terrain;
+
 class TerrainsTableSeeder extends Seeder {
 
 
@@ -44,6 +46,11 @@ class TerrainsTableSeeder extends Seeder {
                     'ville'=>$terrain[2],  
                     'region_id'=>$terrain[3])
                 );
+            // Pour chaque valeur envoyée lors du 'seed', ajout 
+            // d'une valeur aléatoire pour le sport associé
+            for($j=0;$j<rand(1,4);$j++) {
+                DB::table('sport_terrain')->insert(array('terrain_id' => DB::table('terrains')->max('id'), 'sport_id' => rand($sports->min('id'),$sports->max('id'))));
+            }
         }
     }
 }
