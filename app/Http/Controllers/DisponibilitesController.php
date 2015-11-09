@@ -62,7 +62,7 @@ class DisponibilitesController extends BaseController {
 	{
 		try {
 			$benevole = Benevole::findOrFail($id);
-			/*$disponibilites = [];
+			$disponibilites = [];
             $disponibilites[] = \Calendar::event(
                 'Event One',
                 false,
@@ -74,8 +74,8 @@ class DisponibilitesController extends BaseController {
                 true,
                 new \DateTime('2015-02-14'),
                 new \DateTime('2015-02-14')
-            );*/
-            $disponibilites = $benevole->disponibilites();
+            );
+            //$disponibilites = $benevole->disponibilites();
             $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => true, 'eventLimit' => true]);
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
