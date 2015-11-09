@@ -144,9 +144,16 @@ class ParticipantsController extends BaseController {
             $participant->region_id = $input['region_id'];
 
     //      Création de la date de naissance à partir des valeurs des trois comboboxes
-            $dateTest = new DateTime;
-            $dateTest->setDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
-            $participant->naissance=$dateTest;
+			$anneeNaissance = $input['annee_naissance']-1;
+			$moisNaissance = $input['mois_naissance']-1;
+			$jourNaissance = $input['jour_naissance']-1;
+			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
+				$dateTest = new DateTime;
+				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
+				$participant->naissance=$dateTest;
+			} else {
+				$participant->naissance = "invalide";
+			}
 
             if($participant->save()) {
                 if (is_array(Input::get('sport'))) {
@@ -272,7 +279,7 @@ class ParticipantsController extends BaseController {
 			$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
 			$participant->naissance=$dateTest;
 		} else {
-			$participant->naissance = null;
+			$participant->naissance = "invalide";
         }
 
         if($participant->save()) {
