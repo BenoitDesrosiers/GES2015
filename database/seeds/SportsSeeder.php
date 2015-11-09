@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Sport;
+
 class SportsTableSeeder extends Seeder {
 
 
