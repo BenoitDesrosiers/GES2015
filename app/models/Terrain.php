@@ -11,8 +11,7 @@ namespace App\Models;
 
 class Terrain extends EloquentValidating {
     protected $guarded = array('id');
-
-
+    
     /**
      * Eloquent relationship: un terrain peut supporter plusieurs sports différents
     */

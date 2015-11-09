@@ -74,7 +74,7 @@ class TerrainsController extends BaseController {
             $terrain->ville = $input['ville'];
             $terrain->region_id = $input['region_id'];
             $terrain->description_courte = $input['description_courte'];
-            
+
             if($terrain->save()) {
                 if (is_array(Input::get('sport'))) {
                     $terrain->sports()->attach(array_keys(Input::get('sport')));
@@ -82,13 +82,11 @@ class TerrainsController extends BaseController {
                 return Redirect::action('TerrainsController@index')->with('status', 'Terrain ajouté!');
             } else {
                 return Redirect::back()->withInput()->withErrors($terrain->validationMessages());
-            }  
+            }   
         } catch(Exception $e) {
             App::abort(404);
-        } 
-        
+        }  
     }
-
 
     /**
      * Affiche la ressource.
@@ -149,7 +147,6 @@ class TerrainsController extends BaseController {
             $terrain->ville = $input['ville'];
             $terrain->region_id = $input['region_id'];
             $terrain->description_courte = $input['description_courte'];
-            
             if($terrain->save()) {
                 if (is_array(Input::get('sport'))) {
                     $terrain->sports()->sync(array_keys(Input::get('sport')));
@@ -183,6 +180,4 @@ class TerrainsController extends BaseController {
             App::abort(404);
         }
     }
-
-
 }
