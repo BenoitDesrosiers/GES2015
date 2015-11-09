@@ -22,6 +22,8 @@ class BenevolesTableSeeder extends Seeder {
 		];
 
 		foreach($benevoles as $benevole) {
+
+
 			DB::table('benevoles')->insert(array('nom'=>$benevole[0],'prenom'=>$benevole[1],'adresse'=>$benevole[2],'numTel'=>$benevole[3],'numCell'=>$benevole[4],'courriel'=>$benevole[5],'disponibilite'=>$benevole[6],'accreditation'=>$benevole[7],'verification'=>$benevole[8]));
      		
         }
