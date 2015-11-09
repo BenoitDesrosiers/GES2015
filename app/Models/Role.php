@@ -12,14 +12,6 @@ namespace App\Models;
 class Role extends EloquentValidating {
 	protected $guarded = array('id');
 
-	/**
-	 * Eloquent relationship: un rôle appartient à plusieurs délégués
-	 */ 
-
-	public function delegues() {
-		return $this->belongsToMany('Delegue');
-	}
-	
 
 /**
  * Validation
