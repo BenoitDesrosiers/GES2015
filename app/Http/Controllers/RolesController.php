@@ -25,13 +25,16 @@ class RolesController extends BaseController {
 	 */
 	public function index()
 	{
-		$roles = Role::all()->sortby('nom');
-	
-		foreach($roles as $role){
-			if ($role->description == "")
-				{
-					$role->description = "Aucune description";
-			}
+		try {
+			$roles = Role::all()->sortby('nom');
+			foreach($roles as $role){
+				if ($role->description == "")
+					{
+						$role->description = "Aucune description";
+				}
+		}
+		} catch(ModelNotFoundException $e) {
+			App::abort(404);
 		}
 		return View::make('roles.index', compact('roles'));
 	}
@@ -55,12 +58,15 @@ class RolesController extends BaseController {
 	 */
 	public function store()
 	{
-		$input = Input::all();
-		
-		$role = new Role;
-		$role->nom = $input['nom'];
-		$role->description = $input['description'];
-		
+		try {
+			$input = Input::all();
+			
+			$role = new Role;
+			$role->nom = $input['nom'];
+			$role->description = $input['description'];
+		} catch(ModelNotFoundException $e) {
+			App::abort(404);
+		}
 		if($role->save()) {
 			return Redirect::action('RolesController@index');
 		} else {
@@ -96,7 +102,11 @@ class RolesController extends BaseController {
 	 */
 	public function edit($id)
 	{
-		$role = Role::findOrFail($id);
+		try {
+			$role = Role::findOrFail($id);
+		} catch(ModelNotFoundException $e) {
+			App::abort(404);
+		}
 		return View::make('roles.edit', compact('role'));
 	}
 
@@ -109,11 +119,16 @@ class RolesController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$input = Input::all();
+		try {
+			$input = Input::all();
 
-		$role = Role::findOrFail($id);
-		$role->nom = $input['nom'];
-		$role->description = $input['description'];
+			$role = Role::findOrFail($id);
+			$role->nom = $input['nom'];
+			$role->description = $input['description'];
+		} catch(ModelNotFoundException $e) {
+			App::abort(404);
+		}
+
 		
 		if($role->save()) {
 			return Redirect::action('RolesController@index');
@@ -131,9 +146,12 @@ class RolesController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		$role = Role::findOrFail($id);
-		$role->delete();
-		
+		try {
+			$role = Role::findOrFail($id);
+			$role->delete();
+		} catch(ModelNotFoundException $e) {
+			App::abort(404);
+		}
 		return Redirect::action('RolesController@index');
 	
 	}

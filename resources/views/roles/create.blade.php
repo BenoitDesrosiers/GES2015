@@ -7,6 +7,10 @@
 	</div>
 	<div class="panel-body">
 		{!! Form::open(['action'=> 'RolesController@index', 'class' => 'form']) !!}
+		<!--    Affiche les messages d'erreur après un enregistrement raté -->
+        @foreach ($errors->all() as $error)
+            <p class="alert alert-danger">{{ $error }}</p>
+        @endforeach
 		<div class="form-group">
 			{!! Form::label('nom', 'Nom:') !!}
 			{!! Form::text('nom',null, ['class' => 'form-control']) !!}

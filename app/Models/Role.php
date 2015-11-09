@@ -16,10 +16,6 @@ class Role extends EloquentValidating {
 	 * Eloquent relationship: un rôle appartient à plusieurs délégués
 	 */ 
 
-	
-	/*public function sports() {
-		return $this->belongsToMany('Sport');*/
-	
 	public function delegues() {
 		return $this->belongsToMany('Delegue');
 	}
