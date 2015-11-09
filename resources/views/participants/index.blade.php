@@ -5,18 +5,18 @@
 	<div class="panel-heading">
 		<h2>Liste des participants</h2>
 		<div class="row">
-			<div class="col-md-7" id="bouton-créer">
+			<div class="col-md-6" id="bouton-créer">
 				<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>
 			</div> <!-- bouton créer -->
 			{!! Form::open(['action'=> array('ParticipantsController@recherche'), 'method' => 'POST', 'class' => 'form']) !!}
 			<div class="col-md-2" id="liste-filtres">
-				{!! Form::select('listeFiltres', $listeFiltres, $valeurFiltre, ['style' => 'width:100%; height:25px;', 'id' => 'listeFiltres']) !!}
+				{!! Form::select('listeFiltres', $listeFiltres, $valeurFiltre, ['style' => 'width:100%;', 'id' => 'listeFiltres']) !!}
 			</div> <!-- liste-filtres -->
     		<div class="col-md-2" id="recherche">
-    			{!! Form::text('champRecherche', $valeurRecherche, ['style' => 'width:100%; height:25px;', 'id' => 'champRecherche'])!!}
+    			{!! Form::text('champRecherche', $valeurRecherche, ['style' => 'width:100%;', 'id' => 'champRecherche'])!!}
     		</div><!-- recherche -->
-    		<div class="col-md-1" id="boutonRecherche">
-    			{!! Form::button('Recherche', ['type' => 'submit','style' => 'width:100%; height:25px;'])!!}
+    		<div class="col-md-2" id="boutonRecherche">
+    			{!! Form::button('Recherche', ['type' => 'submit','style' => 'width:100%;', 'class' => 'btn btn-info'])!!}
     		</div><!-- buttonRecherche -->
     		{!! Form::close() !!}
 		</div>				
@@ -94,14 +94,14 @@
 			
 			if (!(valeurFiltre == 3 || valeurFiltre == 4)) {
 				
-				var champTexte = $("<input id='champRecherche' type='text' name='champRecherche' style='width:100%; height:25px;'/>");
+				var champTexte = $("<input id='champRecherche' type='text' name='champRecherche' style='width:100%;'/>");
 		
 				$("#champRecherche").remove();
 			    $("#recherche").prepend(champTexte);
 			    
 			} else if (valeurFiltre == 3) {
 				
-				var selecteur = $("<select id='champRecherche' name='champRecherche' style='width:100%; height:25px;'/>");
+				var selecteur = $("<select id='champRecherche' name='champRecherche' style='width:100%;'/>");
 				var donnee = getListeRegion();
 				var valeurRecherche = "<?php echo($valeurRecherche); ?>";
 				if (valeurRecherche == "") {
@@ -118,7 +118,7 @@
 			    
 			} else if (valeurFiltre == 4) {
 				
-				var selecteur = $("<select id='champRecherche' name='champRecherche' style='width:100%; height:25px;'/>");
+				var selecteur = $("<select id='champRecherche' name='champRecherche' style='width:100%;'/>");
 				var donnee = getChoixEquipe();
 				var valeurRecherche = "<?php echo($valeurRecherche); ?>";
 				if (valeurRecherche == "") {
