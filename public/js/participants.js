@@ -18,8 +18,6 @@ $("#listeFiltres").change(function() {
  */
 function changerEntreeRecherche() {
 	var valeurFiltre = $("option:selected", "#listeFiltres").val();
-	var valeurRecherche = "<?php echo $valeurRecherche; ?>";
-	console.log(valeurRecherche);
 	
 	if (!(valeurFiltre == 3 || valeurFiltre == 4)) {
 		
@@ -51,7 +49,6 @@ function changerEntreeRecherche() {
 		if (valeurRecherche == "") {
 			valeurRecherche = "non";
 		}
-		
 		for(var valeur in donnee) {
 		    $("<option />", {value: valeur, text: donnee[valeur]}).appendTo(selecteur);
 		}
