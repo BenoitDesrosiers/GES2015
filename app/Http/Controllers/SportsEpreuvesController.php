@@ -6,8 +6,8 @@ use View;
 use Redirect;
 use Input;
 
-use Sport;
-use Epreuve;
+use App\Models\Sport;
+use App\Models\Epreuve;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
