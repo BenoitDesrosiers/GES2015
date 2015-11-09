@@ -5,6 +5,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Liste des participants</h2>
+<<<<<<< HEAD
 		<div class="row">
 			<div class="col-md-6" id="bouton-créer">
 				<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>
@@ -21,6 +22,9 @@
     		</div><!-- buttonRecherche -->
     		{!! Form::close() !!}
 		</div>				
+=======
+		<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>
+>>>>>>> 1c8f06cebb2ac299963782c8251c87c46aee6277
 	</div>
 	@if ($participants->isEmpty())
 		<div class="panel-body">

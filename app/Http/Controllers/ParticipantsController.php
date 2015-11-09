@@ -6,6 +6,7 @@ use View;
 use Redirect;
 use Input;
 use App;
+use DateTime;
 
 use App\Models\Participant;
 use App\Models\Region;
@@ -39,7 +40,6 @@ class ParticipantsController extends BaseController {
 		return View::make('participants.index', compact('participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurRecherche'));	
 	}
 
-
 	/**
 	 * Affiche le formulaire de création d'un participant.
 	 *
@@ -47,12 +47,20 @@ class ParticipantsController extends BaseController {
 	 */
 	public function create()
 	{
-		$regions = Region::all();
-		$sports = Sport::all();
+        $regions = Region::all();
+        $sports = Sport::all();
 
-		return View::make('participants.create', compact('regions', 'sports'));	
+//      La date par défaut du formulaire est <cette année> - 20 ans
+//      pour être plus prêt de l'âge moyen attendu
+        $anneeDefaut = date('Y')- 20;
+        $moisDefaut = 0;
+        $jourDefaut = 0;
+
+        $listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
+        $listeMois = ParticipantsController::generer_liste(1, 12);
+        $listeJours = ParticipantsController::generer_liste(1, 31);
+        return View::make('participants.create', compact('regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
 	}
-
 
 	/**
 	 * Enregistre dans la bd le participant qui vient d'être créé.
@@ -61,31 +69,45 @@ class ParticipantsController extends BaseController {
 	 */
 	public function store()
 	{
-		$input = Input::all();
-		if(isset($input['equipe'])) {				
-			$input['equipe'] = '1';
-		} else {
-			$input['equipe'] = '0';
-		} 
+        try {
+            $input = Input::all();
+            $participant = new Participant;
 
-		$participant = new Participant;
-		$participant->nom = $input['nom'];
-		$participant->prenom = $input['prenom'];
-		$participant->numero = $input['numero'];
-		$participant->region_id = $input['region_id'];
-		$participant->equipe = $input['equipe'];
-		
-		if($participant->save()) {
-			if (is_array(Input::get('sport'))) { //Sauvegarde les sports associés au participant
-				$participant->sports()->attach(array_keys(Input::get('sport')));
-			}
-			return Redirect::action('ParticipantsController@index');
-		} else {
-			return Redirect::back()->withInput()->withErrors($participant->validationMessages());
-		}	
-		
+    //      Le champ 'equipe' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement
+            if(Input::has('equipe')) {
+                $participant->equipe = true;
+            } else {
+                $participant->equipe = false;
+            }
+            $participant->nom = $input['nom'];
+            $participant->prenom = $input['prenom'];
+            $participant->telephone = $input['telephone'];
+            $participant->nom_parent = $input['nom_parent'];
+            $participant->numero = $input['numero'];
+            $participant->sexe = $input['sexe'];
+            $participant->adresse = $input['adresse'];
+            $participant->region_id = $input['region_id'];
+
+    //      Création de la date de naissance à partir des valeurs des trois comboboxes
+            $dateTest = new DateTime;
+            $dateTest->setDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
+            $participant->naissance=$dateTest;
+
+            if($participant->save()) {
+                if (is_array(Input::get('sport'))) {
+                    $participant->sports()->sync(array_keys(Input::get('sport')));
+                } else {
+                    $participant->sports()->detach();
+                }
+    //          Message de confirmation si la sauvegarde a réussi
+                return Redirect::action('ParticipantsController@create')->with ( 'status', 'Le partipant a été créé!' );
+            } else {
+                return Redirect::back()->withInput()->withErrors($participant->validationMessages());
+            }
+        } catch (Exception $e) {
+            App:abort(404);
+        }
 	}
-
 
 	/**
 	 * Affiche un seul participant.
@@ -106,23 +128,59 @@ class ParticipantsController extends BaseController {
 		return View::make('participants.show', compact('participant', 'region', 'sports', 'participantSports'));
 	}
 
-
 	/**
-	 * Affiche le formulaire pour éditer un participant.
-	 *
-	 * @param  int $id. L'id du participant à éditer. 
-	 * @return Response
-	 */
+	* Affiche le formulaire pour éditer un participant.
+	*
+	* @param  int $id. L'id du participant à éditer. 
+	* @return Response
+	*/      
 	public function edit($id)
 	{
-		$participant = Participant::findOrFail($id);
-		$regions = Region::all();
-		$participantSports = Participant::find($id)->sports;
-		$sports = Sport::all();
-		return View::make('participants.edit', compact('participant', 'regions', 'sports', 'participantSports'));
+		try {
+			$participant = Participant::findOrFail($id);
+			$regions = Region::all();
+			$sports = Sport::all();
+			$participantSports = Participant::find($id)->sports;
+			
+			//Si de vieilles entrées n'ont pas de date de naissance, on utilise les valeurs par défaut
+			$anneeDefaut = date('Y')- 20;
+			$moisDefaut = 0;
+			$jourDefaut = 0;
+			
+			if ($participant->naissance) {
+				//Déterminer les valeurs des trois comboboxes
+				$stringsDate = explode('-',$participant->naissance);
+				$anneeDefaut = $stringsDate[0]+1;
+				$moisDefaut = $stringsDate[1]+1;
+				$jourDefaut = $stringsDate[2]+1;
+			}
+			//Générer les listes des comboboxes
+			$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
+			$listeMois = ParticipantsController::generer_liste(1, 12);
+			$listeJours = ParticipantsController::generer_liste(1, 31);
+            		
+			return View::make('participants.edit', compact('participant', 'regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+		} catch (Exception $e) {
+			App:abort(404);
+		}
 	}
-
-
+	
+	/**
+	 * Construit une liste continue d'entiers sur un intervalle donné
+	 *
+	 * @param int $debut La valeur de départ
+	 * @param int $n     Le nombre de valeurs à inclure
+	 * @return La liste remplie
+	 */
+	private function generer_liste($debut, $n) {
+		$liste = array();
+		$fin = $debut+$n-1;
+		for ($i = $debut; $i <= $fin; $i++) {
+			$liste[$i+1] = $i;
+		}
+		return $liste;
+	}
+	
 	/**
 	 * Mise à jour du participant dans la bd.
 	 *
@@ -131,31 +189,52 @@ class ParticipantsController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$input = Input::all();
-		if(isset($input['equipe'])) {
-			$input['equipe'] = '1';
-		} else {
-			$input['equipe'] = '0';
-		}
-		$participant = Participant::findOrFail($id);
-		$participant->nom = $input['nom'];
-		$participant->prenom = $input['prenom'];
-		$participant->numero = $input['numero'];
-		$participant->region_id = $input['region_id'];
-		$participant->equipe = $input['equipe'];
-		
-		if($participant->save()) {
-			if (is_array(Input::get('sport'))) {
-				$participant->sports()->sync(array_keys(Input::get('sport')));
+		try {
+			$input = Input::all();
+	
+//      Le champ 'equipe' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement
+			$participant = Participant::findOrFail($id);
+			if(Input::has('equipe')) {
+				$participant->equipe = true;
 			} else {
-				$participant->sports()->detach();
+				$participant->equipe = false;
 			}
-			return Redirect::action('ParticipantsController@index');
-		} else {
-			return Redirect::back()->withInput()->withErrors($participant->validationMessages());
+			$participant->nom = $input['nom'];
+			$participant->prenom = $input['prenom'];
+			$participant->telephone = $input['telephone'];
+			$participant->nom_parent = $input['nom_parent'];
+			$participant->numero = $input['numero'];
+			$participant->sexe = $input['sexe'];
+			$participant->adresse = $input['adresse'];
+			$participant->region_id = $input['region_id'];
+	
+//      Création de la date de naissance à partir des valeurs des trois comboboxes
+			$anneeNaissance = $input['annee_naissance']-1;
+			$moisNaissance = $input['mois_naissance']-1;
+			$jourNaissance = $input['jour_naissance']-1;
+			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
+				$dateTest = new DateTime;
+				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
+				$participant->naissance=$dateTest;
+			} else {
+				$participant->naissance = null;
+			}
+	
+			if($participant->save()) {
+				if (is_array(Input::get('sport'))) {
+					$participant->sports()->sync(array_keys(Input::get('sport')));
+				} else {
+					$participant->sports()->detach();
+				}
+//          Message de confirmation si la sauvegarde a réussi
+				return Redirect::action('ParticipantsController@edit', $participant->id)->with ( 'status', 'Le partipant ' . $id . ' a Ã©tÃ© mis a jour!' );
+			} else {
+				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
+			}
+		} catch (Exception $e) {
+			App:abort(404);
 		}
 	}
-
 
 	/**
 	 * Efface un participant de la bd.
@@ -169,7 +248,6 @@ class ParticipantsController extends BaseController {
 		$participant->delete();
 		
 		return Redirect::action('ParticipantsController@index');
-	
 	}
 	
 	/**
