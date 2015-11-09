@@ -10,10 +10,8 @@ class BenevolesTableSeeder extends Seeder {
 
 	public function run()
 	{
-		DB::table('benevoles')->delete();
-
-		$benevoles = [
-		//nom, prenom, adresse, numTel, numCell, courriel, disponibilite, accreditation, verification
+        //nom, prenom, adresse, numTel, numCell, courriel, disponibilite, accreditation, verification
+        $infos = [
 		["Desrosiers", "Jérémi", "123 rue Duniquab, Drummondville, J2C 1A1", "8194771234", "8198181234", "j.desrosiers@evenement-sportif.ca", "Tous les matins", "000A123", "À faire"],
 		["Pedneault", "Eric", "124 rue Petinichon, Drummondville, J2C 1A2", "8194772345", "8198182345", "e.pedneault@evenement-sportif.ca", "Tous les soirs", "000B123", "En attente"],
 		["Girardin", "Simon", "125 rue Sainte-Paire, Drummondville, J2C 1A3", "8194773456", "8198183456", "s.girardin@evenement-sportif.ca", "Mercredi seulement", "000C123", "Fait" ],
@@ -21,11 +19,19 @@ class BenevolesTableSeeder extends Seeder {
         ["Dubé", "Sarah", "127 rue Dunimportequoi, Drummondville, J2C 1A5", "8194775678", "8198185678", "s.dube@evenement-sportif.ca", "En tous temps, sauf le mardi", "000E123", "Fait"],
 		];
 
-		foreach($benevoles as $benevole) {
-
-
-			DB::table('benevoles')->insert(array('nom'=>$benevole[0],'prenom'=>$benevole[1],'adresse'=>$benevole[2],'numTel'=>$benevole[3],'numCell'=>$benevole[4],'courriel'=>$benevole[5],'disponibilite'=>$benevole[6],'accreditation'=>$benevole[7],'verification'=>$benevole[8]));
-     		
+        DB::table('benevoles')->delete();
+        foreach($infos as $info) {
+		    $benevole = new Benevole();
+		    $benevole->nom = $info[0];
+		    $benevole->prenom = $info[1];
+		    $benevole->adresse = $info[2];
+		    $benevole->numTel = $info[3];
+		    $benevole->numCell = $info[4];
+		    $benevole->courriel = $info[5];
+            $benevole->disponibilite = $info[6];
+		    $benevole->accreditation = $info[7];
+		    $benevole->verification = $info[8];
+            $benevole->save();		
         }
 	}
 }
