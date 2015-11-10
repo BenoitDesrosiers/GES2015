@@ -147,13 +147,7 @@ class ParticipantsController extends BaseController {
 			$anneeNaissance = $input['annee_naissance']-1;
 			$moisNaissance = $input['mois_naissance']-1;
 			$jourNaissance = $input['jour_naissance']-1;
-			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
-				$dateTest = new DateTime;
-				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
-				$participant->naissance=$dateTest;
-			} else {
-				$participant->naissance = "invalide";
-			}
+			$participant->naissance = ParticipantsController::construireDate($anneeNaissance, $moisNaissance, $jourNaissance);
 
             if($participant->save()) {
                 if (is_array(Input::get('sport'))) {
@@ -169,6 +163,26 @@ class ParticipantsController extends BaseController {
         } catch (Exception $e) {
             App:abort(404);
         }
+	}
+
+	/**
+	 * Retourne l'objet Date correspondant aux valeurs passées si elles sont valides
+	 * ou le string "invalide" si la date est impossible (ex. 31 février)
+	 *
+	 * @param  int  $annee L'annee
+	 * @param  int  $mois Le mois
+	 * @param  int  $jour Le jour
+	 * @return Date formée de $annee-$mois-$jour ou "invalide"
+	 */
+	
+	public function construireDate($annee, $mois, $jour) {
+		if (checkdate($mois, $jour, $annee)) {
+			$dateTest = new DateTime;
+			$dateTest->setDate($annee, $mois, $jour);
+			return $dateTest;
+		} else {
+			return "invalide";
+		}
 	}
 
 	/**
@@ -199,29 +213,30 @@ class ParticipantsController extends BaseController {
     public function edit($id)
     {
         try {
-		$participant = Participant::findOrFail($id);
-		$regions = Region::all();
-		$sports = Sport::all();
-		$participantSports = Participant::find($id)->sports;
+			$participant = Participant::findOrFail($id);
+			$regions = Region::all();
+			$sports = Sport::all();
+			$participantSports = Participant::find($id)->sports;
 
-//      Si de vieilles entrées n'ont pas de date de naissance, on utilise les valeurs par défaut
-		$anneeDefaut = date('Y')- 20;
-		$moisDefaut = 0;
-		$jourDefaut = 0;
-		if ($participant->naissance) {
-//          Déterminer les valeurs des trois comboboxes
-			$stringsDate = explode('-',$participant->naissance);
-			$anneeDefaut = $stringsDate[0]+1;
-			$moisDefaut = $stringsDate[1]+1;
-			$jourDefaut = $stringsDate[2]+1;
-		}
+	//      Si de vieilles entrées n'ont pas de date de naissance, on utilise les valeurs par défaut
+			$anneeDefaut = date('Y')- 20;
+			$moisDefaut = 0;
+			$jourDefaut = 0;
+			if ($participant->naissance) {
+	//          Déterminer les valeurs des trois comboboxes
+				$stringsDate = explode('-',$participant->naissance);
+	// 			Il faut ajouter 1 aux valeurs pour obtenir la valeur attendue
+				$anneeDefaut = $stringsDate[0]+1;
+				$moisDefaut = $stringsDate[1]+1;
+				$jourDefaut = $stringsDate[2]+1;
+			}
 
-//      Générer les listes des comboboxes
-		$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
-		$listeMois = ParticipantsController::generer_liste(1, 12);
-		$listeJours = ParticipantsController::generer_liste(1, 31);
+	//      Générer les listes des comboboxes
+			$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
+			$listeMois = ParticipantsController::generer_liste(1, 12);
+			$listeJours = ParticipantsController::generer_liste(1, 31);
 
-		return View::make('participants.edit', compact('participant', 'regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+			return View::make('participants.edit', compact('participant', 'regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
         } catch (Exception $e) {
             App:abort(404);
         }
@@ -252,47 +267,41 @@ class ParticipantsController extends BaseController {
     public function update($id)
     {
         try {
-        $input = Input::all();
+			$input = Input::all();
 
-//      Le champ 'equipe' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement
-        $participant = Participant::findOrFail($id);
-        if(Input::has('equipe')) {
-            $participant->equipe = true;
-        } else {
-            $participant->equipe = false;
-        }
-        $participant->nom = $input['nom'];
-        $participant->prenom = $input['prenom'];
-        $participant->telephone = $input['telephone'];
-        $participant->nom_parent = $input['nom_parent'];
-        $participant->numero = $input['numero'];
-        $participant->sexe = $input['sexe'];
-        $participant->adresse = $input['adresse'];
-        $participant->region_id = $input['region_id'];
+	//      Le champ 'equipe' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement
+			$participant = Participant::findOrFail($id);
+			if(Input::has('equipe')) {
+				$participant->equipe = true;
+			} else {
+				$participant->equipe = false;
+			}
+			$participant->nom = $input['nom'];
+			$participant->prenom = $input['prenom'];
+			$participant->telephone = $input['telephone'];
+			$participant->nom_parent = $input['nom_parent'];
+			$participant->numero = $input['numero'];
+			$participant->sexe = $input['sexe'];
+			$participant->adresse = $input['adresse'];
+			$participant->region_id = $input['region_id'];
 
-//      Création de la date de naissance à partir des valeurs des trois comboboxes
-		$anneeNaissance = $input['annee_naissance']-1;
-		$moisNaissance = $input['mois_naissance']-1;
-		$jourNaissance = $input['jour_naissance']-1;
-        if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
-			$dateTest = new DateTime;
-			$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
-			$participant->naissance=$dateTest;
-		} else {
-			$participant->naissance = "invalide";
-        }
+	//      Création de la date de naissance à partir des valeurs des trois comboboxes
+			$anneeNaissance = $input['annee_naissance']-1;
+			$moisNaissance = $input['mois_naissance']-1;
+			$jourNaissance = $input['jour_naissance']-1;
+			$participant->naissance = ParticipantsController::construireDate($anneeNaissance, $moisNaissance, $jourNaissance);
 
-        if($participant->save()) {
-            if (is_array(Input::get('sport'))) {
-                $participant->sports()->sync(array_keys(Input::get('sport')));
-            } else {
-                $participant->sports()->detach();
-            }
-//          Message de confirmation si la sauvegarde a réussi
-            return Redirect::action('ParticipantsController@edit', $participant->id)->with ( 'status', 'Le partipant ' . $id . ' a été mis a jour!' );
-        } else {
-            return Redirect::back()->withInput()->withErrors($participant->validationMessages());
-        }
+			if($participant->save()) {
+				if (is_array(Input::get('sport'))) {
+					$participant->sports()->sync(array_keys(Input::get('sport')));
+				} else {
+					$participant->sports()->detach();
+				}
+	//          Message de confirmation si la sauvegarde a réussi
+				return Redirect::action('ParticipantsController@edit', $participant->id)->with ( 'status', 'Le partipant ' . $id . ' a été mis a jour!' );
+			} else {
+				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
+			}
         } catch (Exception $e) {
             App:abort(404);
         }
