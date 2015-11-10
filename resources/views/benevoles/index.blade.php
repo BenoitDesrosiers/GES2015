@@ -14,7 +14,6 @@
 		<thead>
 			<tr>
 				<th>Nom</th>
-                <th class="hidden-sm hidden-xs"></th>
                 <th class="hidden-xs">Accréditation</th>
                 <th class="hidden-xs">Vérification</th>
                 <th></th>				
