@@ -8,12 +8,9 @@
 	    <meta name="csrf-token" content="{{ csrf_token() }}">
 	    
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="{{ asset('/css/fullcalendar.css') }}"/>
 		<link rel="stylesheet" href="{{ asset('/css/style.css') }}">
 		<script src="//code.jquery.com/jquery.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <script src="{{ asset('/js/moment.min.js') }}"></script>
-        <script src="{{ asset('/js/fullcalendar.min.js') }}"></script>
 		<script src="{{ asset('js/script.js') }}"></script>
 	    <!--[if lt IE 9]>
 			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>

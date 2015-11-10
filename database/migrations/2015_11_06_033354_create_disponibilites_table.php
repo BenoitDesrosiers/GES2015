@@ -18,8 +18,8 @@ class CreateDisponibilitesTable extends Migration
 			$table->unsignedInteger('benevole_id');
             $table->string('title');
             $table->boolean('isAllDay');
-			$table->string('start');
-			$table->string('end');
+			$table->datetime('start');
+			$table->datetime('end');
 			$table->timestamps();
 		});
     }

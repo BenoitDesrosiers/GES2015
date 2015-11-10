@@ -45,9 +45,9 @@ class DisponibilitesController extends BaseController {
 		$disponibilite->end = $input['end'];
         
 		if($disponibilite->save()) {
-			return Redirect::action('BenevolesController@index');
+			return Redirect::action('DisponibilitesController@show');
 		} else {
-			return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
+			return Redirect::back()->withInput()->withErrors($disponibilite->validationMessages());
 		}	
 	}
 
@@ -62,21 +62,8 @@ class DisponibilitesController extends BaseController {
 	{
 		try {
 			$benevole = Benevole::findOrFail($id);
-			$disponibilites = [];
-            $disponibilites[] = \Calendar::event(
-                'Event One',
-                false,
-                '2015-02-11T0800',
-                '2015-02-12T0800'
-            );
-            $disponibilites[] = \Calendar::event(
-                "Valentine's Day",
-                true,
-                new \DateTime('2015-02-14'),
-                new \DateTime('2015-02-14')
-            );
-            //$disponibilites = $benevole->disponibilites();
-            $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => true, 'eventLimit' => true]);
+			$disponibilites = $benevole->disponibilites();
+            $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => false, 'eventLimit' => true]);
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -104,7 +91,20 @@ class DisponibilitesController extends BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$input = Input::all();
+		
+		$disponibilite = Disponibilite::findOrFail($id);
+        $disponibilite->benevole_id = $input['benevole_id'];
+        $disponibilite->title = $input['title'];
+		$disponibilite->isAllDay = $input['isAllDay'];
+		$disponibilite->start = $input['start'];
+		$disponibilite->end = $input['end'];
+        
+		if($disponibilite->save()) {
+			return Redirect::action('DisponibilitesController@show');
+		} else {
+			return Redirect::back()->withInput()->withErrors($disponibilite->validationMessages());
+		}	
 	}
 
 
@@ -116,7 +116,13 @@ class DisponibilitesController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-        //
+        try{
+		    $disponibilite = Disponibilite::findOrFail($id);
+		    $disponibilite->delete();
+		 } catch(ModelNotFoundException $e) {
+            App::abort(404);
+        }
+		return Redirect::action('DisponibilitesController@show');
 	}
 
 
