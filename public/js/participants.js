@@ -2,7 +2,6 @@
  * La fonction changerValeurRecherche() est appeler lorsque la page est prête
  */
 $(function() {
-	console.log("Banana!")
 	changerEntreeRecherche();
 });
 
