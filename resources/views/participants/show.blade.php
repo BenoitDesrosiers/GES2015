@@ -11,7 +11,7 @@
 	</div>
 	<div class="panel-body">
         <p>Genre:
-            @if ($participant->sexe)
+            @if (!$participant->sexe)
                 Masculin
             @else
                 Féminin
