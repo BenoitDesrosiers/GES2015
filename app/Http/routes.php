@@ -13,14 +13,19 @@ use App\Http\Controllers\Auth\AuthController;
 |
 */
 Route::get('/','HomeController@index');
+Route::get('/home','HomeController@index');
 
 Route::group(['middleware'=>'auth'], function() {
 	
 	Route::resource('sports','SportsController');
 	Route::resource('sports.epreuves','SportsEpreuvesController');
+	
+	Route::resource('sports.participants','sportParticipantController');
+	
 	Route::resource('epreuves','EpreuvesController');
 	Route::resource('participants','ParticipantsController');
 	Route::resource('resultats','ResultatsController');
+	Route::resource('terrains','TerrainsController');
     Route::resource('benevoles','BenevolesController');
     Route::resource('disponibilites', 'DisponibilitesController');
 	Route::resource('roles','RolesController');
@@ -29,9 +34,6 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
 	Route::post('resultatPourEvenementResultats', 'ResultatsController@resultatPourEvenement');
 });
-//
-
-
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
