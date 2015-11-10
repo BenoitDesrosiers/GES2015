@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\AuthController;
 |
 */
 Route::get('/','HomeController@index');
+Route::get('/home','HomeController@index');
 
 Route::group(['middleware'=>'auth'], function() {
 	
@@ -21,6 +22,7 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('epreuves','EpreuvesController');
 	Route::resource('participants','ParticipantsController');
 	Route::resource('resultats','ResultatsController');
+	Route::resource('terrains','TerrainsController');
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');

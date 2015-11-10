@@ -1,9 +1,10 @@
 @extends('layout')
 @section('content')
+<?php use App\Models\Region; //TODO: enlever le code qui accède directement à Région de la view, et passer les régions en paramètre, une fois fait, enlever cette ligne?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Liste des participants</h2>
-		<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>						
+		<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>
 	</div>
 @if ($participants->isEmpty())
 	<div class="panel-body">
@@ -13,10 +14,46 @@
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<th>Nom, Prenom</th>
-				<th class="hidden-xs">Numéro</th>
-				<th class="hidden-sm hidden-xs">Région</th>
-				<th class="hidden-sm hidden-xs">Équipe</th>
+				<th>
+					<!-- Création des liens pour trier la colonne Nom -->
+					{!! 
+						link_to_action(
+							$colonnesTriees["colNom"]["contrl"],
+							$colonnesTriees["colNom"]["texteAffiche"],
+							$colonnesTriees["colNom"]["trie"]
+						)
+					!!}
+				</th>
+				<th class="hidden-xs">
+					<!-- Création des liens pour trier la colonne Numéro -->
+					{!! 
+						link_to_action(
+							$colonnesTriees["colNum"]["contrl"],
+							$colonnesTriees["colNum"]["texteAffiche"],
+							$colonnesTriees["colNum"]["trie"]
+						)
+					!!}
+				</th>
+				<th class="hidden-sm hidden-xs">
+					<!-- Création des liens pour trier la colonne Région -->
+					{!! 
+						link_to_action(
+							$colonnesTriees["colRegion"]["contrl"],
+							$colonnesTriees["colRegion"]["texteAffiche"],
+							$colonnesTriees["colRegion"]["trie"]
+						)
+					!!}
+				</th>
+				<th class="hidden-sm hidden-xs">
+					<!-- Création des liens pour trier la colonne Équipe -->
+					{!!
+						link_to_action(
+							$colonnesTriees["colEquipe"]["contrl"],
+							$colonnesTriees["colEquipe"]["texteAffiche"],
+							$colonnesTriees["colEquipe"]["trie"]
+						)
+					!!}
+				</th>
 				<th></th>
 				<th></th>
 			</tr>

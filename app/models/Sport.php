@@ -6,6 +6,9 @@
  * @author benou
  * @version 0.1
  */
+
+namespace App\Models;
+
 class Sport extends EloquentValidating {
 	protected $guarded = array('id');
 
@@ -13,12 +16,13 @@ class Sport extends EloquentValidating {
 	/**
 	 * Eloquent relationship: un sport a plusieurs épreuves
 	 */ 
+	
 	public function epreuves() {
-		return $this->hasMany('Epreuve');
+		return $this->hasMany('App\Models\Epreuve');
 	}
 	
 	public function participants() {
-		return $this->belongsToMany('Participant');
+		return $this->belongsToMany('App\Models\Participant');
 	}
 	
 
