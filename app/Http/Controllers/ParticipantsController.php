@@ -142,19 +142,19 @@ class ParticipantsController extends BaseController {
 			$sports = Sport::all();
 			$participantSports = Participant::find($id)->sports;
 			
-			//Si de vieilles entrées n'ont pas de date de naissance, on utilise les valeurs par défaut
+//			Si de vieilles entrées n'ont pas de date de naissance, on utilise les valeurs par défaut
 			$anneeDefaut = date('Y')- 20;
 			$moisDefaut = 0;
 			$jourDefaut = 0;
 			
 			if ($participant->naissance) {
-				//Déterminer les valeurs des trois comboboxes
+//				Déterminer les valeurs des trois comboboxes
 				$stringsDate = explode('-',$participant->naissance);
 				$anneeDefaut = $stringsDate[0]+1;
 				$moisDefaut = $stringsDate[1]+1;
 				$jourDefaut = $stringsDate[2]+1;
 			}
-			//Générer les listes des comboboxes
+//			Générer les listes des comboboxes
 			$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
 			$listeMois = ParticipantsController::generer_liste(1, 12);
 			$listeJours = ParticipantsController::generer_liste(1, 31);
@@ -192,7 +192,7 @@ class ParticipantsController extends BaseController {
 		try {
 			$input = Input::all();
 	
-//      Le champ 'equipe' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement
+//      	Le champ 'equipe' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement
 			$participant = Participant::findOrFail($id);
 			if(Input::has('equipe')) {
 				$participant->equipe = true;
@@ -208,7 +208,7 @@ class ParticipantsController extends BaseController {
 			$participant->adresse = $input['adresse'];
 			$participant->region_id = $input['region_id'];
 	
-//      Création de la date de naissance à partir des valeurs des trois comboboxes
+//      	Création de la date de naissance à partir des valeurs des trois comboboxes
 			$anneeNaissance = $input['annee_naissance']-1;
 			$moisNaissance = $input['mois_naissance']-1;
 			$jourNaissance = $input['jour_naissance']-1;
@@ -226,7 +226,7 @@ class ParticipantsController extends BaseController {
 				} else {
 					$participant->sports()->detach();
 				}
-//          Message de confirmation si la sauvegarde a réussi
+//          	Message de confirmation si la sauvegarde a réussi
 				return Redirect::action('ParticipantsController@edit', $participant->id)->with ( 'status', 'Le partipant ' . $id . ' a Ã©tÃ© mis a jour!' );
 			} else {
 				return Redirect::back()->withInput()->withErrors($participant->validationMessages());

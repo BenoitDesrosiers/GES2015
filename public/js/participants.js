@@ -2,6 +2,7 @@
  * La fonction changerValeurRecherche() est appeler lorsque la page est prête
  */
 $(function() {
+	console.log("Banana!")
 	changerEntreeRecherche();
 });
 
@@ -30,9 +31,6 @@ function changerEntreeRecherche() {
 		
 		var selecteur = $("<select id='entreeRecherche' name='entreeRecherche' style='width:100%;'/>");
 		var donnee = getListeRegion();
-		if (valeurRecherche == "") {
-			valeurRecherche = "abt";
-		}
 		
 		for(var valeur in donnee) {
 		    $("<option />", {value: valeur, text: donnee[valeur]}).appendTo(selecteur);
@@ -46,9 +44,7 @@ function changerEntreeRecherche() {
 		
 		var selecteur = $("<select id='entreeRecherche' name='entreeRecherche' style='width:100%;'/>");
 		var donnee = getChoixEquipe();
-		if (valeurRecherche == "") {
-			valeurRecherche = "non";
-		}
+		
 		for(var valeur in donnee) {
 		    $("<option />", {value: valeur, text: donnee[valeur]}).appendTo(selecteur);
 		}

@@ -76,13 +76,8 @@
 			</tbody>
 		</table>
 		<script>
-<<<<<<< HEAD
-			$(function() {
-				$('[data-toggle="tooltip"]').tooltip()
-=======
 			$(function () {
 				$('[data-toggle="tooltip"]').tooltip();
->>>>>>> B-FSimpleJs
 			})
 		</script>
 	@endif
