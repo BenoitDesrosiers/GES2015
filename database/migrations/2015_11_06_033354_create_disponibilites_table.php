@@ -14,7 +14,7 @@ class CreateDisponibilitesTable extends Migration
     {
         Schema::create('disponibilites', function($table)
 		{
-			$table->increments('id');
+            $table->increments('id');
 			$table->unsignedInteger('benevole_id');
             $table->string('title');
             $table->boolean('isAllDay');

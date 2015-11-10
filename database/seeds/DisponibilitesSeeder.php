@@ -13,7 +13,7 @@ class DisponibilitesTableSeeder extends Seeder {
 		$infos = [
 		//benevole_id, title, isAllDay, start, end
 		["2", "Sur appel seulement","false","2015-11-04T0800","2015-11-05T0800"],
-		["2", "", "false", "2015-11-07T0800","2015-11-08T0800"]
+		["2", "", "false", "2015-11-07T0800","2015-11-08T0800"],
         ["3", "Sauf entre midi et 13h", "true", "2015-11-07T0800","2015-11-07T0800"]];
 
         DB::table('disponibilites')->delete();
@@ -27,6 +27,6 @@ class DisponibilitesTableSeeder extends Seeder {
             $benevole->save();		
         }
      		
-        }
-	}
+    }
+
 }
