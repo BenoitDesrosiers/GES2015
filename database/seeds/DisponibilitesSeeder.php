@@ -12,9 +12,9 @@ class DisponibilitesTableSeeder extends Seeder {
 	{
 		$infos = [
 		//benevole_id, title, isAllDay, start, end
-		["2", "Sur appel seulement","false","2015-11-04T0800","2015-11-05T0800"],
-		["2", "", "false", "2015-11-07T0800","2015-11-08T0800"],
-        ["3", "Sauf entre midi et 13h", "true", "2015-11-07T0800","2015-11-07T0800"]];
+		["2", "Sur appel seulement","false","2015-11-04 08:00:00","2015-11-05 08:00:00"],
+		["2", "", "false", "2015-11-07 08:00:00","2015-11-08 08:00:00"],
+        ["3", "Sauf entre midi et 13h", "true", "2015-11-07 08:00:00","2015-11-07 08:00:00"]];
 
         DB::table('disponibilites')->delete();
 		foreach($infos as $info) {
@@ -24,7 +24,7 @@ class DisponibilitesTableSeeder extends Seeder {
 		    $disponibilite->isAllDay = $info[2];
 		    $disponibilite->start = $info[3];
 		    $disponibilite->end = $info[4];
-            $benevole->save();		
+            $disponibilite->save();		
         }
      		
     }
