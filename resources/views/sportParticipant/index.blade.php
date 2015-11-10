@@ -14,25 +14,29 @@
 		<tbody>
 @foreach($regions as $region)
 		<tr>
-			<td><p> {{ $region->nom }}</p></td>
-			<tr>
+			<td colspan="3"><p> {{ $region->nom }}</p></td>
+		</tr>
 			<?php $flag = 0 ?>
 				@foreach($participants as $participant)
 					@if($participant->region_id == $region->id)
-					<?php $flag = 1 ?>
-						<tr> </tr>
-						<td><p> {{ $participant->nom }}, {{ $participant->prenom }}</p></td> 					
+						<?php $flag = 1 ?>
+						<tr> 
+							<td class="col-xs-1"> </td>
+							<td>
+								<p>{{ $participant->nom }}, {{ $participant->prenom }}</p> 
+							</td>
+						</tr>
 					@endif
 				@endforeach		
 					@if($flag == 0)
-					<td><p>aucun participant pour cette région</p></td>
+						<tr>
+							<td  colspan="2"><p>aucun participant pour cette région</p></td>
+						</tr>
 					@endif
-			</tr>
-		</tr>
 @endforeach	
 @endif
 		<tr>
-			<td><a href="{{ action('SportsController@index') }}" class="btn btn-info">Retour</a></td>
+			<td><a href="{{ URL::previous() }}" class="btn btn-danger">Retour</a></td>
 		</tr>
 		</tbody>
 	</table>
