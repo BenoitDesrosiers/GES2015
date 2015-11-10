@@ -1,13 +1,11 @@
 /vendor
 /node_modules
 Homestead.yaml
-<<<<<<< HEAD
 #.env 
 composer.lock
 start_server.bat
 TODO.txt
 Proposition.txt
-=======
 #.env   <<<<< a remettre plus tard, je l'ai enlevé juste pour que ca soit moins compliqué pour le étudiants. 
 /composer.lock
->>>>>>> ab2505cc1fcea67dcb0c6bf9ba945c29d34873ce
+*~
