@@ -22,8 +22,8 @@ class Benevole extends EloquentValidating {
      * un bénévole doit avoir:
      * - nom: obligatoire, string
      * - adresse : obligatoire, string
-     * - telephone : obligatoire, int
-     * - accreditation : obligatoire, bool
+     * - telephone : obligatoire, string
+     * - accreditation : obligatoire, string
      * - Les périodes de disponibilité et l'accréditation n'est pas
      *   obligatoire pour l'ajout d'un bénévole.
      */
@@ -33,7 +33,7 @@ class Benevole extends EloquentValidating {
 		    'nom' => 'required',
             'prenom' => 'required',
      		'adresse' => 'required',
-            'numTel' => 'required|int',
+            'numTel' => 'required|string',
 		    'accreditation' => 'required'
 		    ];
     }

@@ -18,8 +18,8 @@ class CreateBenevolesTable extends Migration
 			$table->string('nom');
             $table->string('prenom');
 			$table->string('adresse');
-			$table->integer('numTel');
-			$table->integer('numCell')->nullable();
+			$table->string('numTel');
+			$table->string('numCell')->nullable();
 			$table->string('courriel')->nullable();
             $table->unsignedInteger('disponibiliteId')->nullable();
             $table->string('accreditation');
