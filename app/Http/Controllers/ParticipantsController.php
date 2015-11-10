@@ -263,7 +263,6 @@ class ParticipantsController extends BaseController {
 		$input = Input::all();
 		$valeurFiltre = $input['listeFiltres'];
 		$valeurRecherche = $input['entreeRecherche'];
-		dd($valeurRecherche);
 		if ($valeurRecherche != '') {
 			if ($valeurFiltre == 0) {
 				$participants = Participant::where('nom', 'like', $valeurRecherche . '%')->get();
