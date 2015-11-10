@@ -3,12 +3,14 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Role;
+
 class RolesTableSeeder extends Seeder {
 
 
 	public function run()
 	{
-		DB::table('roles')->delete();
+		
 
 		$items = [
 		//Nom, Description
@@ -17,8 +19,12 @@ class RolesTableSeeder extends Seeder {
 		["Accompagnateur","Un accompagnateur accompagne un athlète pour qu'il ne soit pas seul."]
 		];
 
+		DB::table('roles')->delete();
 		foreach($items as $item) {
-			DB::table('roles')->insert(array('nom' => $item[0], 'description'=>$item[1]));
+			$role = new Role();
+		    $role->nom = $item[0];
+		    $role->description = $item[1];
+            $role->save();	
 		}
 	}
 }
