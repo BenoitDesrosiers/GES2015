@@ -19,6 +19,9 @@ Route::group(['middleware'=>'auth'], function() {
 	
 	Route::resource('sports','SportsController');
 	Route::resource('sports.epreuves','SportsEpreuvesController');
+	
+	Route::resource('sports.participants','sportParticipantController');
+	
 	Route::resource('epreuves','EpreuvesController');
 	Route::resource('participants','ParticipantsController');
 	Route::resource('resultats','ResultatsController');
@@ -30,9 +33,6 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
 	Route::post('resultatPourEvenementResultats', 'ResultatsController@resultatPourEvenement');
 });
-//
-
-
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
