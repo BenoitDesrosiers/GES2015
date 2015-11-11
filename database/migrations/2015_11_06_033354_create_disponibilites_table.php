@@ -15,12 +15,19 @@ class CreateDisponibilitesTable extends Migration
         Schema::create('disponibilites', function($table)
 		{
             $table->increments('id');
-			$table->unsignedInteger('benevole_id');
+			$table->integer('benevole_id')
+                    ->unsigned();
             $table->string('title');
             $table->boolean('isAllDay');
 			$table->datetime('start');
 			$table->datetime('end');
 			$table->timestamps();
+
+            $table->foreign('benevole_id')
+					->references('id')
+					->on('benevoles')
+					->onDelete('cascade')
+					->onUpdate('cascade');
 		});
     }
 

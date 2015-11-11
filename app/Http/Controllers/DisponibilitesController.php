@@ -62,8 +62,8 @@ class DisponibilitesController extends BaseController {
 	{
 		try {
 			$benevole = Benevole::findOrFail($id);
-			$disponibilites = $benevole->disponibilites();
-            $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => false, 'eventLimit' => true]);
+			$disponibilites = $benevole->disponibiliteId();
+            $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => false, 'eventLimit' => true]);//->setCallbacks(['viewRender' => 'function() {alert("Callbacks!");}']);
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}

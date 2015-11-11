@@ -53,8 +53,9 @@ class BenevolesController extends BaseController {
 	 */
 	public function store()
 	{
-		$input = Input::all();
-		
+        $disponibilite = Benevole::findOrFail($id);		
+        $input = Input::all();
+        		
 		$benevole = new Benevole;
         $benevole->prenom = $input['prenom'];
 		$benevole->nom = $input['nom'];
@@ -62,7 +63,7 @@ class BenevolesController extends BaseController {
 		$benevole->numTel = $input['numTel'];
         $benevole->numCell = $input['numCell'];
         $benevole->courriel = $input['courriel'];
-		$benevole->disponibilite = $input['disponibilite'];
+        $benevole->disponibilite = $disponibilite->benevoleId();
 		$benevole->accreditation = $input['accreditation'];
 		$benevole->verification = $input['verification'];
 		
@@ -125,7 +126,6 @@ class BenevolesController extends BaseController {
 		$benevole->numTel = $input['numTel'];
         $benevole->numCell = $input['numCell'];
         $benevole->courriel = $input['courriel'];
-		$benevole->disponibilite = $input['disponibilite'];
 		$benevole->accreditation = $input['accreditaiton'];
 		$benevole->verification = $input['verification'];
 		
