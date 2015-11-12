@@ -2,7 +2,7 @@
 @section('content')
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h2 class="panel-title">Modification des disponibilités de {{ $benevole->prenom }} {{ $benevole->nom }</h2>
+		<h2 class="panel-title">Modification des disponibilités de {{ $benevole->prenom }} {{ $benevole->nom }}</h2>
 	</div>
     
     <!--FullCalendar JavaScript & CSS habituellement dans le <head>.-->
