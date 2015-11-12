@@ -24,8 +24,6 @@
 @foreach($benevoles as $benevole)
 			<tr>
 				<td><a href="{{ action('BenevolesController@show', $benevole->id) }}">{{ $benevole->nom }}, {{ $benevole->prenom }}</a></td>
-                <!--Bouton qui ne fait strictement rien! Préparation en vue de ma deuxième fonctionnalité : Associer des disponibilités à un bénévole.-->
-                <td class="hidden-sm hidden-xs"><a href="{{ action('DisponibilitesController@show',$benevole->id) }}" class="btn btn-info">Disponibilités</a></td>
                 <td class="hidden-xs">{{ $benevole->accreditation }}</td>
                 <td class="hidden-xs">{{ $benevole->verification }}</td>
                 <td><a href="{{ action('BenevolesController@edit',$benevole->id) }}" class="btn btn-info">Modifier</a></td>
@@ -34,6 +32,7 @@
 					{!! Form::close() !!}   {{-- méthode pour faire le delete tel que décrit sur http://www.codeforest.net/laravel-4-tutorial-part-2 , 
 											un script js est appelé pour tous les form qui ont un "data-confirm" (voir assets/js/script.js) --}}
 				</td>
+                <td><a href="{{ action('BenevolesController@editDisponibilites',$benevole->id) }}" class="btn btn-info">Modifier Disponibilités</a></td>
 			</tr>
 @endforeach
 		</tbody>

@@ -7,6 +7,7 @@ use Redirect;
 use Input;
 
 use App\Models\Benevole;
+use App\Models\Disponibilite;
 
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -53,7 +54,6 @@ class BenevolesController extends BaseController {
 	 */
 	public function store()
 	{
-        $disponibilite = Benevole::findOrFail($id);		
         $input = Input::all();
         		
 		$benevole = new Benevole;
@@ -63,7 +63,6 @@ class BenevolesController extends BaseController {
 		$benevole->numTel = $input['numTel'];
         $benevole->numCell = $input['numCell'];
         $benevole->courriel = $input['courriel'];
-        $benevole->disponibilite = $disponibilite->benevoleId();
 		$benevole->accreditation = $input['accreditation'];
 		$benevole->verification = $input['verification'];
 		
@@ -91,6 +90,24 @@ class BenevolesController extends BaseController {
 		return View::make('benevoles.show', compact('benevole'));
 	}
 
+    /**
+	 * Affiche la ressource.
+	 *
+	 * @param  int  $id l'id du bénévole pour lequel on veut afficher
+     * ses disponibilités.
+	 * @return Response
+	 */
+    public function showDisponibilites($id)
+    {
+        try {
+			$benevole = Benevole::findOrFail($id);
+			$disponibilites = $benevole->disponibilites;
+            $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => false, 'eventLimit' => true])->setCallbacks(['viewRender' => 'function() {alert("Callbacks!");}']);
+		} catch(ModelNotFoundException $e) {
+			App::abort(404);
+		}
+		return View::make('benevoles.showDisponibilites', compact('benevole', 'calendrier'));
+    }
 
 	/**
 	 * Affiche le formulaire pour éditer la ressource.
@@ -108,6 +125,24 @@ class BenevolesController extends BaseController {
 		return View::make('benevoles.edit', compact('benevole'));
 	}
 
+    /**
+	 * Affiche le formulaire pour éditer la ressource.
+	 *
+	 * @param  int  $id l'id du bénévole pour lequelle on veut éditer
+     * ses disponibilités. 
+	 * @return Response
+	 */
+	public function editDisponibilites($id)
+	{
+        try{
+		    $benevole = Benevole::findOrFail($id);
+			$disponibilites = $benevole->disponibilites;
+            $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => true, 'eventLimit' => true])->setCallbacks(['viewRender' => 'function() {alert("Callbacks!");}']);
+        } catch(ModelNotFoundException $e) {
+            App::abort(404);
+        }
+		return View::make('benevoles.editDisponibilites', compact('benevole', 'calendrier'));
+	}
 
 	/**
 	 * Mise à jour de la ressource dans la bd.
