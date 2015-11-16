@@ -38,6 +38,44 @@ public function region() {
 }
 
 /**
+ * Les équipes dont fait partie le participant
+ * hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les chefs directement
+ */
+public function equipes() {
+    return $this->hasMany('App\Models\Equipe', 'joueur_id');
+}
+
+/**
+ * Les autres participants dont ce participant est l'équipe
+ * hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les membres directement
+ */
+public function membres() {
+    return $this->hasMany('App\Models\Equipe', 'chef_id');
+}
+
+/**
+ * Le nombre total de membres dont ce participant est l'équipe
+ *
+ * @return int Le nombre de membres
+ */
+public function nombreMembres() {
+	return Equipe::where("chef_id", "=", $this->id)->count();
+}
+
+/**
+ * La liste des id des joueurs dont ce participant est l'équipe
+ *
+ * @return int[] Tous les id des joueurs de cette équipe
+ */
+public function idMembres() {
+	$idMembres = [];
+	foreach($this->membres as $membre) {
+		$idMembres[] = $membre->joueur_id;
+	}
+	return $idMembres;
+}
+
+/**
  * Identifie les colonnes qui peuvent être modifiées
  */
 protected $fillable = [
