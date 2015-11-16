@@ -8,6 +8,7 @@
 		<p>Région : {{ $region->nom }}</p>
 		<p>Numéro d'accréditation : {{ $arbitre->numero_accreditation }}</p>
 		<p>Association : {{ $arbitre->association }}</p>
+		<p>Numéro de téléphone : {{ $arbitre->numero_telephone }}</p>
 		<p>Sexe :
 	        @if (!$arbitre->sexe)
 	            Masculin
@@ -15,7 +16,6 @@
 	            Féminin
 	        @endif
         </p>
-		<p>Numéro de téléphone : {{ $arbitre->numero_telephone }}</p>
 		@if ($arbitre->adresse)
 			<p>Adresse : {{ $arbitre->adresse }}</p>
 		@endif

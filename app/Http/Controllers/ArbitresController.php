@@ -84,7 +84,7 @@ class ArbitresController extends BaseController {
 			$arbitre->adresse = $input['adresse'];
 			$arbitre->sexe = $input['sexe'];
 
-            $arbitre->date_naissance = construireDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
+            $arbitre->date_naissance = ArbitresController::construire_date($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
 			
 			if($arbitre->save()) {
 				return Redirect::action('ArbitresController@create')->with ( 'status', 'L\'arbitre a été créé.' );
@@ -172,7 +172,7 @@ class ArbitresController extends BaseController {
 			$arbitre->adresse = $input['adresse'];
 			$arbitre->sexe = $input['sexe'];
 
-	        $arbitre->date_naissance = $arbitre->date_naissance = construireDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
+	        $arbitre->date_naissance = $arbitre->date_naissance = ArbitresController::construire_date($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
 			
 			if($arbitre->save()) {
 				return Redirect::action('ArbitresController@index');
@@ -222,7 +222,7 @@ class ArbitresController extends BaseController {
     }
 
 
-		/**
+	/**
 	 * Retourne l'objet Date correspondant aux valeurs passées si elles sont valides
 	 * ou le string "invalide" si la date est impossible (ex. 31 février)
 	 *
@@ -232,7 +232,7 @@ class ArbitresController extends BaseController {
 	 * @return Date formée de $annee-$mois-$jour ou "invalide"
 	 */
 	
-	public function construireDate($annee, $mois, $jour) {
+	private function construire_date($annee, $mois, $jour) {
 		if (checkdate($mois, $jour, $annee)) {
 			$dateTest = new DateTime;
 			$dateTest->setDate($annee, $mois, $jour);

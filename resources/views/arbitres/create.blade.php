@@ -89,7 +89,7 @@
         
 	<!--    3 listes déroulantes pour la date -->
         <div class="form-group">
-            {!! Form::label('naissance', 'Date de naissance :') !!}
+            {!! Form::label('naissance', '* Date de naissance :') !!}
             <br/>
             {!! Form::select('annee_naissance',$listeAnnees, $anneeDefaut,['style' => 'width:4em!important;']) !!}
             -

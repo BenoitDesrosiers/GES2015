@@ -111,7 +111,7 @@ class ParticipantsController extends BaseController {
         $moisDefaut = 0;
         $jourDefaut = 0;
 
-        $listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
+        $listeAnnees = ArbitresController::generer_liste(date('Y')-100, 101);
         $listeMois = ParticipantsController::generer_liste(1, 12);
         $listeJours = ParticipantsController::generer_liste(1, 31);
         return View::make('participants.create', compact('regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));

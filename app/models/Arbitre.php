@@ -40,7 +40,7 @@ class Arbitre extends EloquentValidating {
 	 * Validation
 	 *
 	 * Un arbitre doit avoir:
-	 *  - nom, prenom, region_id, numero_accreditation, association et numero_telephone
+	 *  - nom, prenom, region_id, numero_accreditation, association, numero_telephone et sexe
 	 *  - Les autres champs sont falcultatifs.
 	 */
 
