@@ -6,17 +6,17 @@
 	</div>
 	<div class="panel-body">
 		<p>Région : {{ $region->nom }}</p>
-		<p>Numéro : {{ $arbitre->numero_accreditation }}</p>
+		<p>Numéro d'accréditation : {{ $arbitre->numero_accreditation }}</p>
 		<p>Association : {{ $arbitre->association }}</p>
 		<p>Sexe :
-	        @if ($participant->sexe)
+	        @if (!$arbitre->sexe)
 	            Masculin
 	        @else
 	            Féminin
 	        @endif
         </p>
 		<p>Numéro de téléphone : {{ $arbitre->numero_telephone }}</p>
-		@if ($participant->adresse)
+		@if ($arbitre->adresse)
 			<p>Adresse : {{ $arbitre->adresse }}</p>
 		@endif
 

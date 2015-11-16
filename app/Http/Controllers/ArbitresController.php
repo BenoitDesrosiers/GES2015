@@ -84,10 +84,7 @@ class ArbitresController extends BaseController {
 			$arbitre->adresse = $input['adresse'];
 			$arbitre->sexe = $input['sexe'];
 
-			// Création de la date à partir des trois valeurs entrées
-			$date_temp = new DateTime;
-            $date_temp->setDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
-            $arbitre->date_naissance=$date_temp;
+            $arbitre->date_naissance = construireDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
 			
 			if($arbitre->save()) {
 				return Redirect::action('ArbitresController@create')->with ( 'status', 'L\'arbitre a été créé.' );
@@ -152,21 +149,7 @@ class ArbitresController extends BaseController {
 	    }
 	}
 
-    /**
-     * Construit une liste continue d'entiers sur un intervalle donné
-     *
-     * @param int $debut La valeur de départ
-     * @param int $n     Le nombre de valeurs à inclure
-     * @return La liste remplie
-     */
-    private function generer_liste($debut, $n) {
-        $liste = array();
-        $fin = $debut+$n-1;
-        for ($i = $debut; $i <= $fin; $i++) {
-            $liste[$i+1] = $i;
-        }
-        return $liste;
-    }
+
 
 
 	/**
@@ -189,17 +172,16 @@ class ArbitresController extends BaseController {
 			$arbitre->adresse = $input['adresse'];
 			$arbitre->sexe = $input['sexe'];
 
-			// Création de la date à partir des trois valeurs entrées
-			$date_temp = new DateTime;
-	        $date_temp->setDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
-	        $arbitre->date_naissance=$date_temp;
+	        $arbitre->date_naissance = $arbitre->date_naissance = construireDate($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
 			
 			if($arbitre->save()) {
 				return Redirect::action('ArbitresController@index');
 			} else {
 				return Redirect::back()->withInput()->withErrors($arbitre->validationMessages());
 			}
-		}
+		} catch (Exception $e) {
+	    	App:abort(404);
+	    }
 	}
 
 
@@ -216,8 +198,48 @@ class ArbitresController extends BaseController {
 			$arbitre->delete();
 			
 			return Redirect::action('ArbitresController@index');
-		}
+		} catch (Exception $e) {
+	    	App:abort(404);
+	    }
 	
+	}
+
+
+    /**
+     * Construit une liste continue d'entiers sur un intervalle donné
+     *
+     * @param int $debut La valeur de départ
+     * @param int $n     Le nombre de valeurs à inclure
+     * @return La liste remplie
+     */
+    private function generer_liste($debut, $n) {
+        $liste = array();
+        $fin = $debut+$n-1;
+        for ($i = $debut; $i <= $fin; $i++) {
+            $liste[$i+1] = $i;
+        }
+        return $liste;
+    }
+
+
+		/**
+	 * Retourne l'objet Date correspondant aux valeurs passées si elles sont valides
+	 * ou le string "invalide" si la date est impossible (ex. 31 février)
+	 *
+	 * @param  int  $annee L'annee
+	 * @param  int  $mois Le mois
+	 * @param  int  $jour Le jour
+	 * @return Date formée de $annee-$mois-$jour ou "invalide"
+	 */
+	
+	public function construireDate($annee, $mois, $jour) {
+		if (checkdate($mois, $jour, $annee)) {
+			$dateTest = new DateTime;
+			$dateTest->setDate($annee, $mois, $jour);
+			return $dateTest;
+		} else {
+			return "invalide";
+		}
 	}
 
 

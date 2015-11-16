@@ -14,13 +14,13 @@ class CreateArbitresTable extends Migration
     {
         Schema::create('arbitres', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('prenom');
             $table->string('nom');
+            $table->string('prenom');
             $table->unsignedInteger('region_id');
             $table->string('numero_accreditation');
             $table->string('association');
-            $table->boolean('sexe');->nullable();
             $table->string('numero_telephone');
+            $table->boolean('sexe');
             $table->string('adresse')->nullable();
             $table->date('date_naissance')->nullable();
             $table->timestamps();

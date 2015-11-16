@@ -25,13 +25,13 @@ class Arbitre extends EloquentValidating {
 	 * Identifie les colonnes qui peuvent être modifiées
 	 */
 	protected $fillable = [
-	        'prenom',
 	        'nom',
+	        'prenom',
 	        'region_id',
 	        'numero_accreditation',
 	        'association',
-	        'sexe',
 	        'numero_telephone',
+	        'sexe',
 	        'adresse',
 	        'date_naissance'
 	    ];
@@ -48,15 +48,15 @@ class Arbitre extends EloquentValidating {
 
 	public function validationRules() {
 		return [
-			'prenom' => 'required|string',
 			'nom' => 'required|string',
+			'prenom' => 'required|string',
 			'region_id' => 'required|integer',
 			'numero_accreditation' => 'required|string',
 			'association' => 'required|string',
-			'sexe' => 'boolean',
 			'numero_telephone' => 'required|string',
+			'sexe' => 'required|boolean',
 			'adresse' => 'string',
-			'date_naissance' => 'string'
+			'date_naissance' => 'date'
 		];
 	}
 
