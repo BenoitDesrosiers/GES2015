@@ -30,14 +30,6 @@ function changerEntreeRecherche(listeRecherches, valeurRecherche) {
 }
 
 /*
- * Rempli le menu
- */
-function getChoixEquipe() {
-	var donnee = ["Non", "Oui"];
-	return donnee;
-}
-
-/*
  * Valide si une valeur se trouve dans une liste
  */
 function isInArray(value, array) {
