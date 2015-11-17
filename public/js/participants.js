@@ -3,7 +3,7 @@
  */
 function changerEntreeRecherche(listeRecherches, valeurRecherche) {
 	var valeurFiltre = $("option:selected", "#listeFiltres").val();
-	if (!(valeurFiltre == 3 || valeurFiltre == 4)) {
+	if (!(valeurFiltre == 3)) {
 		
 		var champTexte = $("<input id='entreeRecherche' type='text' name='entreeRecherche' style='width:100%;'/>");
 		champTexte.value(valeurRecherche);
@@ -26,26 +26,6 @@ function changerEntreeRecherche(listeRecherches, valeurRecherche) {
 		}
 		$("#entreeRecherche").remove();
 	    $("#recherche").prepend(selecteur);
-	    
-	} else if (valeurFiltre == 4) {
-		
-		var selecteur = $("<select id='entreeRecherche' name='entreeRecherche' style='width:100%;'/>");
-		var donnee = getChoixEquipe();
-		
-		$("<option />", {value: "", text: "Choisir une option"}).appendTo(selecteur);
-		for(var valeur in donnee) {
-		    $("<option />", {value: donnee[valeur], text: donnee[valeur]}).appendTo(selecteur);
-		}
-		
-		if (isInArray(valeurRecherche, donnee)) {
-			selecteur.val(valeurRecherche);		
-		} else {
-			selecteur.val();		
-		}
-		
-		$("#entreeRecherche").remove();
-	    $("#recherche").prepend(selecteur);
-	    
 	}
 }
 

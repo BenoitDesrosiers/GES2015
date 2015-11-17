@@ -35,8 +35,7 @@ class ParticipantsController extends BaseController {
 				'Nom',
 				'Prénom',
 				'Numéro',
-				'Région',
-				'Équipe' 
+				'Région'
 		];
 		$valeurFiltre = 0;
 		$valeurRecherche = '';
@@ -296,17 +295,6 @@ class ParticipantsController extends BaseController {
 				} else {
 					$participants = new \Illuminate\Database\Eloquent\Collection ();
 				}
-			} elseif ($valeurFiltre == 4) {
-				$temporaire = $valeurRecherche;
-				if (is_string ( $valeurRecherche )) {
-					if (strtolower ( $valeurRecherche ) == 'oui') {
-						$valeurRecherche = 1;
-					} elseif (strtolower ( $valeurRecherche ) == 'non') {
-						$valeurRecherche = 0;
-					}
-				}
-				$participants = Participant::where ( 'equipe', $valeurRecherche . '%' )->get ();
-				$valeurRecherche = $temporaire;
 			}
 		} else {
 			$participants = Participant::all ();
