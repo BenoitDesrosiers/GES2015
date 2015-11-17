@@ -31,14 +31,7 @@ class ParticipantsController extends BaseController {
 		$routeActionName = 'ParticipantsController@index';
 		$participants = Participant::all ();
 		$listeRecherches = ParticipantsController::getListeRecherches();
-		
-		$listeFiltres = [ 
-				'Nom',
-				'Prénom',
-				'Numéro',
-				'Région'
-		];
-		
+		$listeFiltres = ParticipantsController::getListeFiltres();
 		$valeurFiltre = 0;
 		$valeurRecherche = '';
 		$infosTri = ParticipantsController::getInfosTri ();
@@ -272,14 +265,7 @@ class ParticipantsController extends BaseController {
 	public function recherche() {
 		$routeActionName = 'ParticipantsController@index';
 		$listeRecherches = ParticipantsController::getListeRecherches();
-		
-		$listeFiltres = [ 
-				'Nom',
-				'Prénom',
-				'Numéro',
-				'Région'
-		];
-		
+		$listeFiltres = ParticipantsController::getListeFiltres();
 		$infosTri = ParticipantsController::getInfosTri ();
 		$input = Input::all ();
 		$valeurFiltre = $input ['listeFiltres'];
@@ -295,10 +281,12 @@ class ParticipantsController extends BaseController {
 			} elseif ($valeurFiltre == 3) {
 				$region = Region::where ( 'nom_court', '=', $valeurRecherche )->first ();
 				if ($region) {
-					$participants = $region->participants ()->get ();
+					$participants = $region->participants()->get();
 				} else {
 					$participants = new \Illuminate\Database\Eloquent\Collection ();
 				}
+			} else {
+				$participants = Participant::all ();
 			}
 		} else {
 			$participants = Participant::all ();
@@ -392,6 +380,16 @@ class ParticipantsController extends BaseController {
 			array_push($listeRecherches, $region->nom_court);
 		}
 		return $listeRecherches;
+	}
+	
+	private function getListeFiltres(){
+		$listeFiltres = [ 
+				'Nom',
+				'Prénom',
+				'Numéro',
+				'Région'
+		];
+		return $listeFiltres;
 	}
 	
 }

@@ -99,7 +99,7 @@
 	 */	
 	$("#listeFiltres").change(function() {
 		var listeRecherches = <?php echo json_encode($listeRecherches) . ";\n";?>
-		var valeurRecherche = <?php echo json_encode($valeurRecherche); ?>;
+		var valeurRecherche = "";
 		changerEntreeRecherche(listeRecherches, valeurRecherche);
 	});
 

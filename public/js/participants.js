@@ -4,9 +4,9 @@
 function changerEntreeRecherche(listeRecherches, valeurRecherche) {
 	var valeurFiltre = $("option:selected", "#listeFiltres").val();
 	if (!(valeurFiltre == 3)) {
-		
+		console.log(valeurFiltre);
 		var champTexte = $("<input id='entreeRecherche' type='text' name='entreeRecherche' style='width:100%;'/>");
-		champTexte.value(valeurRecherche);
+		champTexte.attr("value", valeurRecherche);
 		$("#entreeRecherche").remove();
 	    $("#recherche").prepend(champTexte);
 	    
@@ -14,7 +14,7 @@ function changerEntreeRecherche(listeRecherches, valeurRecherche) {
 		
 		var selecteur = $("<select id='entreeRecherche' name='entreeRecherche' style='width:100%;'/>");
 		
-		$("<option />", {value: "", text: "Choisir une région"}).appendTo(selecteur);
+		$("<option />", {value: "", text: "Toutes les régions"}).appendTo(selecteur);
 		for(var valeur in listeRecherches) {
 		    $("<option />", {value: listeRecherches[valeur], text: listeRecherches[valeur]}).appendTo(selecteur);
 		}
