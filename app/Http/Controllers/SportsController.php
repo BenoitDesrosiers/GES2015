@@ -7,7 +7,7 @@ use Redirect;
 use Input;
 
 use App\Models\Sport;
-
+use App\Models\Terrain;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
@@ -84,10 +84,11 @@ class SportsController extends BaseController {
 	{
 		try {
 			$sport = Sport::findOrFail($id);
+			$terrainSports = Sport::find($id)->terrains;
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		return View::make('sports.show', compact('sport'));
+		return View::make('sports.show', compact('sport', 'terrainSports'));
 	}
 
 

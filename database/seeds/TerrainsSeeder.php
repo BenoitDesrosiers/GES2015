@@ -13,10 +13,6 @@ class TerrainsTableSeeder extends Seeder {
         // Suppression de la base de données
         DB::table('terrains')->delete();
 
-        // Création de la variable sport qui correspond aux 
-        // informations de la table 'sport' de la base de données
-        $sports=DB::table('sports');
-
         // Création de la variable 'terrain' qui correspond à la 
         // liste des champs à 'seeder' dans la base de données
         $terrains = [

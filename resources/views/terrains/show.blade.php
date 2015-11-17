@@ -9,6 +9,7 @@
         <p>Adresse: {{ $terrain->adresse }}</p>
         <p>Ville: {{ $terrain->ville }}</p>
         <p>Description: {{ $terrain->description_courte }}</p>
+        <p>Sports: <ul><?php foreach($terrainSports as $sport) { echo "<li>".$sport->nom."</li>"; } ?></ul></p>
     </div>
 </div>
 @stop
