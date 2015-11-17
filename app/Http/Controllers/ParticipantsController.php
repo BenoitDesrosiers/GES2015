@@ -31,12 +31,14 @@ class ParticipantsController extends BaseController {
 		$routeActionName = 'ParticipantsController@index';
 		$participants = Participant::all ();
 		$listeRecherches = ParticipantsController::getListeRecherches();
+		
 		$listeFiltres = [ 
 				'Nom',
 				'Prénom',
 				'Numéro',
 				'Région'
 		];
+		
 		$valeurFiltre = 0;
 		$valeurRecherche = '';
 		$infosTri = ParticipantsController::getInfosTri ();
@@ -270,26 +272,28 @@ class ParticipantsController extends BaseController {
 	public function recherche() {
 		$routeActionName = 'ParticipantsController@index';
 		$listeRecherches = ParticipantsController::getListeRecherches();
+		
 		$listeFiltres = [ 
 				'Nom',
 				'Prénom',
 				'Numéro',
-				'Région',
-				'Équipe' 
+				'Région'
 		];
+		
 		$infosTri = ParticipantsController::getInfosTri ();
 		$input = Input::all ();
 		$valeurFiltre = $input ['listeFiltres'];
 		$valeurRecherche = $input ['entreeRecherche'];
+		
 		if ($valeurRecherche != '') {
 			if ($valeurFiltre == 0) {
 				$participants = Participant::where ( 'nom', 'like', $valeurRecherche . '%' )->get ();
 			} elseif ($valeurFiltre == 1) {
 				$participants = Participant::where ( 'prenom', 'like', $valeurRecherche . '%' )->get ();
 			} elseif ($valeurFiltre == 2) {
-				$participants = Participant::where ( 'numero', $valeurRecherche . '%' )->get ();
+				$participants = Participant::where ( 'numero', $valeurRecherche )->get ();
 			} elseif ($valeurFiltre == 3) {
-				$region = Region::where ( 'nom_court', 'like', $valeurRecherche . '%' )->first ();
+				$region = Region::where ( 'nom_court', '=', $valeurRecherche )->first ();
 				if ($region) {
 					$participants = $region->participants ()->get ();
 				} else {
@@ -312,7 +316,7 @@ class ParticipantsController extends BaseController {
 	 *        	Collection à trier selon le paramètre de tri et la direction.
 	 * @return Collection $collectionTriee. Collection trier selon le paramètre de tri et la direction.
 	 */
-	public function trierColonnes($collectionNonTriee) {
+	private function trierColonnes($collectionNonTriee) {
 		// Paramêtres récupérés dans le liens du titre de la colonne sélectionnée.
 		$parametreDeTri = Input::get ( 'parametreDeTri' );
 		$direction = Input::get ( 'direction' );
@@ -331,7 +335,7 @@ class ParticipantsController extends BaseController {
 	 *
 	 * @return Array $infosTri. Contient les informations de tri.
 	 */
-	public function getInfosTri() {
+	private function getInfosTri() {
 		$parametreDeTri = Input::get ( 'parametreDeTri' );
 		$direction = Input::get ( 'direction' );
 		$infosTri = [ 
@@ -381,7 +385,7 @@ class ParticipantsController extends BaseController {
 	 * 
 	 * @return Array $listeRecherches. Contient les noms courts des régions.
 	 */
-	public function getListeRecherches() {
+	private function getListeRecherches() {
 		$regions = Region::all('nom_court');
 		$listeRecherches = [];
 		foreach ($regions as $region){
