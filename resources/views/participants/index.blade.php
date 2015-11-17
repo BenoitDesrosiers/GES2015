@@ -78,9 +78,32 @@
 		<script>
 			$(function () {
 				$('[data-toggle="tooltip"]').tooltip();
+				
 			})
 		</script>
 	@endif
 	<script src="{{ asset('js/participants.js') }}"></script>
+	<script type="text/javascript">
+	/*
+	 * La fonction changerValeurRecherche() est appeler lorsque la page est prête
+	 */
+	$(function() {
+		var listeRecherches = <?php echo json_encode($listeRecherches) . ";\n";?>
+		var valeurRecherche = <?php echo json_encode($valeurRecherche); ?>;
+		changerEntreeRecherche(listeRecherches, valeurRecherche);
+	});
+
+	/*
+	 *  La fonction changerValeurRecherche() est appeler lorsque le menu #listeFiltres
+	 *  change.
+	 */	
+	$("#listeFiltres").change(function() {
+		var listeRecherches = <?php echo json_encode($listeRecherches) . ";\n";?>
+		var valeurRecherche = <?php echo json_encode($valeurRecherche); ?>;
+		changerEntreeRecherche(listeRecherches, valeurRecherche);
+	});
+
+	
+	</script>
 </div>
 @stop

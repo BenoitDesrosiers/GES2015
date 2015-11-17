@@ -30,6 +30,7 @@ class ParticipantsController extends BaseController {
 	public function index() {
 		$routeActionName = 'ParticipantsController@index';
 		$participants = Participant::all ();
+		$listeRecherches = ParticipantsController::getListeRecherches();
 		$listeFiltres = [ 
 				'Nom',
 				'Prénom',
@@ -38,11 +39,11 @@ class ParticipantsController extends BaseController {
 				'Équipe' 
 		];
 		$valeurFiltre = 0;
-		$valeurRecherche = "";
+		$valeurRecherche = '';
 		$infosTri = ParticipantsController::getInfosTri ();
 		$participants = ParticipantsController::trierColonnes ( $participants );
 		
-		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurRecherche' ) );
+		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'listeRecherches', 'valeurFiltre', 'valeurRecherche' ) );
 	}
 	
 	/**
@@ -265,6 +266,7 @@ class ParticipantsController extends BaseController {
 	 */
 	public function recherche() {
 		$routeActionName = 'ParticipantsController@index';
+		$listeRecherches = ParticipantsController::getListeRecherches();
 		$listeFiltres = [ 
 				'Nom',
 				'Prénom',
@@ -299,7 +301,7 @@ class ParticipantsController extends BaseController {
 						$valeurRecherche = 0;
 					}
 				}
-				$participants = Participant::where ( 'equipe', 'like', $valeurRecherche . '%' )->get ();
+				$participants = Participant::where ( 'equipe', $valeurRecherche . '%' )->get ();
 				$valeurRecherche = $temporaire;
 			}
 		} else {
@@ -308,7 +310,7 @@ class ParticipantsController extends BaseController {
 		
 		$participants = ParticipantsController::trierColonnes ( $participants );
 		
-		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'valeurFiltre', 'valeurRecherche' ) );
+		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'listeRecherches', 'valeurFiltre', 'valeurRecherche' ) );
 	}
 	
 	/**
@@ -381,4 +383,19 @@ class ParticipantsController extends BaseController {
 		
 		return $infosTri;
 	}
+	
+	/**
+	 * Retourne la liste des noms courts de tous les régions.
+	 * 
+	 * @return Array $listeRecherches. Contient les noms courts des régions.
+	 */
+	public function getListeRecherches() {
+		$regions = Region::all('nom_court');
+		$listeRecherches = [];
+		foreach ($regions as $region){
+			array_push($listeRecherches, $region->nom_court);
+		}
+		return $listeRecherches;
+	}
+	
 }
