@@ -36,7 +36,7 @@
 			{!! Form::label('tournoi', 'Tournoi:') !!} 
 			{!! Form::checkbox('tournoi',$sport->tournoi==true,$sport->tournoi==true) !!}
 			{{ $errors->first('tournoi') }}				
-		</div>	
+		</div>
 		<div class="form-group">
 			{!! Form::button('Sauvegarder', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>

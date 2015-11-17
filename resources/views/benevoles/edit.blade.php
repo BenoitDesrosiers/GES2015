@@ -5,49 +5,49 @@
 		<h2>Modification d'un bénévole</h2>
 	</div>
 	<div class="panel-body">
-		{!! Form::open(['action'=> 'BenevolesController@index', 'class' => 'form']) !!}
+		{!! Form::open(['action'=> array('BenevolesController@update', $benevole->id), 'method' => 'PUT', 'class' => 'form'])!!}
         <!--    Affiche les messages d'erreur après un enregistrement raté -->
         @foreach ($errors->all() as $error)
             <p class="alert alert-danger">{{ $error }}</p>
         @endforeach
 		<div class="form-group">
 			{!! Form::label('nom', 'Nom :') !!} 
-			{!! Form::text('nom',null, ['class' => 'form-control']) !!}
+			{!! Form::text('nom', $benevole->nom, ['class' => 'form-control']) !!}
 			{{ $errors->first('nom') }}
 		</div>
         <div class="form-group">
 			{!! Form::label('prenom', 'Prénom :') !!} 
-			{!! Form::text('prenom',null, ['class' => 'form-control']) !!}
+			{!! Form::text('prenom', $benevole->prenom, ['class' => 'form-control']) !!}
 			{{ $errors->first('prenom') }}
 		</div>
         <div class="form-group">
 			{!! Form::label('adresse', 'Adresse :') !!} 
-			{!! Form::text('adresse',null, ['class' => 'form-control']) !!}
+			{!! Form::text('adresse', $benevole->adresse, ['class' => 'form-control']) !!}
 			{{ $errors->first('adresse') }}
 		</div>
         <div class="form-group">
 			{!! Form::label('numTel', 'Numéro de téléphone :') !!} 
-			{!! Form::text('numTel',null, ['class' => 'form-control']) !!}
+			{!! Form::text('numTel', $benevole->numTel, ['class' => 'form-control']) !!}
 			{{ $errors->first('numTel') }}
 		</div>
         <div class="form-group">
 			{!! Form::label('numCell', 'Numéro de cellulaire :') !!} 
-			{!! Form::text('numCell',null, ['class' => 'form-control']) !!}
+			{!! Form::text('numCell', $benevole->numCell, ['class' => 'form-control']) !!}
 			{{ $errors->first('numCell') }}
 		</div>
         <div class="form-group">
 			{!! Form::label('courriel', 'Courriel :') !!} 
-			{!! Form::text('courriel',null, ['class' => 'form-control']) !!}
+			{!! Form::text('courriel', $benevole->courriel, ['class' => 'form-control']) !!}
 			{{ $errors->first('courriel') }}
 		</div>
         <div class="form-group">
 			{!! Form::label('disponibilite', 'Disponibilité :') !!} 
-			{!! Form::text('disponibilite',null, ['class' => 'form-control']) !!}
+			{!! Form::text('disponibilite', $benevole->disponibilite, ['class' => 'form-control']) !!}
 			{{ $errors->first('disponibilite') }}
 		</div>
         <div class="form-group">
 			{!! Form::label('accreditation', 'Accréditation :') !!} 
-			{!! Form::text('accreditation',null, ['class' => 'form-control']) !!}
+			{!! Form::text('accreditation', $benevole->accreditation, ['class' => 'form-control']) !!}
 			{{ $errors->first('accreditation') }}
 		</div>
         
