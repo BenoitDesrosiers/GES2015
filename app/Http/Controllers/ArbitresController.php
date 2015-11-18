@@ -212,6 +212,7 @@ class ArbitresController extends BaseController {
      * @param int $n     Le nombre de valeurs à inclure
      * @return La liste remplie
      */
+	//todo: mettre en commun avec ParticipantsController
     private function generer_liste($debut, $n) {
         $liste = array();
         $fin = $debut+$n-1;
@@ -231,7 +232,7 @@ class ArbitresController extends BaseController {
 	 * @param  int  $jour Le jour
 	 * @return Date formée de $annee-$mois-$jour ou "invalide"
 	 */
-	
+	//todo: mettre en commun avec participantcontroller
 	private function construire_date($annee, $mois, $jour) {
 		if (checkdate($mois, $jour, $annee)) {
 			$dateTest = new DateTime;

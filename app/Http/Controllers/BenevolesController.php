@@ -117,7 +117,7 @@ class BenevolesController extends BaseController {
 	public function update($id)
 	{
 		$input = Input::all();
-		
+		//fixme: ajouter try catch 
 		$benevole = Benevole::findOrFail($id);
 		$benevole->nom = $input['prenom'];
         $benevole->nom = $input['nom'];
