@@ -9,8 +9,9 @@
 
 namespace App\Models;
 
+use DB;
+
 class Equipe extends EloquentValidating {
-	protected $guarded = array('id');
 
 /**
  * La table correspondant aux équipes

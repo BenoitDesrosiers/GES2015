@@ -131,7 +131,11 @@ class EquipesController extends Controller
 // 		Écriture des changements
 		DB::table('participants_equipes')->where('chef_id','=',$chef->id)->whereIn('joueur_id', $aEffacer)->delete();
 		foreach ($aAjouter as $nouveauMembre) {
-			DB::table('participants_equipes')->insert( ['chef_id' => $chef->id, 'joueur_id' => $nouveauMembre] );
+			$equipe = new Equipe;
+			$equipe->chef_id = $chef->id;
+			$equipe->joueur_id = $nouveauMembre;
+			$equipe->save();
+// 			DB::table('participants_equipes')->insert( ['chef_id' => $chef->id, 'joueur_id' => $nouveauMembre] );
 		}
 // 		Visualisation de l'équipe modifiée
 		return Redirect::action('ParticipantsController@show', $chef->id)->with ( 'status', 'L\'équipe '.$chef->prenom.' '.$chef->nom.' a été mise a jour!' );
