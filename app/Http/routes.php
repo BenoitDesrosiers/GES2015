@@ -25,6 +25,7 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('epreuves','EpreuvesController');
 	Route::resource('participants','ParticipantsController');
 	Route::resource('resultats','ResultatsController');
+	Route::resource('arbitres','ArbitresController');
 	Route::resource('terrains','TerrainsController');
     Route::resource('benevoles','BenevolesController');
 	Route::resource('roles','RolesController');

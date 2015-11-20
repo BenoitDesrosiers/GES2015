@@ -12,7 +12,7 @@
 @else
 	<table class="table table-striped table-hover">
 		<tbody>
-@foreach($regions as $region)
+	@foreach($regions as $region)
 		<tr>
 			<td colspan="3"><p> {{ $region->nom }}</p></td>
 		</tr>
@@ -28,12 +28,12 @@
 						</tr>
 					@endif
 				@endforeach		
-					@if($flag == 0)
-						<tr>
-							<td  colspan="2"><p>aucun participant pour cette région</p></td>
-						</tr>
-					@endif
-@endforeach	
+				@if($flag == 0)
+					<tr>
+						<td  colspan="2"><p>aucun participant pour cette région</p></td>
+					</tr>
+				@endif
+	@endforeach	
 @endif
 		<tr>
 			<td><a href="{{ URL::previous() }}" class="btn btn-danger">Retour</a></td>
