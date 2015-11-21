@@ -45,7 +45,7 @@ class EquipesController extends Controller
     {
         $regions = Region::all();
         $sports = Sport::all();
-        return View::make('equipes.create', compact('regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+        return View::make('equipes.create', compact('regions', 'sports'));
     }
 
     /**
@@ -60,9 +60,21 @@ class EquipesController extends Controller
 		$equipe->equipe = true;
 		$equipe->naissance = new DateTime;
 		$equipe->nom = Input::get('nom');
+		$equipe->numero = Input::get('numero');
 		$equipe->region_id = Input::get('region_id');
-		$sport = Input::get('sport');
-		return $equipe;
+		$sport = Sport::findOrFail(Input::get('sport'));
+		if($equipe->save()) {
+			if (Input::has('sport')) {
+				$equipe->sports()->sync([$sport->id]);
+			} else {
+				$equipe->sports()->detach();
+			}
+// 			Redirection dans la page d'édition de l'équipe
+			return Redirect::action('EquipesController@edit', $equipe->id)
+				->with ( 'status', 'L\'équipe a été initialisée! Sélectionnez maintenant les joueurs qui en font partie.' );
+		} else {
+			return Redirect::back()->withInput()->withErrors($equipe->validationMessages());
+		}
     }
 
 	/**
@@ -86,6 +98,7 @@ class EquipesController extends Controller
      */
     public function edit($id)
     {
+//     TODO n'afficher que les joueurs de la même région et qui ont le bon sport
 //     	L'équipe à modifier
 		$equipe = Equipe::where('equipe','=','1')->where('id','=',$id)->firstOrFail();
 // 		Les id des membres actuels de l'équipe
@@ -97,8 +110,6 @@ class EquipesController extends Controller
 
     /**
      * Modifie les joueurs faisant partie de l'équipe
-     * Comme il s'agit d'une sélection parmi des valeurs déterminées par EquipesControlleur::edit(),
-     * les erreurs ne peuvent provenir que d'un hack du formulaire: il n'y a donc pas de messages d'erreur
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -106,50 +117,102 @@ class EquipesController extends Controller
     public function update($id)
     {
 		$equipe = Equipe::findOrFail($id);
-// 		Le participant-équipe doit être une équipe
+// 		L'équipe doit être une équipe
 		if (!$equipe->equipe) {
 			App::abort(404);
 		}
-// 		Lecture des joueurs sélectionnés
-		$joueursActuels = $equipe->idMembres();
+		$equipe->equipe = true;
+		$equipe->nom = Input::get('nom');
+		$equipe->numero = Input::get('numero');
+
         $membres = Input::get('joueur');
-        $joueursSelectionnes = [];
-		if (is_array($membres)) {
-			foreach ($membres as $membre) {
-				$joueur = Participant::findOrFail($membre);
-// 				Les joueurs ne doivent pas être une équipe
-				if (!$joueur->equipe) {
-					$joueursSelectionnes[] = $joueur->id;
+        if ($membres) {
+			if (is_array($membres)) {
+//      		Les joueurs sélectionnés doivent exister
+				$participants = Participant::whereIn('id', $membres);
+				if ($participants->count() != count($membres)) {
+					App::abort(404);
 				}
+// 				Les joueurs sélectionnés ne doivent pas être des équipes
+				if ($participants->where('equipe','<>','0')->count() > 0) {
+					App::abort(404);
+				}
+			} elseif (Participant::findOrFail($membres)->equipe) {
+				App::abort(404);
 			}
-		}
-// 		Détermination des membres à retirer de l'équipe
-		$aEffacer = [];
-		foreach ($joueursActuels as $joueurActuel) {
-			if (!in_array($joueurActuel, $joueursSelectionnes)) {
-				$aEffacer[] = $joueurActuel;
+        }
+
+		if ($equipe->save()) {
+// 			Associer les membres de l'équipe
+			if ($membres) {
+				if (is_array($membres)) {
+					$equipe->membres()->sync($membres);
+				} else {
+					$equipe->membres()->sync([$membres]);
+				}
+			} else {
+				$equipe->membres()->detach();
 			}
+// 			Redirection dans la page de visualisation de l'équipe
+			return Redirect::action('EquipesController@show', $equipe->id);
+		} else {
+			return Redirect::back()->withInput()->withErrors($equipe->validationMessages());
 		}
-// 		Détermination des membres à ajouter à l'équipe
-		$aAjouter = [];
-		foreach ($joueursSelectionnes as $joueurSelectionne) {
-			if (!in_array($joueurSelectionne, $joueursActuels)) {
-				$aAjouter[] = $joueurSelectionne;
-			}
-		}
-// 		Écriture des changements
-		DB::table('participants_equipes')->where('chef_id','=',$equipe->id)->whereIn('joueur_id', $aEffacer)->delete();
-		foreach ($aAjouter as $nouveauMembre) {
-			$participantEquipe = new ParticipantEquipe;
-			$participantEquipe->chef_id = $equipe->id;
-			$participantEquipe->joueur_id = $nouveauMembre;
-			$participantEquipe->save();
-			return $participantEquipe;
-// 			DB::table('participants_equipes')->insert( ['chef_id' => $equipe->id, 'joueur_id' => $nouveauMembre] );
-		}
-// 		Visualisation de l'équipe modifiée
-		return Redirect::action('ParticipantsController@show', $equipe->id)->with ( 'status', 'L\'équipe '.$equipe->prenom.' '.$equipe->nom.' a été mise a jour!' );
     }
+
+//     /**
+//      * Modifie les joueurs faisant partie de l'équipe
+//      *
+//      * @param  int  $id
+//      * @return \Illuminate\Http\Response
+//      */
+//     public function update($id)
+//     {
+// 		$equipe = Equipe::findOrFail($id);
+// // 		Le participant-équipe doit être une équipe
+// 		if (!$equipe->equipe) {
+// 			App::abort(404);
+// 		}
+// // 		Lecture des joueurs sélectionnés
+// 		$joueursActuels = $equipe->idMembres();
+//         $membres = Input::get('joueur');
+//         $joueursSelectionnes = [];
+// 		if (is_array($membres)) {
+// 			foreach ($membres as $membre) {
+// 				$joueur = Participant::findOrFail($membre);
+// // 				Les joueurs ne doivent pas être une équipe
+// 				if (!$joueur->equipe) {
+// 					$joueursSelectionnes[] = $joueur->id;
+// 				}
+// 			}
+// 		}
+// // 		Détermination des membres à retirer de l'équipe
+// 		$aEffacer = [];
+// 		foreach ($joueursActuels as $joueurActuel) {
+// 			if (!in_array($joueurActuel, $joueursSelectionnes)) {
+// 				$aEffacer[] = $joueurActuel;
+// 			}
+// 		}
+// // 		Détermination des membres à ajouter à l'équipe
+// 		$aAjouter = [];
+// 		foreach ($joueursSelectionnes as $joueurSelectionne) {
+// 			if (!in_array($joueurSelectionne, $joueursActuels)) {
+// 				$aAjouter[] = $joueurSelectionne;
+// 			}
+// 		}
+// // 		Écriture des changements
+// 		DB::table('participants_equipes')->where('chef_id','=',$equipe->id)->whereIn('joueur_id', $aEffacer)->delete();
+// 		foreach ($aAjouter as $nouveauMembre) {
+// 			$participantEquipe = new ParticipantEquipe;
+// 			$participantEquipe->chef_id = $equipe->id;
+// 			$participantEquipe->joueur_id = $nouveauMembre;
+// 			$participantEquipe->save();
+// 			return $participantEquipe;
+// // 			DB::table('participants_equipes')->insert( ['chef_id' => $equipe->id, 'joueur_id' => $nouveauMembre] );
+// 		}
+// // 		Visualisation de l'équipe modifiée
+// 		return Redirect::action('ParticipantsController@show', $equipe->id)->with ( 'status', 'L\'équipe '.$equipe->prenom.' '.$equipe->nom.' a été mise a jour!' );
+//     }
 
     /**
      * Remove the specified resource from storage.

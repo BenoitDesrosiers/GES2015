@@ -16,12 +16,39 @@
                 {{ session('status') }}
             </div>
         @endif
+
         <div class="form-group">
-            {!! Form::label('chef', 'Équipe:') !!}
-            {!! Form::select('chef',$listeEquipesVides) !!}
-            {{ $errors->first('chef') }}
+            {!! Form::label('nom', '*Nom:') !!} 
+            {!! Form::text('nom','', ['class' => 'form-control']) !!}
+            {{ $errors->first('nom') }}
         </div>
-		<div class="form-group">
+        <div class="form-group">
+            {!! Form::label('numero', '*Numéro:') !!} 
+            {!! Form::text('numero','', ['class' => 'form-control']) !!}
+            {{ $errors->first('numero') }}
+        </div>
+        <?php
+            $regionArray = array();
+            for ($i=0; $i<count($regions); $i++) {
+                $regionArray[$i+1] = $regions[$i]['nom'];
+            }
+        ?>
+        <div class="form-group">
+            {!! Form::label('region_id', 'Région:') !!}
+            {!! Form::select('region_id', $regionArray) !!}
+            {{ $errors->first('region_id') }}
+        </div>
+        <div class="form-group">
+            {!! Form::label('sport', '*Sport:') !!}
+            {{ $errors->first('sport') }}
+            @foreach ($sports as $sport)
+				<br/>
+				{!! Form::radio('sport', $sport->id) !!}
+				{!! Form::label('sport', $sport->nom) !!}
+			@endforeach
+        </div>
+
+        <div class="form-group">
 			{!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
 		</div>
