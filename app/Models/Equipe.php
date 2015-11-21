@@ -35,7 +35,7 @@ public function membres() {
  */
 public function idMembres() {
 	$idMembres = [];
-	foreach($this->membres() as $membre) {
+	foreach($this->membres as $membre) {
 		$idMembres[] = $membre->id;
 	}
 	return $idMembres;
@@ -48,10 +48,6 @@ public function idMembres() {
  */
 public function nombreMembres() {
 	return ParticipantEquipe::where("chef_id", "=", $this->id)->count();
-}
-
-public function participantsEquipes() {
-// 	return $this->belongsToMany('App\Models\ParticipantEquipe', ,
 }
 
 /**
@@ -68,6 +64,12 @@ public function sports() {
 	return $this->belongsToMany('App\Models\Sport', 'participant_sport', 'participant_id', 'sport_id');
 }
 
+/**
+ * Retourne le sport (ou le premier sport s'il y en a plusieurs) de cette équipe
+ */
+public function sport() {
+	return $this->sports->first();
+}
 
 /**
  * Identifie les colonnes qui peuvent être modifiées
@@ -75,20 +77,23 @@ public function sports() {
 protected $fillable = [
         'id',
         'nom',
-        'region',
+        'numero',
+        'region_id',
     ];
 
 public $validationMessages;
 
 /**
- *
+ * Règles de validation
  */
-
 public function validationRules() {
 	return [
-        'id' => 'required|integer',
         'nom' => 'required|string',
-        'region' => 'required|integer|exists:regions',
+// 		Numéro unique parmi les équipes mais pas nécessairement parmi les joueurs
+//         'numero' => 'unique:participants,numero,numero,id,equipe,1',
+        'region_id' => 'required|integer', //exists:regions, id  ---> ne fonctionne pas
+//      equipe doit être à 'vrai'
+        'equipe' => 'accepted'
 		];
 }
 
