@@ -3,19 +3,21 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Liste des équipes</h2>
+		<a href="{{ action('EquipesController@create') }}" class="btn btn-info">Créer une équipe</a>
 	</div>
 @if ($equipes->isEmpty())
 	<div class="panel-body">
 		<p>Aucune équipe</p>
 	</div>
 @else
-	<table class="table table-hover table-condensed">
+	<table class="table table-condensed">
 		<thead>
 			<tr>
 				<th class="col-sm-3">Équipe</th>
 				<th>Membres</th>
 				<th class="hidden-xs">Région</th>
 				<th class="hidden-xs">Sport</th>
+				<th class="col-sm-1"/>
 				<th class="col-sm-1"/>
 			</tr>
 		</thead>
@@ -34,12 +36,17 @@
 					<td>
 						<a href="{!! action('EquipesController@edit', $equipe->id) !!}" class="btn btn-info">Modifier</a>
 					</td>
+					<td>
+						{!! Form::open(array('action' => array('EquipesController@destroy',$equipe->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}
+						<button type="submit" href="{{ URL::route('equipes.destroy', $equipe->id) }}" class="btn btn-danger btn-mini">Effacer</button>
+						{!! Form::close() !!}
+					</td>
 				</tr>
 <!-- 			Afficher tous les membres de l'équipe	 -->
 				@if(!$equipe->membres->isEmpty())
 					<tr class="active rangeeMembres">
 						<td/>
-						<td colspan="4">
+						<td colspan="5">
 							<ul>
 								@foreach($equipe->membres as $membre)
 									<li>

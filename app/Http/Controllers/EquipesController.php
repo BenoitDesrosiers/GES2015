@@ -9,7 +9,9 @@ use Input;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use DB;
+use DateTime;
 use App;
+use App\Models\Region;
 use App\Models\Equipe;
 use App\Models\Sport;
 use App\Models\Participant;
@@ -41,7 +43,9 @@ class EquipesController extends Controller
      */
     public function create()
     {
-        //
+        $regions = Region::all();
+        $sports = Sport::all();
+        return View::make('equipes.create', compact('regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
     }
 
     /**
@@ -50,9 +54,15 @@ class EquipesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+		$equipe = new Equipe;
+		$equipe->equipe = true;
+		$equipe->naissance = new DateTime;
+		$equipe->nom = Input::get('nom');
+		$equipe->region_id = Input::get('region_id');
+		$sport = Input::get('sport');
+		return $equipe;
     }
 
 	/**
@@ -147,8 +157,10 @@ class EquipesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($chef_id, $joueur_id)
+    public function destroy($id)
     {
-        //
+		$equipe = Equipe::findOrFail($id);
+		$equipe->delete();
+		return Redirect::action('EquipesController@index');
     }
 }
