@@ -16,21 +16,32 @@
                 {{ session('status') }}
             </div>
         @endif
+        <div class="form-group">
+            {!! Form::label('nom', '*Nom:') !!} 
+            {!! Form::text('nom',$equipe->nom, ['class' => 'form-control']) !!}
+            {{ $errors->first('nom') }}
+        </div>
+        <div class="form-group">
+            {!! Form::label('numero', '*Numéro:') !!} 
+            {!! Form::text('numero',$equipe->numero, ['class' => 'form-control']) !!}
+            {{ $errors->first('numero') }}
+        </div>
 <!--    Lister tous les joueurs possibles      -->
-        @foreach ($joueurs as $joueur)
-			<?php $estMembre = in_array($joueur->id, $membres) ?>
-			<div class="form-group">
-				@if ($estMembre)
-<!-- 				Précocher la case pour les joueurs qui sont déjà membres de l'équipe	 -->
-					<input name="joueur[{{ $joueur->id }}]" type="checkbox" value="{!! $joueur->id !!}" checked>
-<!-- 				Indiquer par un effet de couleur les membres qui faisaient partie de l'équipe avant les modifications	 -->
-					<mark>{!! Form::label($joueur->nom.', '.$joueur->prenom) !!}</mark>
-				@else
-					<input name="joueur[{{ $joueur->id }}]" type="checkbox" value="{!! $joueur->id !!}">
-					{!! Form::label($joueur->nom.', '.$joueur->prenom) !!}
-				@endif
-			</div>
-		@endforeach
+		<div class="form-group">
+            {!! Form::label('membres', 'Membres:') !!}
+			@foreach ($joueurs as $joueur)
+					<br/>
+					@if (in_array($joueur->id, $membres))
+<!-- 					Précocher la case pour les joueurs qui sont déjà membres de l'équipe	 -->
+						<input name="joueur[{{ $joueur->id }}]" type="checkbox" value="{!! $joueur->id !!}" checked>
+<!-- 					Indiquer par un effet de couleur les membres qui faisaient partie de l'équipe avant les modifications	 -->
+						<mark>{!! Form::label($joueur->nom.', '.$joueur->prenom) !!}</mark>
+					@else
+						<input name="joueur[{{ $joueur->id }}]" type="checkbox" value="{!! $joueur->id !!}">
+						{!! Form::label($joueur->nom.', '.$joueur->prenom) !!}
+					@endif
+			@endforeach
+		</div>
 		<div class="form-group">
 			{!! Form::button('Sauvegarder', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
