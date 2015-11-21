@@ -22,7 +22,7 @@
 		<tbody>
 <!-- 		Afficher toutes les équipes, même les vides -->
 			@foreach($equipes as $equipe)
-				<tr>
+				<tr class="rangeeEquipe">
 					<td>
 						<a href="{!! action('EquipesController@show', $equipe->id) !!}">
 							{!! $equipe->nom !!}
@@ -36,24 +36,43 @@
 					</td>
 				</tr>
 <!-- 			Afficher tous les membres de l'équipe	 -->
-				@foreach($equipe->membres as $membre)
-					<tr class="active">
+				@if(!$equipe->membres->isEmpty())
+					<tr class="active rangeeMembres">
 						<td/>
 						<td colspan="4">
-							<a href="{!! action('ParticipantsController@show', $membre->id) !!}">
-								{!! $membre->nom !!}, {!! $membre->prenom !!}
-							</a>
+							<ul>
+								@foreach($equipe->membres as $membre)
+									<li>
+										<a href="{!! action('ParticipantsController@show', $membre->id) !!}">
+											{!! $membre->nom !!}, {!! $membre->prenom !!}
+										</a>
+									</li>
+								@endforeach
+							</ul>
 						</td>
 					</tr>
-				@endforeach
+				@endif
 			@endforeach
 		</tbody>
 	</table>
-	<script>
-		$(function () {
-			$('[data-toggle="tooltip"]').tooltip()
-		})
-	</script>
 @endif
 </div>
+<style>
+	/* Masquer les membres par défaut */
+	.rangeeEquipe + .rangeeMembres {
+		display: none;
+	}
+	/* Les afficher quand l'équipe est pointée	 */
+	.rangeeEquipe:hover + .rangeeMembres {
+		display: table-row;
+	}
+	/* Continuer de les afficher quand le curseur quitte l'équipe pour les membres	 */
+	.rangeeMembres:hover {
+		display: table-row;
+	}
+	.rangeeMembres ul {
+		list-style: none;
+		padding: 0;
+	}
+</style>
 @stop
