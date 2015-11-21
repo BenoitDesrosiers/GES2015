@@ -1,7 +1,6 @@
 <?php
 /**
- * Pont entre des joueurs (participant.equipe = false) et une équipe (participant.equipe = true)
- * Représente une seule entrée de la table participants_equipes
+ * Participant qui représente une équipe
  *
  * @author obnosim
  * @version 0.0.1 rev 1
@@ -9,33 +8,37 @@
 
 namespace App\Models;
 
-use DB;
-
 class Equipe extends EloquentValidating {
 
 /**
  * La table correspondant aux équipes
  */
-protected $table = 'participants_equipes';
+protected $table = 'participants';
 
-/**
- * Le participant en charge de cette équipe
- * (celui qui est une équipe en soi, soit celui pour quoi participants.equipe = true)
- *
- * @return Participant Le participant-équipe
- */
-public function chef() {
-    return $this->belongsTo('App\Models\Participant', 'chef_id');
+public function versParticipant() {
+	return Participant::where('id','=',$this->id)->first();
 }
 
 /**
- * Le participant propre à cette entrée
- * (participants.equipe = false)
+ * Tous les participants faisant partie de cette équipe
  *
- * @return Participant Le participant
+ * @return Participant[]
  */
-public function joueur() {
-    return $this->hasOne('App\Models\Participant', 'id', 'joueur_id');
+public function membres() {
+	return $this->belongsToMany('App\Models\Participant', 'participants_equipes', 'chef_id', 'joueur_id');
+}
+
+/**
+ * La liste des id des joueurs de cette équipe
+ *
+ * @return int[]
+ */
+public function idMembres() {
+	$idMembres = [];
+	foreach($this->membres() as $membre) {
+		$idMembres[] = $membre->id;
+	}
+	return $idMembres;
 }
 
 /**
@@ -43,72 +46,50 @@ public function joueur() {
  *
  * @return int Le nombre de membres
  */
-public function nombreJoueurs() {
-	return Equipe::where("chef_id", "=", $this->chef_id)->count();
+public function nombreMembres() {
+	return ParticipantEquipe::where("chef_id", "=", $this->id)->count();
+}
+
+public function participantsEquipes() {
+// 	return $this->belongsToMany('App\Models\ParticipantEquipe', ,
 }
 
 /**
- * Toutes les entrées de la table participants_equipes
- * qui sont associées à la même équipe, de type Equipe
- *
- * @return Equipe[] Toutes les entrées pour cette équipe
+ * La région à laquelle l'équipe appartient
  */
-public function membresEquipe() {
-	return Equipe::where("chef_id", "=", $this->chef_id)->get();
+public function region() {
+	return $this->belongsTo('App\Models\Region');
 }
 
-/**
- * Tous les joueurs qui font partie de la même équipe, de type Participant
- *
- * @return Participant[] Tous les joueurs de cette équipe
+/** 
+ * Eloquent relationship: un participant appartient à un sport
  */
-public function joueursEquipe() {
-	$joueurs = array();
-	foreach ($this->membresEquipe() as $joueur) {
-		$joueurs[$joueur->joueur_id] = $joueur->joueur();
-	}
-	return $joueurs;
+public function sports() {
+	return $this->belongsToMany('App\Models\Sport', 'participant_sport', 'participant_id', 'sport_id');
 }
 
-/**
- * La liste des id des joueurs qui font partie de la même équipe
- *
- * @return int[] Tous les id des joueurs de cette équipe
- */
-public function idJoueurs() {
-	$idJoueurs = array();
-	foreach ($this->membresEquipe() as $joueur) {
-		$joueurs[] = $joueur->joueur_id;
-	}
-	return $joueurs;
-}
 
 /**
  * Identifie les colonnes qui peuvent être modifiées
  */
 protected $fillable = [
-        'chef_id',
-        'joueur_id'
+        'id',
+        'nom',
+        'region',
     ];
 
 public $validationMessages;
 
-/** 
- * Les champs chef_id et participants_id sont des entiers requis
- * chef_id doit correspondre à un id de participant qui est une équipe
- * joueur_id doit correspondre à un id de participant qui N'est PAS une équipe
+/**
+ *
  */
 
 public function validationRules() {
 	return [
-        'chef_id' => 'required|integer|exists:participants,participant_id,equipe,1',
-        'joueur_id' => 'required|integer|exists:participants,participant_id,equipe,0'
+        'id' => 'required|integer',
+        'nom' => 'required|string',
+        'region' => 'required|integer|exists:regions',
 		];
-}
-
-public function save(array $options = array())
-{
-	DB::table('participants_equipes')->insert($options);
 }
 
 }

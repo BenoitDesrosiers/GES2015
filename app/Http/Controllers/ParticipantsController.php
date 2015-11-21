@@ -181,13 +181,10 @@ class ParticipantsController extends BaseController {
 	{
 		try {
 			$participant = Participant::findOrFail($id);
-			$region = Region::findOrFail($participant->region_id);
-			$participantSports = Participant::find($id)->sports;
-			$sports = Sport::all();
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		return View::make('participants.show', compact('participant', 'region', 'sports', 'participantSports'));
+		return View::make('participants.show', compact('participant'));
 	}
 
     /**
@@ -199,29 +196,29 @@ class ParticipantsController extends BaseController {
     public function edit($id)
     {
         try {
-		$participant = Participant::findOrFail($id);
-		$regions = Region::all();
-		$sports = Sport::all();
-		$participantSports = Participant::find($id)->sports;
+			$participant = Participant::findOrFail($id);
+			$regions = Region::all();
+			$sports = Sport::all();
+			$participantSports = Participant::find($id)->sports;
 
-//      Si de vieilles entrées n'ont pas de date de naissance, on utilise les valeurs par défaut
-		$anneeDefaut = date('Y')- 20;
-		$moisDefaut = 0;
-		$jourDefaut = 0;
-		if ($participant->naissance) {
-//          Déterminer les valeurs des trois comboboxes
-			$stringsDate = explode('-',$participant->naissance);
-			$anneeDefaut = $stringsDate[0]+1;
-			$moisDefaut = $stringsDate[1]+1;
-			$jourDefaut = $stringsDate[2]+1;
-		}
+	//      Si de vieilles entrées n'ont pas de date de naissance, on utilise les valeurs par défaut
+			$anneeDefaut = date('Y')- 20;
+			$moisDefaut = 0;
+			$jourDefaut = 0;
+			if ($participant->naissance) {
+	//          Déterminer les valeurs des trois comboboxes
+				$stringsDate = explode('-',$participant->naissance);
+				$anneeDefaut = $stringsDate[0]+1;
+				$moisDefaut = $stringsDate[1]+1;
+				$jourDefaut = $stringsDate[2]+1;
+			}
 
-//      Générer les listes des comboboxes
-		$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
-		$listeMois = ParticipantsController::generer_liste(1, 12);
-		$listeJours = ParticipantsController::generer_liste(1, 31);
+	//      Générer les listes des comboboxes
+			$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
+			$listeMois = ParticipantsController::generer_liste(1, 12);
+			$listeJours = ParticipantsController::generer_liste(1, 31);
 
-		return View::make('participants.edit', compact('participant', 'regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+			return View::make('participants.edit', compact('participant', 'regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
         } catch (Exception $e) {
             App:abort(404);
         }

@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use DB;
 use App;
 use App\Models\Equipe;
+use App\Models\Sport;
 use App\Models\Participant;
+use App\Models\ParticipantEquipe;
 
 /**
  * Le controlleur pour les équipes
@@ -28,7 +30,7 @@ class EquipesController extends Controller
      */
 	public function index()
     {
-		$equipes = Participant::where('equipe','=','1')->get();
+		$equipes = Equipe::where('equipe','=','1')->get();
 		return View::make('equipes.index', compact('equipes'));
     }
 
@@ -61,7 +63,9 @@ class EquipesController extends Controller
 	 */
 	public function show($id)
 	{
-		return ParticipantsController::show($id);
+		$equipe = Equipe::findOrFail($id);
+		$sport = Sport::where('id','=',$equipe->sport_id)->first();
+		return View::make('equipes.show', compact('equipe','sport'));
 	}
 
     /**
@@ -73,15 +77,12 @@ class EquipesController extends Controller
     public function edit($id)
     {
 //     	L'équipe à modifier
-		$chef = Participant::findOrFail($id);
+		$equipe = Equipe::where('equipe','=','1')->where('id','=',$id)->firstOrFail();
+// 		Les id des membres actuels de l'équipe
+		$membres = $equipe->idMembres();
 // 		Les participants susceptibles d'être ajoutés à l'équipe, triés par nom
-		$joueursTries = DB::table('participants')->where('equipe','=','0')->orderBy('nom')->orderBy('prenom')->get();
-		$joueurs = array();
-		foreach ($joueursTries as $joueur) {
-			$joueurs[] = Participant::findOrFail($joueur->id);
-		}
-		$membres = $chef->idMembres();
-		return View::make('equipes.edit', compact('chef','joueurs','membres'));
+		$joueurs = Participant::where('equipe','=','0')->orderBy('nom')->orderBy('prenom')->get();
+		return View::make('equipes.edit', compact('equipe','joueurs','membres'));
     }
 
     /**
@@ -94,22 +95,20 @@ class EquipesController extends Controller
      */
     public function update($id)
     {
-		$chef = Participant::findOrFail($id);
+		$equipe = Equipe::findOrFail($id);
 // 		Le participant-équipe doit être une équipe
-		if (!$chef->equipe) {
+		if (!$equipe->equipe) {
 			App::abort(404);
 		}
 // 		Lecture des joueurs sélectionnés
-		$joueursActuels = $chef->idMembres();
+		$joueursActuels = $equipe->idMembres();
         $membres = Input::get('joueur');
         $joueursSelectionnes = [];
 		if (is_array($membres)) {
 			foreach ($membres as $membre) {
 				$joueur = Participant::findOrFail($membre);
-// 				Les participants-joueurs ne doivent pas être une équipe
-				if ($joueur->equipe) {
-					App::abort(404);
-				} else {
+// 				Les joueurs ne doivent pas être une équipe
+				if (!$joueur->equipe) {
 					$joueursSelectionnes[] = $joueur->id;
 				}
 			}
@@ -129,16 +128,17 @@ class EquipesController extends Controller
 			}
 		}
 // 		Écriture des changements
-		DB::table('participants_equipes')->where('chef_id','=',$chef->id)->whereIn('joueur_id', $aEffacer)->delete();
+		DB::table('participants_equipes')->where('chef_id','=',$equipe->id)->whereIn('joueur_id', $aEffacer)->delete();
 		foreach ($aAjouter as $nouveauMembre) {
-			$equipe = new Equipe;
-			$equipe->chef_id = $chef->id;
-			$equipe->joueur_id = $nouveauMembre;
-			$equipe->save();
-// 			DB::table('participants_equipes')->insert( ['chef_id' => $chef->id, 'joueur_id' => $nouveauMembre] );
+			$participantEquipe = new ParticipantEquipe;
+			$participantEquipe->chef_id = $equipe->id;
+			$participantEquipe->joueur_id = $nouveauMembre;
+			$participantEquipe->save();
+			return $participantEquipe;
+// 			DB::table('participants_equipes')->insert( ['chef_id' => $equipe->id, 'joueur_id' => $nouveauMembre] );
 		}
 // 		Visualisation de l'équipe modifiée
-		return Redirect::action('ParticipantsController@show', $chef->id)->with ( 'status', 'L\'équipe '.$chef->prenom.' '.$chef->nom.' a été mise a jour!' );
+		return Redirect::action('ParticipantsController@show', $equipe->id)->with ( 'status', 'L\'équipe '.$equipe->prenom.' '.$equipe->nom.' a été mise a jour!' );
     }
 
     /**

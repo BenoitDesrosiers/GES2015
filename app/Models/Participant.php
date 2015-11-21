@@ -19,22 +19,20 @@ namespace App\Models;
 
 class Participant extends EloquentValidating {
 	protected $guarded = array('id');
-	
+
+public function versEquipe() {
+	return Equipe::where('id','=',$this->id)->first();
+}
 
 /** 
  * Eloquent relationship: un participant appartient à un sport
  */
- 
 public function sports() {
-	return $this->belongsToMany('App\Models\Sport');
+	return $this->belongsToMany('App\Models\Sport', 'participant_sport', 'participant_id', 'sport_id');
 }
 
 public function epreuves() {
 	return $this->belongsToMany('App\Models\Epreuve');
-}
-
-public function region() {
-	return $this->belongsTo('App\Models\Region');
 }
 
 /**
@@ -42,7 +40,7 @@ public function region() {
  * hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les chefs directement
  */
 public function equipes() {
-    return $this->hasMany('App\Models\Equipe', 'joueur_id');
+    return $this->belongsToMany('App\Models\Equipe', 'participants_equipes', 'joueur_id', 'chef_id');
 }
 
 /**
@@ -54,25 +52,10 @@ public function membres() {
 }
 
 /**
- * Le nombre total de membres dont ce participant est l'équipe
- *
- * @return int Le nombre de membres
+ * La région à laquelle le participant appartient
  */
-public function nombreMembres() {
-	return Equipe::where("chef_id", "=", $this->id)->count();
-}
-
-/**
- * La liste des id des joueurs dont ce participant est l'équipe
- *
- * @return int[] Tous les id des joueurs de cette équipe
- */
-public function idMembres() {
-	$idMembres = [];
-	foreach($this->membres as $membre) {
-		$idMembres[] = $membre->joueur_id;
-	}
-	return $idMembres;
+public function region() {
+	return $this->belongsTo('App\Models\Region');
 }
 
 /**

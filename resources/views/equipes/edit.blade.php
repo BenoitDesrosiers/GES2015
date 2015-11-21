@@ -2,10 +2,10 @@
 @section('content')
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h2>Modification de l'équipe {!! $chef->prenom !!} {!! $chef->nom !!}</h2>
+		<h2>Modification de l'équipe {!! $equipe->prenom !!} {!! $equipe->nom !!}</h2>
 	</div>
 	<div class="panel-body">
-		{!! Form::open(['action'=> array('EquipesController@update', $chef->id), 'method' => 'PUT', 'class' => 'form']) !!}
+		{!! Form::open(['action'=> array('EquipesController@update', $equipe->id), 'method' => 'PUT', 'class' => 'form']) !!}
 <!--    Affiche les messages d'erreur après un enregistrement raté -->
         @foreach ($errors->all() as $error)
             <p class="alert alert-danger">{{ $error }}</p>
