@@ -12,12 +12,13 @@
             </div>
         @endif
         <p>Genre:
-            @if ($participant->sexe)
+            @if (!$participant->sexe)
                 Masculin
             @else
                 Féminin
             @endif
         </p>
+        <p>Région: {!! $participant->region->nom !!}</p>
 		<p>Numéro: {!! $participant->numero !!}</p>
 <!--    Une équipe n'a pas réellement d'adresse et de date de naissance -->
         @if (!$participant->equipe)
@@ -27,6 +28,12 @@
             @if ($participant->adresse)
                 <p>Adresse: {!! $participant->adresse !!}</p>
             @endif
+        @endif
+        @if ($participant->telephone)
+            <p>Numéro de téléphone: {!! $participant->telephone !!}</p>
+        @endif
+        @if ($participant->nom_parent)
+            <p>Parent: {!! $participant->nom_parent !!}</p>
         @endif
 <!-- 	Afficher les équipes dont le participant est membre	 -->
 		@if (!$participant->equipes->isEmpty())
@@ -41,13 +48,7 @@
 				@endforeach
 			</ul>
         @endif
-        @if ($participant->telephone)
-            <p>Numéro de téléphone: {!! $participant->telephone !!}</p>
-        @endif
-        @if ($participant->nom_parent)
-            <p>Parent: {!! $participant->nom_parent !!}</p>
-        @endif
-        <p>Région: {!! $participant->region->nom !!}</p>
+<!--    Afficher les sports du participant      -->
 		@if (!$participant->sports->isEmpty())
 			<p>Sports:</p>
 			<ul>
