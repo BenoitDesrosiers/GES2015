@@ -25,7 +25,7 @@ public function creerParticipants() {
 		["Elsa"		, "Eiffel"		, 5,	2,	2,	1],
 		["Francesco", "Funiculaire"	, 6,	2,	3,	0],
 		["Ginette"	, "Gargantua"	, 7,	3,	1,	1],
-		["Henri"	, "Salvador"	, 8,	3,	2,	0],
+		["Henri"	, "Hippocampe"	, 8,	3,	2,	0],
 		["Ivan"		, "Impitoyable"	, 9,	3,	3,	0],
 		["Josephte" , "Jamboni"		,10,	4,	1,	1],
 		["Kitty" 	, "KitKat"		,11,	4,	2,	1],
