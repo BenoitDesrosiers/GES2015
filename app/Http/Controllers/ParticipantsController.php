@@ -300,9 +300,7 @@ class ParticipantsController extends BaseController {
 	{
 		$participant = Participant::findOrFail($id);
 		$participant->delete();
-		
 		return Redirect::action('ParticipantsController@index');
 	}
-
 
 }

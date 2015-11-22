@@ -11,8 +11,8 @@
  * - pour Baseball
  *   - Tournoi masculin
  * 
- * @author BinarMorker
- * @version 0.0.1 rev 1
+ * @author BinarMorker, obnosim
+ * @version 2
  */
 
 namespace App\Models;
@@ -20,78 +20,74 @@ namespace App\Models;
 class Participant extends EloquentValidating {
 	protected $guarded = array('id');
 
-public function versEquipe() {
-	return Equipe::where('id','=',$this->id)->first();
-}
+	/**
+	* Eloquent relationship: un participant appartient à un sport
+	*/
+	public function sports() {
+		return $this->belongsToMany('App\Models\Sport', 'participant_sport', 'participant_id', 'sport_id');
+	}
 
-/** 
- * Eloquent relationship: un participant appartient à un sport
- */
-public function sports() {
-	return $this->belongsToMany('App\Models\Sport', 'participant_sport', 'participant_id', 'sport_id');
-}
+	public function epreuves() {
+		return $this->belongsToMany('App\Models\Epreuve');
+	}
 
-public function epreuves() {
-	return $this->belongsToMany('App\Models\Epreuve');
-}
+	/**
+	* Les équipes dont fait partie le participant
+	* hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les chefs directement
+	*/
+	public function equipes() {
+		return $this->belongsToMany('App\Models\Equipe', 'participants_equipes', 'joueur_id', 'chef_id');
+	}
 
-/**
- * Les équipes dont fait partie le participant
- * hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les chefs directement
- */
-public function equipes() {
-    return $this->belongsToMany('App\Models\Equipe', 'participants_equipes', 'joueur_id', 'chef_id');
-}
+	/**
+	* Les autres participants dont ce participant est l'équipe
+	* hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les membres directement
+	*/
+	public function membres() {
+		return $this->hasMany('App\Models\Equipe', 'chef_id');
+	}
 
-/**
- * Les autres participants dont ce participant est l'équipe
- * hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les membres directement
- */
-public function membres() {
-    return $this->hasMany('App\Models\Equipe', 'chef_id');
-}
+	/**
+	* La région à laquelle le participant appartient
+	*/
+	public function region() {
+		return $this->belongsTo('App\Models\Region');
+	}
 
-/**
- * La région à laquelle le participant appartient
- */
-public function region() {
-	return $this->belongsTo('App\Models\Region');
-}
-
-/**
- * Identifie les colonnes qui peuvent être modifiées
- */
-protected $fillable = [
-        'equipe',
-        'nom',
-        'prenom',
-        'telephone',
-        'nom_parent',
-        'numero',
-        'sexe',
-        'naissance',
-        'adresse',
-        'region_id'
-    ];
-
-public $validationMessages;
-
-/** 
- * Les champs nom, prénom, numéro, équipe, région_id, sexe, naissance sont requis
- * Les champs téléphone, nom_parent et adresse ne le sont pas
- */
-
-public function validationRules() {
-	return [
-		'nom' => 'required|string',
-		'prenom' => 'required|string',
-        'numero' => 'required|integer',
-        'equipe' => 'required|boolean',
-        'region_id' => 'required|integer',
-        'sexe' => 'required|boolean',
-        'naissance' => 'required|date'
+	/**
+	* Identifie les colonnes qui peuvent être modifiées
+	*/
+	protected $fillable = [
+			'equipe',
+			'nom',
+			'prenom',
+			'telephone',
+			'nom_parent',
+			'numero',
+			'sexe',
+			'naissance',
+			'adresse',
+			'region_id'
 		];
-}
+
+	public $validationMessages;
+
+	/** 
+	* Les champs nom, prénom, numéro, équipe, région_id, sexe, naissance sont requis
+	* Les champs téléphone, nom_parent et adresse ne le sont pas
+	*/
+
+	public function validationRules() {
+		return [
+			'nom' => 'required|string',
+			'prenom' => 'required|string',
+			'numero' => 'required|integer',
+			'equipe' => 'required|boolean',
+			'region_id' => 'required|integer',
+			'sexe' => 'required|boolean',
+			'naissance' => 'required|date'
+			];
+	}
 
 
 }

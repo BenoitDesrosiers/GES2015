@@ -7,15 +7,11 @@ use App\Models\Participant;
 
 class ParticipantsTableSeeder extends Seeder {
 
-public function run()
-{
-	$this->creerParticipants();
-}
-
 /**
  * Crée les entrées de la table Participants correspondant aux équipes
  */
-public function creerParticipants() {
+public function run()
+{
 	$entrees = [
 		//prénom,	nom				#, region,sport,sexe
 		["Arthur"	, "Archambault"	, 1,	1,	1,	0],
@@ -47,6 +43,7 @@ public function creerParticipants() {
 	];
 
 	Participant::where('equipe','=',0)->delete();
+
 	foreach($entrees as $entree) {
 		$participant = new Participant;
 		$participant->prenom = $entree[0];

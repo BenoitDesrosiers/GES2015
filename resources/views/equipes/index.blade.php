@@ -65,6 +65,7 @@
 	</table>
 @endif
 </div>
+
 <script>
 // 	Affiche ou masque les membres d'une équipe donnée
 	function afficherMembres(equipe) {
@@ -75,6 +76,7 @@
 		}
 	}
 </script>
+
 <style>
 	/* Masquer les membres par défaut */
 	.rangeeEquipe + .rangeeMembres {
@@ -89,4 +91,5 @@
 		padding: 0;
 	}
 </style>
+
 @stop
