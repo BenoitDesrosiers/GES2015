@@ -47,7 +47,7 @@ public function idMembres() {
  * @return int Le nombre de membres
  */
 public function nombreMembres() {
-	return ParticipantEquipe::where("chef_id", "=", $this->id)->count();
+	return $this->membres->count();
 }
 
 /**
