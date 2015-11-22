@@ -27,7 +27,7 @@
 					@foreach ($equipe->membres as $membre)
 						<li>
 							<a href="{!! action('ParticipantsController@show', $membre->id) !!}">
-								{!! $membre->nom !!}
+								{!! $membre->nom !!}, {!! $membre->prenom !!}
 							</a>
 						</li>
 					@endforeach
