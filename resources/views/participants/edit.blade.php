@@ -17,11 +17,6 @@
             </div>
         @endif
 <!--    Les champs explicitement requis sont précédés d'un astérisque -->
-        <div class="form-group">
-            {!! Form::label('equipe', 'Équipe:') !!}
-            <input type="checkbox" name="equipe" @if ($participant->equipe) checked @endif >
-            {{ $errors->first('equipe') }}
-        </div>
 		<div class="form-group">
 			{!! Form::label('nom', '*Nom:') !!} 
 			{!! Form::text('nom',$participant->nom, ['class' => 'form-control']) !!}
@@ -51,10 +46,10 @@
         <div class="form-group">
             {!! Form::label('sexe', '*Genre:') !!}
             <br/>
-            {!! Form::radio('sexe', 0, $participant->sexe==false) !!}
+            {!! Form::radio('sexe', 0, !$participant->sexe) !!}
             {!! Form::label('homme', 'Homme') !!}
             <br/>
-            {!! Form::radio('sexe', 1, $participant->sexe==true) !!}
+            {!! Form::radio('sexe', 1, $participant->sexe) !!}
             {!! Form::label('femme', 'Femme') !!}
             <br/>
             {{ $errors->first('sexe') }}
