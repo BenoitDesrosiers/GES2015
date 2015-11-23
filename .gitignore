@@ -1,4 +1,4 @@
-/vendor
+﻿/vendor
 /node_modules
 Homestead.yaml
 #.env 
@@ -8,4 +8,6 @@ TODO.txt
 Proposition.txt
 #.env   <<<<< a remettre plus tard, je l'ai enlevé juste pour que ca soit moins compliqué pour le étudiants. 
 /composer.lock
+.settings/org.eclipse.core.resources.prefs
 *~
+

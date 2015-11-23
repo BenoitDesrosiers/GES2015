@@ -88,6 +88,5 @@ class Participant extends EloquentValidating {
 			'naissance' => 'required|date'
 			];
 	}
-
-
+    
 }
