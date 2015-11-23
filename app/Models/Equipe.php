@@ -87,8 +87,6 @@ class Equipe extends EloquentValidating {
 			'equipe' => 'accepted',
 			'nom' => 'required|string',
 			'region_id' => 'required|integer' //exists:regions, id  ---> ne fonctionne pas
-	// 		Numéro unique parmi les équipes mais pas nécessairement parmi les joueurs
-	// 		'numero' => 'unique:participants,numero,numero,id,equipe,1' ---> empêche la mise à jour
 			];
 	}
 

@@ -129,11 +129,7 @@ class ParticipantsController extends BaseController {
             $participant = new Participant;
 
     //      Le champ 'equipe' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement
-            if(Input::has('equipe')) {
-                $participant->equipe = true;
-            } else {
-                $participant->equipe = false;
-            }
+			$participant->equipe = false;
             $participant->nom = $input['nom'];
             $participant->prenom = $input['prenom'];
             $participant->telephone = $input['telephone'];
