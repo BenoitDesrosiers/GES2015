@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
 use View;
-
+use Systeme;
 /**
  * Le controller principal
  * 
@@ -24,7 +24,10 @@ class HomeController extends BaseController {
 
 	public function index()
 	{
-		return View::make('homePage');
+
+		$titre = Systeme::find(1)->nomEvenement;
+
+		return View::make('homePage', compact('titre'));
 	}	
 
 }
