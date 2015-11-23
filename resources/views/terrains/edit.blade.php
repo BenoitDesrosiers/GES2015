@@ -8,17 +8,17 @@
     <div class="panel-body">
         {!! Form::open(['action'=> array('TerrainsController@update', $terrain->id), 'method' => 'PUT', 'class' => 'form']) !!}
         <div class="form-group">
-            {!! Form::label('nom', 'Nom:') !!} 
+            {!! Form::label('nom', '* Nom:') !!} 
             {!! Form::text('nom',$terrain->nom, ['class' => 'form-control']) !!}
             {{ $errors->first('nom') }}
         </div>
         <div class="form-group">
-            {!! Form::label('adresse', 'Adresse:') !!} 
+            {!! Form::label('adresse', '* Adresse:') !!} 
             {!! Form::text('adresse',$terrain->adresse, ['class' => 'form-control']) !!}
             {{ $errors->first('adresse') }}
         </div>
         <div class="form-group">
-            {!! Form::label('ville', 'Ville:') !!} 
+            {!! Form::label('ville', '* Ville:') !!} 
             {!! Form::text('ville',$terrain->ville, ['class' => 'form-control']) !!}
             {{ $errors->first('ville') }}
         </div>
@@ -29,7 +29,7 @@
             }
         ?>
         <div class="form-group">
-            {!! Form::label('region_id', 'Région:') !!} <br/>
+            {!! Form::label('region_id', '* Région:') !!} <br/>
             {!! Form::select('region_id', $regionArray, $terrain->region_id) !!}
             {{ $errors->first('region_id') }}
         </div>

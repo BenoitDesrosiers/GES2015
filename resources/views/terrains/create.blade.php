@@ -8,18 +8,18 @@
     <div class="panel-body">
         {!! Form::open(['action'=> 'TerrainsController@index', 'class' => 'form']) !!}
         <div class="form-group">
-            {!! Form::label('nom', 'Nom:') !!} 
+            {!! Form::label('nom', '* Nom:') !!} 
             {!! Form::text('nom',null, ['class' => 'form-control']) !!}
             {{ $errors->first('nom') }}
         </div>
 
         <div class="form-group">
-            {!! Form::label('adresse', 'Adresse:') !!} 
+            {!! Form::label('adresse', '* Adresse:') !!} 
             {!! Form::text('adresse',null, ['class' => 'form-control']) !!}
             {{ $errors->first('adresse') }}
         </div>
         <div class="form-group">
-            {!! Form::label('ville', 'Ville:') !!} 
+            {!! Form::label('ville', '* Ville:') !!} 
             {!! Form::text('ville', null, ['class' => 'form-control']) !!}
             {{ $errors->first('ville') }}
         </div>
@@ -30,7 +30,7 @@
             }
         ?>
         <div class="form-group">
-            {!! Form::label('region_id', 'Région:') !!} <br/>
+            {!! Form::label('region_id', '* Région:') !!} <br/>
             {!! Form::select('region_id', $regionArray) !!}
             {{ $errors->first('region_id') }}
         </div>
