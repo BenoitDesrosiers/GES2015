@@ -4,6 +4,7 @@
     <div class="panel-heading">
         <h2>Modification d'un terrain</h2>
     </div>
+    <?php //todo: ajouter la liste des erreurs en rouge en haut?>
     <div class="panel-body">
         {!! Form::open(['action'=> array('TerrainsController@update', $terrain->id), 'method' => 'PUT', 'class' => 'form']) !!}
         <div class="form-group">

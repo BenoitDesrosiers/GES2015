@@ -33,6 +33,11 @@ class TerrainsTableSeeder extends Seeder {
         ["Soccer 2 Jean-Raimbault",             "177 Rue Pelletier",        "Drummondville", "4"]
         ];
 
+        //todo: lire les régions à partir de la BD et associer des ids de régions qui existent
+        //      car ca cause un bug lors d'un second seed car les id de régions de sont pas 1,2,3,4
+        //      si on aurait utilisé Terrain::save au lieu de create, cette erreur aurait été détecté avant...
+        // 		voir ArbitresSeeder pour un exemple de comment le faire.  
+         
         // 'seed' de la base de données
         foreach($terrains as $terrain) {
             Terrain::create(

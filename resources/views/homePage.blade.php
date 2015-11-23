@@ -9,6 +9,7 @@
 		<a class="btn btn-lg btn-success" href="{{ action('ParticipantsController@index') }}" role="button">Participants</a></p>
 		<p><a class="btn btn-lg btn-success" href="{{ action('ResultatsController@index') }}" role="button">Résultats</a>
 		<a class="btn btn-lg btn-success" href="{{ action('BenevolesController@index') }}" role="button">Bénévoles</a>
+		<a class="btn btn-lg btn-success" href="{{ action('ArbitresController@index') }}" role="button">Arbitres</a>
 		<a class="btn btn-lg btn-success" href="{{ action('RolesController@index') }}" role="button">Rôles</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('TerrainsController@index') }}" role="button">Terrains</a></p>
 	</div>

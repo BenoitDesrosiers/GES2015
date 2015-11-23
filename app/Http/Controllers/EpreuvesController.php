@@ -9,7 +9,7 @@ use Input;
 
 use App\Models\Sport;
 use App\Models\Epreuve;
-use App\Models\Request;
+use Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**

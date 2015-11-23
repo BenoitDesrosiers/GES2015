@@ -86,7 +86,9 @@ class RolesController extends BaseController {
 	{
 		try {
 			$role = Role::findOrFail($id);
-			if ($role->description == "") {$role->description = "Aucune description";}
+			if ($role->description == "") {
+				$role->description = "Aucune description";
+			}
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
