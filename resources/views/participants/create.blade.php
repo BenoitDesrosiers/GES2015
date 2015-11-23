@@ -17,11 +17,6 @@
             </div>
         @endif
         <div class="form-group">
-            {!! Form::label('equipe', 'Équipe:') !!}
-            <input type="checkbox" name="equipe" >
-            {{ $errors->first('equipe') }}
-        </div>
-        <div class="form-group">
             {!! Form::label('nom', '*Nom:') !!} 
             {!! Form::text('nom','', ['class' => 'form-control']) !!}
             {{ $errors->first('nom') }}
