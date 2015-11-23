@@ -40,6 +40,8 @@
 											un script js est appelé pour tous les form qui ont un "data-confirm" (voir assets/js/script.js) --}}
 				</td>
 				<td><a href="{{ action('SportsEpreuvesController@index',$sport->id) }}" class="btn btn-info">Épreuves</a></td>
+				
+          		<td><a href="{{ action('sportParticipantController@index',$sport->id) }}" class="btn btn-info">Participants</a></td> 
 			</tr>
 @endforeach
 		</tbody>

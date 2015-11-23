@@ -7,8 +7,8 @@ use View;
 use Redirect;
 use Input;
 
-use Sport;
-use Epreuve;
+use App\Models\Sport;
+use App\Models\Epreuve;
 use Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -110,7 +110,7 @@ class EpreuvesController extends BaseController
 			}
 			return Redirect::action('EpreuvesController@index',array('sportId'=>$input["sportsListe"]));
 		} else {
-			return Redirect::back()->withInput()->withErrors($epreuve->validationMessages);
+			return Redirect::back()->withInput()->withErrors($epreuve->validationMessages());
 		}			
 	}
 	
@@ -138,7 +138,7 @@ class EpreuvesController extends BaseController
 		if($epreuve->save()) { 
 			return Redirect::action('EpreuvesController@index',array('sportId'=>$input["sportsListe"]));
 		} else {
-			return Redirect::back()->withInput()->withErrors($epreuve->validationMessages);
+			return Redirect::back()->withInput()->withErrors($epreuve->validationMessages());
 		}
 	}
 	
