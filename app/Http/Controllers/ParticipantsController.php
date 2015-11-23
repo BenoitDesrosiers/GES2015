@@ -1,122 +1,66 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
 use View;
 use Redirect;
 use Input;
+use App;
 use DateTime;
-
 use App\Models\Participant;
 use App\Models\Region;
 use App\Models\Sport;
-
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * Le controller pour les participants
- * 
+ *
  * @author BinarMorker
  * @version 0.0.1 rev 1
  */
 class ParticipantsController extends BaseController {
-
+	
 	/**
 	 * Affiche une liste de tous les participants.
 	 *
 	 * @return Response
 	 */
-	public function index()
-	{
-		# Paramêtres récupérés dans le liens du titre de la colonne sélectionnée.
-		$parametreDeTri = Input::get('parametreDeTri');
-		$direction = Input::get('direction');
+	public function index() {
+		$routeActionName = 'ParticipantsController@index';
+		$participants = Participant::all ();
+		$listeRecherches = ParticipantsController::getListeRecherches();
+		$listeFiltres = ParticipantsController::getListeFiltres();
+		$valeurFiltre = 0;
+		$valeurRecherche = '';
+		$infosTri = ParticipantsController::getInfosTri ();
+		$participants = ParticipantsController::trierColonnes ( $participants );
 		
-		# Tableau qui possède toutes les informations nécessaire pour la gestion
-		# des tris des colonnes.
-		$colonnesTriees = [
-		"colNom" => [
-					"contrl"=>'ParticipantsController@index',
-					"texteAffiche"=>'Nom, Prenom',
-					"trie"=>[
-						"parametreDeTri"=>'nom',
-						"direction"=>'asc']],
-		"colNum" => [
-					"contrl"=>'ParticipantsController@index',
-					"texteAffiche"=>'Numéro',
-					"trie"=>[
-						"parametreDeTri"=>'numero',
-						"direction"=>'asc']],
-		"colRegion" => [
-					"contrl"=>'ParticipantsController@index',
-					"texteAffiche"=>'Région',
-					"trie"=>[
-						"parametreDeTri"=>'region_id',
-						"direction"=>'asc']],
-		"colEquipe" => [
-					"contrl"=>'ParticipantsController@index',
-					"texteAffiche"=>'Équipe',
-					"trie"=>[
-						"parametreDeTri"=>'equipe',
-						"direction"=>'asc']]
-		];
-
-		# Détermination de la colonne qui a été triée.
-		if ($parametreDeTri == "numero") {
-			$colonneChangee = "colNum";
-		} elseif ($parametreDeTri == "region_id") {
-			$colonneChangee = "colRegion";
-		} elseif ($parametreDeTri == "equipe") {
-			$colonneChangee = "colEquipe";
-		} else {
-			$parametreDeTri = "nom";
-			$colonneChangee = "colNom";
-		}
-		
-		# Changement de la direction pour la colonne qui a été triée.
-		if ($direction == 'asc'){
-			$prochaineDirection = 'desc';
-		} else {
-			$direction = 'desc';
-			$prochaineDirection = 'asc';
-		}
-		
-		# Si un tri est sélectionné, on lance la requête OrderBy, sinon on retourne
-		# tous les participants.
-		if ($parametreDeTri && $direction) {
-			$participants = Participant::orderBy($parametreDeTri, $direction)->get();
-		} else {
-			$participants = Participant::get();
-		}
-		
-		# Changement de la direction dans le liens qui va être créé par la View.
-		$colonnesTriees[$colonneChangee]['trie']['direction'] = $prochaineDirection;
-		
-		return View::make('participants.index', compact('participants', 'colonnesTriees'));
-		
+		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'listeRecherches', 'valeurFiltre', 'valeurRecherche' ) );
 	}
-
+	
 	/**
 	 * Affiche le formulaire de création d'un participant.
 	 *
 	 * @return Response
 	 */
-	public function create()
-	{
-        $regions = Region::all();
-        $sports = Sport::all();
-
-//      La date par défaut du formulaire est <cette année> - 20 ans
-//      pour être plus prêt de l'âge moyen attendu
-        $anneeDefaut = date('Y')- 20;
-        $moisDefaut = 0;
-        $jourDefaut = 0;
-
-        $listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
-        $listeMois = ParticipantsController::generer_liste(1, 12);
-        $listeJours = ParticipantsController::generer_liste(1, 31);
-        return View::make('participants.create', compact('regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+	public function create() {
+		$regions = Region::all ();
+		$sports = Sport::all ();
+		
+		// La date par défaut du formulaire est <cette année> - 20 ans
+		// pour être plus prêt de l'âge moyen attendu
+		$anneeDefaut = date ( 'Y' ) - 20;
+		$moisDefaut = 0;
+		$jourDefaut = 0;
+		
+		$listeAnnees = ParticipantsController::generer_liste ( date ( 'Y' ) - 100, 101 );
+		$listeMois = ParticipantsController::generer_liste ( 1, 12 );
+		$listeJours = ParticipantsController::generer_liste ( 1, 31 );
+		return View::make ( 'participants.create', compact ( 'regions', 'sports', 'participantSports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut' ) );
 	}
-
+	
 	/**
 	 * Enregistre dans la bd le participant qui vient d'être créé.
 	 *
@@ -170,25 +114,26 @@ class ParticipantsController extends BaseController {
             App:abort(404);
         }
 	}
-
+	
 	/**
 	 * Affiche un seul participant.
 	 *
-	 * @param  int  $id l'id du participant à afficher
+	 * @param int $id.
+	 *        	L'id du participant à afficher.
 	 * @return Response
 	 */
-	public function show($id)
-	{
+	public function show($id) {
 		try {
-			$participant = Participant::findOrFail($id);
-			$region = Region::findOrFail($participant->region_id);
-			$participantSports = Participant::find($id)->sports;
-			$sports = Sport::all();
-		} catch(ModelNotFoundException $e) {
-			App::abort(404);
+			$participant = Participant::findOrFail ( $id );
+			$region = Region::findOrFail ( $participant->region_id );
+			$participantSports = Participant::find ( $id )->sports;
+			$sports = Sport::all ();
+		} catch ( ModelNotFoundException $e ) {
+			App::abort ( 404 );
 		}
-		return View::make('participants.show', compact('participant', 'region', 'sports', 'participantSports'));
+		return View::make ( 'participants.show', compact ( 'participant', 'region', 'sports', 'participantSports' ) );
 	}
+
 
     /**
      * Affiche le formulaire pour éditer un participant.
@@ -301,17 +246,158 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Efface un participant de la bd.
 	 *
-	 * @param  int $id l'id du participant à effacer
+	 * @param int $id.
+	 *        	L'id du participant à effacer.
 	 * @return Response
 	 */
+
 	public function destroy($id)
 	{
 		//todo: ajouter le try catch
 		$participant = Participant::findOrFail($id);
 		$participant->delete();
 		
-		return Redirect::action('ParticipantsController@index');
+		return Redirect::action ( 'ParticipantsController@index' );
 	}
-
-
+	
+	/**
+	 * Recherche une entrée de la bd.
+	 *
+	 * @return Response
+	 */
+	public function recherche() {
+		$routeActionName = 'ParticipantsController@index';
+		$listeRecherches = ParticipantsController::getListeRecherches();
+		$listeFiltres = ParticipantsController::getListeFiltres();
+		$infosTri = ParticipantsController::getInfosTri ();
+		$input = Input::all ();
+		$valeurFiltre = $input ['listeFiltres'];
+		$valeurRecherche = $input ['entreeRecherche'];
+		
+		if ($valeurRecherche != '') {
+			if ($valeurFiltre == 0) {
+				$participants = Participant::where ( 'nom', 'like', $valeurRecherche . '%' )->get ();
+			} elseif ($valeurFiltre == 1) {
+				$participants = Participant::where ( 'prenom', 'like', $valeurRecherche . '%' )->get ();
+			} elseif ($valeurFiltre == 2) {
+				if (is_numeric($valeurRecherche)) {
+					$participants = Participant::where ( 'numero', $valeurRecherche )->get ();
+				} else {
+					$participants = new \Illuminate\Database\Eloquent\Collection ();
+				}
+				
+			} elseif ($valeurFiltre == 3) {
+				$region = Region::where ( 'nom_court', '=', $valeurRecherche )->first ();
+				if ($region) {
+					$participants = $region->participants()->get();
+				} else {
+					$participants = new \Illuminate\Database\Eloquent\Collection ();
+				}
+			} else {
+				$participants = Participant::all ();
+			}
+		} else {
+			$participants = Participant::all ();
+		}
+		
+		$participants = ParticipantsController::trierColonnes ( $participants );
+		
+		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'listeRecherches', 'valeurFiltre', 'valeurRecherche' ) );
+	}
+	
+	/**
+	 * Trie une collection.
+	 *
+	 * @param Collection $collectionNonTriee.
+	 *        	Collection à trier selon le paramètre de tri et la direction.
+	 * @return Collection $collectionTriee. Collection trier selon le paramètre de tri et la direction.
+	 */
+	private function trierColonnes($collectionNonTriee) {
+		// Paramêtres récupérés dans le liens du titre de la colonne sélectionnée.
+		$parametreDeTri = Input::get ( 'parametreDeTri' );
+		$direction = Input::get ( 'direction' );
+		
+		if ($direction == 'desc') {
+			$collectionTriee = $collectionNonTriee->sortByDesc ( $parametreDeTri );
+		} else {
+			$collectionTriee = $collectionNonTriee->sortBy ( $parametreDeTri );
+		}
+		
+		return $collectionTriee;
+	}
+	
+	/**
+	 * Retourne les informations de tri.
+	 *
+	 * @return Array $infosTri. Contient les informations de tri.
+	 */
+	private function getInfosTri() {
+		$parametreDeTri = Input::get ( 'parametreDeTri' );
+		$direction = Input::get ( 'direction' );
+		$infosTri = [ 
+				'nom' => [ 
+						'texteAffiche' => 'Nom, Prenom',
+						'trie' => [ 
+								'parametreDeTri' => 'nom',
+								'direction' => 'asc' 
+						] 
+				],
+				'numero' => [ 
+						'texteAffiche' => 'Numéro',
+						'trie' => [ 
+								'parametreDeTri' => 'numero',
+								'direction' => 'asc' 
+						] 
+				],
+				'region_id' => [ 
+						'texteAffiche' => 'Région',
+						'trie' => [ 
+								'parametreDeTri' => 'region_id',
+								'direction' => 'asc' 
+						] 
+				],
+				'equipe' => [ 
+						'texteAffiche' => 'Équipe',
+						'trie' => [ 
+								'parametreDeTri' => 'equipe',
+								'direction' => 'asc' 
+						] 
+				] 
+		];
+		
+		if ($parametreDeTri) {
+			if ($direction == 'asc') {
+				$infosTri [$parametreDeTri] ['trie'] ['direction'] = 'desc';
+			} else {
+				$infosTri [$parametreDeTri] ['trie'] ['direction'] = 'asc';
+			}
+		}
+		
+		return $infosTri;
+	}
+	
+	/**
+	 * Retourne la liste des noms courts de tous les régions.
+	 * 
+	 * @return Array $listeRecherches. Contient les noms courts des régions.
+	 */
+	private function getListeRecherches() {
+		$regions = Region::all('nom_court');
+		$listeRecherches = [];
+		foreach ($regions as $region){
+			array_push($listeRecherches, $region->nom_court);
+		}
+		return $listeRecherches;
+	}
+	
+	private function getListeFiltres(){
+		$listeFiltres = [ 
+				'Nom',
+				'Prénom',
+				'Numéro',
+				'Région'
+		];
+		return $listeFiltres;
+	}
+	
 }
