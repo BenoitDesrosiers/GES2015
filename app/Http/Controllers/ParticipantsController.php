@@ -280,7 +280,12 @@ class ParticipantsController extends BaseController {
 			} elseif ($valeurFiltre == 1) {
 				$participants = Participant::where ( 'prenom', 'like', $valeurRecherche . '%' )->get ();
 			} elseif ($valeurFiltre == 2) {
-				$participants = Participant::where ( 'numero', $valeurRecherche )->get ();
+				if (is_numeric($valeurRecherche)) {
+					$participants = Participant::where ( 'numero', $valeurRecherche )->get ();
+				} else {
+					$participants = new \Illuminate\Database\Eloquent\Collection ();
+				}
+				
 			} elseif ($valeurFiltre == 3) {
 				$region = Region::where ( 'nom_court', '=', $valeurRecherche )->first ();
 				if ($region) {
