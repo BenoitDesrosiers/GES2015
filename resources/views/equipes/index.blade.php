@@ -13,6 +13,7 @@
 	<table class="table table-condensed table-hover">
 		<thead>
 			<tr>
+				<th/>
 				<th class="col-sm-3">Équipe</th>
 				<th>Membres</th>
 				<th class="hidden-xs">Région</th>
@@ -25,7 +26,9 @@
 <!-- 		Afficher toutes les équipes, même les vides -->
 			@foreach($equipes as $equipe)
 <!-- 			Les équipes vides ont une apparence légèrement différente	 -->
-				<tr class="rangeeEquipe @if ($equipe->nombreMembres() == 0) active @endif" onClick="afficherMembres(this)" >
+				<tr class="rangeeEquipe @if ($equipe->nombreMembres() == 0) active @endif" >
+					<td>
+						<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherMembres(this)"><i></i></button></td>
 					<td>
 						<a href="{!! action('EquipesController@show', $equipe->id) !!}">
 							{!! $equipe->nom !!}
@@ -46,6 +49,7 @@
 <!-- 			Afficher tous les membres de l'équipe	 -->
 				@if(!$equipe->membres->isEmpty())
 					<tr class="info rangeeMembres">
+						<td/>
 						<td/>
 						<td colspan="5">
 							<ul>
@@ -68,11 +72,16 @@
 
 <script>
 // 	Affiche ou masque les membres d'une équipe donnée
-	function afficherMembres(equipe) {
-		if (equipe.classList.contains("actif")) {
-			equipe.classList.remove("actif");
+	function afficherMembres(bouton) {
+		rangee = bouton.parentNode.parentNode;
+		if (rangee.classList.contains("actif")) {
+			bouton.classList.remove("glyphicon-minus");
+			bouton.classList.add("glyphicon-plus");
+			rangee.classList.remove("actif");
 		} else {
-			equipe.classList.add("actif");
+			bouton.classList.remove("glyphicon-plus");
+			bouton.classList.add("glyphicon-minus");
+			rangee.classList.add("actif");
 		}
 	}
 </script>
