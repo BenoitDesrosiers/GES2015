@@ -8,16 +8,6 @@ body {
   padding-bottom: 60px;
 }
 
-table {
-    table-layout: fixed;      
-}
-
-td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;  
-}
-
 .footer {
   position: absolute;
   bottom: 0;
