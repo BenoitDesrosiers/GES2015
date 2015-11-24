@@ -26,7 +26,7 @@
 <!-- 		Afficher toutes les équipes, même les vides -->
 			@foreach($equipes as $equipe)
 <!-- 			Les équipes vides ont une apparence légèrement différente	 -->
-				<tr class="rangeeEquipe @if ($equipe->nombreMembres() == 0) active @endif" >
+				<tr class="rangeeEquipe" >
 					<td>
 						@if (!$equipe->membres->isEmpty())
 							<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherMembres(this)"/>
