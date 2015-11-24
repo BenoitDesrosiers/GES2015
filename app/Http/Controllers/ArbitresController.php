@@ -117,13 +117,12 @@ class ArbitresController extends BaseController {
 	{
 		try {
 			$arbitre = Arbitre::findOrFail($id);
-			$region = Region::findOrFail($arbitre->region_id);
+			return View::make('arbitres.show', compact('arbitre'));
 
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
 
-		return View::make('arbitres.show', compact('arbitre', 'region'));
 	}
 
 
@@ -138,6 +137,7 @@ class ArbitresController extends BaseController {
 		try {
 			$arbitre = Arbitre::findOrFail($id);
 			$regions = Region::all();
+			$sports = Sport::all();
 			
 			// La date par défaut du formulaire est <cette année> - 20 ans
 			// pour être plus prêt de l'âge moyen attendu
