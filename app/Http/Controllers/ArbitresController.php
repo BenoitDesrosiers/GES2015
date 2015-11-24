@@ -150,7 +150,7 @@ class ArbitresController extends BaseController {
 	        $listeMois = ArbitresController::generer_liste(1, 12);
 	        $listeJours = ArbitresController::generer_liste(1, 31);
 
-	        return View::make('arbitres.edit', compact('arbitre', 'regions', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+	        return View::make('arbitres.edit', compact('arbitre', 'regions', 'sports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
 	    
 	    } catch (Exception $e) {
 	    	App:abort(404);
@@ -183,6 +183,14 @@ class ArbitresController extends BaseController {
 	        $arbitre->date_naissance = $arbitre->date_naissance = ArbitresController::construire_date($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
 			
 			if($arbitre->save()) {
+				
+				// Association avec les sports sélectionnés
+				if (is_array(Input::get('sport'))) {
+                    $arbitre->sports()->sync(array_keys(Input::get('sport')));
+                } else {
+                    $arbitre->sports()->detach();
+                }
+
 				return Redirect::action('ArbitresController@index');
 			} else {
 				return Redirect::back()->withInput()->withErrors($arbitre->validationMessages());

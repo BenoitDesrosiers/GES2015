@@ -97,6 +97,33 @@
             {!! Form::select('jour_naissance',$listeJours, $jourDefaut, ['style' => 'width:3em!important;']) !!}
             {{ $errors->first('date_naissance') }}
         </div>
+
+    <!--   Boutons « checkbox » pour la liste des sports -->
+    <div class="form-group">
+			{!! Form::label('sports', 'Sports:') !!} 
+			<div class="row">
+				<?php
+					foreach ($sports as $sport) {
+						$checked = "";
+						$active = "";
+						foreach ($arbitre->sports as $arbitreSport) {
+							if ($arbitreSport->id == $sport->id) {
+								$checked = " checked";
+								$active = " active";
+								//continue;
+							}
+						}
+				?>
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
+			        <label class="btn btn-default btn-block<?=$active?>">
+			            <input name="sport[{{ $sport->id }}]" type="checkbox"<?=$checked?>> {{ $sport->nom }}
+			        </label><br/>
+			    </div>
+				<?php
+					}
+				?>
+			</div>
+		</div>
 		
 	<!--    Boutons Sauvegarder et Annuler -->
 		<div class="form-group">
