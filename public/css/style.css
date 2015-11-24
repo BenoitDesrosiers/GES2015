@@ -18,6 +18,10 @@ td {
     text-overflow: ellipsis;  
 }
 
+table button {
+    float: right;    
+}
+
 .footer {
   position: absolute;
   bottom: 0;
