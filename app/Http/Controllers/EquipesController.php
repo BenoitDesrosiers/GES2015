@@ -98,7 +98,6 @@ class EquipesController extends Controller
      */
     public function edit($id)
     {
-//     TODO n'afficher que les joueurs qui ont le même sport
 		$equipe = Equipe::findOrFail($id);
 		$membres = $equipe->idMembres();
 // 		Les participants susceptibles d'être ajoutés à l'équipe, triés par nom
