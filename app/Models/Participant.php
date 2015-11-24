@@ -14,43 +14,62 @@
  * @author BinarMorker
  * @version 0.0.1 rev 1
  */
+
+namespace App\Models;
+
 class Participant extends EloquentValidating {
 	protected $guarded = array('id');
-
-/** 
- * Eloquent relationship: un participant appartient à un sport
- */
-
-public function sports() {
-	return $this->belongsToMany('Sport');
-}
-
-public function epreuves() {
-	return $this->belongsToMany('Epreuve');
-}
-
-public function region() {
-	return $this->belongsTo('Region');
-}
 	
-/**
- * Validation
- *
- * un participant doit avoir:
- *  - nom: obligatoire, et unique pour un sport donné, mais je n'ai pas trouvé comment exprimer ca avec les règles de Laravel
- *  - Les autres champs sont falcultatifs.
- */
 
-public $validationMessages;
+    /** 
+     * Eloquent relationship: un participant appartient à un sport
+     */
+     
+    public function sports() {
+    	return $this->belongsToMany('App\Models\Sport');
+    }
 
-public function validationRules() {
-	return [
-		'nom' => 'required',
-		'prenom' => 'required',
-		'numero' => 'required',
-		'region_id' => 'required',
-		];
-}
+    public function epreuves() {
+    	return $this->belongsToMany('App\Models\Epreuve');
+    }
 
+    public function region() {
+    	return $this->belongsTo('App\Models\Region');
+    }
 
+    /**
+     * Identifie les colonnes qui peuvent être modifiées
+     */
+    protected $fillable = [
+            'equipe',
+            'nom',
+            'prenom',
+            'telephone',
+            'nom_parent',
+            'numero',
+            'sexe',
+            'naissance',
+            'adresse',
+            'region_id'
+        ];
+
+    public $validationMessages;
+
+    /** 
+     * Les champs nom, prénom, numéro, équipe, région_id, sexe, naissance sont requis
+     * Les champs téléphone, nom_parent et adresse ne le sont pas
+     */
+
+    public function validationRules() {
+    	return [
+    		'nom' => 'required|string',
+    		'prenom' => 'required|string',
+            'numero' => 'required|integer',
+            'equipe' => 'required|boolean',
+            'region_id' => 'required|integer',
+            'sexe' => 'required|boolean',
+            'naissance' => 'required|date'
+    		];
+    }
+    
 }
