@@ -98,11 +98,16 @@ class EquipesController extends Controller
      */
     public function edit($id)
     {
-//     TODO n'afficher que les joueurs de la même région et qui ont le bon sport
+//     TODO n'afficher que les joueurs qui ont le même sport
 		$equipe = Equipe::findOrFail($id);
 		$membres = $equipe->idMembres();
 // 		Les participants susceptibles d'être ajoutés à l'équipe, triés par nom
-		$joueurs = Participant::where('equipe','=','0')->orderBy('nom')->orderBy('prenom')->get();
+		$joueurs = Participant::where('equipe','=','0')
+					->orderBy('nom')->orderBy('prenom')
+					->where('region_id','=',$equipe->region_id)
+					->join('participant_sport','participants.id','=','participant_sport.participant_id')
+					->where('sport_id','=',$equipe->sport()->id)
+					->get();
 // 		Redirection vers la page d'édition pour permettre d'ajouter des membres
 		return View::make('equipes.edit', compact('equipe','joueurs','membres'));
     }
