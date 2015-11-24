@@ -13,12 +13,11 @@ table {
 }
 
 td {
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;  
 }
 
-table button {
+table .btn {
     float: right;    
 }
 
