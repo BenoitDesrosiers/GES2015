@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
 use View;
-use Systeme;
+use App\Models\Systeme;
 /**
  * Le controller principal
  * 

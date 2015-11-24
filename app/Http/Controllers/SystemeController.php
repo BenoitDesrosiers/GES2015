@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use View;
-use Systeme;
+use App\Models\Systeme;
 use Input;
 use Redirect;
 
