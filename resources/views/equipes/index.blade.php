@@ -28,7 +28,10 @@
 <!-- 			Les équipes vides ont une apparence légèrement différente	 -->
 				<tr class="rangeeEquipe @if ($equipe->nombreMembres() == 0) active @endif" >
 					<td>
-						<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherMembres(this)"><i></i></button></td>
+						@if (!$equipe->membres->isEmpty())
+							<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherMembres(this)"/>
+						@endif
+					</td>
 					<td>
 						<a href="{!! action('EquipesController@show', $equipe->id) !!}">
 							{!! $equipe->nom !!}
