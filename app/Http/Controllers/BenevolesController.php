@@ -102,7 +102,7 @@ class BenevolesController extends BaseController {
         try {
 			$benevole = Benevole::findOrFail($id);
 			$disponibilites = $benevole->disponibilites;
-            $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => false, 'eventLimit' => true])->setCallbacks(['viewRender' => 'function() {alert("Callbacks!");}']);
+            $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => false, 'eventLimit' => true]);
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -137,11 +137,77 @@ class BenevolesController extends BaseController {
         try{
 		    $benevole = Benevole::findOrFail($id);
 			$disponibilites = $benevole->disponibilites;
-            $calendrier = \Calendar::addEvents($disponibilites)->setOptions(['editable' => true, 'eventLimit' => true])->setCallbacks(['viewRender' => 'function() {alert("Callbacks!");}']);
+            $calendrier = \Calendar::addEvents($disponibilites)
+                ->setOptions([
+                    'editable' => true,
+                    'eventLimit' => true,
+                    'selectable' => true,
+                    'selectableHelper' => true,
+                    'displayEventTime' => false
+                ]);
+            $calendrier->setCallbacks([
+                    'select' => 'function(start, end) {
+                        var title = prompt("Event Title1");
+                        var eventData;
+                        if(title){
+                            eventData = {
+                                title: title,
+                                start: start,
+                                end: end
+                            };
+                            $("#calendar-' . $calendrier->getId() .'").fullCalendar("renderEvent", eventData, true);
+                        }
+                        $("#calendar-' . $calendrier->getId() .'").fullCalendar("unselect");
+                        $.ajax({
+			                type: "POST",
+			                url: "{{URL::action("BenevolesController@editDisponibilitesSave") }}",
+			                data: {  _token : $("meta[name="csrf-token"]").attr("content"),
+				                     benevole_id : document.getElementById("benevoles").value },
+			                timeout: 10000,
+			                success: function(data){
+				                document.getElementById("liste-epreuves").innerHTML=data;
+				                }
+		                });	
+
+                    }'
+                ]); 
+
         } catch(ModelNotFoundException $e) {
             App::abort(404);
         }
 		return View::make('benevoles.editDisponibilites', compact('benevole', 'calendrier'));
+	}
+
+    /**
+	 * Enregistre dans la BD sur le serveur et affiche un message d'erreur si ça plante.
+	 *
+	 * @param  int  $id l'id du bénévole pour lequelle on veut éditer
+     * ses disponibilités. 
+	 * @return Response
+	 */
+    public function editDisponibilitesSave()
+	{
+        if(Request::ajax()) {
+		    $benevole_id = Input::get('benevole_id');
+		    try {
+			    $benevole = Benevole::findOrFail($benevole_id); 
+		    } catch (ModelNotFoundException $e) {
+			    App::abort(404);
+		    }
+		    $disponibilite = new Disponibilite;
+            $disponibilite->benevole_id = $input['benevole_id'];
+	        $disponibilite->title = $input['title'];
+	        $disponibilite->isAllDay = $input['isAllDay'];
+	        $disponibilite->start = $input['start'];
+            $disponibilite->end = $input['end'];
+            if($disponibilite->save()) {
+		        /*Ne fait rien*/
+	        } else {
+		        return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
+	        }
+	    } else {
+		    return App::abort(404);
+	    }
 	}
 
 	/**

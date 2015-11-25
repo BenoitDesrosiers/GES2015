@@ -28,7 +28,10 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('terrains','TerrainsController');
 	
 	Route::get('benevole/{id}', 'BenevolesController@showDisponibilites');
-    Route::get('benevole/{id}/edit', 'BenevolesController@editDisponibilites');
+
+    Route::get('benevole/{id}/editDisponibilites', 'BenevolesController@editDisponibilites');
+    Route::get('benevole/{id}/editDisponibilites/save', 'BenevolesController@editDisponibilitesSave');
+
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
