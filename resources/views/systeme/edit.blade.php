@@ -9,7 +9,7 @@
 		<div class="form-group">
 			{!! Form::label('texte', 'Changement de texte:') !!} 
 			{!! Form::text('texte',$texte->nomEvenement, ['class' => 'form-control']) !!}
-			{{ $errors->first('texte') }}
+			{{ $errors->first('nomEvenement') }}
 		</div>
 		
 		<div class="form-group">
