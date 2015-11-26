@@ -10,7 +10,7 @@ use App\Models\Systeme;
 use Input;
 use Redirect;
 
-
+//TODO: renommer Systeme pour Activite
 class SystemeController extends Controller
 {
     /**
@@ -21,7 +21,7 @@ class SystemeController extends Controller
     public function index()
 
     {
-
+        //TODO: refaire pour afficher toutes les activités
         $evenement = Systeme::find(1);
 
         return View::make('systeme.index', compact('evenement'));
@@ -34,7 +34,7 @@ class SystemeController extends Controller
      */
     public function create()
     {
-        //
+        //TODO: à compléter
     }
 
     /**
@@ -45,7 +45,7 @@ class SystemeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //TODO: à compléter
     }
 
     /**
@@ -56,7 +56,7 @@ class SystemeController extends Controller
      */
     public function show($id)
     {
-        //
+        //TODO: à compléter
     }
 
     /**
@@ -67,6 +67,7 @@ class SystemeController extends Controller
      */
     public function edit($id)
     {
+        //TODO: ajouter des try catch.
         $texte = Systeme::find($id);
         return View::make('systeme.edit', compact('texte', 'id'));
     }
@@ -81,6 +82,7 @@ class SystemeController extends Controller
     public function update($id)
     {
         $input = Input::all();
+        //TODO: ajouter des try catch.
         $texte = Systeme::findOrFail($id);
         $texte->nomEvenement = $input['texte'];
 
@@ -102,6 +104,6 @@ class SystemeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //TODO: a compléter
     }
 }
