@@ -86,6 +86,7 @@ class Equipe extends EloquentValidating {
 	//      equipe doit être à 'vrai'
 			'equipe' => 'accepted',
 			'nom' => 'required|string',
+			'numero' => 'required|integer',
 			'region_id' => 'required|integer' //exists:regions, id  ---> ne fonctionne pas
 			];
 	}
