@@ -18,14 +18,13 @@
 				<th>Membres</th>
 				<th class="hidden-xs">Région</th>
 				<th class="hidden-xs">Sport</th>
-				<th class="col-sm-1"/>
-				<th class="col-sm-1"/>
+				<th class="col-xs-1 col-sm-1"/>
+				<th class="col-xs-1 col-sm-1"/>
 			</tr>
 		</thead>
 		<tbody>
 <!-- 		Afficher toutes les équipes, même les vides -->
 			@foreach($equipes as $equipe)
-<!-- 			Les équipes vides ont une apparence légèrement différente	 -->
 				<tr class="rangeeEquipe" >
 					<td>
 						@if (!$equipe->membres->isEmpty())
@@ -51,7 +50,7 @@
 				</tr>
 <!-- 			Afficher tous les membres de l'équipe	 -->
 				@if(!$equipe->membres->isEmpty())
-					<tr class="info rangeeMembres">
+					<tr class="active rangeeMembres">
 						<td/>
 						<td/>
 						<td colspan="5">

@@ -34,11 +34,11 @@
 						<br/>
 						@if (in_array($joueur->id, $membres))
 <!-- 						Précocher la case pour les joueurs qui sont déjà membres de l'équipe	 -->
-							<input name="joueur[{{ $joueur->id }}]" type="checkbox" value="{!! $joueur->id !!}" checked>
+							<input name="joueur[{!! $joueur->id !!}]" type="checkbox" value="{!! $joueur->id !!}" checked>
 <!-- 						Indiquer par un effet de couleur les membres qui faisaient partie de l'équipe avant les modifications	 -->
 							<mark>{!! Form::label($joueur->nom.', '.$joueur->prenom) !!}</mark>
 						@else
-							<input name="joueur[{{ $joueur->id }}]" type="checkbox" value="{!! $joueur->id !!}">
+							<input name="joueur[{!! $joueur->id !!}]" type="checkbox" value="{!! $joueur->id !!}">
 							{!! Form::label($joueur->nom.', '.$joueur->prenom) !!}
 						@endif
 				@endforeach
