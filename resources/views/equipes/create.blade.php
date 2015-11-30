@@ -8,24 +8,26 @@
 		{!! Form::open(['action'=> 'EquipesController@index', 'class' => 'form']) !!}
 <!--    Affiche les messages d'erreur après un enregistrement raté -->
         @foreach ($errors->all() as $error)
-            <p class="alert alert-danger">{{ $error }}</p>
+            <p class="alert alert-danger">
+				{!! $error !!}
+			</p>
         @endforeach
 <!--    Affiche un message de confirmation après un enregistrement réussi -->
         @if (session('status'))
             <div class="alert alert-success">
-                {{ session('status') }}
+                {!! session('status') !!}
             </div>
         @endif
 
         <div class="form-group">
             {!! Form::label('nom', '*Nom:') !!} 
             {!! Form::text('nom','', ['class' => 'form-control']) !!}
-            {{ $errors->first('nom') }}
+            {!! $errors->first('nom') !!}
         </div>
         <div class="form-group">
             {!! Form::label('numero', '*Numéro:') !!} 
             {!! Form::text('numero','', ['class' => 'form-control']) !!}
-            {{ $errors->first('numero') }}
+            {!! $errors->first('numero') !!}
         </div>
         <?php
             $regionArray = array();
@@ -36,14 +38,21 @@
         <div class="form-group">
             {!! Form::label('region_id', 'Région:') !!}
             {!! Form::select('region_id', $regionArray) !!}
-            {{ $errors->first('region_id') }}
+            {!! $errors->first('region_id') !!}
         </div>
         <div class="form-group">
             {!! Form::label('sport', '*Sport:') !!}
-            {{ $errors->first('sport') }}
+            {!! $errors->first('sport') !!}
+			<br/>
+<!--        Cocher le premier sport      -->
+            <?php
+				$premierSport = $sports->shift();
+			?>
+			{!! Form::radio('sport', $premierSport->id, true) !!}
+			{!! Form::label('sport', $premierSport->nom) !!}
             @foreach ($sports as $sport)
 				<br/>
-				{!! Form::radio('sport', $sport->id) !!}
+				{!! Form::radio('sport', $sport->id, false) !!}
 				{!! Form::label('sport', $sport->nom) !!}
 			@endforeach
         </div>
