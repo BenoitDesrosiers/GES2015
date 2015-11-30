@@ -266,6 +266,7 @@ class ParticipantsController extends BaseController {
 	 * @return Response
 	 */
 	public function recherche() {
+	//TODO: mettre cette logique dans index()
 		$routeActionName = 'ParticipantsController@index';
 		$listeRecherches = ParticipantsController::getListeRecherches();
 		$listeFiltres = ParticipantsController::getListeFiltres();
@@ -381,6 +382,7 @@ class ParticipantsController extends BaseController {
 	 * 
 	 * @return Array $listeRecherches. Contient les noms courts des régions.
 	 */
+	 //TODO: renommer cette fonction getRegions
 	private function getListeRecherches() {
 		$regions = Region::all('nom_court');
 		$listeRecherches = [];
