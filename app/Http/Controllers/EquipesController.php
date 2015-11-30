@@ -14,7 +14,6 @@ use App\Models\Region;
 use App\Models\Equipe;
 use App\Models\Sport;
 use App\Models\Participant;
-use App\Models\ParticipantEquipe;
 
 /**
  * Le controlleur pour les équipes
