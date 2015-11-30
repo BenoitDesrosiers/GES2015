@@ -40,14 +40,6 @@ class Participant extends EloquentValidating {
 	}
 
 	/**
-	* Les autres participants dont ce participant est l'équipe
-	* hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les membres directement
-	*/
-	public function membres() {
-		return $this->hasMany('App\Models\Equipe', 'chef_id');
-	}
-
-	/**
 	* La région à laquelle le participant appartient
 	*/
 	public function region() {
