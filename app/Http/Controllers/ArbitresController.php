@@ -195,16 +195,18 @@ class ArbitresController extends BaseController {
 			}
 		} catch (Exception $e) {
 	    	App:abort(404);
-	 * Efface un arbitre de la bd.
-	 *
-	 * @param  int $id l'id de l'arbitre à effacer
 	    }
 	}
 
 
+
 	/**
+	 * Efface un arbitre de la bd.
+	 *
+	 * @param  int $id l'id de l'arbitre à effacer
 	 * @return Response
 	 */
+	
 	public function destroy($id)
 	{
 		try {
