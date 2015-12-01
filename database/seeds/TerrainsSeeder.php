@@ -54,8 +54,8 @@ class TerrainsTableSeeder extends Seeder {
             $terrain->save();
             $index_sports = array();
             for ($x = 1; $x < rand(1, count($sports)); $x++) {
-                $test = rand(0, 1);
-                if ($test === 1) {
+                $rand_bin_value = rand(0, 1);
+                if ($rand_bin_value === 1) {
                     array_push($index_sports, $x);
                 }   
             }
