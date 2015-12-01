@@ -16,6 +16,7 @@
 	            Féminin
 	        @endif
         </p>
+        
 		@if ($arbitre->adresse)
 			<p>Adresse : {{ $arbitre->adresse }}</p>
 		@endif
@@ -23,6 +24,7 @@
    		@if ($arbitre->date_naissance)
    			<p>Date de naissance : {{ $arbitre->date_naissance }}</p>
    		@endif
+
    		@if (count($arbitre->sports) > 0)
    			<p>Sports: <ul> <?php foreach($arbitre->sports as $sport) { echo "<li>".$sport->nom."</li>"; } ?></ul></p>
    		@endif
