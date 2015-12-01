@@ -158,8 +158,6 @@ class ArbitresController extends BaseController {
 	}
 
 
-
-
 	/**
 	 * Mise à jour de l'arbitre dans la bd.
 	 *
@@ -217,7 +215,6 @@ class ArbitresController extends BaseController {
 		} catch (Exception $e) {
 	    	App:abort(404);
 	    }
-	
 	}
 
 
@@ -229,7 +226,8 @@ class ArbitresController extends BaseController {
      * @return La liste remplie
      */
 	//todo: mettre en commun avec ParticipantsController
-    private function generer_liste($debut, $n) {
+    private function generer_liste($debut, $n) 
+    {
         $liste = array();
         $fin = $debut+$n-1;
         for ($i = $debut; $i <= $fin; $i++) {
@@ -241,15 +239,16 @@ class ArbitresController extends BaseController {
 
 	/**
 	 * Retourne l'objet Date correspondant aux valeurs passées si elles sont valides
-	 * ou le string "invalide" si la date est impossible (ex. 31 février)
+	 * ou le string « invalide » si la date est impossible (ex. 31 février)
 	 *
 	 * @param  int  $annee L'annee
 	 * @param  int  $mois Le mois
 	 * @param  int  $jour Le jour
-	 * @return Date formée de $annee-$mois-$jour ou "invalide"
+	 * @return Date formée de $annee-$mois-$jour ou « invalide »
 	 */
 	//todo: mettre en commun avec participantcontroller
-	private function construire_date($annee, $mois, $jour) {
+	private function construire_date($annee, $mois, $jour) 
+	{
 		if (checkdate($mois, $jour, $annee)) {
 			$dateTest = new DateTime;
 			$dateTest->setDate($annee, $mois, $jour);
@@ -258,6 +257,4 @@ class ArbitresController extends BaseController {
 			return "invalide";
 		}
 	}
-
-
 }

@@ -64,6 +64,4 @@ class Arbitre extends EloquentValidating {
 			'date_naissance' => 'date'
 		];
 	}
-
-
 }
