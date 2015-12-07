@@ -3,7 +3,7 @@
  * La classe Code
  * 
  * 
- * @author Éric B
+ * @author GBEY0402
  * @version 0.1
  */
  

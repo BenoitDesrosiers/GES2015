@@ -6,6 +6,7 @@
 	</div>
 	<div class="panel-body">
 		<p>Description: <?php echo $code->description ?></p>
+		<a href="{{ URL::previous() }}" class="btn btn-primary">Retour</a>
 	</div>
 </div>
 @stop
