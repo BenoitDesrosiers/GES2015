@@ -8,7 +8,8 @@ use Input;
 
 use App\Models\Benevole;
 use App\Models\Disponibilite;
-
+use Request;
+use Response;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
@@ -137,39 +138,52 @@ class BenevolesController extends BaseController {
         try{
 		    $benevole = Benevole::findOrFail($id);
 			$disponibilites = $benevole->disponibilites;
+
             $calendrier = \Calendar::addEvents($disponibilites)
                 ->setOptions([
                     'editable' => true,
                     'eventLimit' => true,
                     'selectable' => true,
-                    'selectableHelper' => true,
-                    'displayEventTime' => false
+                    'selectableHelper' => false,
+                    'displayEventTime' => true,
+                    'displayEventEnd' => true
                 ]);
             $calendrier->setCallbacks([
-                    'select' => 'function(start, end) {
-                        var title = prompt("Event Title1");
+                    'select' => "function(start, end) {
+                        var title = prompt('Event Title');
                         var eventData;
+
                         if(title){
                             eventData = {
                                 title: title,
                                 start: start,
                                 end: end
                             };
-                            $("#calendar-' . $calendrier->getId() .'").fullCalendar("renderEvent", eventData, true);
+                            $('#calendar-" . $calendrier->getId() ."').fullCalendar('renderEvent', eventData, true);
                         }
-                        $("#calendar-' . $calendrier->getId() .'").fullCalendar("unselect");
+                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect');                                            
                         $.ajax({
-			                type: "POST",
-			                url: "{{URL::action("BenevolesController@editDisponibilitesSave") }}",
-			                data: {  _token : $("meta[name="csrf-token"]").attr("content"),
-				                     benevole_id : document.getElementById("benevoles").value },
+			                type: 'POST',
+			                url: '" . action('BenevolesController@editDisponibilitesSave') . "',
+                            data: {  _token : $('meta[name=\"csrf-token\"]').attr('content'),
+                                benevole_id: " . $id . ",
+                                title: title,
+                                start: new Date(start),
+                                end: new Date(end),
+                                backgroundColor: '#80ACED'
+                                },
 			                timeout: 10000,
 			                success: function(data){
-				                document.getElementById("liste-epreuves").innerHTML=data;
-				                }
-		                });	
+                                if(data.status == \"fail\"){
+                                    alert(data.msg);
+                                };
+				            },
+                            error: function(data){
+                                alert('Le serveur ne répond pas.');
+                            }
+		                });
 
-                    }'
+                    }"
                 ]); 
 
         } catch(ModelNotFoundException $e) {
@@ -186,24 +200,39 @@ class BenevolesController extends BaseController {
 	 * @return Response
 	 */
     public function editDisponibilitesSave()
-	{
+	{        
+        
         if(Request::ajax()) {
-		    $benevole_id = Input::get('benevole_id');
+            $input = Input::all();
+            //print_r($input);die;
 		    try {
-			    $benevole = Benevole::findOrFail($benevole_id); 
+			    $benevole = Benevole::findOrFail($input['benevole_id']); 
 		    } catch (ModelNotFoundException $e) {
-			    App::abort(404);
+			    $response = array(
+                    'status' => 'fail',
+                    'msg' => 'fail1',
+                );
+                return $response;
 		    }
+            
 		    $disponibilite = new Disponibilite;
             $disponibilite->benevole_id = $input['benevole_id'];
 	        $disponibilite->title = $input['title'];
-	        $disponibilite->isAllDay = $input['isAllDay'];
-	        $disponibilite->start = $input['start'];
-            $disponibilite->end = $input['end'];
+	        //$disponibilite->isAllDay = $input['isAllDay'];
+	        $disponibilite->start = strtotime($input['start']);
+            $disponibilite->end = strtotime($input['end']);
             if($disponibilite->save()) {
-		        /*Ne fait rien*/
+		        $response = array(
+                    'status' => 'success',
+                    'msg' => 'Setting created successfully',
+                );
+                return $response;
 	        } else {
-		        return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
+		        $response = array(
+                    'status' => 'fail',
+                    'msg' => 'fail2',
+                );
+                return $response;
 	        }
 	    } else {
 		    return App::abort(404);
