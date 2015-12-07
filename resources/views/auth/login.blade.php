@@ -12,12 +12,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="//code.jquery.com/jquery.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <style>
-        h1 {
-            padding-top : 2%;
-            padding-bottom : 2%;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
 </head>
 
 <body>
