@@ -86,7 +86,7 @@ class Equipe extends EloquentValidating {
 	//      equipe doit être à 'vrai'
 			'equipe' => 'accepted',
 			'nom' => 'required|string',
-			'numero' => 'required|integer',
+			'numero' => 'required|integer', // la clause UNIQUE empêche la mise à jour
 			'region_id' => 'required|integer' //exists:regions, id  ---> ne fonctionne pas
 			];
 	}

@@ -74,11 +74,10 @@ class Participant extends EloquentValidating {
 			'nom' => 'required|string',
 			'prenom' => 'required|string',
 			'numero' => 'required|integer',
-			'equipe' => 'required|boolean',
+			'equipe' => 'required|boolean', // impossible de s'assurer que le champ est à Faux
 			'region_id' => 'required|integer',
 			'sexe' => 'required|boolean',
 			'naissance' => 'required|date'
 			];
 	}
-    
 }
