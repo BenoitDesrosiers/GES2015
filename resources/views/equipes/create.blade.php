@@ -37,7 +37,7 @@
         ?>
         <div class="form-group">
             {!! Form::label('region_id', 'Région:') !!}
-            {!! Form::select('region_id', $regionArray) !!}
+            {!! Form::select('region_id', $regionArray, '', ['class' => 'form-control']) !!}
             {!! $errors->first('region_id') !!}
         </div>
         <div class="form-group">
