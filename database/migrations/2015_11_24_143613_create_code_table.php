@@ -16,6 +16,7 @@ class CreateCodeTable extends Migration
         {
             $table->increments('id');
             $table->string('nom');
+            $table->string('abreviation');
             $table->string('description');
             $table->timestamps();
             

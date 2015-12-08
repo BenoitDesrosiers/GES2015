@@ -13,15 +13,19 @@
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
+				<!--  Les différents champs d'un code -->
 				<th>Nom</th>
+				<th class="hidden-xs">Abréviation</th>
 				<th class="hidden-xs">Description</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
+<!--  Pour chaque code trouvé dans la base de données, affiche le nom, l'abréviation et la description  -->
 @foreach($codes as $code)
 			<tr>
 				<td><a href="{{ action('CodesController@show', $code->id) }}">{{ $code->nom }}</a></td>
+				<td class="hidden-xs"><?php echo $code->abreviation ?></td>
 				<td class="hidden-xs"><?php echo $code->description ?></td>
 				<td><a href="{{ action('CodesController@edit',$code->id) }}" class="btn btn-info">Modifier</a></td>
 				<td>{!! Form::open(array('action' => array('CodesController@destroy',$code->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}

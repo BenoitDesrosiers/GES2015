@@ -1,4 +1,8 @@
 <?php
+/** 
+ * @author GBEY0402
+ * @version 0.1
+ */
 
 namespace App\Http\Controllers;
 
@@ -16,7 +20,7 @@ use App\Models\Code;
 class CodesController extends BaseController
 {
     /**
-     * Display a listing of the resource.
+     * Affiche une liste des codes trouvés dans la base de données trier en ordre alphabétique.
      *
      * @return \Illuminate\Http\Response
      */
@@ -27,6 +31,11 @@ class CodesController extends BaseController
             $codes = Code::all()->sortby('nom');
             foreach($codes as $code)
             {
+                if ($code->abreviation == "")
+                {
+                        $code->abreviation = "Aucune abréviation disponible";
+                }
+
                 if ($code->description == "")
                 {
                         $code->description = "Aucune description disponible";
@@ -41,7 +50,7 @@ class CodesController extends BaseController
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Affiche un formulaire de création de code.
      *
      * @return \Illuminate\Http\Response
      */
@@ -51,12 +60,11 @@ class CodesController extends BaseController
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistre le nouveau code dans la base de données après la création.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         try 
         {
@@ -64,6 +72,7 @@ class CodesController extends BaseController
             
             $code = new Code;
             $code->nom = $input['nom'];
+            $code->abreviation = $input['abreviation'];
             $code->description = $input['description'];
         } 
         catch(ModelNotFoundException $e) 
@@ -82,7 +91,7 @@ class CodesController extends BaseController
     }
 
     /**
-     * Display the specified resource.
+     * Affiche un code en particulier en utilisant son Id.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -92,6 +101,11 @@ class CodesController extends BaseController
         try 
         {
             $code = Code::findOrFail($id);
+            if ($code->abreviation == "") 
+            {
+                $code->abreviation = "Aucune abréviation disponible";
+            }
+
             if ($code->description == "") 
             {
                 $code->description = "Aucune description disponible";
@@ -105,7 +119,7 @@ class CodesController extends BaseController
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Ouvre un fomulaire pour modifier un ou plusieurs éléments d'un code en utilisant son Id.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -124,9 +138,8 @@ class CodesController extends BaseController
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update les nouvelles entrées dans la base de données d'un code en utilisant son Id.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -138,6 +151,7 @@ class CodesController extends BaseController
 
             $code = Code::findOrFail($id);
             $code->nom = $input['nom'];
+            $code->abreviation = $input['abreviation'];
             $code->description = $input['description'];
         } 
         catch(ModelNotFoundException $e) 
@@ -158,9 +172,9 @@ class CodesController extends BaseController
 
 
     /**
-     * Efface la ressource de la bd.
+     * Efface la ressource de la bd en utilisant son Id.
      *
-     * @param  int  $id l'id du rôle à effacer
+     * @param  int  $id
      * @return Response
      */
     public function destroy($id)
