@@ -68,7 +68,7 @@ class SystemeController extends Controller
     public function edit($id)
     {
         $texte = Systeme::find($id);
-        return View::make('gestion.edit', compact('texte', 'id'));
+        return View::make('systeme.edit', compact('texte', 'id'));
     }
 
     /**
