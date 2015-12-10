@@ -58,6 +58,8 @@ class EquipesController extends Controller
 			$equipe->nom = Input::get('nom');
 			$equipe->numero = Input::get('numero');
 			$equipe->region_id = Input::get('region_id');
+			
+			//une équipe participe à un et un seul sport. Contrairement à un participant qui peut faire plusieurs sports. 
 			$sport = Sport::findOrFail(Input::get('sport'));
 			if($equipe->save()) {
 				if (Input::has('sport')) {

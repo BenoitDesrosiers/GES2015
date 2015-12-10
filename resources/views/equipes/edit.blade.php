@@ -6,7 +6,7 @@
 	</div>
 	<div class="panel-body">
 		{!! Form::open(['action'=> array('EquipesController@update', $equipe->id), 'method' => 'PUT', 'class' => 'form']) !!}
-<!--    Affiche les messages d'erreur après un enregistrement raté -->
+<!--    Affiche les messages d'erreur après un enregistrement raté -->  <?php //TODO: changer ces commentaires HTML en commentaires PHP afin qu'ils n'apparaissent pas sur le html ?>
         @foreach ($errors->all() as $error)
             <p class="alert alert-danger">{{ $error }}</p>
         @endforeach

@@ -12,6 +12,7 @@ class ParticipantsTableSeeder extends Seeder {
  */
 public function run()
 {
+	//TODO: à refaire car ca plante si on seed 2 fois car les id de région et de sports sont hardcodés
 	$entrees = [
 		//prénom,	nom				#, region,sport,sexe
 		["Arthur"	, "Archambault"	, 1,	1,	1,	0],
