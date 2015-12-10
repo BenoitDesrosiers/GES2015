@@ -75,7 +75,7 @@ class CodesController extends BaseController
             $code->abreviation = $input['abreviation'];
             $code->description = $input['description'];
         } 
-        catch(ModelNotFoundException $e) 
+        catch(ModelNotFoundException $e) //FIXME: est-ce qu'on peut vraiment avoir un modelnotfound ici?
         {
             App::abort(404);
         }
@@ -119,7 +119,7 @@ class CodesController extends BaseController
     }
 
     /**
-     * Ouvre un fomulaire pour modifier un ou plusieurs éléments d'un code en utilisant son Id.
+     * Ouvre un formulaire pour modifier un ou plusieurs éléments d'un code en utilisant son Id.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -154,7 +154,7 @@ class CodesController extends BaseController
             $code->abreviation = $input['abreviation'];
             $code->description = $input['description'];
         } 
-        catch(ModelNotFoundException $e) 
+        catch(ModelNotFoundException $e) //FIXME: c'est pas juste un modelnotfound qu'on peut pogner ici. Les input peuvent ne pas être bon aussi. 
         {
             App::abort(404);
         }
@@ -166,7 +166,7 @@ class CodesController extends BaseController
         } 
         else 
         {
-            return Redirect::back()->withInput()->withErrors($role->validationMessages());
+            return Redirect::back()->withInput()->withErrors($code->validationMessages());
         }
     }
 
