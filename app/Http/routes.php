@@ -29,7 +29,8 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('systeme', 'SystemeController');
 	Route::resource('arbitres','ArbitresController');
 	Route::resource('terrains','TerrainsController');
-    	Route::resource('benevoles','BenevolesController');
+	Route::resource('equipes','EquipesController');
+    Route::resource('benevoles','BenevolesController');
 	Route::resource('roles','RolesController');
 	Route::resource('codes','CodesController');
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');

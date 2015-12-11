@@ -11,65 +11,73 @@
  * - pour Baseball
  *   - Tournoi masculin
  * 
- * @author BinarMorker
- * @version 0.0.1 rev 1
+ * @author BinarMorker, obnosim
+ * @version 2
  */
 
 namespace App\Models;
 
 class Participant extends EloquentValidating {
 	protected $guarded = array('id');
-	
 
-    /** 
-     * Eloquent relationship: un participant appartient à un sport
-     */
-     
-    public function sports() {
-    	return $this->belongsToMany('App\Models\Sport');
-    }
+	/**
+	* Eloquent relationship: un participant appartient à un sport
+	*/
+	public function sports() {
+		return $this->belongsToMany('App\Models\Sport', 'participant_sport', 'participant_id', 'sport_id');
+	}
 
-    public function epreuves() {
-    	return $this->belongsToMany('App\Models\Epreuve');
-    }
+	public function epreuves() {
+		return $this->belongsToMany('App\Models\Epreuve');
+	}
 
-    public function region() {
-    	return $this->belongsTo('App\Models\Region');
-    }
+	/**
+	* Les équipes dont fait partie le participant
+	* hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les chefs directement
+	*/
+	public function equipes() {
+		return $this->belongsToMany('App\Models\Equipe', 'participants_equipes', 'joueur_id', 'chef_id');
+	}
 
-    /**
-     * Identifie les colonnes qui peuvent être modifiées
-     */
-    protected $fillable = [
-            'equipe',
-            'nom',
-            'prenom',
-            'telephone',
-            'nom_parent',
-            'numero',
-            'sexe',
-            'naissance',
-            'adresse',
-            'region_id'
-        ];
+	/**
+	* La région à laquelle le participant appartient
+	*/
+	public function region() {
+		return $this->belongsTo('App\Models\Region');
+	}
 
-    public $validationMessages;
+	/**
+	* Identifie les colonnes qui peuvent être modifiées
+	*/
+	protected $fillable = [
+			'equipe',
+			'nom',
+			'prenom',
+			'telephone',
+			'nom_parent',
+			'numero',
+			'sexe',
+			'naissance',
+			'adresse',
+			'region_id'
+		];
 
-    /** 
-     * Les champs nom, prénom, numéro, équipe, région_id, sexe, naissance sont requis
-     * Les champs téléphone, nom_parent et adresse ne le sont pas
-     */
+	public $validationMessages;
 
-    public function validationRules() {
-    	return [
-    		'nom' => 'required|string',
-    		'prenom' => 'required|string',
-            'numero' => 'required|integer',
-            'equipe' => 'required|boolean',
-            'region_id' => 'required|integer',
-            'sexe' => 'required|boolean',
-            'naissance' => 'required|date'
-    		];
-    }
-    
+	/** 
+	* Les champs nom, prénom, numéro, équipe, région_id, sexe, naissance sont requis
+	* Les champs téléphone, nom_parent et adresse ne le sont pas
+	*/
+
+	public function validationRules() {
+		return [
+			'nom' => 'required|string',
+			'prenom' => 'required|string',
+			'numero' => 'required|integer',
+			'equipe' => 'required|boolean', // impossible de s'assurer que le champ est à Faux
+			'region_id' => 'required|integer',
+			'sexe' => 'required|boolean',
+			'naissance' => 'required|date'
+			];
+	}
 }

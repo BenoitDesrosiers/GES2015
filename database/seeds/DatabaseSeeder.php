@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EpreuvesTableSeeder');
 		$this->call('RegionsTableSeeder');
 		$this->call('ParticipantsTableSeeder');
+		$this->call('EquipesSeeder');
 		$this->call('ArbitresTableSeeder');
 		$this->call('EvenementsTableSeeder');
 		$this->call('info_event');

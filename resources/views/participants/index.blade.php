@@ -43,20 +43,14 @@
 							link_to_action($routeActionName, $infosTri["numero"]["texteAffiche"], $infosTri["numero"]["trie"])
 						!!}
 					</th>
-					<th class="hidden-sm hidden-xs">
+					<th class="hidden-sm hidden-xs ">
 						<!-- Création des liens pour trier la colonne Région -->
 						{!! 
 							link_to_action($routeActionName, $infosTri["region_id"]["texteAffiche"], $infosTri["region_id"]["trie"])
 						!!}
 					</th>
-					<th class="hidden-sm hidden-xs">
-						<!-- Création des liens pour trier la colonne Équipe -->
-						{!!
-							link_to_action($routeActionName, $infosTri["equipe"]["texteAffiche"], $infosTri["equipe"]["trie"])
-						!!}
-					</th>
-					<th></th>
-					<th></th>
+					<th class="col-sm-1"></th>
+					<th class="col-sm-1"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -65,7 +59,6 @@
 					<td><a href="{{ action('ParticipantsController@show', $participant->id) }}">{{ $participant->nom }}, {{ $participant->prenom }}</a></td>
 					<td class="hidden-xs">{{ $participant->numero }}</td>
 					<td class="hidden-sm hidden-xs"><span data-toggle="tooltip" data-placement="bottom" title="{{ Region::where('id', '=', $participant->region_id)->get()[0]->nom }}">{{ Region::where('id', '=', $participant->region_id)->get()[0]->nom_court }}</span></td>
-					<td class="hidden-sm hidden-xs"><?php if($participant->equipe) echo "Oui"; else echo "Non"; ?></td>
 					<td><a href="{{ action('ParticipantsController@edit',$participant->id) }}" class="btn btn-info">Modifier</a></td>
 					<td>{!! Form::open(array('action' => array('ParticipantsController@destroy',$participant->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}
 						<button type="submit" href="{{ URL::route('participants.destroy', $participant->id) }}" class="btn btn-danger btn-mini">Effacer</button>
