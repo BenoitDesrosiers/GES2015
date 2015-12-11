@@ -33,13 +33,12 @@ class TerrainsController extends BaseController {
                 if ($terrain->description_courte === "" || $terrain->description_courte === NULL){
                     $terrain->description_courte = "Aucune description";
                 }
-            } 
+            }
             return View::make('terrains.index', compact('terrains'));
         } catch(Exception $e) {
             App::abort(404);
         }
     }
-
 
     /**
      * Affiche le formulaire de création de la ressource.
@@ -57,7 +56,6 @@ class TerrainsController extends BaseController {
             App::abort(404);
         }
     }
-
 
     /**
      * Enregistre dans la bd la ressource qui vient d'être créée.
@@ -100,11 +98,12 @@ class TerrainsController extends BaseController {
         try {
             $terrain = Terrain::findOrFail($id);
             $region = Region::findOrFail($terrain->region_id);
+            $terrainSports = Terrain::find($id)->sports;
             $sports = Sport::all();
             if ($terrain->description_courte === ""){
                 $terrain->description_courte = "Aucune description";
             }
-            return View::make('terrains.show', compact('terrain', 'region', 'sports'));
+            return View::make('terrains.show', compact('terrain', 'region', 'sports', 'terrainSports'));
         } catch(Exception $e) {
             App::abort(404);
         }
@@ -122,9 +121,9 @@ class TerrainsController extends BaseController {
         try {
             $terrain = Terrain::findOrFail($id);
             $regions = Region::all();
+            $terrainSports = Terrain::find($id)->sports;
             $sports = Sport::all();
-
-            return View::make('terrains.edit', compact('terrain', 'regions', 'sports'));
+            return View::make('terrains.edit', compact('terrain', 'regions', 'sports', 'terrainSports'));
         } catch(Exception $e) {
             App::abort(404);
         }
@@ -149,6 +148,11 @@ class TerrainsController extends BaseController {
             $terrain->description_courte = $input['description_courte'];
 
             if($terrain->save()) {
+                if (is_array(Input::get('sport'))) {
+                    $terrain->sports()->sync(array_keys(Input::get('sport')));
+                } else {
+                    $terrain->sports()->detach();
+                }
                 return Redirect::action('TerrainsController@index')->with('status', 'Terrain mis à jour!');
             } else {
                 return Redirect::back()->withInput()->withErrors($terrain->validationMessages());
@@ -157,7 +161,6 @@ class TerrainsController extends BaseController {
             App::abort(404);
         }
     }
-
 
     /**
      * Efface la ressource de la bd.

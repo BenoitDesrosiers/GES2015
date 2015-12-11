@@ -17,6 +17,10 @@ class Terrain extends EloquentValidating {
      * Eloquent relationship: un terrain peut supporter plusieurs sports différents
     */
 
+    public function sports() {
+        return $this->belongsToMany('App\Models\Sport');
+    }
+
     public function region() {
         return $this->belongsTo('App\Models\Region');
     }

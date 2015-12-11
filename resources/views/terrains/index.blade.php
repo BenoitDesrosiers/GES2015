@@ -25,7 +25,8 @@
                 <th class="hidden-xs">Ville</th>
                 <th class="hidden-xs">Région</th>
                 <th class="hidden-sm hidden-xs">Description</th>
-                <th></th>
+                <th class="col-sm-1"></th>
+                <th class="col-sm-1"></th>
             </tr>
         </thead>
         <tbody>

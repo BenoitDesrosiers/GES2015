@@ -18,7 +18,7 @@ class CreateTerrainsTable extends Migration
             $table->string('adresse');
             $table->string('description_courte')->nullable();
             $table->string('ville');
-            $table->unsignedInteger('region_id');
+            $table->unsignedInteger('region_id');  //TODO: un terrain n'a pas besoin de région. L'adresse est suffisante
             $table->timestamps();
         });
     }
