@@ -43,7 +43,7 @@ class TerrainsTableSeeder extends Seeder {
             $terrain->nom = $item[0];
             $terrain->adresse = $item[1];
             $terrain->ville = $item[2];
-            $terrain->region_id = rand(1, count($regions));
+            $terrain->region_id = rand(1, count($regions));  //FIXME: si les id de régions ne sont pas de 1 à count, ca va planter quand même. Il faut choisir une région au hasard, et prendre son id. 
             $terrain->save();
 
             // Ajout d'une valeur aléatoire dans la table 'sports_terrains'
@@ -51,7 +51,7 @@ class TerrainsTableSeeder extends Seeder {
             for ($x = 1; $x < rand(1, count($sports)); $x++) {
                 $rand_bin_value = rand(0, 1);
                 if ($rand_bin_value === 1) {
-                    array_push($index_sports, $x);
+                    array_push($index_sports, $x);  //FIXME: ici aussi, c'est pas la valeur de random qu'il faut stocker, mais bien l'id du sport à la position random
                 }   
             }
             $terrain->sports()->sync($index_sports);

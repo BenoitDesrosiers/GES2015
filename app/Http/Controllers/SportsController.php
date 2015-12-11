@@ -96,7 +96,7 @@ class SportsController extends BaseController {
 	{
 		try {
 			$sport = Sport::findOrFail($id);
-			$terrainSports = Sport::find($id)->terrains;
+			$terrainSports = Sport::find($id)->terrains; //FIXME: pourquoi aller rechercher le sport une 2ième fois?
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -113,7 +113,7 @@ class SportsController extends BaseController {
 	{
 		try {
 			$sport = Sport::findOrFail($id);
-			$terrainSports = Sport::find($id)->terrains;
+			$terrainSports = Sport::find($id)->terrains; //FIXME: on a déjà le sport
 			$terrains = Terrain::all();
 
 			return View::make('sports.edit', compact('sport', 'terrainSports', 'terrains'));
