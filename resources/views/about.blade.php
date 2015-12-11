@@ -16,6 +16,7 @@
 		</br>
 		 <p class="lead">Liste des étudiants ayant participé!</p>
 	</div>
+
 @if (count($liste_etudiants) === 0)
     <div class="panel-body">
         <p>Aucun étudiants</p>

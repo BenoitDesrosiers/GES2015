@@ -75,6 +75,7 @@ class AboutController extends BaseController {
                 array(
                     "Benoit Desrosiers",
                     "Gestion du projet"
+
                 )
                 )
             );
