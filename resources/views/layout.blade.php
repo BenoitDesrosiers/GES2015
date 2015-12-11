@@ -33,6 +33,8 @@
           			<li<?php if ($route == "benevoles") { ?> class="active"<?php } ?>><a href="{{ action('BenevolesController@index') }}">Bénévoles</a></li>
           			<li<?php if ($route == "arbitres") { ?> class="active"<?php } ?>><a href="{{ action('ArbitresController@index') }}">Arbitres</a></li>
 					<li<?php if ($route == "roles") { ?> class="active"<?php } ?>><a href="{{ action('RolesController@index') }}">Rôles</a></li>
+					<li<?php if ($route == "codes") { ?> class="active"<?php } ?>><a href="{{ action('CodesController@index') }}">Codes</a></li>
+
           			<?php if (Auth::user() == "") { ?>
           			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Connexion</a></li>
           			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Inscription</a></li>
