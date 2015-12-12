@@ -183,7 +183,15 @@ class BenevolesController extends BaseController {
                             }
 		                });
 
-                    }"
+                    }",
+                    'eventClick' => "function(calEvent, jsEvent, view) {
+
+                            alert('Voulez-vous vraiment supprimer cette événement?');
+
+                            // change the border color just for fun
+                            $(this).css('border-color', 'red');
+
+                        }"
                 ]); 
 
         } catch(ModelNotFoundException $e) {
@@ -191,6 +199,12 @@ class BenevolesController extends BaseController {
         }
 		return View::make('benevoles.editDisponibilites', compact('benevole', 'calendrier'));
 	}
+
+    /**
+     * Fonction du gars de NMédia :
+     * eventRender : function(event, elem){
+     * elem.append($('<span>x</span>').css({ display: 'inline-block' }).click(function(){alert('coucou');}));
+     */
 
     /**
 	 * Enregistre dans la BD sur le serveur et affiche un message d'erreur si ça plante.
