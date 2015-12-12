@@ -184,14 +184,23 @@ class BenevolesController extends BaseController {
 		                });
 
                     }",
-                    'eventClick' => "function(calEvent, jsEvent, view) {
-
-                            alert('Voulez-vous vraiment supprimer cette événement?');
-
-                            // change the border color just for fun
-                            $(this).css('border-color', 'red');
-
-                        }"
+                    'eventMouseover' => "function(event, jsEvent, view) {
+                        if (view.name !== 'agendaDay') {
+                            $(jsEvent.target).attr('title', event.title);
+                        }
+                    }",
+                    'eventDestroy' => "function(event, element, view)
+                    {
+                        alert(\"removing stuff\");
+                    }",
+                    'eventClick' => "function(calEvent, jsEvent, view)
+                    {
+                        var r=confirm(\"Delete \" + calEvent.title);
+                        if (r===true)
+                          {
+                              $('#calendar').fullCalendar('removeEvents', calEvent._id);
+                          }
+                    }"
                 ]); 
 
         } catch(ModelNotFoundException $e) {
