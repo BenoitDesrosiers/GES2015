@@ -146,7 +146,9 @@ class BenevolesController extends BaseController {
                     'selectable' => true,
                     'selectableHelper' => false,
                     'displayEventTime' => true,
-                    'displayEventEnd' => true
+                    'displayEventEnd' => true,
+                    'dragOpacity' => '.50',
+                    'lang' => 'fr'
                 ]);
             $calendrier->setCallbacks([
                     'select' => "function(start, end) {
@@ -184,23 +186,37 @@ class BenevolesController extends BaseController {
 		                });
 
                     }",
-                    'eventMouseover' => "function(event, jsEvent, view) {
-                        if (view.name !== 'agendaDay') {
-                            $(jsEvent.target).attr('title', event.title);
-                        }
-                    }",
-                    'eventDestroy' => "function(event, element, view)
-                    {
-                        alert(\"removing stuff\");
-                    }",
                     'eventClick' => "function(calEvent, jsEvent, view)
                     {
                         var r=confirm(\"Delete \" + calEvent.title);
                         if (r===true)
-                          {
-                              $('#calendar').fullCalendar('removeEvents', calEvent._id);
-                          }
-                    }"
+                            {
+                                $('#calendar-" . $calendrier->getId() ."').fullCalendar('removeEvents', calEvent._id);
+                            }
+                        $.ajax({
+			                type: 'POST',
+			                url: '" . action('BenevolesController@destroyDisponibilites') . "',
+                            data: {  _token : $('meta[name=\"csrf-token\"]').attr('content'),
+                                id: " . $id . "
+                                },
+			                timeout: 10000,
+			                success: function(data){
+                                if(data.status == \"fail\"){
+                                    alert(data.msg);
+                                };
+				            },
+                            error: function(data){
+                                alert('Le serveur ne répond pas.');
+                            }
+		                });
+                    }",
+                    'eventDragStart' => "function( event, jsEvent, ui, view ) { }",
+                    'eventDragStop' => "function( event, jsEvent, ui, view ) { }",
+                    'eventDrop' => "function( event, delta, revertFunc, jsEvent, ui, view ) { }",
+                    'eventResizeStart' => "function( event, jsEvent, ui, view ) { }",
+                    'eventResizeStop' => "function( event, jsEvent, ui, view ) { }",
+                    'eventResize' => "function( event, delta, revertFunc, jsEvent, ui, view ) { }"
+                    
                 ]); 
 
         } catch(ModelNotFoundException $e) {
@@ -213,6 +229,11 @@ class BenevolesController extends BaseController {
      * Fonction du gars de NMédia :
      * eventRender : function(event, elem){
      * elem.append($('<span>x</span>').css({ display: 'inline-block' }).click(function(){alert('coucou');}));
+     */
+
+    /**
+     * Autres fonctions :
+     * $('#calendar').fullCalendar('removeEvents', calEvent._id);
      */
 
     /**
@@ -308,5 +329,43 @@ class BenevolesController extends BaseController {
 	
 	}
 
+    /**
+     * Efface la dispo
+     *
+     * @param int $id dispo
+     * @return respond
+     */
+    public function destroyDisponibilites()
+	{
+        if(Request::ajax()) {
+            $input = Input::all();
+            //print_r($input);die;
+		    try {
+			    $disponibilite = Disponibilte::findOrFail($input['id']); 
+		    } catch (ModelNotFoundException $e) {
+			    $response = array(
+                    'status' => 'fail',
+                    'msg' => 'fail1',
+                );
+                return $response;
+		    }
+            if($disponibilite->delete()) {
+		        $response = array(
+                    'status' => 'success',
+                    'msg' => 'delete successfully',
+                );
+                return $response;
+	        } else {
+		        $response = array(
+                    'status' => 'fail',
+                    'msg' => 'fail2',
+                );
+                return $response;
+	        }
+	    } else {
+		    return App::abort(404);
+	    }
+	
+	}
 
 }
