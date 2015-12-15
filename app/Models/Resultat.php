@@ -15,7 +15,7 @@ class Resultat extends EloquentValidating {
  */
 
 public function evenement() {
-	return $this->belongsTo('Evenement');
+	return $this->belongsTo('App\Models\Evenement');
 }
 	
 /**
