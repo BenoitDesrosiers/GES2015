@@ -14,12 +14,9 @@
 				<?php
 					foreach ($participants as $participant) {
 						$checked = "";
-						$active = "";
 						foreach ($epreuveParticipants as $epreuvePart) {
-							
 							if ($epreuvePart->id == $participant->id) {
 								$checked = " checked";
-								$active = " active";
 								continue;
 							}
 						}
