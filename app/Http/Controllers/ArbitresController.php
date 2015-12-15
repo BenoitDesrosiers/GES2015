@@ -30,7 +30,6 @@ class ArbitresController extends BaseController {
 	public function index()
 	{
 		$arbitres = Arbitre::all();
-		
 		return View::make('arbitres.index', compact('arbitres'));
 		
 	}

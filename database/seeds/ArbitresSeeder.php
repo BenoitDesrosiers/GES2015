@@ -11,18 +11,20 @@ class ArbitresTableSeeder extends Seeder {
 	public function run()
 	{
 
-		$regions = ["ABT","BOU","CAP","CDQ","CHA","CTN","EDQ","EST","LSL","LAN","LAU","LAV","MAU","MON","OUT","RIY","RIS","SLJ","SUO" ];
-		$noms = ["Machin","Machin chouette","Chose","L'autre","Lui-là","Machine","Lui","L'autre-là","Là"];
-		$numeros_accreditation = ["1357059", "2584612", "1473546", "0145678", "2316580", "1567308"];
+		$entrees = [
+		//prénom,	nom				 region, #,  association, 	telephone, 		sexe
+		["Benoit"	, "Desrosiers"	, 1,	 1,		"AQSFR",	"819-578-6489",		0],
+		["Guy"	, "Bernard"	, 2,	 1,		"OSQ",			"450-715-6915",		0],
+		["Jonathan"	, "Gareau"		, 3,	 1,		"ASSQ",			"514-763-2485",		0],
+		["Stéphane", "Janvier"	, 4,	 2,		"ASAQ",			"450-571-1203",		0],
 
-		for($i=0;$i<10;$i++) {
+		foreach($entrees as $entree) {
 			$arbitre = new Arbitre;
-			$arbitre->nom = $noms[rand(0,8)];
-			$arbitre->prenom = $noms[rand(0,8)];
-			$regionid=DB::table('regions')->where('nom_court',$regions[rand(0,18)])->pluck('id');
-			$arbitre->region_id = $regionid;
-			$arbitre->numero_accreditation = $numeros_accreditation[rand(0,5)];
-			$arbitre->association = $noms[rand(0,8)];
+			$arbitre->prenom = $entree[0];
+			$arbitre->nom = $entree[1];
+			$arbitre->region_id = $entree[2];
+			$arbitre->numero_accreditation = $entree[3];
+			$arbitre->association = $entree[4];
 			$arbitre->numero_telephone = '819-123-4567';
 			$arbitre->sexe = rand(0,1);
 			$date_temp = new DateTime;
