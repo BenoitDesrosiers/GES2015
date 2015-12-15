@@ -5,53 +5,22 @@ use View;
 use App\Http\Controllers\BaseController;
 
 /**
- * Le controller pour les rôles.
+ * Le controller pour la page 'About'.
  * 
- * @author SteveL
+ * @author IMFUZZ
  * @version 0.1
  */
 class AboutController extends BaseController {
     /**
-     * Display a listing of the resource.
-     *
+     * Page 'About' qui affiche la liste des personnes 
+     * qui ont participé à la conception du système.
+     *  
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $liste_etudiants = array(
             2014 => array(
-                array(
-                    "François Allard",
-                    "Yo"
-                ),
-                array(
-                    "François Allard",
-                    "Yo"
-                ),
-                array(
-                    "François Allard",
-                    "Yo"
-                ),
-                array(
-                    "François Allard",
-                    "Yo"
-                ),
-                array(
-                    "François Allard",
-                    "Yo"
-                ),
-                array(
-                    "François Allard",
-                    "Yo"
-                ),
-                array(
-                    "François Allard",
-                    "Yo"
-                ),
-                array(
-                    "François Allard",
-                    "Yo"
-                ),
                 array(
                     "François Allard",
                     "À conçu la base du système!"
@@ -63,106 +32,11 @@ class AboutController extends BaseController {
                     "À été ben sympathique.."
                 ),
                 array(
-                    "Daniel-Junior Dubé",
-                    "À été ben sympathique.."
-                ),
-                array(
-                    "Daniel-Junior Dubé",
-                    "À été ben sympathique.."
-                ),
-                array(
-                    "Daniel-Junior Dubé",
-                    "À été ben sympathique.."
-                ),
-                array(
-                    "Daniel-Junior Dubé",
-                    "À été ben sympathique.."
-                ),
-                array(
-                    "Daniel-Junior Dubé",
-                    "À été ben sympathique.."
-                ),
-                array(
-                    "Daniel-Junior Dubé",
-                    "À été ben sympathique.."
-                ),
-                array(
-                    "Daniel-Junior Dubé",
-                    "À été ben sympathique.."
-                ),
-                array(
                     "Benoit Desrosiers",
                     "Est ben épuisé des corrections"
                 )
                 )
             );
-
         return View::make('about', compact('liste_etudiants'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
