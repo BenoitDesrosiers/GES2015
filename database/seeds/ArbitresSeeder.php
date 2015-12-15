@@ -14,6 +14,7 @@ class ArbitresTableSeeder extends Seeder {
 		$regions = ["ABT","BOU","CAP","CDQ","CHA","CTN","EDQ","EST","LSL","LAN","LAU","LAV","MAU","MON","OUT","RIY","RIS","SLJ","SUO" ];
 		$noms = ["Machin","Machin chouette","Chose","L'autre","Lui-là","Machine","Lui","L'autre-là","Là"];
 		$numeros_accreditation = ["1357059", "2584612", "1473546", "0145678", "2316580", "1567308"];
+		$epreuves=DB::table('epreuves');
 
 		for($i=0;$i<10;$i++) {
 			$arbitre = new Arbitre;
@@ -30,6 +31,10 @@ class ArbitresTableSeeder extends Seeder {
 	        $arbitre->date_naissance=$date_temp;
 			
 			$arbitre->save();
+		
+			for($j=0;$j<rand(1,4);$j++) {
+				DB::table('arbitres_epreuves')->insert(array('arbitre_id' => DB::table('arbitres')->max('id'), 'epreuve_id' => rand($epreuves->min('id'),$epreuves->max('id'))));
+			}
 		}
 	}
 }

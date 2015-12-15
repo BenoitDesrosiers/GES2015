@@ -6,9 +6,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="csrf-token" content="{{ csrf_token() }}">
-	    
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{{ asset('/css/style.css') }}">
+		@yield('stylesheet')
 		<script src="//code.jquery.com/jquery.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script src="{{ asset('js/script.js') }}"></script>
@@ -47,7 +47,7 @@
       		<div class="footer">
         		<p></p>
       		</div>
-
+			@yield('script')
     	</div> <!-- /container -->
 	</body>
 </html>

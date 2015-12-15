@@ -15,10 +15,15 @@ class Arbitre extends EloquentValidating {
 	/** 
 	 * Eloquent relationship: un arbitre est associé à une région
 	 */
-
-
 	public function region() {
 		return $this->belongsTo('App\Models\Region');
+	}
+
+	/**
+	 * Eloquent relationship: un arbitre est associé à plusieurs épreuves
+	 */
+	public function epreuve() {
+		return $this->belongsToMany('App\Models\Epreuve');
 	}
 
 	/**
