@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('TerrainsTableSeeder');
         $this->call('BenevolesTableSeeder');
 		$this->call('RolesTableSeeder');
+		$this->call('PointagesTableSeeder');
 		//$this->call('ResultatTournoisTableSeeder');
 		
 		Model::reguard();
