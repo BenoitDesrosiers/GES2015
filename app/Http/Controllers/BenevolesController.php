@@ -98,7 +98,7 @@ class BenevolesController extends BaseController {
      * ses disponibilités.
 	 * @return Response
 	 */
-    public function showDisponibilites($id)
+    public function showDisponibilites($id)  //FIXME: étant donné qu'il y a un show/edit/save disponibilite, ne serait-il pas mieux d'avoir un ctrl pour les dispo?
     {
         try {
 			$benevole = Benevole::findOrFail($id);
@@ -204,21 +204,19 @@ class BenevolesController extends BaseController {
         
         if(Request::ajax()) {
             $input = Input::all();
-            //print_r($input);die;
 		    try {
 			    $benevole = Benevole::findOrFail($input['benevole_id']); 
 		    } catch (ModelNotFoundException $e) {
 			    $response = array(
                     'status' => 'fail',
-                    'msg' => 'fail1',
+                    'msg' => 'fail1', //FIXME: ca veut dire quoi ca "fail1"??? faudrait que ca soit documenté dans l'entête de fonction. 
                 );
                 return $response;
 		    }
             
 		    $disponibilite = new Disponibilite;
-            $disponibilite->benevole_id = $input['benevole_id'];
+            $disponibilite->benevole_id = $input['benevole_id']; //FIXME: pas de try catch, si les champs n'existe pas, ca plante. 
 	        $disponibilite->title = $input['title'];
-	        //$disponibilite->isAllDay = $input['isAllDay'];
 	        $disponibilite->start = strtotime($input['start']);
             $disponibilite->end = strtotime($input['end']);
             if($disponibilite->save()) {
@@ -230,7 +228,7 @@ class BenevolesController extends BaseController {
 	        } else {
 		        $response = array(
                     'status' => 'fail',
-                    'msg' => 'fail2',
+                    'msg' => 'fail2', //FIXME: ca veut dire quoi ca fail2?
                 );
                 return $response;
 	        }
@@ -250,7 +248,7 @@ class BenevolesController extends BaseController {
 		$input = Input::all();
 		
 		$benevole = Benevole::findOrFail($id);
-		$benevole->nom = $input['prenom'];
+		$benevole->nom = $input['prenom']; //FIXME: ajouter try catch. 
         $benevole->nom = $input['nom'];
 		$benevole->adresse = $input['adresse'];
 		$benevole->numTel = $input['numTel'];
