@@ -30,6 +30,7 @@
                     <li<?php if ($route == "terrains") { ?> class="active"<?php } ?>><a href="{{ action('TerrainsController@index') }}">Terrains</a></li>
           			<li<?php if ($route == "resultats") { ?> class="active"<?php } ?>><a href="{{ action('ResultatsController@index') }}">Résultats</a></li>
           			<li<?php if ($route == "benevoles") { ?> class="active"<?php } ?>><a href="{{ action('BenevolesController@index') }}">Bénévoles</a></li>
+					<li<?php if ($route == "delegues") { ?> class="active"<?php } ?>><a href="{{ action('DeleguesController@index') }}">Délégués</a></li>
 					<li<?php if ($route == "roles") { ?> class="active"<?php } ?>><a href="{{ action('RolesController@index') }}">Rôles</a></li>
           			<?php if (Auth::user() == "") { ?>
           			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Connexion</a></li>
