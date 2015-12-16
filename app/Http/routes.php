@@ -30,7 +30,9 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::get('benevole/{id}', 'BenevolesController@showDisponibilites');
 
     Route::get('benevole/{id}/editDisponibilites', 'BenevolesController@editDisponibilites');
+    Route::post('benevole/createDisponibilites/save', 'BenevolesController@createDisponibilitesSave');
     Route::post('benevole/editDisponibilites/save', 'BenevolesController@editDisponibilitesSave');
+    Route::post('benevole/destroyDisponibilites', 'BenevolesController@destroyDisponibilites');
 
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');

@@ -9,6 +9,7 @@
     <script src="{{ asset('/js/jquery.min.js') }}"></script>
     <script src="{{ asset('/js/moment.min.js') }}"></script>
     <script src="{{ asset('/js/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('/js/lang/fr.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('/css/fullcalendar.min.css') }}"/>
 	
     <div class="panel-body">
