@@ -99,6 +99,7 @@ class BenevolesController extends BaseController {
 	 * @return Response
 	 */
     public function showDisponibilites($id)  //FIXME: étant donné qu'il y a un show/edit/save disponibilite, ne serait-il pas mieux d'avoir un ctrl pour les dispo?
+    										//il serait possible d'injecter le model pour lequel la dispo doit être affichée dans le construct d'un DispoCtrl. 		
     {
         try {
 			$benevole = Benevole::findOrFail($id);
@@ -234,8 +235,6 @@ class BenevolesController extends BaseController {
 	            $disponibilite->title = $input['title'];
             }
 
-	        //$disponibilite->isAllDay = $input['isAllDay'];
-
             if (isset($input['start'])) {
 	            $disponibilite->start = strtotime($input['start']);
             }
@@ -324,20 +323,20 @@ class BenevolesController extends BaseController {
 		    } catch (ModelNotFoundException $e) {
 			    $response = array(
                     'status' => 'fail',
-                    'msg' => 'fail1',
+                    'msg' => 'fail1', //FIXME: à quoi sert ce msg? à documenter dans la description de la fct. 
                 );
                 return $response;
 		    }
             if($disponibilite->delete()) {
 		        $response = array(
                     'status' => 'success',
-                    'msg' => 'delete successfully',
+                    'msg' => 'delete successfully', //FIXME: un peu de francais svp 
                 );
                 return $response;
 	        } else {
 		        $response = array(
                     'status' => 'fail',
-                    'msg' => 'fail2',
+                    'msg' => 'fail2', //FIXME: à quoi sert ce msg?
                 );
                 return $response;
 	        }
@@ -355,41 +354,41 @@ class BenevolesController extends BaseController {
     private function getSelectCallback($id, $calendrier) {
         return "function(start, end) {
             var title = prompt('Titre de l\'événement :');
-                                                       
-            $.ajax({
-                type: 'POST',
-                url: '" . action('BenevolesController@createDisponibilitesSave') . "',
-                data: {  _token : $('meta[name=\"csrf-token\"]').attr('content'),                
-                    benevole_id: " . $id . ",
-                    title: title,
-                    start: new Date(start),
-                    end: new Date(end),
-                    backgroundColor: '#80ACED'
-                },
-                timeout: 10000,
-                success: function(data){
-                    if(data.status == \"fail\"){
-                        alert(data.msg);
-                    }else{
-                        var eventData;
-
-                        if(title){
-                            eventData = {
-                                id: data.id,
-                                title: title,
-                                start: start,
-                                end: end
-                            };
-                            $('#calendar-" . $calendrier->getId() ."').fullCalendar('renderEvent', eventData, true);
-                        }
-                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect'); 
-                       
-                    };
-	            },
-                error: function(data){
-                    alert('Le serveur ne répond pas onselect.');
-                }
-            });
+            if(title) {                                           
+	            $.ajax({
+	                type: 'POST',
+	                url: '" . action('BenevolesController@createDisponibilitesSave') . "',
+	                data: {  _token : $('meta[name=\"csrf-token\"]').attr('content'),                
+	                    benevole_id: " . $id . ",
+	                    title: title,
+	                    start: new Date(start),
+	                    end: new Date(end),
+	                    backgroundColor: '#80ACED'
+	                }, //data
+	                timeout: 10000,
+	                success: function(data){
+	                    if(data.status == \"fail\"){
+	                        alert(data.msg);
+	                    } else {
+	                        var eventData;
+	
+	                        eventData = {
+	                            id: data.id,
+	                            title: title,
+	                            start: start,
+	                            end: end
+	                    		};
+	                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('renderEvent', eventData, true);
+	                    }; //if 
+	                    $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect'); 
+	                       
+	                 }, //success
+	                 error: function(data){
+	                    alert('Le serveur ne répond pas onselect.');
+	                } // error
+	            }); // ajax
+	         
+            };//if(title)
 
         }";
     }
@@ -419,7 +418,7 @@ class BenevolesController extends BaseController {
                     };
 	            },
                 error: function(data){
-                    alert('Le serveur ne répond pas onclic.');
+                    alert('Le serveur ne répond pas onclic.'); //TODO: mettre des meilleurs messages
                 }
             });
         }";

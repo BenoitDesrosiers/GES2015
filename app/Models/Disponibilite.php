@@ -20,6 +20,7 @@ class Disponibilite extends EloquentValidating implements \MaddHatter\LaravelFul
     public function validationRules() {
 	    return [
 		    'benevole_id' => 'required|int',
+	    	'title' => 'required', 
             'start' => 'required|date',
      		'end' => 'required|date',
 		    ];

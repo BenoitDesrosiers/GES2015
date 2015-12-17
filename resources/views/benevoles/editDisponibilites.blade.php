@@ -5,7 +5,7 @@
 		<h2 class="panel-title">Modification des disponibilités de {{ $benevole->prenom }} {{ $benevole->nom }}</h2>
 	</div>
     
-    <!--FullCalendar JavaScript & CSS habituellement dans le <head>.-->
+    <!--FullCalendar JavaScript & CSS habituellement dans le <head>.--> <?php //FIXME: mettre un yield pour une section script dans layout.blade.  ?>
     <script src="{{ asset('/js/jquery.min.js') }}"></script>
     <script src="{{ asset('/js/moment.min.js') }}"></script>
     <script src="{{ asset('/js/fullcalendar.min.js') }}"></script>

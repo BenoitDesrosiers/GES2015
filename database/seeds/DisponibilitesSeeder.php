@@ -19,7 +19,7 @@ class DisponibilitesTableSeeder extends Seeder {
         DB::table('disponibilites')->delete();
 		foreach($infos as $info) {
 		    $disponibilite = new Disponibilite();
-		    $disponibilite->benevole_id = $info[0];
+		    $disponibilite->benevole_id = $info[0];  //FIXME: si on fait 2 seeds successifs, ca va planter car le benevole_id ne sera pas 2 et 3. Faut faire un fetch du bénévole avec un certain nom, et prendre son id. 
 		    $disponibilite->title = $info[1];
 		    $disponibilite->isAllDay = $info[2];
 		    $disponibilite->start = $info[3];
