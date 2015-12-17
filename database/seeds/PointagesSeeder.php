@@ -12,7 +12,7 @@ class PointagesTableSeeder extends Seeder {
      */
     public function run()
     {
-        DB::table('benevoles')->delete();
+        DB::table('pointages')->delete();
         $sports = Sport::all();
         
         foreach ($sports as $sport) {

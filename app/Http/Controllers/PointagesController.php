@@ -52,7 +52,7 @@ class PointagesController extends Controller
     {
         $listeValeurs = Input::get("valeur");
         $listePositions = array_keys($listeValeurs); 
-        $idSport = Input::get("listeSports");
+        $idSport = Input::get("listeSports"); //FIXME: c'est pas l'id du sélecteur que ca prend, c'est l'id du sport à cet endroit dans la liste. Ca plante si on seed 2 fois
         $pointages = [];
         $erreurs = [];
         if(Sport::where ( 'id', $idSport )->get ()) {
@@ -67,11 +67,7 @@ class PointagesController extends Controller
         		$ok = true;
         		Pointage::where('sport_id', $idSport )->delete();
 	        	foreach ($pointages as $pointage) {
-	        		if($pointage->save()){
-	        			
-	        		} else {
-	        			$ok=false;
-	        		}
+	        		$ok = $ok AND $pointage->save(); //si un des pointages n'est pas bon, on devra faire un rollback
 	        	}
 	        	if($ok){
 	        		DB::commit();
@@ -126,11 +122,11 @@ class PointagesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update($id){
-    $listeValeurs = Input::get("valeur");
+    	$listeValeurs = Input::get("valeur"); //TODO: ajoute un try catch
         $listePositions = array_keys($listeValeurs);
         $pointages = [];
         $erreurs = [];
-        if(Sport::where ( 'id', $id )->get ()) {
+        if(Sport::where ( 'id', $id )->get ()) {  //FIXME: c'est la même chose que dans store. DRY
         	foreach ($listePositions as $position){
 		        			$pointage = new Pointage();
 		        			$pointage->sport_id  = $id;
@@ -188,7 +184,7 @@ class PointagesController extends Controller
     	foreach ($sports as $sport){
     		array_push($listeSports, $sport->nom);
     	}
-    	array_unshift($listeSports, 'Choisir un sport');
+    	array_unshift($listeSports, 'Choisir un sport');  //FIXME: est-ce vraiment utile?
     	return $listeSports;
     }
     
@@ -204,11 +200,11 @@ class PointagesController extends Controller
     
     public function pointagesPourSport() {
     	if(Request::ajax()) {
-    		$sportId = Input::get('sportId');
+    		$sportId = Input::get('sportId'); //TODO: try catch
 	    	try {
 				return $pointages = Pointage::where('sport_id', $sportId )->get();				
 			} catch ( ModelNotFoundException $e ) {
-				App::abort ( 404 );
+				App::abort ( 404 ); 
 			}
     	} else {
     		return App::abort(404);
