@@ -180,7 +180,7 @@ class BenevolesController extends BaseController {
 		    } catch (ModelNotFoundException $e) {
 			    $response = array(
                     'status' => 'fail',
-                    'msg' => 'fail1', //FIXME: ca veut dire quoi ca "fail1"??? faudrait que ca soit documenté dans l'entête de fonction. 
+                    'msg' => 'Le bénévole n\'a pas été trouvé',
                 );
                 return $response;
 		    }
@@ -192,8 +192,8 @@ class BenevolesController extends BaseController {
             $disponibilite->end = strtotime($input['end']);
             if($disponibilite->save()) {
 		        $response = array(
-                    'status' => 'success',
-                    'msg' => 'Setting created successfully',
+                    'status' => 'succes',
+                    'msg' => 'La disponibilité a été créée avec succès',
                     'id' => $disponibilite->getId(),
                     'start' => strtotime($input['start']),
                     'end' => strtotime($input['end']),
@@ -201,8 +201,8 @@ class BenevolesController extends BaseController {
                 return $response;
 	        } else {
 		        $response = array(
-                    'status' => 'fail',
-                    'msg' => 'fail2',
+                    'status' => 'echec',
+                    'msg' => 'La disponibilité n\'a pas été créée',
                 );
                 return $response;
 	        }
@@ -226,8 +226,8 @@ class BenevolesController extends BaseController {
                     $disponibilite->benevole_id = $input['benevole_id'];
 		        } catch (ModelNotFoundException $e) {
 			        $response = array(
-                        'status' => 'fail',
-                        'msg' => 'fail1',
+                        'status' => 'echec',
+                        'msg' => 'Le bénévole n\'a pas été trouvé',
                     );
                     return $response;
 		        }
@@ -247,14 +247,14 @@ class BenevolesController extends BaseController {
            
             if ($disponibilite->save()) {
 		        $response = array(
-                    'status' => 'success',
-                    'msg' => 'Setting created successfully'
+                    'status' => 'succes',
+                    'msg' => 'La disponibilité a été enregistrée avec succès'
                 );
                 return $response;
 	        } else {
 		        $response = array(
-                    'status' => 'fail',
-                    'msg' => 'fail2', //FIXME: ca veut dire quoi ca fail2?
+                    'status' => 'echec',
+                    'msg' => 'La disponibilité n\'a pas été enregistré',
                 );
                 return $response;
 	        }
@@ -319,26 +319,25 @@ class BenevolesController extends BaseController {
 	{
         if(Request::ajax()) {
             $input = Input::all();
-            //print_r($input);die;
 		    try {
 			    $disponibilite = Disponibilite::findOrFail($input['id']); 
 		    } catch (ModelNotFoundException $e) {
 			    $response = array(
-                    'status' => 'fail',
-                    'msg' => 'fail1', //FIXME: à quoi sert ce msg? à documenter dans la description de la fct. 
+                    'status' => 'echec',
+                    'msg' => 'La disponibilité n\'existe pas',
                 );
                 return $response;
 		    }
             if($disponibilite->delete()) {
 		        $response = array(
-                    'status' => 'success',
-                    'msg' => 'delete successfully', //FIXME: un peu de francais svp 
+                    'status' => 'succes',
+                    'msg' => 'La disponibilité a été supprimée avec succès',
                 );
                 return $response;
 	        } else {
 		        $response = array(
-                    'status' => 'fail',
-                    'msg' => 'fail2', //FIXME: à quoi sert ce msg?
+                    'status' => 'echec',
+                    'msg' => 'La disponibilité n\'a pas été supprimé',
                 );
                 return $response;
 	        }
@@ -388,7 +387,7 @@ class BenevolesController extends BaseController {
                 },
                 timeout: 10000,
                 success: function(data){
-                    if(data.status == \"fail\"){
+                    if(data.status == \"echec\"){
                         alert(data.msg);
                     }else{
                         var eventData;
@@ -430,7 +429,7 @@ class BenevolesController extends BaseController {
                     },
                 timeout: 10000,
                 success: function(data){
-                    if(data.status == \"fail\"){
+                    if(data.status == \"echec\"){
                         alert(data.msg);
                     };
 	            },
@@ -459,7 +458,7 @@ class BenevolesController extends BaseController {
                 },
                 timeout: 10000,
                 success: function(data){
-                    if(data.status == \"fail\"){
+                    if(data.status == \"echec\"){
                         alert(data.msg);
                     } else {
                         $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect'); 
@@ -490,7 +489,7 @@ class BenevolesController extends BaseController {
                 },
                 timeout: 10000,
                 success: function(data){
-                    if(data.status == \"fail\"){
+                    if(data.status == \"echec\"){
                         alert(data.msg);
                     } else {
                         $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect'); 
