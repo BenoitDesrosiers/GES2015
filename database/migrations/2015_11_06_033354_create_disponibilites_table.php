@@ -12,10 +12,10 @@ class CreateDisponibilitesTable extends Migration
      */
     public function up()
     {
-        Schema::create('evenements', function($table)
+        Schema::create('disponibilites', function($table)
 		{
             $table->increments('id');
-			$table->integer('restaurant_id')
+			$table->integer('benevole_id')
                     ->unsigned();
             $table->string('title');
             $table->boolean('isAllDay');
@@ -23,9 +23,9 @@ class CreateDisponibilitesTable extends Migration
 			$table->datetime('end');
 			$table->timestamps();
 
-            $table->foreign('restaurant_id')
-					->references('numero')
-					->on('restaurant')
+            $table->foreign('benevole_id')
+					->references('id')
+					->on('benevoles')
 					->onDelete('cascade')
 					->onUpdate('cascade');
 		});
@@ -38,6 +38,6 @@ class CreateDisponibilitesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('evenements');
+        Schema::drop('disponibilites');
     }
 }

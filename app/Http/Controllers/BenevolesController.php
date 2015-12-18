@@ -271,23 +271,28 @@ class BenevolesController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$input = Input::all();
-		
-		$benevole = Benevole::findOrFail($id);
-		$benevole->nom = $input['prenom']; //FIXME: ajouter try catch. 
-        $benevole->nom = $input['nom'];
-		$benevole->adresse = $input['adresse'];
-		$benevole->numTel = $input['numTel'];
-        $benevole->numCell = $input['numCell'];
-        $benevole->courriel = $input['courriel'];
-		$benevole->accreditation = $input['accreditaiton'];
-		$benevole->verification = $input['verification'];
-		
-		if($benevole->save()) {
-			return Redirect::action('BenevolesController@index');
-		} else {
-			return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
-		}
+        try {
+	        $input = Input::all();
+	
+	        $benevole = Benevole::findOrFail($id);
+	        $benevole->prenom = $input['prenom'];
+            $benevole->nom = $input['nom'];
+	        $benevole->adresse = $input['adresse'];
+	        $benevole->numTel = $input['numTel'];
+            $benevole->numCell = $input['numCell'];
+            $benevole->courriel = $input['courriel'];
+	        $benevole->accreditation = $input['accreditaiton'];
+	        $benevole->verification = $input['verification'];
+	
+	        if($benevole->save()) {
+		        return Redirect::action('BenevolesController@index');
+	        } else {
+		        return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
+	        }
+        }
+        catch ($e) {
+                    App::abort(404);
+        }
 	}
 
 
@@ -397,9 +402,9 @@ class BenevolesController extends BaseController {
                             start: start,
                             end: end
                         };
-                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('renderEvent', eventData, true);
-                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect'); 
+                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('renderEvent', eventData, true); 
                     };
+                    $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect');
 	            },
                 error: function(data){
                     alert('Le serveur ne répond pas onselect.');
