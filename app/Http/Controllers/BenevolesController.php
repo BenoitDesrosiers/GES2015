@@ -194,7 +194,9 @@ class BenevolesController extends BaseController {
 		        $response = array(
                     'status' => 'success',
                     'msg' => 'Setting created successfully',
-                    'id' => $disponibilite->getId()
+                    'id' => $disponibilite->getId(),
+                    'start' => strtotime($input['start']),
+                    'end' => strtotime($input['end']),
                 );
                 return $response;
 	        } else {
@@ -354,41 +356,56 @@ class BenevolesController extends BaseController {
     private function getSelectCallback($id, $calendrier) {
         return "function(start, end) {
             var title = prompt('Titre de l\'événement :');
-            if(title) {                                           
-	            $.ajax({
-	                type: 'POST',
-	                url: '" . action('BenevolesController@createDisponibilitesSave') . "',
-	                data: {  _token : $('meta[name=\"csrf-token\"]').attr('content'),                
-	                    benevole_id: " . $id . ",
-	                    title: title,
-	                    start: new Date(start),
-	                    end: new Date(end),
-	                    backgroundColor: '#80ACED'
-	                }, //data
-	                timeout: 10000,
-	                success: function(data){
-	                    if(data.status == \"fail\"){
-	                        alert(data.msg);
-	                    } else {
-	                        var eventData;
-	
-	                        eventData = {
-	                            id: data.id,
-	                            title: title,
-	                            start: start,
-	                            end: end
-	                    		};
-	                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('renderEvent', eventData, true);
-	                    }; //if 
-	                    $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect'); 
-	                       
-	                 }, //success
-	                 error: function(data){
-	                    alert('Le serveur ne répond pas onselect.');
-	                } // error
-	            }); // ajax
-	         
-            };//if(title)
+
+            if (title === null) return;
+            if (start._ambigTime) {
+                var time = 0;
+                while (!moment.isDuration(time) || (moment.isDuration(time) && time._milliseconds <= 0)) {
+                    time = prompt('Temps de début (format HH:MM) :');
+                    if (time === null) return;
+                    time = moment.duration(time);
+                }
+                start.time(time);
+            }
+            if (end._ambigTime) {
+                var time = 0;
+                while (!moment.isDuration(time) || (moment.isDuration(time) && time._milliseconds <= 0)) {
+                    time = prompt('Temps de fin (format HH:MM) :');
+                    if (time === null) return;
+                    time = moment.duration(time);
+                }
+                end.time(time);
+            }
+                                                       
+            $.ajax({
+                type: 'POST',
+                url: '" . action('BenevolesController@createDisponibilitesSave') . "',
+                data: {  _token : $('meta[name=\"csrf-token\"]').attr('content'),                
+                    benevole_id: " . $id . ",
+                    title: title,
+                    start: new Date(start),
+                    end: new Date(end)
+                },
+                timeout: 10000,
+                success: function(data){
+                    if(data.status == \"fail\"){
+                        alert(data.msg);
+                    }else{
+                        var eventData;
+                        eventData = {
+                            id: data.id,
+                            title: title,
+                            start: start,
+                            end: end
+                        };
+                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('renderEvent', eventData, true);
+                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect'); 
+                    };
+	            },
+                error: function(data){
+                    alert('Le serveur ne répond pas onselect.');
+                }
+            });
 
         }";
     }
@@ -464,7 +481,6 @@ class BenevolesController extends BaseController {
 	 */
     private function getEventResizeCallback($calendrier) {
         return "function(event, delta, revertFunc, jsEvent, ui, view) {
-            console.log(event);
             $.ajax({
                 type: 'POST',
                 url: '" . action('BenevolesController@editDisponibilitesSave') . "',
