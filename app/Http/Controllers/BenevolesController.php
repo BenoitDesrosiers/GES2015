@@ -365,8 +365,7 @@ class BenevolesController extends BaseController {
                     benevole_id: " . $id . ",
                     title: title,
                     start: new Date(start),
-                    end: new Date(end),
-                    backgroundColor: '#80ACED'
+                    end: new Date(end)
                 },
                 timeout: 10000,
                 success: function(data){
