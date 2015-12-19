@@ -52,7 +52,7 @@ class DeleguesController extends BaseController {
 			$anneeDefaut = date('Y')- 20;
 			$moisDefaut = 0;
 			$jourDefaut = 0;
-			$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101);
+			$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101); //FIXME: les délégués ne devraient pas être dépendant des Participants. Mettre cette fonction dans un helper. 
 			$listeMois = ParticipantsController::generer_liste(1, 12);
 			$listeJours = ParticipantsController::generer_liste(1, 31);
 			return View::make('delegues.create', compact('regions', 'roles', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
@@ -68,7 +68,7 @@ class DeleguesController extends BaseController {
 	 * @return Response
 	 */
 	public function store()
-	{
+	{ //FIXME:: identique à update
 		try {
 			$input = Input::all();
 			$delegue = new Delegue;
@@ -181,7 +181,7 @@ class DeleguesController extends BaseController {
 	 * @return Response
 	 */
 	public function update($id)
-	{
+	{  //FIXME: identique à store()
 		try {
 			$input = Input::all();
 			$delegue = Delegue::findOrFail($id);

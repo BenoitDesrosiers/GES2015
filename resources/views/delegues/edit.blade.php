@@ -87,6 +87,7 @@
 				@foreach ($roles as $role)
 						<br/>
 						@if (in_array($role->id, $postes))
+							<?php //FIXME ce code n'est pas DRY, mettre des paramètres pour afficher ou non le checked et le mark ?>
 							<!--	Précocher la case pour les rôles associés au délégué	 -->
 							<input name="role[{!! $role->id !!}]" type="checkbox" value="{!! $role->id !!}" checked>
 							<!-- 	Indiquer par un effet de couleur les rôles associés au délégué avant les modifications	 -->
