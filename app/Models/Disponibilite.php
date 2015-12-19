@@ -11,7 +11,7 @@ namespace App\Models;
 
 class Disponibilite extends EloquentValidating implements \MaddHatter\LaravelFullcalendar\IdentifiableEvent
 {
-    //protected $guarded = array('id');
+    protected $guarded = array('id');
 
     public function benevole() {
 	    return $this->belongsTo('Benevole');

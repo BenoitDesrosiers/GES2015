@@ -174,38 +174,30 @@ class BenevolesController extends BaseController {
 	{        
         
         if(Request::ajax()) {
-            $input = Input::all();
-		    try {
-			    $benevole = Benevole::findOrFail($input['benevole_id']); 
-		    } catch (ModelNotFoundException $e) {
-			    $response = array(
+            try {
+                $input = Input::all();
+			    $benevole = Benevole::findOrFail($input['benevole_id']);
+		        $disponibilite = new Disponibilite;
+                $disponibilite->benevole_id = $input['benevole_id']; //FIXME: pas de try catch, si les champs n'existe pas, ca plante. 
+	            $disponibilite->title = $input['title'];
+	            $disponibilite->start = strtotime($input['start']);
+                $disponibilite->end = strtotime($input['end']);
+                if($disponibilite->save()) {
+		            $response = array(
+                        'status' => 'success',
+                        'msg' => 'La disponibilité a été enregistrée avec succès.',
+                        'id' => $disponibilite->getId(),
+                        'start' => strtotime($input['start']),
+                        'end' => strtotime($input['end']),
+                    );
+                }
+	        } catch(ModelNotFoundException $e) {
+		        $response = array(
                     'status' => 'fail',
-                    'msg' => 'Le bénévole n\'a pas été trouvé',
-                );
-                return $response;
-		    }
-            
-		    $disponibilite = new Disponibilite;
-            $disponibilite->benevole_id = $input['benevole_id']; //FIXME: pas de try catch, si les champs n'existe pas, ca plante. 
-	        $disponibilite->title = $input['title'];
-	        $disponibilite->start = strtotime($input['start']);
-            $disponibilite->end = strtotime($input['end']);
-            if($disponibilite->save()) {
-		        $response = array(
-                    'status' => 'succes',
-                    'msg' => 'La disponibilité a été créée avec succès',
-                    'id' => $disponibilite->getId(),
-                    'start' => strtotime($input['start']),
-                    'end' => strtotime($input['end']),
-                );
-                return $response;
-	        } else {
-		        $response = array(
-                    'status' => 'echec',
-                    'msg' => 'La disponibilité n\'a pas été créée',
-                );
-                return $response;
+                    'msg' => 'Impossible de créer la disponibilité.',
+                );                
 	        }
+            return $response;
 	    } else {
 		    return App::abort(404);
 	    }
@@ -216,48 +208,35 @@ class BenevolesController extends BaseController {
         
         if(Request::ajax()) {
             
-            $input = Input::all();
-            
-		    $disponibilite = Disponibilite::findOrFail($input['id']);
-
-            if (isset($input['benevole_id'])) {
-		        try {
-			        $benevole = Benevole::findOrFail($input['benevole_id']); 
-                    $disponibilite->benevole_id = $input['benevole_id'];
-		        } catch (ModelNotFoundException $e) {
-			        $response = array(
-                        'status' => 'echec',
-                        'msg' => 'Le bénévole n\'a pas été trouvé',
+            try {
+                $input = Input::all();
+		        $disponibilite = Disponibilite::findOrFail($input['id']);
+                if (isset($input['benevole_id'])) {
+		            $benevole = Benevole::findOrFail($input['benevole_id']); 
+                    $disponibilite->benevole_id = $input['benevole_id'];     
+		            }
+                if (isset($input['title'])) {
+	                $disponibilite->title = $input['title'];
+                }
+                if (isset($input['start'])) {
+	                $disponibilite->start = strtotime($input['start']);
+                }
+                if (isset($input['end'])) {
+                    $disponibilite->end = strtotime($input['end']);
+                }
+                if ($disponibilite->save()) {
+		            $response = array(
+                        'status' => 'success',
+                        'msg' => 'La disponibilité a été modifiée avec succès.'
                     );
-                    return $response;
-		        }
-            }
-            
-            if (isset($input['title'])) {
-	            $disponibilite->title = $input['title'];
-            }
-
-            if (isset($input['start'])) {
-	            $disponibilite->start = strtotime($input['start']);
-            }
-            
-            if (isset($input['end'])) {
-                $disponibilite->end = strtotime($input['end']);
-            }
-           
-            if ($disponibilite->save()) {
-		        $response = array(
-                    'status' => 'succes',
-                    'msg' => 'La disponibilité a été enregistrée avec succès'
+                }
+            } catch(ModelNotFoundException $e) {
+	            $response = array(
+                    'status' => 'fail',
+                    'msg' => 'Impossible de modifier la disponibilité.',
                 );
-                return $response;
-	        } else {
-		        $response = array(
-                    'status' => 'echec',
-                    'msg' => 'La disponibilité n\'a pas été enregistré',
-                );
-                return $response;
-	        }
+            }
+            return $response;
 	    } else {
 		    return App::abort(404);
 	    }
@@ -290,7 +269,7 @@ class BenevolesController extends BaseController {
 		        return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
 	        }
         }
-        catch ($e) {
+        catch (ModelNotFoundException $e) {
                     App::abort(404);
         }
 	}
@@ -323,29 +302,22 @@ class BenevolesController extends BaseController {
     public function destroyDisponibilites()
 	{
         if(Request::ajax()) {
-            $input = Input::all();
-		    try {
+            try {
+                $input = Input::all();
 			    $disponibilite = Disponibilite::findOrFail($input['id']); 
-		    } catch (ModelNotFoundException $e) {
+                if($disponibilite->delete()) {
+		            $response = array(
+                        'status' => 'success',
+                        'msg' => 'La disponibilité a été supprimée avec succès.',
+                    );
+                }
+            } catch (ModelNotFoundException $e) {
 			    $response = array(
-                    'status' => 'echec',
-                    'msg' => 'La disponibilité n\'existe pas',
+                    'status' => 'fail',
+                    'msg' => 'Impossible de supprimer la disponibilté',
                 );
-                return $response;
-		    }
-            if($disponibilite->delete()) {
-		        $response = array(
-                    'status' => 'succes',
-                    'msg' => 'La disponibilité a été supprimée avec succès',
-                );
-                return $response;
-	        } else {
-		        $response = array(
-                    'status' => 'echec',
-                    'msg' => 'La disponibilité n\'a pas été supprimé',
-                );
-                return $response;
-	        }
+            }
+            return $response;
 	    } else {
 		    return App::abort(404);
 	    }
@@ -363,22 +335,23 @@ class BenevolesController extends BaseController {
 
             if (title === null) return;
             if (start._ambigTime) {
-                var time = 0;
-                while (!moment.isDuration(time) || (moment.isDuration(time) && time._milliseconds <= 0)) {
-                    time = prompt('Temps de début (format HH:MM) :');
-                    if (time === null) return;
-                    time = moment.duration(time);
+                var start_time = 0;
+                while (!moment.isDuration(start_time) || (moment.isDuration(start_time) && start_time <= 0)) {
+                    start_time = prompt('Temps de début (format HH:MM) :');
+                    if (start_time === null) return;
+                    start_time = moment.duration(start_time);
                 }
-                start.time(time);
+                start.time(start_time);
             }
             if (end._ambigTime) {
-                var time = 0;
-                while (!moment.isDuration(time) || (moment.isDuration(time) && time._milliseconds <= 0)) {
-                    time = prompt('Temps de fin (format HH:MM) :');
-                    if (time === null) return;
-                    time = moment.duration(time);
+                var end_time = 0;
+                while (!moment.isDuration(end_time) || (moment.isDuration(end_time) && end_time <= start_time)) {
+                    end_time = prompt('Temps de fin (format HH:MM) :');
+                    if (end_time === null) return;
+                    end_time = moment.duration(end_time);
                 }
-                end.time(time);
+                console.log(end_time, start_time)
+                end.time(end_time);
             }
                                                        
             $.ajax({
@@ -392,7 +365,7 @@ class BenevolesController extends BaseController {
                 },
                 timeout: 10000,
                 success: function(data){
-                    if(data.status == \"echec\"){
+                    if(data.status == \"fail\"){
                         alert(data.msg);
                     }else{
                         var eventData;
@@ -402,12 +375,12 @@ class BenevolesController extends BaseController {
                             start: start,
                             end: end
                         };
-                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('renderEvent', eventData, true); 
-                    };
-                    $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect');
+                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('renderEvent', eventData, true);
+                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect');
+                    };                    
 	            },
                 error: function(data){
-                    alert('Le serveur ne répond pas onselect.');
+                    alert(data.msg);
                 }
             });
 
@@ -434,12 +407,12 @@ class BenevolesController extends BaseController {
                     },
                 timeout: 10000,
                 success: function(data){
-                    if(data.status == \"echec\"){
+                    if(data.status == \"fail\"){
                         alert(data.msg);
                     };
 	            },
                 error: function(data){
-                    alert('Le serveur ne répond pas onclic.'); //TODO: mettre des meilleurs messages
+                    alert(data.msg);
                 }
             });
         }";
@@ -463,14 +436,12 @@ class BenevolesController extends BaseController {
                 },
                 timeout: 10000,
                 success: function(data){
-                    if(data.status == \"echec\"){
+                    if(data.status == \"fail\"){
                         alert(data.msg);
-                    } else {
-                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect'); 
-                    }
+                    };
 	            },
                 error: function(data){
-                    alert('Le serveur ne répond pas on drop.');
+                    alert(data.msg);
                 }
             });
 
@@ -494,14 +465,12 @@ class BenevolesController extends BaseController {
                 },
                 timeout: 10000,
                 success: function(data){
-                    if(data.status == \"echec\"){
+                    if(data.status == \"fail\"){
                         alert(data.msg);
-                    } else {
-                        $('#calendar-" . $calendrier->getId() ."').fullCalendar('unselect'); 
-                    }
+                    };
 	            },
                 error: function(data){
-                    alert('Le serveur ne répond pas onresize.');
+                    alert(data.msg);
                 }
             });
 
