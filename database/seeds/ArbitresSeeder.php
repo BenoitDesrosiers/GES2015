@@ -32,7 +32,7 @@ class ArbitresTableSeeder extends Seeder {
 			
 			$arbitre->save();
 		
-			for($j=0;$j<rand(1,4);$j++) {
+			for($j=0;$j<rand(1,4);$j++) { //TODO: ca fonctionne, mais c'est risqué, et c'est totalement aléatoire, donc pas très test-friendly
 				DB::table('arbitres_epreuves')->insert(array('arbitre_id' => DB::table('arbitres')->max('id'), 'epreuve_id' => rand($epreuves->min('id'),$epreuves->max('id'))));
 			}
 		}

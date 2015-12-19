@@ -24,7 +24,7 @@
 			{{ $errors->first('description') }}				
 		</div>
 		<div class="form-group">
-			<!-- Code original par "Dey-Dey" adapté pour le site -->
+			<!-- Code original par "Dey-Dey" adapté pour le site --> <?php //TODO: mettre ca dans un include car c'est commun a create et edit ?>
 			<div class="container bootstrap snippet">
 			  <div class="row">
 		      	<div class="col-sm-4 col-sm-offset-1">
