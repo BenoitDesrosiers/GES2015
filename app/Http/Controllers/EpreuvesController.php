@@ -81,7 +81,7 @@ class EpreuvesController extends BaseController {
 			App::abort ( 404 );
 		}
 		if ($epreuve->save ()) {
-			if (is_array ( Input::get ( 'participants' ) )) {
+			if (is_array ( Input::get ( 'participants' ) )) { //FIXME: si participants n'existe pas, $epreuve est déjà sauvegardée, et ca va planter. 
 				$epreuve->participants()->sync ( array_keys ( Input::get ( 'participants' )));
 			} else {
 				$epreuve->participants()->detach();
@@ -93,7 +93,7 @@ class EpreuvesController extends BaseController {
 	}
 	
 	/**
-	 * Affiche les partcipants/équipes associés à l'épreuve sélectionné par région.
+	 * Affiche les participants/équipes associés à l'épreuve sélectionnée par région.
 	 *
 	 * @param[in] get int $epreuveId l'id de l'épreuve qu'on sélectionne.
 	 */
