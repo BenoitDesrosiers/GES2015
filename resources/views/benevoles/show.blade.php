@@ -9,7 +9,7 @@
 		<p>Numéro de Téléphone : {{ $benevole->numTel }}</p>
         <p>Numéro de Cellulaire : {{ $benevole->numCell }}</p>
         <p>Courriel : {{ $benevole->courriel }}</p>
-        <p><a href="{{ action('BenevolesController@showDisponibilites',$benevole->id) }}" class="btn btn-info">Afficher Disponibilités</a></p>
+        <p><a href="{{ action('DisponibilitesController@show',$benevole->id) }}" class="btn btn-info">Afficher Disponibilités</a></p>
         <p>Accréditation : {{ $benevole->accreditation }}</p>
         <p>Vérification : {{ $benevole->verification }}</p>
 	</div>
