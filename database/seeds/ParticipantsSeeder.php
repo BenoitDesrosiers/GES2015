@@ -4,6 +4,9 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Participant;
+use App\Models\Region;
+use App\Models\Sport;
+
 
 class ParticipantsTableSeeder extends Seeder {
 
@@ -42,6 +45,9 @@ public function run()
 		["Yannick"	, "Ytterbium"	,25,	1,	4,	0],
 		["Zaza"		, "Zébulon"		,26,	2,	4,	1]
 	];
+	
+	$sports = Sport::all();
+	$regions = Region::all();
 
 	Participant::where('equipe','=',0)->delete();
 
@@ -50,12 +56,12 @@ public function run()
 		$participant->prenom = $entree[0];
 		$participant->nom = $entree[1];
 		$participant->numero = $entree[2];
-		$participant->region_id = $entree[3];
+		$participant->region_id = $regions[$entree[3]]->id;
 		$participant->sexe = $entree[5];
 		$participant->naissance = new DateTime;
 		$participant->equipe = false;
 		$participant->save();
-		$participant->sports()->attach([$entree[4]]);
+		$participant->sports()->attach([$sports[$entree[4]]->id]);
 	}
 }
 

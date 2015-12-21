@@ -21,7 +21,7 @@ class Participant extends EloquentValidating {
 	protected $guarded = array('id');
 
 	/**
-	* Eloquent relationship: un participant appartient à un sport
+	* Eloquent relationship: un participant appartient à plusieurs sport
 	*/
 	public function sports() {
 		return $this->belongsToMany('App\Models\Sport', 'participant_sport', 'participant_id', 'sport_id');

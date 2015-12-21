@@ -102,6 +102,7 @@ class EquipesController extends Controller
 		$equipe = Equipe::findOrFail($id);
 		$membres = $equipe->idMembres();
 // 		Les participants susceptibles d'être ajoutés à l'équipe, triés par nom
+//		On ne peut pas changer la région d'une équipe car ca aurait des impacts sur les membres de l'équipe
 		$joueurs = Participant::where('equipe','=','0')
 					->orderBy('nom')->orderBy('prenom')
 					->where('region_id','=',$equipe->region_id)

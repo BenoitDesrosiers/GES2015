@@ -39,8 +39,8 @@ public function participants() {
 /**
  * Eloquent relationship: un épreuve est associé à plusieurs arbitres
  */
-public function arbitre() {  //FIXME: si c'est plusieurs arbitres, il devrait y avoir un s à cette fonction
-	return $this->belongsToMany('App\Models\Arbitre', 'arbitres_epreuves');
+public function arbitres() {
+	return $this->belongsToMany('App\Models\Arbitre');
 }
 	
 /**

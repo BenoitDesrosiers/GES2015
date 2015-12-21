@@ -25,7 +25,7 @@ class HomeController extends BaseController {
 	public function index()
 	{
 
-		$titre = Systeme::find(1)->nomEvenement;
+		$titre = Systeme::first()->nomEvenement;
 
 		return View::make('homePage', compact('titre'));
 	}	

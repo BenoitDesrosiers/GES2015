@@ -67,7 +67,7 @@ class EpreuvesController extends BaseController
 			$epreuve = Epreuve::findOrFail($epreuveId);
 			$sportId = $epreuve->sport->id;
 			$sports = Sport::all();
-			$arbitresEpreuves = $epreuve->arbitre;
+			$arbitresEpreuves = $epreuve->arbitres;
 			$arbitres = EpreuvesController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresEpreuves);
 			//FIXME: au lieu d'avoir une fonction pour filtrer les arbitres déjà associés à une épreuve, on peut se servir du whereNotIn
 			//       et fournir la liste des ids des arbitresEpreuves
@@ -89,7 +89,7 @@ class EpreuvesController extends BaseController
 	{
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
-			$arbitresEpreuves = $epreuve->arbitre;
+			$arbitresEpreuves = $epreuve->arbitres;
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -117,9 +117,9 @@ class EpreuvesController extends BaseController
 				$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 				//Vérification qu'il y a bien un arbitre à entrer dans la BD.
                 if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
-                    $epreuve->arbitre()->sync($arbitresAEntrer);
+                    $epreuve->arbitres()->sync($arbitresAEntrer);
                 } else {
-                	$epreuve->arbitre()->detach();
+                	$epreuve->arbitres()->detach();
             	}
 			} catch (Exception $e) {
 				App::abort(404);
@@ -155,9 +155,9 @@ class EpreuvesController extends BaseController
 			$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 			//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
             if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
-                $epreuve->arbitre()->sync($arbitresAEntrer);
+                $epreuve->arbitres()->sync($arbitresAEntrer);
             } else {
-                $epreuve->arbitre()->detach();
+                $epreuve->arbitres()->detach();
             } 
 			return Redirect::action('EpreuvesController@index',array('sportId'=>$input["sportsListe"]));
 		} else {
@@ -250,8 +250,8 @@ class EpreuvesController extends BaseController
 	 */
 	protected function filtrer_arbitres($arbitres, $arbitresEpreuves){
 		if ($arbitresEpreuves){
-			foreach ($arbitres as $arbitre){
-				foreach ($arbitresEpreuves as $index => $arbitreEpreuve) {
+			foreach ($arbitres as $index => $arbitre){
+				foreach ($arbitresEpreuves as $arbitreEpreuve) {
 					if ($arbitreEpreuve->id == $arbitre->id) {
 						$arbitres->pull($index);
 					}

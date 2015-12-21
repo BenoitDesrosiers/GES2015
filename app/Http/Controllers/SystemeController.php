@@ -22,7 +22,7 @@ class SystemeController extends Controller
 
     {
         //TODO: refaire pour afficher toutes les activités
-        $evenement = Systeme::find(1);
+        $evenement = Systeme::first();
 
         return View::make('systeme.index', compact('evenement'));
     }

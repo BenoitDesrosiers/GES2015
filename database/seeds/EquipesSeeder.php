@@ -4,13 +4,15 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Equipe;
+use App\Models\Participant;
+use App\Models\Region;
+use App\Models\Sport;
 
 class EquipesSeeder extends Seeder {
 
 public function run()
 {
 	$this->creerEquipes();
-	$this->remplirEquipes();
 }
 
 /**
@@ -31,24 +33,30 @@ public function creerEquipes() {
 		["Streptocoques désagréables"	,10,	4,	3,	[ 4, 5, 6]],
 	];
 
+	$sports = Sport::all();
+	$regions = Region::all();
+	$participants = Participant::all();
+	
 	Equipe::where('equipe','=',1)->delete();
+	
 	foreach($entrees as $entree) {
 		$equipe = new Equipe;
 		$equipe->nom = $entree[0];
 		$equipe->numero = $entree[1];
-		$equipe->region_id = $entree[2];
+		$equipe->region_id = $regions[$entree[2]]->id;
 		$equipe->prenom = "";
 		$equipe->equipe = true;
 		$equipe->sexe = $entree[1] % 2;
 		$equipe->naissance = new DateTime;
 		$equipe->save();
-		$equipe->sports()->attach([$entree[3]]);
-		$equipe->membres()->sync($entree[4]);
+		$equipe->sports()->attach([$sports[$entree[3]]->id]);
+		$index_membres = array();
+		for ($x = 0; $x < count($entree[4]); $x++) {
+			array_push($index_membres, $participants[$entree[4][$x]-1]->id);
+		}
+		$equipe->membres()->sync($index_membres);
 	}
 }
 
-public function remplirEquipes() {
-	
-}
 
 }

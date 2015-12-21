@@ -12,7 +12,7 @@ class CreateArbitreEpreuveTable extends Migration
      */
     public function up()
     {
-        Schema::create('arbitres_epreuves', function(Blueprint $table) {
+        Schema::create('arbitre_epreuve', function(Blueprint $table) {
 			$table->unsignedInteger('arbitre_id');
 			$table->unsignedInteger('epreuve_id');
 			$table->foreign('arbitre_id')

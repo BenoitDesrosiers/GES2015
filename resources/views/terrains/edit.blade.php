@@ -24,8 +24,9 @@
         </div>
         <?php
             $regionArray = array();
+            
             for ($i=0; $i<count($regions); $i++) {
-                $regionArray[$i+1] = $regions[$i]['nom'];
+            	$regionArray[$regions[$i]['id']]  = $regions[$i]['nom'];
             }
         ?>
         <div class="form-group">

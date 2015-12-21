@@ -22,7 +22,7 @@ class Arbitre extends EloquentValidating {
 	/**
 	 * Eloquent relationship: un arbitre est associé à plusieurs épreuves
 	 */
-	public function epreuve() {
+	public function epreuves() {
 		return $this->belongsToMany('App\Models\Epreuve');
 	}
 
