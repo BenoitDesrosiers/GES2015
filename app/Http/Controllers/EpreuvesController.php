@@ -7,7 +7,9 @@ use View;
 use Redirect;
 use Input;
 
+use DB;
 use App\Models\Sport;
+use App\Models\Arbitre;
 use App\Models\Epreuve;
 use Request;
 
@@ -32,7 +34,7 @@ class EpreuvesController extends BaseController
 	 */
 	public function index()
 	{	
-		$sportId = Input::get('sportId');
+		$sportId = Input::get('sportId'); //TODO: ajouter un try catch
 		$sports = Sport::all();
 		$sportId = $this->checkSportId($sports, $sportId);
 		 
@@ -49,8 +51,9 @@ class EpreuvesController extends BaseController
 	{
 		$sportId = Input::get('sportId');
 		$sports = Sport::all();
+		$arbitres = Arbitre::orderBy('nom', 'asc')->get(); //TODO: quand les arbitres seront associés à un sport, ne prendre que les arbitre du sport associé à l'épreuve
 		$sportId = $this->checkSportId($sports, $sportId);
-		return View::make('epreuves.create', compact('sports', 'sportId'));
+		return View::make('epreuves.create', compact('sports', 'sportId', 'arbitres', 'arbitresUtilises'));
 	}
 	
 	/**
@@ -62,13 +65,19 @@ class EpreuvesController extends BaseController
 	{
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
+			$sportId = $epreuve->sport->id;
+			$sports = Sport::all();
+			$arbitresEpreuves = $epreuve->arbitre;
+			$arbitres = EpreuvesController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresEpreuves);
+			//FIXME: au lieu d'avoir une fonction pour filtrer les arbitres déjà associés à une épreuve, on peut se servir du whereNotIn
+			//       et fournir la liste des ids des arbitresEpreuves
+			//       $arbitres = Arbitre::all()->whereNotIn('id', $arbitresEpreuves->pluck('id')) ->get();
+			$sportId = $this->checkSportId($sports, $sportId);
+			
+			return View::make('epreuves.edit', compact('epreuve', 'sports', 'sportId', 'arbitres', 'arbitresEpreuves'));
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		$sportId = $epreuve->sport->id;
-		$sports = Sport::all();
-		$sportId = $this->checkSportId($sports, $sportId);
-		return View::make('epreuves.edit', compact('epreuve','sports', 'sportId'));
 	}
 	
 	/**
@@ -80,10 +89,11 @@ class EpreuvesController extends BaseController
 	{
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
+			$arbitresEpreuves = $epreuve->arbitre;
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		return View::make('Epreuves.show', compact('epreuve'));
+		return View::make('Epreuves.show', compact('epreuve', 'arbitresEpreuves'));
 	}	
 	
 	/**
@@ -91,7 +101,7 @@ class EpreuvesController extends BaseController
 	 *
 	 */
 	public function store()
-	{
+	{ //FIXME: presque le même code que update, DRY
 		$input = Input::all();
 		try {
 			$sport = Sport::findOrFail($input["sportsListe"]);
@@ -101,10 +111,16 @@ class EpreuvesController extends BaseController
 		$epreuve = new Epreuve;
 		$epreuve->nom = $input['nom'];
 		$epreuve->description = $input['description'];
+		$epreuve->sport_id = $input["sportsListe"];
 		if($epreuve->save()) {
 			try {
-				//associe le sport aux épreuves (one to many)
-				$epreuve = $sport->epreuves()->save($epreuve);
+				$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
+				//Vérification qu'il y a bien un arbitre à entrer dans la BD.
+                if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
+                    $epreuve->arbitre()->sync($arbitresAEntrer);
+                } else {
+                	$epreuve->arbitre()->detach();
+            	}
 			} catch (Exception $e) {
 				App::abort(404);
 			}
@@ -120,7 +136,7 @@ class EpreuvesController extends BaseController
 	 * @param[in] int $epreuveId l'id de l'épreuve
 	 */
 	public function update( $epreuveId)
-	{
+	{  //FIXME: presque le même code que store, DRY
 		$input = Input::all();
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
@@ -135,7 +151,14 @@ class EpreuvesController extends BaseController
 			App::abort(404);
 		}
 		$epreuve->sport_id = $sport->id;
-		if($epreuve->save()) { 
+		if($epreuve->save()) {
+			$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
+			//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
+            if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
+                $epreuve->arbitre()->sync($arbitresAEntrer);
+            } else {
+                $epreuve->arbitre()->detach();
+            } 
 			return Redirect::action('EpreuvesController@index',array('sportId'=>$input["sportsListe"]));
 		} else {
 			return Redirect::back()->withInput()->withErrors($epreuve->validationMessages());
@@ -164,7 +187,6 @@ class EpreuvesController extends BaseController
 	 * 
 	 * @param[in] post int sportId l'id du sport pour lequel on veut lister les épreuves
 	 * @return la sous-view pour afficher une liste d'épreuves.
-	 * 
 	 */
 	
 	public function epreuvesPourSport() {
@@ -205,6 +227,38 @@ class EpreuvesController extends BaseController
 			$sportId= $sports[0]->id;
 		}
 		return $sportId; 
+	}
+	
+	/**
+	 * Vérifie si les arbitres sont sous formes d'array etsi il y en as. 0 veut dire qu'il n'y a pas d'arbitres.
+	 * @param $arbitres
+	 * @return boolean
+	 */
+	protected function verifier_existence($arbitresAEntrer) {
+		if (is_array($arbitresAEntrer) AND ($arbitresAEntrer[0] != "0")) {
+			$retour = TRUE;  //FIXME: pourquoi ne pas juste retourner le résultat du IF?
+		}else{
+			$retour = FALSE;
+		}
+		return $retour;
+	}
+	
+	/**
+	 * filtre les arbitres pour retirer ceux déjà attribués à une épreuve.
+	 * @param array $arbitres
+	 * @param array $arbitresEpreuves
+	 */
+	protected function filtrer_arbitres($arbitres, $arbitresEpreuves){
+		if ($arbitresEpreuves){
+			foreach ($arbitres as $arbitre){
+				foreach ($arbitresEpreuves as $index => $arbitreEpreuve) {
+					if ($arbitreEpreuve->id == $arbitre->id) {
+						$arbitres->pull($index);
+					}
+				}
+			}
+		}
+		return $arbitres;
 	}
 
 }

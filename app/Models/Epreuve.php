@@ -25,15 +25,22 @@ class Epreuve extends EloquentValidating {
  */
 
 public function sport() {
-	return $this->belongsTo('Sport');
+	return $this->belongsTo('App\Models\Sport');
 }
 
 public function evenements() {
-	return $this->hasMany('Evenement');
+	return $this->hasMany('App\Models\Evenement');
 }
 	
 public function participants() {
-	return $this->belongsToMany('Participant');
+	return $this->belongsToMany('App\Models\Participant');
+}
+
+/**
+ * Eloquent relationship: un épreuve est associé à plusieurs arbitres
+ */
+public function arbitre() {  //FIXME: si c'est plusieurs arbitres, il devrait y avoir un s à cette fonction
+	return $this->belongsToMany('App\Models\Arbitre', 'arbitres_epreuves');
 }
 	
 /**
