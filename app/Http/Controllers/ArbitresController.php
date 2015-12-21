@@ -164,7 +164,7 @@ class ArbitresController extends BaseController {
 	 * @return Response
 	 */
 	public function update($id)
-	{
+	{   //FIXME: meme code que store, DRY
 		try {
 			$input = Input::all();
 			$arbitre = Arbitre::findOrFail($id);
