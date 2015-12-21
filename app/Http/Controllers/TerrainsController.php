@@ -70,7 +70,7 @@ class TerrainsController extends BaseController {
             $terrain->nom = $input['nom'];
             $terrain->adresse = $input['adresse'];
             $terrain->ville = $input['ville'];
-            $terrain->region_id = $input['region_id'];
+            $terrain->region_id = $input['region_id']; //FIXME: ce n'est pas l'indice dans la liste qu'on veut, c'est l'id de la région
             $terrain->description_courte = $input['description_courte'];
 
             if($terrain->save()) {
