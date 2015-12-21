@@ -33,11 +33,22 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('benevoles','BenevolesController');
 	Route::resource('roles','RolesController');
 	Route::resource('codes','CodesController');
+	
+	Route::get('benevole/{id}', 'BenevolesController@showDisponibilites');
+    Route::get('benevole/{id}/editDisponibilites', 'BenevolesController@editDisponibilites');
+    Route::post('benevole/createDisponibilites/save', 'BenevolesController@createDisponibilitesSave');
+    Route::post('benevole/editDisponibilites/save', 'BenevolesController@editDisponibilitesSave');
+    Route::post('benevole/destroyDisponibilites', 'BenevolesController@destroyDisponibilites');
+
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
 	Route::post('participants/recherche','ParticipantsController@recherche');
 	Route::post('resultatPourEvenementResultats', 'ResultatsController@resultatPourEvenement');
+    Route::resource('benevoles','BenevolesController');
+	
+	Route::resource('roles','RolesController');
+   
 });
 
 // Authentication routes...

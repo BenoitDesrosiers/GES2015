@@ -21,7 +21,6 @@ class CreateBenevolesTable extends Migration
 			$table->string('numTel');
 			$table->string('numCell')->nullable();
 			$table->string('courriel')->nullable();
-            $table->string('disponibilite')->nullable();
             $table->string('accreditation');
             $table->string('verification')->nullable();
 			$table->timestamps();

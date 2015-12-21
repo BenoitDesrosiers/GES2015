@@ -41,11 +41,6 @@
 			{{ $errors->first('courriel') }}
 		</div>
         <div class="form-group">
-			{!! Form::label('disponibilite', 'Disponibilité :') !!} 
-			{!! Form::text('disponibilite', $benevole->disponibilite, ['class' => 'form-control']) !!}
-			{{ $errors->first('disponibilite') }}
-		</div>
-        <div class="form-group">
 			{!! Form::label('accreditation', 'Accréditation :') !!} 
 			{!! Form::text('accreditation', $benevole->accreditation, ['class' => 'form-control']) !!}
 			{{ $errors->first('accreditation') }}

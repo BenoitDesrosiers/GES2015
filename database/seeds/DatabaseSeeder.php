@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EvenementsTableSeeder');
 		$this->call('info_event');
 		$this->call('TerrainsTableSeeder');
-        	$this->call('BenevolesTableSeeder');
+        $this->call('BenevolesTableSeeder');
+        $this->call('DisponibilitesTableSeeder');
 		$this->call('RolesTableSeeder');
 		//$this->call('ResultatTournoisTableSeeder');
 		

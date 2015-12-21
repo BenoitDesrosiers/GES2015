@@ -12,6 +12,10 @@ namespace App\Models;
 class Benevole extends EloquentValidating {
 	protected $guarded = array('id');
 
+    public function disponibilites() {
+	    return $this->hasMany('App\Models\Disponibilite');
+    }
+
     /**
      * Validation
      *
