@@ -13,6 +13,7 @@
 		<a class="btn btn-lg btn-success" href="{{ action('BenevolesController@index') }}" role="button">Bénévoles</a>
 		<a class="btn btn-lg btn-success" href="{{ action('ArbitresController@index') }}" role="button">Arbitres</a>
 		<a class="btn btn-lg btn-success" href="{{ action('RolesController@index') }}" role="button">Rôles</a></p>
+		<a class="btn btn-lg btn-success" href="{{ action('PointagesController@index') }}" role="button">Pointages</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('TerrainsController@index') }}" role="button">Terrains</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('CodesController@index') }}" role="button">Codes</a></p>	
 		<a class="btn btn-lg btn-success" href="{{ action('AboutController@index') }}" role="button">À propos</a></p>

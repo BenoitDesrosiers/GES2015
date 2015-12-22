@@ -40,6 +40,8 @@ Route::group(['middleware'=>'auth'], function() {
     Route::post('benevole/editDisponibilites/save', 'BenevolesController@editDisponibilitesSave');
     Route::post('benevole/destroyDisponibilites', 'BenevolesController@destroyDisponibilites');
 
+	Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');
+	Route::resource('pointages','PointagesController');
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');

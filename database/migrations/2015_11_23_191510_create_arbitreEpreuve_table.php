@@ -35,6 +35,6 @@ class CreateArbitreEpreuveTable extends Migration
      */
     public function down()
     {
-    	Schema::drop('arbitres_epreuves');
+    	Schema::drop('arbitre_epreuve');
     }
 }
