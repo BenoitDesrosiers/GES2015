@@ -10,9 +10,9 @@
 		<div class="col-sm-4">
 			<div class="list-group" id="list2">
 				<a class="list-group-item active"><span class="glyphicon glyphicon-user"></span>Arbitres attitrés</a>
-@foreach($arbitresEpreuves as $arbitreEpreuve)
+	@foreach($arbitresEpreuves as $arbitreEpreuve)
 				<a class="list-group-item">{{ $arbitreEpreuve->nom }}, {{ $arbitreEpreuve->prenom }}</a>
-@endforeach
+	@endforeach
 			</div>
 		</div>
 @endif

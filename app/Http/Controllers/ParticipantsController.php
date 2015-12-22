@@ -94,7 +94,7 @@ class ParticipantsController extends BaseController {
 			}
 
             if($participant->save()) {
-                if (is_array(Input::get('sport'))) {
+                if (is_array(Input::get('sport'))) {  //FIXME: si le get plante, le save est déjà fait. 
                     $participant->sports()->sync(array_keys(Input::get('sport')));
                 } else {
                     $participant->sports()->detach();

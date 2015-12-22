@@ -1,6 +1,6 @@
 <?php
 /**
- * Un arbitre est une personne associée à une région
+ * Un arbitre est une personne associée à une région et à des sports
  * 
  * 
  * @author Sarah Laflamme
@@ -13,10 +13,17 @@ class Arbitre extends EloquentValidating {
 	protected $guarded = array('id');
 
 	/** 
-	 * Eloquent relationship: un arbitre est associé à une région
+	 * Eloquent relationship: 
+	 * - Un arbitre est associé à une région
+	 * - Un arbitre est associé à un ou plusieurs sports
 	 */
+
 	public function region() {
 		return $this->belongsTo('App\Models\Region');
+	}
+
+	public function sports() {
+		return $this->belongsToMany('App\Models\Sport', 'arbitres_sports', 'arbitre_id', 'sport_id');
 	}
 
 	/**
@@ -64,6 +71,4 @@ class Arbitre extends EloquentValidating {
 			'date_naissance' => 'date'
 		];
 	}
-
-
 }

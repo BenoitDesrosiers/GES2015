@@ -5,7 +5,7 @@
 		<h2 class="panel-title">{{ $arbitre->nom }}, {{ $arbitre->prenom }}</h2>
 	</div>
 	<div class="panel-body">
-		<p>Région : {{ $region->nom }}</p>
+		<p>Région : {{ $arbitre->region->nom }}</p>
 		<p>Numéro d'accréditation : {{ $arbitre->numero_accreditation }}</p>
 		<p>Association : {{ $arbitre->association }}</p>
 		<p>Numéro de téléphone : {{ $arbitre->numero_telephone }}</p>
@@ -16,12 +16,17 @@
 	            Féminin
 	        @endif
         </p>
+        
 		@if ($arbitre->adresse)
 			<p>Adresse : {{ $arbitre->adresse }}</p>
 		@endif
 
    		@if ($arbitre->date_naissance)
    			<p>Date de naissance : {{ $arbitre->date_naissance }}</p>
+   		@endif
+
+   		@if (count($arbitre->sports) > 0)
+   			<p>Sports: <ul> <?php foreach($arbitre->sports as $sport) { echo "<li>".$sport->nom."</li>"; } ?></ul></p>
    		@endif
 	</div>
 </div>
