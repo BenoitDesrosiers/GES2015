@@ -13,6 +13,7 @@
 	@foreach($arbitresEpreuves as $arbitreEpreuve)
 				<a class="list-group-item">{{ $arbitreEpreuve->nom }}, {{ $arbitreEpreuve->prenom }}</a>
 	@endforeach
+	<?php //TODO: ajouter la liste des participants. ?>
 			</div>
 		</div>
 @endif

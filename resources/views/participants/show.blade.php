@@ -61,6 +61,7 @@
 				@endforeach
 			</ul>
         @endif
+        <?php //TODO: afficher les épreuves auxquels est inscrit ce participants. ?>
 	</div>
 </div>
 @stop

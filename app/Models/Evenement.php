@@ -14,11 +14,11 @@ class Evenement extends EloquentValidating {
  */
 
 public function epreuve() {
-	return $this->belongsTo('Epreuve');
+	return $this->belongsTo('App\Models\Epreuve');
 }
 
 public function resultats() {
-	return $this->hasMany('Resultat');
+	return $this->hasMany('App\Models\Resultat');
 }
 	
 /**
