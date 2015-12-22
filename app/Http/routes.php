@@ -42,6 +42,9 @@ Route::group(['middleware'=>'auth'], function() {
 
 	Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');
 	Route::resource('pointages','PointagesController');
+
+	Route::resource('delegues','DeleguesController');
+	
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');

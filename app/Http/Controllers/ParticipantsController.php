@@ -167,7 +167,7 @@ class ParticipantsController extends BaseController {
      * @param int $n     Le nombre de valeurs à inclure
      * @return La liste remplie
      */
-    private function generer_liste($debut, $n) {
+    public static function generer_liste($debut, $n) {
         $liste = array();
         $fin = $debut+$n-1;
         for ($i = $debut; $i <= $fin; $i++) {

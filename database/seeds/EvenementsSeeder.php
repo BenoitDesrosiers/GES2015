@@ -16,7 +16,7 @@ class EvenementsTableSeeder extends Seeder {
 		$participants=DB::table('participants')->lists('id');
 		$evenements=DB::table('evenements');
 		for($i=0;$i<10;$i++) {
-			for($j=0;$j<rand(1,2);$j++) {
+			for($j=0;$j<rand(1,2);$j++) { //TODO: refaire avec un attach()
 				DB::table('evenement_participant')->insert(array('participant_id' => $participants[$i], 'evenement_id' => rand($evenements->min('id'),$evenements->max('id'))));
 			}
 		}
