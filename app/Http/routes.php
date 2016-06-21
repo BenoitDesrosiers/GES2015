@@ -37,11 +37,13 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('roles','RolesController');
 	Route::resource('codes','CodesController');
 	
-	Route::get('benevole/{id}', 'BenevolesController@showDisponibilites');
-    Route::get('benevole/{id}/editDisponibilites', 'BenevolesController@editDisponibilites');
-    Route::post('benevole/createDisponibilites/save', 'BenevolesController@createDisponibilitesSave');
-    Route::post('benevole/editDisponibilites/save', 'BenevolesController@editDisponibilitesSave');
-    Route::post('benevole/destroyDisponibilites', 'BenevolesController@destroyDisponibilites');
+
+    //Route::get('disponibilites/{id}/create', 'DisponibilitesController@create');
+    //Route::post('disponibilites/store', 'DisponibilitesController@store');
+	//Route::get('disponibilites/{id}/show', 'DisponibilitesController@showDisponibilites');    
+    //Route::post('disponibilites/update', 'DisponibilitesController@update');
+    //Route::post('disponibilites/destroy', 'DisponibilitesController@destroy');
+    Route::resource('disponibilites','DisponibilitesController');
 
 	Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');
 	Route::resource('pointages','PointagesController');
@@ -54,7 +56,7 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::post('participants/recherche','ParticipantsController@recherche');
 	Route::post('resultatPourEvenementResultats', 'ResultatsController@resultatPourEvenement');
     Route::resource('benevoles','BenevolesController');
-	
+
 	Route::resource('roles','RolesController');
    
 });

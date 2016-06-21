@@ -32,7 +32,7 @@
 					{!! Form::close() !!}   {{-- méthode pour faire le delete tel que décrit sur http://www.codeforest.net/laravel-4-tutorial-part-2 , 
 											un script js est appelé pour tous les form qui ont un "data-confirm" (voir assets/js/script.js) --}}
 				</td>
-                <td><a href="{{ action('BenevolesController@editDisponibilites', $benevole->id) }}" class="btn btn-info">Modifier Disponibilités</a></td>
+                <td><a href="{{ action('DisponibilitesController@edit',$benevole->id) }}" class="btn btn-info">Gestion des disponibilités</a></td>
 			</tr>
 @endforeach
 		</tbody>
