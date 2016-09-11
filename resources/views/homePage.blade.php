@@ -20,4 +20,5 @@
 		<a class="btn btn-lg btn-success" href="{{ action('AboutController@index') }}" role="button">À propos</a></p>
 
 	</div>
+	<?php phpinfo();?>
 @stop
