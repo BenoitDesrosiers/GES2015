@@ -37,12 +37,30 @@
 					<li<?php if ($route == "codes") { ?> class="active"<?php } ?>><a href="{{ action('CodesController@index') }}">Codes</a></li>
 					<li<?php if ($route == "delegues") { ?> class="active"<?php } ?>><a href="{{ action('DeleguesController@index') }}">Délégués</a></li>
 					<li<?php if ($route == "roles") { ?> class="active"<?php } ?>><a href="{{ action('RolesController@index') }}">Rôles</a></li>
-          			<?php if (Auth::user() == "") { ?>
-          			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Connexion</a></li>
-          			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Inscription</a></li>
-          			<?php } else { ?>
-          			<li><a href="{{ action('Auth\AuthController@getLogout') }}">Déconnexion [{{ Auth::user()->username }}]</a></li>
-					<?php } ?>
+          			@if (Auth::user() == "")
+          				<li><a href="{{ url('/login') }}">Connexion</a></li>
+          				<li><a href="{{ url('/register') }}">Inscription</a></li>
+          			@else 
+	          			<li class="dropdown">
+	                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+	                                {{ Auth::user()->name }} <span class="caret"></span>
+	                            </a>
+	
+	                            <ul class="dropdown-menu" role="menu">
+	                                <li>
+	                                    <a href="{{ url('/logout') }}"
+	                                        onclick="event.preventDefault();
+	                                                 document.getElementById('logout-form').submit();">
+	                                        Déconnexion
+	                                    </a>
+	
+	                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+	                                        {{ csrf_field() }}
+	                                    </form>
+	                                </li>
+	                            </ul>
+	                        </li>
+					@endif
           		</ul>
      		</div>
       		

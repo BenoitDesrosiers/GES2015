@@ -47,7 +47,7 @@ class EpreuvesTableSeeder extends Seeder {
 		];
 		
 		foreach($sports as $sport) {
-			$sportid=DB::table('sports')->where('nom',$sport[0])->pluck('id');
+			$sportid=DB::table('sports')->where('nom',$sport[0])->pluck('id')->first();
 			foreach($sport[1] as $epreuve) {
 				$epreuvedb = Epreuve::create(array('nom' => $epreuve[0], 'description'=>$epreuve[1],'sport_id'=>$sportid));
 				foreach($epreuve[2] as $resultat) {

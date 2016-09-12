@@ -26,7 +26,6 @@ class HomeController extends BaseController {
 	{
 
 		$titre = Systeme::first()->nomEvenement;
-
 		return View::make('homePage', compact('titre'));
 	}	
 

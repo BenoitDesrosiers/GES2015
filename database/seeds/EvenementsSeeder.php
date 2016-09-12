@@ -13,7 +13,7 @@ class EvenementsTableSeeder extends Seeder {
 		DB::table('evenement_participant')->delete();		
 		
 		//nom, prenom, numero, region court (à mapper), equipe
-		$participants=DB::table('participants')->lists('id');
+		$participants=DB::table('participants')->pluck('id');
 		$evenements=DB::table('evenements');
 		for($i=0;$i<10;$i++) {
 			for($j=0;$j<rand(1,2);$j++) { //TODO: refaire avec un attach()
