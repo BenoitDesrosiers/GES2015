@@ -45,6 +45,19 @@
 			{!! Form::text('accreditation',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('accreditation') }}
 		</div>
+		<div class="form-group">
+			{!! Form::label('date_naissance', 'Date de naissance :') !!} 
+			{!! Form::text('date_naissance',null, ['class' => 'form-control']) !!}
+			{{ $errors->first('date_naissance') }}
+		</div>
+	
+		 <div class="form-group">
+			{!! Form::label('sexe', 'Sexe :') !!} 
+			{!! Form::radio('sexe','h', true, ['id'=>'h', 'class' => 'radio-inline']) !!} Homme
+			{!! Form::radio('sexe','f', false, ['id'=>'f', 'class' => 'radio-inline']) !!} Femme
+			{!! Form::radio('sexe','a', false, ['id'=>'a', 'class' => 'radio-inline']) !!} Autre
+			{{ $errors->first('benevole') }}				
+		</div>
         
         <div class="form-group">
 			{!! Form::label('verification', 'Vérification :') !!} 
