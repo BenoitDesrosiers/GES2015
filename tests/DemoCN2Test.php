@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class DemoCN2Test extends TestCase
 {
-	use DatabaseMigrations;
+	use DatabaseTransactions;
 	
     /**
      * A basic test example.
@@ -31,9 +31,7 @@ class DemoCN2Test extends TestCase
     	$this->actingAs($user);
     	$this->visit('/benevoles/create')
     	->type('2015-01-01','date_naissance')
-    	//->check('f')
-    	//->check('h')
-    	->check('sexe')
+    	->select('f', 'sexe')
     	//remplie les autres champs ... mais ca ne fait pas parti de ce test
     	->type('Nic', 'nom')
     	->type('Pic', 'prenom')
@@ -42,10 +40,11 @@ class DemoCN2Test extends TestCase
     	->type('987-654-4321', 'numCell')
     	->type('PicNic@radiocanada.ca', 'courriel')
     	->type('ben oui', 'accreditation')
-    	->check('verification')
+    	->check('verification','f')
        	->press('Créer')
     	;
     	
+    	$this->seeInDatabase('benevoles', ['nom'=>'Nic', 'date_naissance'=>'2015-01-01', 'sexe'=>'f']);
     	
     	
     }
