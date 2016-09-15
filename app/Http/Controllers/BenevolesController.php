@@ -65,6 +65,8 @@ class BenevolesController extends BaseController {
         $benevole->courriel = $input['courriel'];
 		$benevole->accreditation = $input['accreditation'];
 		$benevole->verification = $input['verification'];
+		$benevole->date_naissance = $input['date_naissance'];
+		$benevole->sexe = $input['sexe'];
 		
 		if($benevole->save()) {
 			return Redirect::action('BenevolesController@index');
@@ -117,7 +119,6 @@ class BenevolesController extends BaseController {
 	{
         try {
 	        $input = Input::all();
-	
 	        $benevole = Benevole::findOrFail($id);
 	        $benevole->prenom = $input['prenom'];
             $benevole->nom = $input['nom'];
@@ -127,7 +128,8 @@ class BenevolesController extends BaseController {
             $benevole->courriel = $input['courriel'];
 	        $benevole->accreditation = $input['accreditaiton'];
 	        $benevole->verification = $input['verification'];
-	
+			$benevole->date_naissance = $input['date_naissance'];
+			$benevole->sexe = $input['sexe'];
 	        if($benevole->save()) {
 		        return Redirect::action('BenevolesController@index');
 	        } else {
