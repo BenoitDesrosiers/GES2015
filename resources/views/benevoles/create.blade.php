@@ -53,9 +53,9 @@
 	
 		 <div class="form-group">
 			{!! Form::label('sexe', 'Sexe :') !!} 
-			{!! Form::radio('sexe','h', true, ['id'=>'h', 'class' => 'radio-inline']) !!} Homme
-			{!! Form::radio('sexe','f', false, ['id'=>'f', 'class' => 'radio-inline']) !!} Femme
-			{!! Form::radio('sexe','a', false, ['id'=>'a', 'class' => 'radio-inline']) !!} Autre
+			{!! Form::radio('sexe','h', true, ['id'=>'sexeh', 'class' => 'radio-inline']) !!} Homme
+			{!! Form::radio('sexe','f', false, ['id'=>'sexef', 'class' => 'radio-inline']) !!} Femme
+			{!! Form::radio('sexe','a', false, ['id'=>'sexea', 'class' => 'radio-inline']) !!} Autre
 			{{ $errors->first('benevole') }}				
 		</div>
         
