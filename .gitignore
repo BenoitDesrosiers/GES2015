@@ -7,4 +7,5 @@ Proposition.txt
 #.env   <<<<< a remettre plus tard, je l'ai enlevé juste pour que ca soit moins compliqué pour le étudiants. 
 .settings/org.eclipse.core.resources.prefs
 *~
+composer.lock
 
