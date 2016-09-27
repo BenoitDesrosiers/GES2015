@@ -20,6 +20,16 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+/*pour le démo de création de voiture de CN2 */
+$factory->define(App\Models\Voiture::class, function (Faker\Generator $faker) {
+	return [
+			'modele' => $faker->name,
+			'date_achat' => $faker->DateTimeThisCentury(),
+			'identifiant' => rand(1,1000)
+			
+		];
+});
+
 
 $factory->define(App\Models\Benevole::class, function (Faker\Generator $faker) {
 		return [

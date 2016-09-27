@@ -57,7 +57,5 @@ class DemoCN2ModelEquipeTest extends TestCase
     	$equipe_a_ne_pas_creer = factory(App\Models\Equipe::class)->create(['region_id'=>100000000]);
     }
     
-    /** @test */
-    public function 
-    
+   
 }
