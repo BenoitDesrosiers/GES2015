@@ -1,5 +1,7 @@
+﻿/.idea
 /vendor
 /node_modules
+composer.lock
 Homestead.yaml
 start_server.bat
 TODO.txt
