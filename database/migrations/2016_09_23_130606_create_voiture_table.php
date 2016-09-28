@@ -15,7 +15,7 @@ class CreateVoitureTable extends Migration
         //
 
     	 Schema::create('Voitures', function (Blueprint $table) {
-            $table->unsignedInteger('voiture_id');  <<< changer pour id
+            $table->increments('id');  
 			$table->string('modele');
 			$table->date('date_achat');
 			$table->unsignedInteger('identifiant');

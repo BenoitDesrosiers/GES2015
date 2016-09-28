@@ -24,7 +24,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 $factory->define(App\Models\Voiture::class, function (Faker\Generator $faker) {
 	return [
 			'modele' => $faker->name,
-			'date_achat' => $faker->DateTimeThisCentury(),
+			'date_achat' => $faker->Date(),
 			'identifiant' => rand(1,1000)
 			
 		];

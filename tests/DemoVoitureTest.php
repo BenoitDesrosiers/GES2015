@@ -8,11 +8,15 @@ use App\Models\Voiture;
 
 class DemoVoitureTest extends TestCase
 {
+	
     /**
      * Demo de la construction d'un test pour CN2
      *
      * @return void
      */
+	
+	use DatabaseTransactions; // <---- permet de ne pas créer plein de "déchets" dans la bd.
+	
 	/** @test */
     public function la_creation_d_une_voiture_fonctionne()
     {
@@ -28,6 +32,51 @@ class DemoVoitureTest extends TestCase
     {
     	$voiture = factory(App\Models\Voiture::class)
     	->create();
-    	$this->seeInDatabase('Voitures', ['voiture_id'=>$voiture->id]);
+    	$this->seeInDatabase('Voitures', ['id'=>$voiture->id, 
+    										'modele'=>$voiture->modele, 
+    										'identifiant'=>$voiture->identifiant,
+    										'date_achat'=>$voiture->date_achat
+								    	]);
     }
+
+    /** @test 
+     * @expectedException PDOException*/
+    public function le_champ_model_est_valide()
+    {
+        //$this->setExpectedException(PDOException::class);
+       	//le champs modele est obligatoire dans la description du problème
+    	$voiture = factory(App\Models\Voiture::class)
+    	->create(['modele'=>null]);
+    }
+    
+    /** @test
+     * @expectedException PDOException
+     * @dataProvider nullProvider */
+    public function les_champs_sont_valide($modele, $identifiant, $date_achat)
+    {
+    	$voiture = factory(App\Models\Voiture::class)
+    	->create(['modele'=>$modele, 'identifiant'=>$identifiant, 'date_achat'=>$date_achat]);
+    }
+
+    
+    public function nullProvider()
+    {
+    	return [
+    			'modele' => [null, '1', '2015-01-01'],
+    			'identifiant' => ['kia', null, '2015-01-01'],
+    			'date_achat' => ['kia', '1', null]
+    	    	];
+    }
+    
+    
+    /** @test */
+    public function le_champ_model_est_valide_en_utilisant_le_validateur_de_Laravel()
+    {
+    	//le champs modele est obligatoire dans la description du problème
+    	$voiture = factory(App\Models\Voiture::class)
+    	->make(['modele'=>null]);
+    	$this->assertTrue($voiture->validate());
+    }
+    
+    
 }
