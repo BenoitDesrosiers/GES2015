@@ -58,6 +58,8 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('benevoles','BenevolesController');
 
 	Route::resource('roles','RolesController');
+	
+	Route::resource('voitures', 'VoituresController');
    
 });
 

@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Voiture extends Model
 {
     //
+	protected $guarded = array('id');
+	
  
 }

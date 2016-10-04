@@ -70,13 +70,41 @@ class DemoVoitureTest extends TestCase
     
     
     /** @test */
-    public function le_champ_model_est_valide_en_utilisant_le_validateur_de_Laravel()
+    public function on_peut_creer_une_voiture_avec_l_interface_et_le_validateur_de_Laravel()
     {
-    	//le champs modele est obligatoire dans la description du problème
-    	$voiture = factory(App\Models\Voiture::class)
-    	->make(['modele'=>null]);
-    	$this->assertTrue($voiture->validate());
+    	
+    	//La première chose à tester est si on peut créer une voiture avec une view. 
+    	$user = factory(App\User::class)->create();
+    	$this->actingAs($user);
+    	$this->visit('/voitures/create')
+    	->see('modele');
+    	
+    	$this->type('Kia', 'modele');
+    	$this->type('2016-01-01', 'date_achat');
+    	$this->type('1023', 'identifiant');
+    	$this->press('Créer');
+    	
+    	$this->seeInDatabase('voitures', ['modele' => 'Kia']);
     }
+    
+    /** @test */
+    public function le_validateur_de_Laravel_assure_que_le_modele_est_obligatoire()
+    {
+    	 
+    	//La première chose à tester est si on peut créer une voiture avec une view.
+    	$user = factory(App\User::class)->create();
+    	$this->actingAs($user);
+    	$this->visit('/voitures/create')
+    	->see('modele');
+    	 
+		//on ne fournit pas le modele. 
+    	$this->type('2016-01-01', 'date_achat');
+    	$this->type('1023', 'identifiant');
+    	$this->press('Créer');
+    	 
+    	$this->dontseeInDatabase('voitures', ['modele' => 'Kia']);
+    }
+   
     
     
 }
