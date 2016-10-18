@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use DatabaseTransactions;
 
 class BenevolesSportsTest extends TestCase
 {
@@ -20,5 +21,9 @@ class BenevolesSportsTest extends TestCase
     {
     	$benevolesSports = factory(App\Models\BenevolesSports::class)
     	->create();
+    	$this->seeInDatabase('benevoles_sports', [
+    			'benevole_id'=>$benevolesSports->benevole_id,
+    			'sport_id'=>$benevolesSports->sport_id,
+    	]);
     }
 }
