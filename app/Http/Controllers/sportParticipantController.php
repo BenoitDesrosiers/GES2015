@@ -37,4 +37,19 @@ class sportParticipantController extends BaseController{
 		}
 	}
 
+    public function listerParticipants()
+    {
+        $region_id = $_GET['region_id'];
+        if ( isset($region_id) )
+        {
+            $region = Region::find($region_id);
+            $participants = $region->participants->sortby('nom');
+            return $participants;
+        }
+        else
+        {
+            App::abort(404);
+        }
+    }
+
 }

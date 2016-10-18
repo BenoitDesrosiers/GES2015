@@ -17,6 +17,7 @@ use App\Http\Controllers\Auth\RegisterController;
 Route::get('/','HomeController@index');
 Route::get('/home','HomeController@index');
 Route::get('/about','AboutController@index');
+Route::get('/test', 'sportParticipantController@listerParticipants');
 
 Auth::routes();
 

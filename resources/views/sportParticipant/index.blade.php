@@ -1,49 +1,33 @@
 @extends('layout')
 @section('content')
-<div class="panel panel-default">
-	<div class="panel-heading">
-		<h2>Liste des participants {{$sport->nom}}</h2>						
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2>Liste des participants {{$sport->nom}}</h2>
+			@if ($regions->isEmpty())
+				<p>Il n'existe aucune région dans le système.</p>
+			@else
+				<div class="dropdown">
+					<button class="btn btn-default dropdown-toggle" type="button" id="boutonDropDown" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="true" name="dropdown">
+						Choisir une région
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						@foreach($regions as $region)
+							<li value="{{ $region->id }}"><a href="#">{{ $region->nom }}</a>
+						@endforeach
+					</ul>
+				</div>
+			@endif
+		</div>
+
+		<div id="listeParticipants">
+
+		</div>
 	</div>
-</div>
-@if ($regions->isEmpty())
-	<div class="panel-body">
-		<p>Aucune région</p>
-	</div>
-@else
-	<table class="table table-striped table-hover">
-		<tbody>
-	@foreach($regions as $region)
-		<tr>
-			<td colspan="3"><p> {{ $region->nom }}</p></td>
-		</tr>
-			<?php $flag = 0 ?>
-				@foreach($participants as $participant)
-					@if($participant->region_id == $region->id)
-						<?php $flag = 1 ?>
-						<tr> 
-							<td class="col-xs-1"> </td>
-							<td>
-								<p>{{ $participant->nom }}, {{ $participant->prenom }}</p> 
-							</td>
-						</tr>
-					@endif
-				@endforeach		
-				@if($flag == 0)
-					<tr>
-						<td  colspan="2"><p>aucun participant pour cette région</p></td>
-					</tr>
-				@endif
-	@endforeach	
-@endif
-		<tr>
-			<td><a href="{{ URL::previous() }}" class="btn btn-danger">Retour</a></td>
-		</tr>
-		</tbody>
-	</table>
-<script>
-		$(function () {
-			$('[data-toggle="tooltip"]').tooltip()
-		})
-	</script>
-</div>
+
+@stop
+
+@section('script')
+	<script src="{{ asset('js/testing.js') }}"></script>
 @stop
