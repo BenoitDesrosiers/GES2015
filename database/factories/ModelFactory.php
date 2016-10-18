@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Region;
+use App\Models\Terrain;
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -18,4 +21,20 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'password' => str_random(10),
         'remember_token' => str_random(10),
     ];
+});
+
+//Pour les tests 'TerrainsEpreuvesTest'
+$factory->define(App\Models\Epreuve::class, function (Faker\Generator $faker) {
+	return [
+			'nom' => 'Simple Masculin'
+	];
+});
+
+$factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
+	return [
+			'nom' => 'Simple Masculin',
+			'adresse'=> $faker->address,
+			'ville'=> $faker->city,
+			'region_id' => rand(0, 100)
+	];
 });
