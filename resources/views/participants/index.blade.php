@@ -6,9 +6,12 @@
 	<div class="panel-heading">
 		<h2>Liste des participants</h2>
 		<div class="row">
-			<div class="col-md-6" id="bouton-créer">
+			<div class="col-md-2" id="bouton-créer">
 				<a href="{{ action('ParticipantsController@create') }}" class="btn btn-info">Créer un participant</a>
 			</div> <!-- bouton créer -->
+			<div class="col-md-4" id="bouton-creer-batch">
+				<a href="{{ action('ParticipantsController@createFromCSV') }}" class="btn btn-info">Créer des participants</a>
+			</div>
 				{!! Form::open(['action'=> array('ParticipantsController@recherche'), 'method' => 'POST', 'class' => 'form']) !!}
 			<div class="col-md-2" id="liste-filtres">
 				{!! Form::select('listeFiltres', $listeFiltres, $valeurFiltre, ['style' => 'width:100%;', 'id' => 'listeFiltres']) !!}

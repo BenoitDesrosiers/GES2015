@@ -39,6 +39,16 @@ class ParticipantsController extends BaseController {
 		
 		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'listeRecherches', 'valeurFiltre', 'valeurRecherche' ) );
 	}
+
+	/**
+	 * Créée des participants à partir d'un fichier CSV
+	 *
+	 * @author ZeLarpMaster
+	 * @return Response
+	 */
+	public function createFromCSV() {
+		return View::make("participants.create-batch");
+	}
 	
 	/**
 	 * Affiche le formulaire de création d'un participant.

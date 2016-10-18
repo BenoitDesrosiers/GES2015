@@ -31,6 +31,8 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::get ( 'listeParticipant/{epreuveId}', 'EpreuvesController@listeParticipant' );
 	
 	Route::resource('epreuves','EpreuvesController');
+
+	Route::get('participants/create-batch', 'ParticipantsController@createFromCSV')->name("participants.create-batch");
 	Route::resource('participants','ParticipantsController');
 	Route::resource('resultats','ResultatsController');
 	Route::resource('systeme', 'SystemeController');
