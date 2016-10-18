@@ -12,7 +12,8 @@
 	
 			<div>
 				<?php  //TODO: séparer les participants par régions, ou encore mieux, avoir un filtre de région
-					foreach ($participants as $participant) {
+					echo ("<tr><th>&nbsp;</th><th>Nom</th><th>Région</th><th>Numéro</th></tr>");
+					foreach ($participants as $participant) {	
 						$checked = "";
 						//FIXME: se servir des fonctions de collections: $listeIds = $epreuveParticipants->pluck('id'); ....  if($listeIds->contains($participant->id))... 
 						foreach ($epreuveParticipants as $epreuvePart) {
@@ -22,9 +23,20 @@
 							}
 						}
 				?>
-				<div>			  
-			            <input type="checkbox" name="participants[{{$participant->id}}]" <?=$checked?>> {{$participant->nom}}, {{$participant->prenom}} <br/>
-			    </div>
+				<tr>
+					<td>
+			            <input type="checkbox" name="participants[{{$participant->id}}]" <?=$checked?>>
+					</td>
+					<td>
+						{{$participant->nom}}, {{$participant->prenom}}
+					</td>
+					<td>
+						{{$participant->region->nom}}
+					</td>
+					<td>
+						{{$participant->numero}}
+					</td>
+			    </tr>
 				<?php
 					}
 				?>
