@@ -1,15 +1,28 @@
-﻿@extends('layout') 
+﻿@extends('layout')
 @section('content')
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h2>ajouter participant {{$epreuve->nom}}</h2>
+		<h2>Ajouter un participant : {{$epreuve->nom}}</h2>
 	</div>
 	
 <table class="table table-striped table-hover">
 	<tbody>
-		
+
 		{!! Form::open(array('action' => array('EpreuvesController@storeParticipants', $epreuve->id))) !!}
-	
+		{!! Form::open(array('action' => array('EpreuvesController@ajtParticipants', $regions->id))) !!}
+
+			<!--    Méthode comme délégué create    -->
+			<?php
+			$regionArray = array();
+			for ($i=0; $i<count($regions); $i++) {
+				$regionArray[$regions[$i]['id']]  = $regions[$i]['nom'];
+			}
+			?>
+			<div class="form-group">
+				{!! Form::label('region_id', 'Région:') !!} <br/>
+				{!! Form::select('region_id', $regionArray) !!}
+				{{ $errors->first('region_id') }}
+			</div>
 			<div>
 				<?php  //TODO: séparer les participants par régions, ou encore mieux, avoir un filtre de région
 					foreach ($participants as $participant) {
@@ -35,6 +48,14 @@
 			<a href="{{ action('EpreuvesController@index') }}" class="btn btn-danger">Annuler</a>
 		</div>
 		{!! Form::close() !!}
+		{!! Form::close() !!}
 	</tbody>
 </table>
+<script>
+	function afficherListeRegions() {
+		$.ajax({
+
+		});
+	}
+</script>
 @stop

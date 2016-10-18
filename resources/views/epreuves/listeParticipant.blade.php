@@ -2,7 +2,7 @@
 @section('content')
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h2>Liste des participants {{$epreuve->nom}}</h2>						
+		<h2>Liste des participants {{$epreuve->nom}}</h2>
 	</div>
 </div>
 

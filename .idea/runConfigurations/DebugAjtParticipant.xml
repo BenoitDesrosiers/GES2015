@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DebugAjtParticipant" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" singleton="true" browser="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" server_name="localhost" start_url="C:\Users\Nicolas\Documents\Nico\Travaux\Web\GES2015\resources\views\epreuves\ajtParticipant.blade.php">
+    <method />
+  </configuration>
+</component>

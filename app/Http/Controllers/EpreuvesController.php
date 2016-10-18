@@ -67,6 +67,7 @@ class EpreuvesController extends BaseController {
 	 */
 	public function ajtParticipant($epreuveId) {
 		try{
+            $regions = Region::all();
 			$epreuve = Epreuve::findOrFail ( $epreuveId );
 			$sport = Sport::findOrFail( $epreuve->sport_id);
 			$participants = $sport->participants->sortBy('prenom');
@@ -74,7 +75,7 @@ class EpreuvesController extends BaseController {
 		} catch ( ModelNotFoundException $e ) {
 			App::abort ( 404 );
 		}
-		return View::make ( 'epreuves.ajtParticipant', compact ( 'epreuve', 'sport', 'participants', 'epreuveParticipants') );
+		return View::make ( 'epreuves.ajtParticipant', compact ( 'epreuve', 'sport', 'participants', 'epreuveParticipants', 'regions') );
 	}
 	
 	/**
@@ -83,6 +84,7 @@ class EpreuvesController extends BaseController {
 	public function storeParticipants($epreuveId) {	
 		$input = Input::all ();
 		try {
+
 			$epreuve = Epreuve::findOrFail($epreuveId);
 			$sportId = $epreuve->sport->id;
 			$sports = Sport::all();
@@ -328,6 +330,5 @@ class EpreuvesController extends BaseController {
 		}
 		return $arbitres;
 	}
-
 
 }
