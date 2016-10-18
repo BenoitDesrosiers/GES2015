@@ -7,6 +7,14 @@ class GonzoTest extends TestCase
 {
 
 	/**
+	 * Crée un utilisateur test pour les tests.
+	 */
+	public function creerUsagerMythique() {
+		$user = factory(App\User::class)->create();
+		$this->actingAs($user);
+	}
+
+	/**
 	 * Teste que la table 'telephones' existe dans la base de données.
 	 */
 	public function testTableTelephonesCreee() {
