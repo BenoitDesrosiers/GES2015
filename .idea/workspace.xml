@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="539345c8-ad0b-43d2-afbc-32b88032ead0" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/epreuves/ajtParticipant.blade.php" afterPath="$PROJECT_DIR$/resources/views/epreuves/ajtParticipant.blade.php" />
     </list>
     <ignored path="GES2015.iws" />
@@ -26,12 +27,11 @@
       <file leaf-file-name="ajtParticipant.blade.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/epreuves/ajtParticipant.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="27" column="38" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
+            <state relative-caret-position="751">
+              <caret line="31" column="29" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
               <folding>
                 <element signature="e#1029#1035#1#HTML" expanded="true" />
-                <marker date="1477407222421" expanded="true" signature="2432:2457" ph="..." />
-                <marker date="1477407222421" expanded="true" signature="2620:2654" ph="..." />
+                <marker date="1477409355012" expanded="true" signature="2950:2984" ph="..." />
               </folding>
             </state>
           </provider>
@@ -335,19 +335,19 @@
       <option name="presentableId" value="Default" />
       <updated>1476794745915</updated>
       <workItem from="1476794749182" duration="10226000" />
-      <workItem from="1477397214734" duration="9190000" />
+      <workItem from="1477397214734" duration="11340000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19416000" />
+    <option name="totallyTimeSpent" value="21566000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2869" y="-11" width="2182" height="1312" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22222222" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16805555" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -398,8 +398,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1029#1035#1#HTML" expanded="true" />
-            <marker date="1477407222421" expanded="true" signature="2432:2457" ph="..." />
-            <marker date="1477407222421" expanded="true" signature="2620:2654" ph="..." />
+            <marker date="1477409355012" expanded="true" signature="2950:2984" ph="..." />
           </folding>
         </state>
       </provider>
@@ -572,12 +571,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/epreuves/ajtParticipant.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="27" column="38" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
+        <state relative-caret-position="751">
+          <caret line="31" column="29" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
           <folding>
             <element signature="e#1029#1035#1#HTML" expanded="true" />
-            <marker date="1477407222421" expanded="true" signature="2432:2457" ph="..." />
-            <marker date="1477407222421" expanded="true" signature="2620:2654" ph="..." />
+            <marker date="1477409355012" expanded="true" signature="2950:2984" ph="..." />
           </folding>
         </state>
       </provider>

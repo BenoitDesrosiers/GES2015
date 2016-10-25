@@ -30,25 +30,33 @@
                             <th>Participant</th>
                             <th>Région</th>
                         </tr>
-                    </table>
                 </div>
                 <!-- Fin de mon code ici -->
                 <div>
                     <!-- TODO: séparer les participants par régions, ou encore mieux, avoir un filtre de région -->
                         <!-- Début modification syntaxe ici (pour blade) -->
-                        @foreach ($participants as $participant)
-                            <?php $checked = " "; ?>
-                            <!-- FIXME: se servir des fonctions de collections: $listeIds = $epreuveParticipants->pluck('id'); ....  if($listeIds->contains($participant->id))... -->
-                            @foreach ($epreuveParticipants as $epreuvePart)
-                                @if ($epreuvePart->id == $participant->id)
-                                    <?php $checked = " checked"; ?>
-                                @endif
+                        <tr>
+                            @foreach ($participants as $participant)
+                                <?php $checked = " "; ?>
+                                <!-- FIXME: se servir des fonctions de collections: $listeIds = $epreuveParticipants->pluck('id'); ....  if($listeIds->contains($participant->id))... -->
+                                @foreach ($epreuveParticipants as $epreuvePart)
+                                    @if ($epreuvePart->id == $participant->id)
+                                        <?php $checked = " checked"; ?>
+                                    @endif
+                                @endforeach
+                            <?php $region = $participant->region; ?>
+                        </tr>
+                            <div>
+                                <th>
+                                    <input type="checkbox" name="participants[{{$participant->id}}]" <?=$checked?>>
+                                </th>
+                                <th>{{$participant->id}}</th>
+                                <th>{{$participant->nom}}, {{$participant->prenom}}</th>
+                                <th>{{$region->nom}}</th>
+                                <br/>
+                            </div>
                             @endforeach
-                        <?php $region = $participant->region; ?>
-                    <div>
-                        <input type="checkbox" name="participants[{{$participant->id}}]" <?=$checked?>> {{$participant->id}} {{$participant->nom}}, {{$participant->prenom}} {{$region->nom}} <br/> <!-- Ajout d'infos ici -->
-                    </div>
-                        @endforeach
+                    </table>
                 </div>
                 <!-- Fin modification syntaxe ici (pour blade) -->
             <div class="form-group">
