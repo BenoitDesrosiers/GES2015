@@ -62,12 +62,14 @@
 			{!! Form::text('adresse',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('adresse') }}
 		</div>
-		<div class="form-group">
-			{!! Form::label('telephone', 'Téléphone:') !!} 
+		<div class="form-group telephone">
+			{!! Form::label('telephone', 'Téléphone:') !!}
 			{!! Form::text('telephone',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('telephone') }}
 		</div>
+			<button type ="button" id='add1'>Add</button>
 		<div class="form-group">
+			{!! Form::button('+', ['type' => 'button']) !!}
 			{!! Form::label('courriel', 'Courriel:') !!} 
 			{!! Form::text('courriel',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('courriel') }}
@@ -92,4 +94,21 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+@stop
+@section('script')
+<script>
+	$(document).ready(function() {
+		var removeButton = "<button type = 'button' onclick='remove(this)' class='remove'>Remove</button>";
+		$('#add1').click(function() {
+			$('div.telephone:last').after($('div.telephone:first').clone());
+			$('div.telephone:last').append(removeButton);
+
+		});
+	});
+
+	function remove(element) {
+		$(element).closest('div.telephone').remove();
+	}
+
+</script>
 @stop

@@ -64,61 +64,61 @@ class DeleguesController extends BaseController {
 
 	/**
 	 * Enregistre dans la bd la ressource qui vient d'être créée.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{ //FIXME:: identique à update
-		try {
-			$input = Input::all();
-			$delegue = new Delegue;
-			$delegue->nom = $input['nom'];
-			$delegue->prenom = $input['prenom'];
+*
+* @return Response
+*/
+    public function store()
+    { //FIXME:: identique à update
+        try {
+            $input = Input::all();
+            $delegue = new Delegue;
+            $delegue->nom = $input['nom'];
+            $delegue->prenom = $input['prenom'];
             $delegue->region_id = $input['region_id'];
-			$roles = Input::get('role');
-			
-			//      Le champ 'accreditation' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement.
+            $roles = Input::get('role');
+
+            //      Le champ 'accreditation' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement.
             if(Input::has('accreditation')) {
                 $delegue->accreditation = true;
             } else {
                 $delegue->accreditation = false;
             }
-			$delegue->sexe = $input['sexe'];
-			
-			//      Création de la date de naissance à partir des valeurs des trois comboboxes
-			$anneeNaissance = $input['annee_naissance']-1;
-			$moisNaissance = $input['mois_naissance']-1;
-			$jourNaissance = $input['jour_naissance']-1;
-			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
-				$dateTest = new DateTime;
-				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
-				$delegue->date_naissance=$dateTest;
-			} else {
-				$delegue->date_naissance = "invalide";
-			}
-			$delegue->adresse = $input['adresse'];
-			$delegue->telephone = $input['telephone'];
-			$delegue->courriel = $input['courriel'];
+            $delegue->sexe = $input['sexe'];
 
-			if($delegue->save()) {
-				//		Associer les rôles au délégué.
-				if ($roles) {
-					if (is_array($roles)) {
-						$delegue->roles()->sync($roles);
-					} else {
-						$delegue->roles()->sync([$roles]);
-					}
-				} else {
-					$delegue->roles()->detach();
-				}
-				return Redirect::action('DeleguesController@index');
-			} else {
-				return Redirect::back()->withInput()->withErrors($delegue->validationMessages());
-			}
-		} catch(ModelNotFoundException $e) {
-			App::abort(404);
-		}
-	}
+            //      Création de la date de naissance à partir des valeurs des trois comboboxes
+            $anneeNaissance = $input['annee_naissance']-1;
+            $moisNaissance = $input['mois_naissance']-1;
+            $jourNaissance = $input['jour_naissance']-1;
+            if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
+                $dateTest = new DateTime;
+                $dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
+                $delegue->date_naissance=$dateTest;
+            } else {
+                $delegue->date_naissance = "invalide";
+            }
+            $delegue->adresse = $input['adresse'];
+            $delegue->telephone = $input['telephone'];
+            $delegue->courriel = $input['courriel'];
+
+            if($delegue->save()) {
+                //		Associer les rôles au délégué.
+                if ($roles) {
+                    if (is_array($roles)) {
+                        $delegue->roles()->sync($roles);
+                    } else {
+                        $delegue->roles()->sync([$roles]);
+                    }
+                } else {
+                    $delegue->roles()->detach();
+                }
+                return Redirect::action('DeleguesController@index');
+            } else {
+                return Redirect::back()->withInput()->withErrors($delegue->validationMessages());
+            }
+        } catch(ModelNotFoundException $e) {
+            App::abort(404);
+        }
+    }
 
 
 	/**
