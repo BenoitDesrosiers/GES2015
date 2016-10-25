@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use View;
 use Redirect;
 use Input;
@@ -46,8 +48,22 @@ class ParticipantsController extends BaseController {
 	 * @author ZeLarpMaster
 	 * @return Response
 	 */
-	public function createFromCSV() {
-		return View::make("participants.create-batch");
+	public function createFromCSV(Request $request) {
+		$donnees = array();
+
+		$entete = array("Nom" => true, "Prénom" => true, "Numéro Téléphone" => false, "Nom Parent" => false, "Numéro" => true, "Genre" => true, "Date Naissance" => true, "Adresse" => false, "Région" => false, "Sports" => false);
+
+		$fichierCsv = $request->input("fichier-csv", null);
+		if (is_null($fichierCsv) || !$fichierCsv->isValid()) {
+			$donneesCsv = null;
+		} else {
+			$donneesCsv = ParticipantsController::transformerFichierCsv($fichierCsv);
+		}
+
+		$donnees["entetes"] = $entete;
+		$donnees["rangees"] = $donneesCsv;
+
+		return View::make("participants.create-batch", $donnees);
 	}
 	
 	/**
@@ -297,7 +313,21 @@ class ParticipantsController extends BaseController {
 		
 		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'listeRecherches', 'valeurFiltre', 'valeurRecherche' ) );
 	}
-	
+
+	/**
+	 * Transforme un fichier CSV en array
+	 *
+	 * @param UploadedFile $fichierCsv
+	 * 			Fichier CSV à transformer.
+	 * @return Array $resultat. Tableau des valeurs du $fichierCsv
+	 */
+	private function transformerFichierCsv($fichierCsv) {
+		$contenuBrut = file_get_contents($fichierCsv->getRealPath());
+		$contenuTableau = str_getcsv($contenuBrut);
+		$resultat = $contenuTableau;
+		return $resultat;
+	}
+
 	/**
 	 * Trie une collection.
 	 *
