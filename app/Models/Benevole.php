@@ -12,6 +12,14 @@ namespace App\Models;
 class Benevole extends EloquentValidating {
 	protected $guarded = array('id');
 
+	/**
+	 * Eloquent relationship: un bénévole appartient à plusieurs terrains
+	 */
+	public function terrains() {
+		return $this->belongsToMany('App\Models\Terrain', 'benevole_terrain', 'benevole_id', 'terrain_id');
+	}
+	
+	
     public function disponibilites() {
 	    return $this->hasMany('App\Models\Disponibilite');
     }
