@@ -17,7 +17,7 @@ class Benevole extends EloquentValidating {
 	}
 	
 	/**
-	 * Eloquent relationship: Un bénévole peut avoir entre 0 et plusieurs sports.
+	 * Eloquent relationship: Un bénévole peut avoir de 0 à plusieurs sports.
 	 *
 	 * @return Sport[]
 	 */
