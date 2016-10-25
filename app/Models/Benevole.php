@@ -15,6 +15,15 @@ class Benevole extends EloquentValidating {
 	public function disponibilites() {
 		return $this->hasMany('App\Models\Disponibilite');
 	}
+	
+	/**
+	 * Eloquent relationship: Un bénévole peut avoir entre 0 et plusieurs sports.
+	 *
+	 * @return Sport[]
+	 */
+	public function sports() {
+		return $this->belongsToMany('App\Models\Sport', 'benevoles_sports', 'benevole_id', 'sport_id');
+	}
 
 	/**
 	 * Validation
@@ -38,12 +47,4 @@ class Benevole extends EloquentValidating {
 		];
 	}
 	
-	/**
-	* Eloquent relationship: Un bénévole peut avoir entre 0 et plusieurs sports.
-	*
-	* @return Sport[]
-	*/
-	public function sports() {
-		return $this->belongsToMany('App\Models\Sport', 'benevoles_sports', 'benevole_id', 'sport_id');
-	}
 }
