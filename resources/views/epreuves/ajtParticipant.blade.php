@@ -9,9 +9,9 @@
 	<tbody>
 
 		{!! Form::open(array('action' => array('EpreuvesController@storeParticipants', $epreuve->id))) !!}
-		{!! Form::open(array('action' => array('EpreuvesController@ajtParticipants', $regions->id))) !!}
 
-			<!--    Méthode comme délégué create    -->
+			<!--    Méthode comme délégué create
+                    Début mon code ici              -->
 			<?php
 			$regionArray = array();
 			for ($i=0; $i<count($regions); $i++) {
@@ -23,6 +23,7 @@
 				{!! Form::select('region_id', $regionArray) !!}
 				{{ $errors->first('region_id') }}
 			</div>
+            <!-- Fin de mon code ici -->
 			<div>
 				<?php  //TODO: séparer les participants par régions, ou encore mieux, avoir un filtre de région
 					foreach ($participants as $participant) {
