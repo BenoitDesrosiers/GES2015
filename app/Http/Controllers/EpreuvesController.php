@@ -69,7 +69,7 @@ class EpreuvesController extends BaseController {
 		try{
 			$epreuve = Epreuve::findOrFail ( $epreuveId );
 			$sport = Sport::findOrFail( $epreuve->sport_id);
-			$participants = $sport->participants->sortBy('prenom');
+			$participants = $sport->participants->sortBy('region');
 			$epreuveParticipants = $epreuve::find($epreuveId)->participants;
 		} catch ( ModelNotFoundException $e ) {
 			App::abort ( 404 );
