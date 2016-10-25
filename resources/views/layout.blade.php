@@ -26,6 +26,7 @@
           			<li<?php if ($route == "") { ?> class="active"<?php } ?>><a href="{{ action('HomeController@index') }}">Accueil</a></li>
          			<li<?php if ($route == "sports") { ?> class="active"<?php } ?>><a href="{{ action('SportsController@index') }}">Sports</a></li>
           			<li<?php if ($route == "epreuves") { ?> class="active"<?php } ?>><a href="{{ action('EpreuvesController@index') }}">Épreuves</a></li>
+          			<li<?php if ($route == "organismes") { ?> class="active"<?php } ?>><a href="{{ action('OrganismesController@index') }}">Organismes</a></li>
           			<li<?php if ($route == "participants") { ?> class="active"<?php } ?>><a href="{{ action('ParticipantsController@index') }}">Participants</a></li>
           			<li<?php if ($route == "equipes") { ?> class="active"<?php } ?>><a href="{{ action('EquipesController@index') }}">Équipes</a></li>
          			<li<?php if ($route == "systeme") { ?> class="active"<?php } ?>><a href="{{ action('SystemeController@index') }}">Système</a></li>
