@@ -14,7 +14,7 @@
 			{!! Form::select('sportsListe', $sportsListe, $sportId, array('id' => 'sportsListe')) !!}
 		</div> <!-- liste-sports -->
 		<div class="form-group">
-			{!! Form::label('nom', 'Nom:') !!} 
+			{!! Form::label('nom', '*Nom:') !!}
 			{!! Form::text('nom',$epreuve->nom, ['class' => 'form-control']) !!}
 			{{ $errors->first('nom') }}
 		</div>
