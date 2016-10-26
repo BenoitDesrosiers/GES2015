@@ -228,6 +228,7 @@ class EpreuvesController extends BaseController {
 		}
 		$epreuve->sport_id = $sport->id;
 		if($epreuve->save()) {
+            
 			$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 			//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
             if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
@@ -317,12 +318,49 @@ class EpreuvesController extends BaseController {
 		}
 		return $retour;
 	}
-	
+
 	/**
-	 * filtre les arbitres pour retirer ceux déjà attribués à une épreuve.
-	 * @param array $arbitres
-	 * @param array $arbitresEpreuves
+     * Crée une liste avec les participants non valide.
+     *
+     * @param Epreuve $epreuve
+	 *
+     * @return array
 	 */
+	protected function participant_non_valide($epreuve){
+        $participantsInvalide = [];
+	    $participants = $epreuve->participants;
+        foreach ($participants as $participant){
+            if($participant->sexe != ($epreuve->genre == 'feminin')){
+                array_push($participantsInvalide,$participant);
+            }
+        }
+
+        return $participantsInvalide;
+
+    }
+
+    /**
+     * Filtre les participants pour retirer ceux n'ayant pas le bon genre.
+     * @param Epreuve $epreuve
+     *
+     * @return array
+     */
+    protected function filtrer_participants($epreuve){
+        $participantsNonValide = $this->participant_non_valide($epreuve);
+        $participants = $epreuve->participants;
+
+        $listeFiltrer = array_diff($participants, $participantsNonValide);
+
+        return $listeFiltrer;
+    }
+
+    /**
+     * filtre les arbitres pour retirer ceux déjà attribués à une épreuve.
+     * @param array $arbitres
+     * @param array $arbitresEpreuves
+     *
+     * @return array
+     */
 	protected function filtrer_arbitres($arbitres, $arbitresEpreuves){
 		if ($arbitresEpreuves){
 			foreach ($arbitres as $index => $arbitre){
