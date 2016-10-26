@@ -69,8 +69,13 @@ class EpreuvesController extends BaseController {
 		try{
 			$epreuve = Epreuve::findOrFail ( $epreuveId );
 			$sport = Sport::findOrFail( $epreuve->sport_id);
-			$participants = $sport->participants->sortBy('prenom');
-			$epreuveParticipants = $epreuve::find($epreuveId)->participants;
+            if($epreuve->genre == 'mixte'){
+                $participants = $sport->participants->sortBy('prenom');
+            }else{
+                $genreRequis = ($epreuve->genre == 'feminin');
+                $participants = $sport->participants->where('sexe',$genreRequis)->sortBy('prenom');
+            }
+			$epreuveParticipants = ($epreuve::find($epreuveId)->participants);
 		} catch ( ModelNotFoundException $e ) {
 			App::abort ( 404 );
 		}
@@ -97,8 +102,8 @@ class EpreuvesController extends BaseController {
 		}
 
 		if ($epreuve->save ()) {
-			if (is_array ( Input::get ( 'participants' ) )) { //FIXME: si participants n'existe pas, $epreuve est déjà sauvegardée, et ca va planter. 
-				$epreuve->participants()->sync ( array_keys ( Input::get ( 'participants' )));
+			if (is_array ( Input::get ( 'participants' ) )) { //FIXME: si participants n'existe pas, $epreuve est déjà sauvegardée, et ca va planter.
+                $epreuve->participants()->sync ( array_keys ( Input::get ( 'participants' )));
 			} else {
 				$epreuve->participants()->detach();
 			}
