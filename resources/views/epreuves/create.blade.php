@@ -19,6 +19,20 @@
 			{{ $errors->first('nom') }}
 		</div>
 		<div class="form-group">
+			{!! Form::label('genre', '*Genre:') !!}
+			<br/>
+			{!! Form::radio('genre', 'mixte', true) !!}
+			{!! Form::label('mixte', 'Mixte') !!}
+			<br/>
+			{!! Form::radio('genre', 'masculin') !!}
+			{!! Form::label('masculin', 'Masculin') !!}
+			<br/>
+			{!! Form::radio('genre', 'feminin') !!}
+			{!! Form::label('feminin', 'Feminin') !!}
+			<br/>
+			{{ $errors->first('genre') }}
+		</div>
+		<div class="form-group">
 			{!! Form::label('description', 'Description courte:') !!} 
 			{!! Form::text('description',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('description') }}				

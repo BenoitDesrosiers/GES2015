@@ -42,22 +42,25 @@ public function participants() {
 public function arbitres() {
 	return $this->belongsToMany('App\Models\Arbitre');
 }
-	
+
 /**
  * Validation
  *
  * une épreuve doit avoir:
  *  - nom: obligatoire, et unique pour un sport donné, mais je n'ai pas trouvé comment exprimer ca avec les règles de Laravel
+ *  - genre: obligatoire, et la valeur donné doit être parmis les valeurs suivante: ['masculin', 'feminin', 'mixte']
  *  - Les autres champs sont falcultatifs.
  */
 
 public $validationMessages;
 
 public function validationRules() {
-	return [
+    return [
 		'nom' => 'required',
+        'genre' => 'in:masculin,feminin,mixte',
 		];
 }
+
 
 
 }

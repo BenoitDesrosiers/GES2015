@@ -177,6 +177,7 @@ class EpreuvesController extends BaseController {
 		}
 		$epreuve = new Epreuve;
 		$epreuve->nom = $input['nom'];
+        $epreuve->genre = $input['genre'];
 		$epreuve->description = $input['description'];
 		$epreuve->sport_id = $sport->id; 
 		if($epreuve->save()) {
@@ -213,6 +214,7 @@ class EpreuvesController extends BaseController {
 			App::abort ( 404 );
 		}
 		$epreuve->nom = $input ['nom'];
+        $epreuve->genre = $input ['genre'];
 		$epreuve->description = $input ['description'];
 		try {
 			$sport = Sport::findOrFail ( $input ["sportsListe"] );
