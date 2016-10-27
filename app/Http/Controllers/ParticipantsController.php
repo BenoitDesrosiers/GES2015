@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Collection;
  * Le controller pour les participants
  *
  * @author BinarMorker, Res260 (A2016)
- * @version 161026
+ * @version 161027
  */
 class ParticipantsController extends BaseController {
 	

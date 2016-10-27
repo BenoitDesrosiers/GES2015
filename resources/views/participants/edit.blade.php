@@ -1,3 +1,10 @@
+{{-----------------------------------------------------------------
+| edit.blade.php
+| Description: Vue d'édition d'un participant.
+| Créé le: Avant automne 2016
+| Modifié le: 161027
+| Par: (Auteur précédent inconnu), Res260
+-----------------------------------------------------------------}}
 @extends('layout')
 @section('content')
 <div class="panel panel-default">
@@ -27,11 +34,6 @@
 			{!! Form::text('prenom',$participant->prenom, ['class' => 'form-control']) !!}
 			{{ $errors->first('prenom') }}
 		</div>
-        <div class="form-group">
-            {!! Form::label('telephone', 'Numéro de téléphone:') !!} 
-            {!! Form::text('telephone',$participant->telephone, ['class' => 'form-control']) !!}
-            {{ $errors->first('telephone') }}
-        </div>
         <div class="form-group">
             {!! Form::label('nom_parent', 'Nom d\'un parent:') !!} 
             {!! Form::text('nom_parent',$participant->nom_parent, ['class' => 'form-control']) !!}
@@ -65,20 +67,12 @@
             {!! Form::select('jour_naissance',$listeJours, $jourDefaut, ['style' => 'width:3em!important;']) !!}
             {{ $errors->first('naissance') }}
         </div>
-        <div class="form-group">
-            {!! Form::label('adresse', 'Adresse:') !!} 
-            {!! Form::text('adresse',$participant->adresse, ['class' => 'form-control']) !!}
-            {{ $errors->first('adresse') }}
-        </div>
-		<?php
-			$regionArray = array();
-			for ($i=0; $i<count($regions); $i++) {
-				$regionArray[$regions[$i]['id']] = $regions[$i]['nom'];
-			}
-		?>
 		<div class="form-group">
-			{!! Form::label('region_id', '*Région:') !!} <br/>
-			{!! Form::select('region_id', $regionArray, $participant->region_id) !!}
+			<select name="region_id" id="region_id">
+				@foreach ($regions as $region)
+					<option value="{{ $region->id }}">{{$region->nom}}</option>
+				@endforeach
+			</select>
 			{{ $errors->first('region_id') }}
 		</div>
 		<div class="form-group">

@@ -2,7 +2,7 @@
 | show.blade.php
 | Description: Fichier d'affichage d'un participant
 | Créé le: Avant automne 2016
-| Modifié le: 161026
+| Modifié le: 161027
 | Par: (Auteur précédent inconnu), Res260 (A2016)
 -----------------------------------------------------------------}}
 @extends('layout')
@@ -45,7 +45,7 @@
 						</li>
 					@endforeach
 				@else
-					<li>Le participant n'a pas de téléphone</li>
+					<li>Le/la participant(e) n'a pas de téléphone.</li>
 				@endif
 			</ul>
 	<!-- 	Afficher les équipes dont le participant est membre	 -->
@@ -74,7 +74,7 @@
 					@endforeach
 				</ul>
 			@endif
-			<?php //TODO: afficher les épreuves auxquels est inscrit ce participants. ?>
+			{{-- //TODO: afficher les épreuves auxquels est inscrit ce participants. --}}
 		</div>
 	</div>
 @endsection

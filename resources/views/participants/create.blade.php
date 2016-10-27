@@ -1,8 +1,8 @@
 {{-----------------------------------------------------------------
 | create.blade.php
 | Description: Vue de création d'un participant.
-| Créé le: 161025
-| Modifié le: 161026
+| Créé le: Avant automne 2016
+| Modifié le: 161027
 | Par: (Auteur précédent inconnu), Res260 (A2016)
 -----------------------------------------------------------------}}
 @extends('layout')
