@@ -33,10 +33,10 @@
 			{!! Form::radio('genre', 'mixte', $epreuve->genre == "mixte") !!}
 			{!! Form::label('mixte', 'Mixte') !!}
 			<br/>
-			{!! Form::radio('genre', 'masculin', $epreuve->genre == "masculin", ['class' => 'radio_click']) !!}
+			{!! Form::radio('genre', 'masculin', $epreuve->genre == "masculin", ['class' => 'radio_click', 'onclick' => 'confirmationPopup()']) !!}
 			{!! Form::label('masculin', 'Masculin') !!}
 			<br/>
-			{!! Form::radio('genre', 'feminin', $epreuve->genre == "feminin", ['class' => 'radio_click']) !!}
+			{!! Form::radio('genre', 'feminin', $epreuve->genre == "feminin", ['class' => 'radio_click', 'onclick' => 'confirmationPopup()']) !!}
 			{!! Form::label('feminin', 'Feminin') !!}
 			<br/>
 			{{ $errors->first('genre') }}
@@ -79,15 +79,22 @@
 		</div>
 		<div class="form-group">
 
-			{!! Form::button('Sauvegarder', ['name' => 'save', 'type' => 'submit', 'class' => 'btn btn-primary', 'onclick' => 'confirmationPopup()']) !!}
+			{!! Form::button('Sauvegarder', ['name' => 'save', 'type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
 			<script>
 				function confirmationPopup() {
-					var r = confirm("Press a button! " + "");
-					if (r != true) {
-						old()
-					}
-					return r;
+					//bootbox.alert("Attention changer de genre va supprimer tout les \n" +
+					//				"participants avec un genre incompatible seront supprimer.")
+					//}
+					bootbox.alert({
+						title: "Attention".fontsize(8),
+						message: "En changeant le genre tous, les participants incompatibles seront retirés de l'épreuve.".fontsize(4),
+						size: 'Large',
+						backdrop: true,
+						closeButton: false,
+						onEscape: true
+					});
+
 				}
 			</script>
 		</div>
