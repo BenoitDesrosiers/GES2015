@@ -7,6 +7,7 @@
 -----------------------------------------------------------------}}
 @extends('layout')
 @section('content')
+<link rel="stylesheet" href="{!! asset('/css/participants/create.css') !!}">
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Création d'un participant</h2>
@@ -69,21 +70,16 @@
             {!! Form::text('adresse','', ['class' => 'form-control']) !!}
             {{ $errors->first('adresse') }}
         </div>
+        <div id="conteneur-telephones">
+            <div class="form-group conteneur-telephone">
+                {!! Form::label('telephone-numero-1', 'Numéro de téléphone:') !!}
+                {!! Form::text('telephone_numero[]','', ['id' => 'telephone-numero-1', 'class' => 'form-control']) !!}
 
-        <div class="form-group">
-            {!! Form::label('telephone_numero[]', 'Numéro de téléphone:') !!}
-            {!! Form::text('telephone_numero[]','', ['class' => 'form-control']) !!}
-
-            {!! Form::label('telephone_description[]', 'Description du téléphone:') !!}
-            {!! Form::text('telephone_description[]','', ['class' => 'form-control']) !!}
+                {!! Form::label('telephone-description-1', 'Description du téléphone:') !!}
+                {!! Form::text('telephone_description[]','', ['id' => 'telephone-description-1', 'class' => 'form-control']) !!}
+            </div>
         </div>
-        <div class="form-group">
-            {!! Form::label('telephone_numero[]', 'Numéro de téléphone:') !!}
-            {!! Form::text('telephone_numero[]','', ['class' => 'form-control']) !!}
-
-            {!! Form::label('telephone_description[]', 'Description du téléphone:') !!}
-            {!! Form::text('telephone_description[]','', ['class' => 'form-control']) !!}
-        </div>
+        <button onclick="ajouterTelephone()" id="bouton-ajouter-telephone" disabled class="btn-success" type="button">Ajouter un téléphone</button>
 
         <div class="form-group">
             <select name="region_id" id="region_id">
@@ -116,4 +112,5 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+<script src="{!! asset('/js/participants/gerer-infos-contact.js') !!}"></script>
 @stop

@@ -1,0 +1,38 @@
+/*******************************************************************************
+Fichier: create.css
+Description: Fichier de style pour la page d'ajout d'un participant.
+Créé le: 161027
+Modifié le: 161027
+Par: Res260
+*******************************************************************************/
+
+.conteneur-telephone {
+    border-radius:5px;
+    border: 1px solid #777;
+    padding: 5px;
+}
+
+.conteneur-telephone .btn-danger {
+    border:2px solid #DD0000;
+}
+
+.btn-danger, .btn-success{
+    border-radius:5px;
+    margin-top: 4px;
+}
+
+.btn-success {
+    border:2px solid #00DD00;
+    margin-bottom: 4px;
+}
+
+.btn-success[disabled] {
+    background: #005500;
+    color: #777;
+    cursor:not-allowed;
+}
+
+.btn-success[disabled]:hover {
+    background: #005500;
+    color: #777;
+}

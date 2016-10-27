@@ -74,13 +74,13 @@ class ParticipantsController extends BaseController {
         try {
             $input = Input::all();
 			$participant = $this->construireParticipant($input);
-			$telephones = $this->construireListeTelephones($input);
 
 			// TODO: Formatter champs téléphones.
             if(!$participant->save()) {
 				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 			}
 
+			$telephones = $this->construireListeTelephones($input);
 			//Sauvegarde tous les téléphones. Si erreur, annule tout.
 			foreach($telephones as $telephone) {
 				# sauvegarderTelephone() retourne true s'il n'y a pas
@@ -89,7 +89,6 @@ class ParticipantsController extends BaseController {
 					return Redirect::back()->withInput()->withErrors($telephone->validationMessages());
 				}
 			}
-
 
 			if (is_array(Input::get('sport'))) {  //FIXME: si le get plante, le save est déjà fait.
 				$participant->sports()->sync(array_keys(Input::get('sport')));
