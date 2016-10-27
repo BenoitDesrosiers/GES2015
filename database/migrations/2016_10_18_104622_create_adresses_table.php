@@ -16,10 +16,10 @@ class CreateAdressesTable extends Migration
 	{
 		Schema::create('Adresses', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('Adresse');
-			$table->string('Description')->nullable();
-			$table->unsignedInteger('ParticipantId');
-			$table->foreign('ParticipantId')
+			$table->string('adresse');
+			$table->string('description')->nullable();
+			$table->unsignedInteger('participant_Id');
+			$table->foreign('participant_Id')
 				->references('id')
 				->on('participants')
 				->onDelete('cascade')

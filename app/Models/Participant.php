@@ -47,6 +47,13 @@ class Participant extends EloquentValidating {
 	}
 
 	/**
+	 * Un participant a plusieurs téléphones.
+	 */
+	public function telephones() {
+		return $this->hasMany(Telephone::class);
+	}
+
+	/**
 	* Identifie les colonnes qui peuvent être modifiées
 	*/
 	protected $fillable = [

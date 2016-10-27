@@ -1,3 +1,10 @@
+{{-----------------------------------------------------------------
+| create.blade.php
+| Description: Vue de création d'un participant.
+| Créé le: 161025
+| Modifié le: 161026
+| Par: (Auteur précédent inconnu), Res260 (A2016)
+-----------------------------------------------------------------}}
 @extends('layout')
 @section('content')
 <div class="panel panel-default">
@@ -25,11 +32,6 @@
             {!! Form::label('prenom', '*Prenom:') !!} 
             {!! Form::text('prenom', '', ['class' => 'form-control']) !!}
             {{ $errors->first('prenom') }}
-        </div>
-        <div class="form-group">
-            {!! Form::label('telephone', 'Numéro de téléphone:') !!} 
-            {!! Form::text('telephone','', ['class' => 'form-control']) !!}
-            {{ $errors->first('telephone') }}
         </div>
         <div class="form-group">
             {!! Form::label('nom_parent', 'Nom d\'un parent:') !!} 
@@ -67,15 +69,20 @@
             {!! Form::text('adresse','', ['class' => 'form-control']) !!}
             {{ $errors->first('adresse') }}
         </div>
-        <?php
-            $regionArray = array();
-            for ($i=0; $i<count($regions); $i++) {
-                $regionArray[$i+1] = $regions[$i]['nom'];
-            }
-        ?>
         <div class="form-group">
-            {!! Form::label('region_id', 'Région:') !!} <br/>
-            {!! Form::select('region_id', $regionArray) !!}
+            {!! Form::label('telephone_numero', 'Numéro de téléphone:') !!}
+            {!! Form::text('telephone_numero','', ['class' => 'form-control']) !!}
+
+            {!! Form::label('telephone_description', 'Description du téléphone:') !!}
+            {!! Form::text('telephone_description','', ['class' => 'form-control']) !!}
+        </div>
+
+        <div class="form-group">
+            <select name="region_id" id="region_id">
+                @foreach ($regions as $region)
+                    <option value="{{ $region->id }}">{{$region->nom}}</option>
+                @endforeach
+            </select>
             {{ $errors->first('region_id') }}
         </div>
 		<div class="form-group">

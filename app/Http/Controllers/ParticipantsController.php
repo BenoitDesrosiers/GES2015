@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Telephone;
+use DB;
+use phpDocumentor\Reflection\Types\Boolean;
 use View;
 use Redirect;
 use Input;
@@ -17,8 +20,8 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * Le controller pour les participants
  *
- * @author BinarMorker
- * @version 0.0.1 rev 1
+ * @author BinarMorker, Res260 (A2016)
+ * @version 161026
  */
 class ParticipantsController extends BaseController {
 	
@@ -64,48 +67,36 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Enregistre dans la bd le participant qui vient d'être créé.
 	 *
-	 * @return Response
+	 * @return
 	 */
 	public function store()
 	{
         try {
             $input = Input::all();
-            $participant = new Participant;
-            $participant->equipe = false;
-            $participant->nom = $input['nom'];
-            $participant->prenom = $input['prenom'];
-            $participant->telephone = $input['telephone'];
-            $participant->nom_parent = $input['nom_parent'];
-            $participant->numero = $input['numero'];
-            $participant->sexe = $input['sexe'];
-            $participant->adresse = $input['adresse'];
-            $participant->region_id = $input['region_id'];
-
-    //      Création de la date de naissance à partir des valeurs des trois comboboxes
-			$anneeNaissance = $input['annee_naissance']-1;
-			$moisNaissance = $input['mois_naissance']-1;
-			$jourNaissance = $input['jour_naissance']-1;
-			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
-				$dateTest = new DateTime;
-				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
-				$participant->naissance=$dateTest;
-			} else {
-				$participant->naissance = "invalide";
+			$participant = $this->construireParticipant($input);
+			$telephone = $this->construireTelephone($input);
+            if(!$participant->save()) {
+				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 			}
 
-            if($participant->save()) {
-                if (is_array(Input::get('sport'))) {  //FIXME: si le get plante, le save est déjà fait. 
-                    $participant->sports()->sync(array_keys(Input::get('sport')));
-                } else {
-                    $participant->sports()->detach();
-                }
-    //          Message de confirmation si la sauvegarde a réussi
-                return Redirect::action('ParticipantsController@create')->with ( 'status', 'Le partipant a été créé!' );
-            } else {
-                return Redirect::back()->withInput()->withErrors($participant->validationMessages());
-            }
+			# sauvegarderTelephone() retourne true s'il n'y a pas
+			# de téléphone ou si l'insertion s'est bien passée.
+			if(!$this->sauvegarderTelephone($telephone, $participant)) {
+				return Redirect::back()->withInput()->withErrors($telephone->validationMessages());
+			}
+
+
+			if (is_array(Input::get('sport'))) {  //FIXME: si le get plante, le save est déjà fait.
+				$participant->sports()->sync(array_keys(Input::get('sport')));
+			} else {
+				$participant->sports()->detach();
+			}
+
+			// Message de confirmation si la sauvegarde a réussi
+			return Redirect::action('ParticipantsController@create')->with ( 'status', 'Le partipant a été créé!' );
+
         } catch (Exception $e) {
-            App:abort(404);
+            App:abort(503);
         }
 	}
 	
@@ -312,7 +303,7 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Retourne les informations de tri.
 	 *
-	 * @return Array $infosTri. Contient les informations de tri.
+	 * @return array $infosTri. Contient les informations de tri.
 	 */
 	private function getInfosTri() {
 		$parametreDeTri = Input::get ( 'parametreDeTri' );
@@ -375,5 +366,71 @@ class ParticipantsController extends BaseController {
 				'Région'
 		];
 		return $listeFiltres;
+	}
+
+	/**
+	 * Associe les valeurs reçues au participant.
+	 *
+	 * @param $input array les valeurs que l'usager a entrés.
+	 * @return Participant le participant à créer.
+	 */
+	private function construireParticipant($input)
+	{
+		$participant = new Participant;
+		$participant->equipe = false;
+		$participant->nom = $input['nom'];
+		$participant->prenom = $input['prenom'];
+		$participant->nom_parent = $input['nom_parent'];
+		$participant->numero = $input['numero'];
+		$participant->sexe = $input['sexe'];
+		$participant->region_id = $input['region_id'];
+
+		//Création de la date de naissance à partir des valeurs des trois comboboxes
+		$anneeNaissance = $input['annee_naissance']-1;
+		$moisNaissance = $input['mois_naissance']-1;
+		$jourNaissance = $input['jour_naissance']-1;
+		if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
+			$dateTest = new DateTime;
+			$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
+			$participant->naissance=$dateTest;
+		} else {
+			$participant->naissance = "invalide";
+		}
+		return $participant;
+	}
+
+	/**
+	 * Construit et retourne le téléphone entré par l'utilisateur.
+	 * Si aucun numéro n'est spécifié, retourne null.
+	 *
+	 * @author Res260
+	 * @param $input array les valeurs entrées par l'utilisateur.
+	 * @return Telephone l'objet de téléphone à ajouter, ou null.
+	 */
+	public function construireTelephone($input)
+	{
+		$telephone = New Telephone;
+		$telephone->description = $input['telephone_description'];
+		$telephone->numero = $input['telephone_numero'];
+		$return_value = $telephone->numero ? $telephone : null;
+		return $return_value;
+	}
+
+	/**
+	 * @param $telephone Telephone|void l'objet téléphone à sauvegarder.
+	 * @param $participant Participant l'objet participant à détruire si la sauvegarde échoue.
+	 * @return bool True si la sauvegarde a fonctionné, false sinon.
+	 */
+	private function sauvegarderTelephone($telephone, $participant):bool
+	{
+		// Null si il le # de téléphone n'a pas été spécifié.
+		if($telephone) {
+			$telephone->participant()->associate($participant);
+			if (!$telephone->save()) {
+				$participant->delete();
+				return false;
+			}
+		}
+		return true;
 	}
 }

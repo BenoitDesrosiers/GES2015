@@ -16,10 +16,10 @@ class CreateTelephonesTable extends Migration
     {
         Schema::create('Telephones', function (Blueprint $table) {
 			$table->increments('id');
-        	$table->string('Numero');
-			$table->string('Description')->nullable();
-			$table->unsignedInteger('ParticipantId');
-			$table->foreign('ParticipantId')
+        	$table->string('numero');
+			$table->string('description')->nullable();
+			$table->unsignedInteger('participant_Id');
+			$table->foreign('participant_Id')
 				  ->references('id')
 				  ->on('participants')
 				  ->onDelete('cascade')
