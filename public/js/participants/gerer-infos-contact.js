@@ -51,7 +51,8 @@ function ajouterTelephone() {
 						.children().last();
 	elementAjoute.find('input[name*="telephone_numero"]')
 				 .attr('id', 'telephone-numero-' + nouveauTelephoneId)
-				 .on('input', gererEtatBoutonAjouterTelephone);;
+				 //Ajoute le 'listener' pour changer l'état du bouton d'ajout.
+				 .on('input', gererEtatBoutonAjouterTelephone);
 	elementAjoute.find('input[name*="telephone_description"]')
 				 .attr('id', 'telephone-description-' + nouveauTelephoneId);
 	//S'assurer que le bouton se re-désactive.

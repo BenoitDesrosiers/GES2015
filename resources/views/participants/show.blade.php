@@ -41,7 +41,7 @@
 				@if ($participant->telephones->count() > 0)
 					@foreach ($participant->telephones as $telephone)
 						<li>
-							{!! $telephone->description !!} : {!! $telephone->numero !!}
+							<strong>{!! $telephone->description != "" ? $telephone->description : "(pas de description)"  !!} :</strong> {!! $telephone->numero !!}
 						</li>
 					@endforeach
 				@else
