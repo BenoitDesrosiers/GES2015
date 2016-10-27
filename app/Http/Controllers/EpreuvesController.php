@@ -137,7 +137,8 @@ class EpreuvesController extends BaseController {
 	{
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
-			$sportId = $epreuve->sport->id;
+			$participants = $epreuve->participants;
+            $sportId = $epreuve->sport->id;
 			$sports = Sport::all();
 			$arbitresEpreuves = $epreuve->arbitres;
 			$arbitres = EpreuvesController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresEpreuves);
@@ -145,8 +146,8 @@ class EpreuvesController extends BaseController {
 			//       et fournir la liste des ids des arbitresEpreuves
 			//       $arbitres = Arbitre::all()->whereNotIn('id', $arbitresEpreuves->pluck('id')) ->get();
 			$sportId = $this->checkSportId($sports, $sportId);
-				
-			return View::make('epreuves.edit', compact('epreuve', 'sports', 'sportId', 'arbitres', 'arbitresEpreuves'));
+            
+			return View::make('epreuves.edit', compact('epreuve', 'participants', 'sports', 'sportId', 'arbitres', 'arbitresEpreuves'));
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -203,7 +204,7 @@ class EpreuvesController extends BaseController {
 			return Redirect::back ()->withInput ()->withErrors ( $epreuve->validationMessages () );
 		}
 	}
-	
+
 	/**
 	 * Mise à jour d'une épreuve associée
 	 *
@@ -228,7 +229,7 @@ class EpreuvesController extends BaseController {
 		}
 		$epreuve->sport_id = $sport->id;
 		if($epreuve->save()) {
-            
+            $epreuve->participants()->sync($this->filtrer_participants($epreuveId,true));
 			$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 			//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
             if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
@@ -330,7 +331,7 @@ class EpreuvesController extends BaseController {
         $participantsInvalide = [];
 	    $participants = $epreuve->participants;
         foreach ($participants as $participant){
-            if($participant->sexe != ($epreuve->genre == 'feminin')){
+            if($participant->sexe == ($epreuve->genre == 'feminin')){
                 array_push($participantsInvalide,$participant);
             }
         }
@@ -340,18 +341,29 @@ class EpreuvesController extends BaseController {
     }
 
     /**
-     * Filtre les participants pour retirer ceux n'ayant pas le bon genre.
-     * @param Epreuve $epreuve
+     * Filtre les participants selon la validité ou l'invalidité de la liste.
+     * @param int $epreuveId
+     * @param boolean $valide
      *
      * @return array
      */
-    protected function filtrer_participants($epreuve){
-        $participantsNonValide = $this->participant_non_valide($epreuve);
-        $participants = $epreuve->participants;
+    protected function filtrer_participants($epreuveId, $valide){
+        try{
+            $epreuve = Epreuve::findOrFail ( $epreuveId );
+            $participants = $epreuve->participants;
+            if ($epreuve->genre != 'mixte'){
+                $genreRequis = $epreuve->genre == 'feminin';
+                if (!$valide){
+                    $genreRequis = !valide;
+                }
+                $participants = $epreuve->participants->where('sexe',$genreRequis);
+            }
 
-        $listeFiltrer = array_diff($participants, $participantsNonValide);
+        } catch ( ModelNotFoundException $e ) {
+            App::abort ( 404 );
+        }
 
-        return $listeFiltrer;
+        return $participants;
     }
 
     /**

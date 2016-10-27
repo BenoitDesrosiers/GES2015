@@ -1,4 +1,9 @@
 @extends('layout')
+
+@section('script')
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+@stop
+
 @section('content')
 <div class="panel panel-default">
 	<div class="panel-heading">
@@ -19,15 +24,19 @@
 			{{ $errors->first('nom') }}
 		</div>
 		<div class="form-group">
+			{!! Form::open() !!}
 			{!! Form::label('genre', '*Genre:') !!}
 			<br/>
+
+			{!! Form::hidden('old_genre', $test = $epreuve->genre) !!}
+
 			{!! Form::radio('genre', 'mixte', $epreuve->genre == "mixte") !!}
 			{!! Form::label('mixte', 'Mixte') !!}
 			<br/>
-			{!! Form::radio('genre', 'masculin', $epreuve->genre == "masculin") !!}
+			{!! Form::radio('genre', 'masculin', $epreuve->genre == "masculin", ['class' => 'radio_click']) !!}
 			{!! Form::label('masculin', 'Masculin') !!}
 			<br/>
-			{!! Form::radio('genre', 'feminin', $epreuve->genre == "feminin") !!}
+			{!! Form::radio('genre', 'feminin', $epreuve->genre == "feminin", ['class' => 'radio_click']) !!}
 			{!! Form::label('feminin', 'Feminin') !!}
 			<br/>
 			{{ $errors->first('genre') }}
@@ -69,16 +78,29 @@
 			</div>
 		</div>
 		<div class="form-group">
-			{!! Form::button('Sauvegarder', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+
+			{!! Form::button('Sauvegarder', ['name' => 'save', 'type' => 'submit', 'class' => 'btn btn-primary', 'onclick' => 'confirmationPopup()']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
+			<script>
+				function confirmationPopup() {
+					var r = confirm("Press a button! " + "");
+					if (r != true) {
+						old()
+					}
+					return r;
+				}
+			</script>
 		</div>
 		{!! Form::close() !!}
+
 	</div>
 </div>
 @stop
 
 @section('script')
+
 	<script type="text/javascript">
+
 		$('.ajouter').click(function(){
 			transfererDroite();
 			changer_liste();
