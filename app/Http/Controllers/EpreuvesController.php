@@ -137,7 +137,6 @@ class EpreuvesController extends BaseController {
 	{
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
-			$participants = $epreuve->participants;
             $sportId = $epreuve->sport->id;
 			$sports = Sport::all();
 			$arbitresEpreuves = $epreuve->arbitres;
@@ -147,7 +146,7 @@ class EpreuvesController extends BaseController {
 			//       $arbitres = Arbitre::all()->whereNotIn('id', $arbitresEpreuves->pluck('id')) ->get();
 			$sportId = $this->checkSportId($sports, $sportId);
             
-			return View::make('epreuves.edit', compact('epreuve', 'participants', 'sports', 'sportId', 'arbitres', 'arbitresEpreuves'));
+			return View::make('epreuves.edit', compact('epreuve', 'sports', 'sportId', 'arbitres', 'arbitresEpreuves'));
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}

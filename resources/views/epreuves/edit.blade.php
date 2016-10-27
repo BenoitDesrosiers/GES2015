@@ -27,9 +27,6 @@
 			{!! Form::open() !!}
 			{!! Form::label('genre', '*Genre:') !!}
 			<br/>
-
-			{!! Form::hidden('old_genre', $test = $epreuve->genre) !!}
-
 			{!! Form::radio('genre', 'mixte', $epreuve->genre == "mixte") !!}
 			{!! Form::label('mixte', 'Mixte') !!}
 			<br/>
@@ -71,7 +68,7 @@
 @endforeach
 		          </div>
 		          <div>
-					<input type="hidden" name="arbitresUtilises" id="arbitresUtilises"></input>
+					<input type="hidden" name="arbitresUtilises" id="arbitresUtilises">
 		          </div>
 		        </div>
 			  </div>
@@ -83,9 +80,6 @@
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
 			<script>
 				function confirmationPopup() {
-					//bootbox.alert("Attention changer de genre va supprimer tout les \n" +
-					//				"participants avec un genre incompatible seront supprimer.")
-					//}
 					bootbox.alert({
 						title: "Attention".fontsize(8),
 						message: "En changeant le genre tous, les participants incompatibles seront retirés de l'épreuve.".fontsize(4),
@@ -94,7 +88,6 @@
 						closeButton: false,
 						onEscape: true
 					});
-
 				}
 			</script>
 		</div>
