@@ -69,12 +69,20 @@
             {!! Form::text('adresse','', ['class' => 'form-control']) !!}
             {{ $errors->first('adresse') }}
         </div>
-        <div class="form-group">
-            {!! Form::label('telephone_numero', 'Numéro de téléphone:') !!}
-            {!! Form::text('telephone_numero','', ['class' => 'form-control']) !!}
 
-            {!! Form::label('telephone_description', 'Description du téléphone:') !!}
-            {!! Form::text('telephone_description','', ['class' => 'form-control']) !!}
+        <div class="form-group">
+            {!! Form::label('telephone_numero[]', 'Numéro de téléphone:') !!}
+            {!! Form::text('telephone_numero[]','', ['class' => 'form-control']) !!}
+
+            {!! Form::label('telephone_description[]', 'Description du téléphone:') !!}
+            {!! Form::text('telephone_description[]','', ['class' => 'form-control']) !!}
+        </div>
+        <div class="form-group">
+            {!! Form::label('telephone_numero[]', 'Numéro de téléphone:') !!}
+            {!! Form::text('telephone_numero[]','', ['class' => 'form-control']) !!}
+
+            {!! Form::label('telephone_description[]', 'Description du téléphone:') !!}
+            {!! Form::text('telephone_description[]','', ['class' => 'form-control']) !!}
         </div>
 
         <div class="form-group">

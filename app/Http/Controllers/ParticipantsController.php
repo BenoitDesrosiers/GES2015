@@ -74,15 +74,20 @@ class ParticipantsController extends BaseController {
         try {
             $input = Input::all();
 			$participant = $this->construireParticipant($input);
-			$telephone = $this->construireTelephone($input);
+			$telephones = $this->construireListeTelephones($input);
+
+			// TODO: Formatter champs téléphones.
             if(!$participant->save()) {
 				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 			}
 
-			# sauvegarderTelephone() retourne true s'il n'y a pas
-			# de téléphone ou si l'insertion s'est bien passée.
-			if(!$this->sauvegarderTelephone($telephone, $participant)) {
-				return Redirect::back()->withInput()->withErrors($telephone->validationMessages());
+			//Sauvegarde tous les téléphones. Si erreur, annule tout.
+			foreach($telephones as $telephone) {
+				# sauvegarderTelephone() retourne true s'il n'y a pas
+				# de téléphone ou si l'insertion s'est bien passée.
+				if(!$this->sauvegarderTelephone($telephone, $participant)) {
+					return Redirect::back()->withInput()->withErrors($telephone->validationMessages());
+				}
 			}
 
 
@@ -405,13 +410,18 @@ class ParticipantsController extends BaseController {
 	 *
 	 * @author Res260
 	 * @param $input array les valeurs entrées par l'utilisateur.
+	 * @param $index int l'index à aller chercher dans
+	 * 					 $input['telephone_description'] et $input['telephone_numero'].
 	 * @return Telephone l'objet de téléphone à ajouter, ou null.
 	 */
-	public function construireTelephone($input)
+	public function construireTelephone($input, $index)
 	{
+		$numero = isset($input['telephone_numero'][$index]) ? $input['telephone_numero'][$index] : null;
+		$description = isset($input['telephone_description'][$index]) ? $input['telephone_description'][$index] : null;
+
 		$telephone = New Telephone;
-		$telephone->description = $input['telephone_description'];
-		$telephone->numero = $input['telephone_numero'];
+		$telephone->description = $description;
+		$telephone->numero = $numero;
 		$return_value = $telephone->numero ? $telephone : null;
 		return $return_value;
 	}
@@ -432,5 +442,28 @@ class ParticipantsController extends BaseController {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Retourne la liste des téléphones selon $input.
+	 *
+	 * @param $input array les valeurs entrées par l'utilisateur.
+	 * @return array[Telephone] La liste des téléphones entrés par l'utilisateur.
+	 */
+	private function construireListeTelephones($input):array
+	{
+		$telephones = [];
+		$i = 0;
+		// Tant qu'il y a des entrées de téléphones à ajouter, on boucle et on ajoute à la liste.
+		while ($i == count($telephones)) {
+			array_push($telephones, $this->construireTelephone($input, $i));
+			if(array_last($telephones)) {
+				$i++;
+			}
+		}
+		// Le dernier élément sera toujours null.
+		array_pop($telephones);
+
+		return $telephones;
 	}
 }
