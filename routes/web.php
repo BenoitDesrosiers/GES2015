@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Http\Request;
 
 
 /*
@@ -17,7 +18,7 @@ use App\Http\Controllers\Auth\RegisterController;
 Route::get('/','HomeController@index');
 Route::get('/home','HomeController@index');
 Route::get('/about','AboutController@index');
-Route::get('/test', 'sportParticipantController@listerParticipants');
+Route::get('/tableau_participants', 'sportParticipantController@listerParticipants');
 
 Auth::routes();
 
