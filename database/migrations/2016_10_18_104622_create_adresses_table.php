@@ -18,8 +18,8 @@ class CreateAdressesTable extends Migration
 			$table->increments('id');
 			$table->string('adresse');
 			$table->string('description')->nullable();
-			$table->unsignedInteger('participant_Id');
-			$table->foreign('participant_Id')
+			$table->unsignedInteger('participant_id');
+			$table->foreign('participant_id')
 				->references('id')
 				->on('participants')
 				->onDelete('cascade')

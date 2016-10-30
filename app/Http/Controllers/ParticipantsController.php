@@ -72,20 +72,23 @@ class ParticipantsController extends BaseController {
 	public function store()
 	{
         try {
+			DB::beginTransaction();
             $input = Input::all();
 			$participant = $this->construireParticipant($input);
 
-			// TODO: Formatter champs téléphones.
+
             if(!$participant->save()) {
+				DB::rollBack();
 				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 			}
-
+			// TODO: Formatter champs téléphones.
 			$telephones = $this->construireListeTelephones($input);
 			//Sauvegarde tous les téléphones. Si erreur, annule tout.
 			foreach($telephones as $telephone) {
-				# sauvegarderTelephone() retourne true s'il n'y a pas
-				# de téléphone ou si l'insertion s'est bien passée.
+				// sauvegarderTelephone() retourne true s'il n'y a pas
+				// de téléphone ou si l'insertion s'est bien passée.
 				if(!$this->sauvegarderTelephone($telephone, $participant)) {
+					DB::rollBack();
 					return Redirect::back()->withInput()->withErrors($telephone->validationMessages());
 				}
 			}
@@ -96,10 +99,12 @@ class ParticipantsController extends BaseController {
 				$participant->sports()->detach();
 			}
 
+			DB::commit();
 			// Message de confirmation si la sauvegarde a réussi
 			return Redirect::action('ParticipantsController@create')->with ( 'status', 'Le partipant a été créé!' );
 
         } catch (Exception $e) {
+			DB::rollBack();
             App:abort(503);
         }
 	}
@@ -175,49 +180,44 @@ class ParticipantsController extends BaseController {
      * Mise à jour du participant dans la bd.
      *
      * @param  int $id l'id du participant à changer.
-     * @return Response
+     * @return
      */
     public function update($id)
     {
         try {
+			DB::beginTransaction();
 			$input = Input::all();
-			$participant = Participant::findOrFail($id);
-			$participant->equipe = false;
-			$participant->nom = $input['nom'];
-			$participant->prenom = $input['prenom'];
-			$participant->telephone = $input['telephone'];
-			$participant->nom_parent = $input['nom_parent'];
-			$participant->numero = $input['numero'];
-			$participant->sexe = $input['sexe'];
-			$participant->adresse = $input['adresse'];
-			$participant->region_id = $input['region_id'];
 
-//      	Création de la date de naissance à partir des valeurs des trois comboboxes
-			$anneeNaissance = $input['annee_naissance']-1;
-			$moisNaissance = $input['mois_naissance']-1;
-			$jourNaissance = $input['jour_naissance']-1;
-			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
-				$dateTest = new DateTime;
-				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
-				$participant->naissance=$dateTest;
-			} else {
-// 				Un message d'erreur sera généré lors de la validation
-				$participant->naissance = "invalide";
-			}
-
-			if($participant->save()) {
-				if (is_array(Input::get('sport'))) {
-					$participant->sports()->sync(array_keys(Input::get('sport')));
-				} else {
-					$participant->sports()->detach();
-				}
-//         		Message de confirmation si la sauvegarde a réussi
-				return Redirect::action('ParticipantsController@show', $participant->id)->with ( 'status', 'Le partipant a été mis a jour!' );
-			} else {
+			$participant = $this->construireParticipant($input, Participant::findOrFail($id));
+			$this->supprimerTelephones($participant);
+			$telephones = $this->construireListeTelephones($input);
+			if(!$participant->save()) {
+				DB::rollBack();
 				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 			}
+
+			//Sauvegarde tous les téléphones. Si erreur, annule tout.
+			foreach($telephones as $telephone) {
+				// sauvegarderTelephone() retourne true s'il n'y a pas
+				// de téléphone ou si l'insertion s'est bien passée.
+				if(!$this->sauvegarderTelephone($telephone, $participant)) {
+					DB::rollBack();
+					return Redirect::back()->withInput()->withErrors($telephone->validationMessages());
+				}
+			}
+
+			if (is_array(Input::get('sport'))) {
+				$participant->sports()->sync(array_keys(Input::get('sport')));
+			} else {
+				$participant->sports()->detach();
+			}
+
+			DB::commit();
+//         		Message de confirmation si la sauvegarde a réussi
+			return Redirect::action('ParticipantsController@show', $participant->id)->with ( 'status', 'Le partipant a été mis a jour!' );
         } catch (Exception $e) {
-            App:abort(404);
+			DB::rollBack();
+            App:abort(503);
         }
     }
 
@@ -350,7 +350,7 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Retourne la liste des noms courts de tous les régions.
 	 * 
-	 * @return Array $listeRecherches. Contient les noms courts des régions.
+	 * @return array $listeRecherches. Contient les noms courts des régions.
 	 */
 	 //TODO: renommer cette fonction getRegions
 	private function getListeRecherches() {
@@ -373,14 +373,16 @@ class ParticipantsController extends BaseController {
 	}
 
 	/**
-	 * Associe les valeurs reçues au participant.
+	 * Associe les valeurs reçues au participant (qui peut exister ou non).
 	 *
+	 * @author Res260
 	 * @param $input array les valeurs que l'usager a entrés.
+	 * @param Participant $aParticipant le participant (s'il existe déjà).
 	 * @return Participant le participant à créer.
 	 */
-	private function construireParticipant($input)
+	private function construireParticipant($input, $aParticipant = null)
 	{
-		$participant = new Participant;
+		$participant = ($aParticipant) ? $aParticipant : New Participant;
 		$participant->equipe = false;
 		$participant->nom = $input['nom'];
 		$participant->prenom = $input['prenom'];
@@ -426,17 +428,19 @@ class ParticipantsController extends BaseController {
 	}
 
 	/**
+	 * Sauvegarde $telephone de $participant dans la BDD.
+	 *
+	 * @author Res260
 	 * @param $telephone Telephone|void l'objet téléphone à sauvegarder.
-	 * @param $participant Participant l'objet participant à détruire si la sauvegarde échoue.
+	 * @param $participant Participant Le participant à qui le Telephone appartient.
 	 * @return bool True si la sauvegarde a fonctionné, false sinon.
 	 */
-	private function sauvegarderTelephone($telephone, $participant):bool
+	private function sauvegarderTelephone($telephone, $participant)
 	{
 		// Null si il le # de téléphone n'a pas été spécifié.
 		if($telephone) {
 			$telephone->participant()->associate($participant);
 			if (!$telephone->save()) {
-				$participant->delete();
 				return false;
 			}
 		}
@@ -446,10 +450,11 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Retourne la liste des téléphones selon $input.
 	 *
+	 * @author Res260
 	 * @param $input array les valeurs entrées par l'utilisateur.
 	 * @return array[Telephone] La liste des téléphones entrés par l'utilisateur.
 	 */
-	private function construireListeTelephones($input):array
+	private function construireListeTelephones($input)
 	{
 		$telephones = [];
 		$i = 0;
@@ -464,5 +469,17 @@ class ParticipantsController extends BaseController {
 		array_pop($telephones);
 
 		return $telephones;
+	}
+
+	/**
+	 * Supprime les téléphones de $participant de la BDD.
+	 *
+	 * @param $participant Participant Le participant à qui on supprime les téléphones.
+	 */
+	private function supprimerTelephones($participant)
+	{
+		foreach ($participant->telephones()->get() as $telephone) {
+			$telephone->delete();
+		}
 	}
 }

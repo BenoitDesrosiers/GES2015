@@ -50,7 +50,7 @@ class Participant extends EloquentValidating {
 	 * Un participant a plusieurs téléphones.
 	 */
 	public function telephones() {
-		return $this->hasMany(Telephone::class);
+		return $this->hasMany('App\Models\Telephone');
 	}
 
 	/**

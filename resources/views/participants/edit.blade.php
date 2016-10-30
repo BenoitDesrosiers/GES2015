@@ -2,11 +2,12 @@
 | edit.blade.php
 | Description: Vue d'édition d'un participant.
 | Créé le: Avant automne 2016
-| Modifié le: 161027
+| Modifié le: 161030
 | Par: (Auteur précédent inconnu), Res260
 -----------------------------------------------------------------}}
 @extends('layout')
 @section('content')
+<link rel="stylesheet" href="{!! asset('/css/participants/create-edit.css') !!}">
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Modification d'un participant</h2>
@@ -67,6 +68,21 @@
             {!! Form::select('jour_naissance',$listeJours, $jourDefaut, ['style' => 'width:3em!important;']) !!}
             {{ $errors->first('naissance') }}
         </div>
+		<div id="conteneur-telephones">
+			@foreach($participant->telephones()->get() as $telephone)
+				<div class="form-group conteneur-telephone">
+					{!! Form::label('telephone-numero-' . $telephone->id, 'Numéro de téléphone:') !!}
+					{{ Form::text('telephone_numero[]', $telephone->numero,
+					['id' => 'telephone-numero-' . $telephone->id, 'class' => 'form-control']) }}
+
+					{!! Form::label('telephone-description-' . $telephone->id, 'Description du téléphone:') !!}
+					{{ Form::text('telephone_description[]', $telephone->description,
+					['id' => 'telephone-description-' . $telephone->id, 'class' => 'form-control']) }}
+					<button onclick="retirerConteneur($(this).parent())" class="btn-danger" type="button" >Retirer</button>
+				</div>
+			@endforeach
+		</div>
+
 		<div class="form-group">
 			<select name="region_id" id="region_id">
 				@foreach ($regions as $region)
@@ -107,4 +123,5 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+<script src="{!! asset('/js/participants/gerer-infos-contact.js') !!}"></script>
 @stop

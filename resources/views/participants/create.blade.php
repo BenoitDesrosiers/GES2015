@@ -7,7 +7,7 @@
 -----------------------------------------------------------------}}
 @extends('layout')
 @section('content')
-<link rel="stylesheet" href="{!! asset('/css/participants/create.css') !!}">
+<link rel="stylesheet" href="{!! asset('/css/participants/create-edit.css') !!}">
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Création d'un participant</h2>

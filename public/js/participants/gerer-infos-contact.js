@@ -33,7 +33,8 @@ function retirerConteneur(conteneur) {
  */
 function ajouterTelephone() {
 	var conteneur = $('#conteneur-telephones');
-	var elementAAjouter = '<div class="form-group conteneur-telephone">' +
+	var elementAAjouter =
+					'<div class="form-group conteneur-telephone">' +
 					'	<label for="">Numéro de téléphone:</label>' +
 					'	<input type="text" name="telephone_numero[]" id="" class="form-control" />' +
 					'	<label for="">Description du téléphone:</label>' +
