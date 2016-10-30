@@ -417,7 +417,9 @@ class ParticipantsController extends BaseController {
 	 */
 	public function construireTelephone($input, $index)
 	{
-		$numero = isset($input['telephone_numero'][$index]) ? $input['telephone_numero'][$index] : null;
+		$numero = isset($input['telephone_numero'][$index])
+						? $this->formatterTelephone($input['telephone_numero'][$index])
+						: null;
 		$description = isset($input['telephone_description'][$index]) ? $input['telephone_description'][$index] : null;
 
 		$telephone = New Telephone;
@@ -425,6 +427,28 @@ class ParticipantsController extends BaseController {
 		$telephone->numero = $numero;
 		$return_value = $telephone->numero ? $telephone : null;
 		return $return_value;
+	}
+
+	/**
+	 * Formatte $telephone s'il est composé de 10 chiffres selon le format
+	 * "(ind) XXX-XXXX". Sinon, enlève simplement les caractères
+	 * " ", "(", ")" et "-".
+	 *
+	 * @param $telephone string Une chaine de caractères d'un téléphone.
+	 * @return mixed Une version formattée de $telephone
+	 */
+	private function formatterTelephone($telephone) {
+		$telephoneFormatte = substr($telephone, 0);
+		$telephoneFormatte = str_replace(' ', '', $telephoneFormatte);
+		$telephoneFormatte = str_replace('(', '', $telephoneFormatte);
+		$telephoneFormatte = str_replace(')', '', $telephoneFormatte);
+		$telephoneFormatte = str_replace('-', '', $telephoneFormatte);
+		if(strlen($telephoneFormatte) == 10) {
+			$telephoneFormatte = '(' . substr($telephoneFormatte, 0, 3) .
+				 				 ') '. substr($telephoneFormatte, 3, 3) .
+								 '-' . substr($telephoneFormatte, 6, 4);
+		}
+		return $telephoneFormatte;
 	}
 
 	/**

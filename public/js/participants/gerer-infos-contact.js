@@ -15,6 +15,7 @@
  */
 $(document).ready(function() {
 	$('#conteneur-telephones').find('#telephone-numero-1').on('input', gererEtatBoutonAjouterTelephone);
+	gererEtatBoutonAjouterTelephone();
 });
 
 /**

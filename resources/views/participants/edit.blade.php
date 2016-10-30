@@ -69,19 +69,33 @@
             {{ $errors->first('naissance') }}
         </div>
 		<div id="conteneur-telephones">
-			@foreach($participant->telephones()->get() as $telephone)
-				<div class="form-group conteneur-telephone">
-					{!! Form::label('telephone-numero-' . $telephone->id, 'Numéro de téléphone:') !!}
-					{{ Form::text('telephone_numero[]', $telephone->numero,
-					['id' => 'telephone-numero-' . $telephone->id, 'class' => 'form-control']) }}
+			<?php $telephones = $participant->telephones()->get(); ?>
+			@if(count($telephones) > 0)
+				@foreach($telephones as $telephone)
+					<div class="form-group conteneur-telephone">
+						{!! Form::label('telephone-numero-' . $telephone->id, 'Numéro de téléphone:') !!}
+						{{ Form::text('telephone_numero[]', $telephone->numero,
+						['id' => 'telephone-numero-' . $telephone->id, 'class' => 'form-control']) }}
 
-					{!! Form::label('telephone-description-' . $telephone->id, 'Description du téléphone:') !!}
-					{{ Form::text('telephone_description[]', $telephone->description,
-					['id' => 'telephone-description-' . $telephone->id, 'class' => 'form-control']) }}
-					<button onclick="retirerConteneur($(this).parent())" class="btn-danger" type="button" >Retirer</button>
+						{!! Form::label('telephone-description-' . $telephone->id, 'Description du téléphone:') !!}
+						{{ Form::text('telephone_description[]', $telephone->description,
+						['id' => 'telephone-description-' . $telephone->id, 'class' => 'form-control']) }}
+						<button onclick="retirerConteneur($(this).parent())" class="btn-danger" type="button" >Retirer</button>
+					</div>
+				@endforeach
+			@else
+				<div class="form-group conteneur-telephone">
+					{!! Form::label('telephone-numero-1', 'Numéro de téléphone:') !!}
+					{{ Form::text('telephone_numero[]', '',
+                    ['id' => 'telephone-numero-1', 'class' => 'form-control']) }}
+
+					{!! Form::label('telephone-description-1', 'Description du téléphone:') !!}
+					{{ Form::text('telephone_description[]', '',
+                    ['id' => 'telephone-description-1', 'class' => 'form-control']) }}
 				</div>
-			@endforeach
+			@endif
 		</div>
+		<button onclick="ajouterTelephone()" id="bouton-ajouter-telephone" disabled class="btn-success" type="button">Ajouter un téléphone</button>
 
 		<div class="form-group">
 			<select name="region_id" id="region_id">

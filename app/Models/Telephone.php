@@ -42,7 +42,7 @@ class Telephone extends EloquentValidating
 	 */
 	public function validationRules() {
 		return [
-			'description' => 'required|string',
+			'description' => 'string',
 			'numero'	  => 'required|string'
 		];
 	}
