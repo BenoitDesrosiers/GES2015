@@ -16,6 +16,8 @@
 $(document).ready(function() {
 	$('#conteneur-telephones').find('#telephone-numero-1').on('input', gererEtatBoutonAjouterTelephone);
 	gererEtatBoutonAjouterTelephone();
+	$('#conteneur-adresses').find('#adresse-adresse-1').on('input', gererEtatBoutonAjouterAdresse);
+	gererEtatBoutonAjouterAdresse();
 });
 
 /**
@@ -61,6 +63,40 @@ function ajouterTelephone() {
 	gererEtatBoutonAjouterTelephone();
 }
 
+
+/**
+ * Procédure qui ajoute une adresse à la fin des autres
+ * champs d'ajout d'adresse'.
+ */
+function ajouterAdresse() {
+	var conteneur = $('#conteneur-adresses');
+	var elementAAjouter =
+		'<div class="form-group conteneur-adresse">' +
+		'	<label for="">Adresse:</label>' +
+		'	<input type="text" name="adresse_adresse[]" id="" class="form-control" />' +
+		'	<label for="">Description de l\'adresse:</label>' +
+		'	<input type="text" name="adresse_description[]" id="" class="form-control" />' +
+		'	<button onclick="retirerConteneur($(this).parent())" class="btn-danger" type="button" >Retirer</button>' +
+		'</div>';
+	var nouvelleAdresseId = parseInt(
+			conteneur.find('div:last .form-control')
+				[0]
+				.id
+				.match(/\d+/)
+				[0])
+		+ 1;
+	var elementAjoute = conteneur.append(elementAAjouter)
+		.children().last();
+	elementAjoute.find('input[name*="adresse_adresse"]')
+		.attr('id', 'adresse-adresse-' + nouvelleAdresseId)
+		//Ajoute le 'listener' pour changer l'état du bouton d'ajout.
+		.on('input', gererEtatBoutonAjouterAdresse);
+	elementAjoute.find('input[name*="adresse_description"]')
+		.attr('id', 'adresse-description-' + nouvelleAdresseId);
+	//S'assurer que le bouton se re-désactive.
+	gererEtatBoutonAjouterAdresse();
+}
+
 /**
  * Procédure qui s'occupe d'activer ou désactiver le
  * bouton d'ajout de téléphone selon si le contenu
@@ -69,13 +105,32 @@ function ajouterTelephone() {
  */
 function gererEtatBoutonAjouterTelephone() {
 	var derniereEntreeNumero = $('#conteneur-telephones')
-							.children()
-							.last()
-							.find('input[name*="telephone_numero"]')
-							[0];
+		.children()
+		.last()
+		.find('input[name*="telephone_numero"]')
+		[0];
 	if(derniereEntreeNumero.value != "") {
 		$('#bouton-ajouter-telephone').removeAttr("disabled");
 	} else {
 		$('#bouton-ajouter-telephone').attr("disabled","disabled");
+	}
+}
+
+/**
+ * Procédure qui s'occupe d'activer ou désactiver le
+ * bouton d'ajout d'adresse selon si le contenu
+ * du dernier champ d'adresse est vide (désactive)
+ * ou non-vide (active).
+ */
+function gererEtatBoutonAjouterAdresse() {
+	var derniereEntreeAdresse= $('#conteneur-adresses')
+		.children()
+		.last()
+		.find('input[name*="adresse_adresse"]')
+		[0];
+	if(derniereEntreeAdresse.value != "") {
+		$('#bouton-ajouter-adresse').removeAttr("disabled");
+	} else {
+		$('#bouton-ajouter-adresse').attr("disabled","disabled");
 	}
 }

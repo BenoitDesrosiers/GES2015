@@ -11,8 +11,9 @@
  * - pour Baseball
  *   - Tournoi masculin
  * 
- * @author BinarMorker, obnosim
+ * @author BinarMorker, obnosim, Res260
  * @version 2
+ * @date 161030
  */
 
 namespace App\Models;
@@ -51,6 +52,13 @@ class Participant extends EloquentValidating {
 	 */
 	public function telephones() {
 		return $this->hasMany('App\Models\Telephone');
+	}
+
+	/**
+	 * Un participant a plusieurs adresses.
+	 */
+	public function adresses() {
+		return $this->hasMany('App\Models\Adresse');
 	}
 
 	/**

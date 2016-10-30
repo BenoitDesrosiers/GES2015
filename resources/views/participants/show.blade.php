@@ -36,18 +36,45 @@
 			@if ($participant->nom_parent)
 				<p>Parent: {!! $participant->nom_parent !!}</p>
 			@endif
+
+			{{------ Affichage des téléphones du participant. ------}}
 			<p>Téléphones:</p>
 			<ul>
-				@if ($participant->telephones->count() > 0)
+				@if (!$participant->telephones->isEmpty())
 					@foreach ($participant->telephones as $telephone)
 						<li>
-							<strong>{!! $telephone->description != "" ? $telephone->description : "(pas de description)"  !!} :</strong> {!! $telephone->numero !!}
+							<strong>
+								{!! $telephone->description != ""
+										? $telephone->description
+										: "(pas de description)"
+								!!} :
+							</strong> 	{!! $telephone->numero !!}
 						</li>
 					@endforeach
 				@else
 					<li>Le/la participant(e) n'a pas de téléphone.</li>
 				@endif
 			</ul>
+
+			{{------ Affichage des adresses du participant. ------}}
+			<p>Adresses:</p>
+			<ul>
+				@if (!$participant->adresses->isEmpty())
+					@foreach ($participant->adresses as $adresse)
+						<li>
+							<strong>
+								{!! $adresse->description != ""
+										? $adresse->description
+										: "(pas de description)"
+								!!} :
+							</strong> 	{!! $adresse->adresse !!}
+						</li>
+					@endforeach
+				@else
+					<li>Le/la participant(e) n'a pas d'adresse.</li>
+				@endif
+			</ul>
+
 	<!-- 	Afficher les équipes dont le participant est membre	 -->
 			@if (!$participant->equipes->isEmpty())
 				<p>Équipes:</p>

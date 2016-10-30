@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Adresse;
 use App\Models\Telephone;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
@@ -69,6 +70,18 @@ public function run()
 		$telephone->description = str_random(10);
 		$telephone->participant()->associate($participant);
 		$telephone->save();
+
+		$adresse = New Adresse;
+		$adresse->adresse = rand(1,5000) . ", rue " . str_random(10);
+		$adresse->description = str_random(10);
+		$adresse->participant()->associate($participant);
+		$adresse->save();
+
+		$adresse2 = New Adresse;
+		$adresse2->adresse = rand(1,5000) . ", rue " . str_random(10);
+		$adresse2->description = str_random(10);
+		$adresse2->participant()->associate($participant);
+		$adresse2->save();
 	}
 }
 

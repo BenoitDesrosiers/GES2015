@@ -7,13 +7,13 @@ Modifié le: 161030
 Par: Res260
 *******************************************************************************/
 
-.conteneur-telephone {
+.conteneur-telephone, .conteneur-adresse {
     border-radius:5px;
     border: 1px solid #777;
     padding: 5px;
 }
 
-.conteneur-telephone .btn-danger {
+.conteneur-telephone .btn-danger, .conteneur-adresse .btn-danger {
     border:2px solid #DD0000;
 }
 

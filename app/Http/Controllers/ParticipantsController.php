@@ -81,7 +81,6 @@ class ParticipantsController extends BaseController {
 				DB::rollBack();
 				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 			}
-			// TODO: Formatter champs téléphones.
 			$telephones = $this->construireListeTelephones($input);
 			//Sauvegarde tous les téléphones. Si erreur, annule tout.
 			foreach($telephones as $telephone) {

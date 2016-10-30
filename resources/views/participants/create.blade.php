@@ -65,11 +65,16 @@
             {!! Form::select('jour_naissance',$listeJours, $jourDefaut, ['style' => 'width:3em!important;']) !!}
             {{ $errors->first('naissance') }}
         </div>
-        <div class="form-group">
-            {!! Form::label('adresse', 'Adresse:') !!} 
-            {!! Form::text('adresse','', ['class' => 'form-control']) !!}
-            {{ $errors->first('adresse') }}
+        <div id="conteneur-adresses">
+            <div class="form-group conteneur-adresse">
+                {!! Form::label('adresse-adresse-1', 'Adresse:') !!}
+                {!! Form::text('adresse_adresse[]','', ['id' => 'adresse-adresse-1', 'class' => 'form-control']) !!}
+
+                {!! Form::label('adresse-description-1', 'Description de l\'adresse:') !!}
+                {!! Form::text('adresse_description[]','', ['id' => 'adresse-description-1', 'class' => 'form-control']) !!}
+            </div>
         </div>
+        <button onclick="ajouterAdresse()" id="bouton-ajouter-adresse" disabled class="btn-success" type="button">Ajouter une adresse</button>
         <div id="conteneur-telephones">
             <div class="form-group conteneur-telephone">
                 {!! Form::label('telephone-numero-1', 'Numéro de téléphone:') !!}
