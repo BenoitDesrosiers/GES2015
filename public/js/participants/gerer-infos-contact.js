@@ -14,10 +14,9 @@
  * Ajoute le 'listener' au premier champ de téléphone.
  */
 $(document).ready(function() {
-	$('#conteneur-telephones').find('#telephone-numero-1').on('input', gererEtatBoutonAjouterTelephone);
-	gererEtatBoutonAjouterTelephone();
-	$('#conteneur-adresses').find('#adresse-adresse-1').on('input', gererEtatBoutonAjouterAdresse);
-	gererEtatBoutonAjouterAdresse();
+	$('#conteneur-telephones').find('#telephone-numero-1').on('input', gererEtatBoutonsAjout);
+	$('#conteneur-adresses').find('#adresse-adresse-1').on('input', gererEtatBoutonsAjout);
+	gererEtatBoutonsAjout();
 });
 
 /**
@@ -25,10 +24,18 @@ $(document).ready(function() {
  * @param conteneur l'élément à supprimer.
  */
 function retirerConteneur(conteneur) {
-	$(conteneur).remove();
+	var nombreEnfants = $(conteneur).parent().children().length;
+
+	if(nombreEnfants > 1) {
+		$(conteneur).remove();
+	} else {
+		conteneur.find("input").each(function(index) {
+			this.value = "";
+		});
+		conteneur.on('input', gererEtatBoutonsAjout);
+	}
 	//S'assurer que le bouton se ré-active.
-	gererEtatBoutonAjouterTelephone();
-	gererEtatBoutonAjouterAdresse();
+	gererEtatBoutonsAjout();
 }
 
 /**
@@ -57,11 +64,11 @@ function ajouterTelephone() {
 	elementAjoute.find('input[name*="telephone_numero"]')
 				 .attr('id', 'telephone-numero-' + nouveauTelephoneId)
 				 //Ajoute le 'listener' pour changer l'état du bouton d'ajout.
-				 .on('input', gererEtatBoutonAjouterTelephone);
+				 .on('input', gererEtatBoutonsAjout);
 	elementAjoute.find('input[name*="telephone_description"]')
 				 .attr('id', 'telephone-description-' + nouveauTelephoneId);
 	//S'assurer que le bouton se re-désactive.
-	gererEtatBoutonAjouterTelephone();
+	gererEtatBoutonsAjout();
 }
 
 
@@ -91,11 +98,11 @@ function ajouterAdresse() {
 	elementAjoute.find('input[name*="adresse_adresse"]')
 		.attr('id', 'adresse-adresse-' + nouvelleAdresseId)
 		//Ajoute le 'listener' pour changer l'état du bouton d'ajout.
-		.on('input', gererEtatBoutonAjouterAdresse);
+		.on('input', gererEtatBoutonsAjout);
 	elementAjoute.find('input[name*="adresse_description"]')
 		.attr('id', 'adresse-description-' + nouvelleAdresseId);
 	//S'assurer que le bouton se re-désactive.
-	gererEtatBoutonAjouterAdresse();
+	gererEtatBoutonsAjout();
 }
 
 /**
@@ -104,7 +111,8 @@ function ajouterAdresse() {
  * du dernier champ de # de téléphone est vide (désactive)
  * ou non-vide (active).
  */
-function gererEtatBoutonAjouterTelephone() {
+function gererEtatBoutonsAjout() {
+	// Telephone
 	var derniereEntreeNumero = $('#conteneur-telephones')
 		.children()
 		.last()
@@ -115,15 +123,8 @@ function gererEtatBoutonAjouterTelephone() {
 	} else {
 		$('#bouton-ajouter-telephone').attr("disabled","disabled");
 	}
-}
 
-/**
- * Procédure qui s'occupe d'activer ou désactiver le
- * bouton d'ajout d'adresse selon si le contenu
- * du dernier champ d'adresse est vide (désactive)
- * ou non-vide (active).
- */
-function gererEtatBoutonAjouterAdresse() {
+	//Adresse
 	var derniereEntreeAdresse= $('#conteneur-adresses')
 		.children()
 		.last()
