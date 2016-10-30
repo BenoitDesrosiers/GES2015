@@ -68,8 +68,24 @@
             {!! Form::select('jour_naissance',$listeJours, $jourDefaut, ['style' => 'width:3em!important;']) !!}
             {{ $errors->first('naissance') }}
         </div>
+        <div id="conteneur-adresses">
+            <?php $adresses = $participant->adresses()->orderBy('id')->get(); ?>
+            @if(count($adresses) > 0)
+                @foreach($adresses as $adresse)
+                    <div class="form-group conteneur-adresse">
+                        {!! Form::label('adresse-adresse-' . $adresse->id, 'Adresse:') !!}
+                        {!! Form::text('adresse_adresse[]', $adresse->adresse, ['id' => 'adresse-adresse-' . $adresse->id, 'class' => 'form-control']) !!}
+
+                        {!! Form::label('adresse-description-' . $adresse->id, 'Description de l\'adresse:') !!}
+                        {!! Form::text('adresse_description[]', $adresse->description, ['id' => 'adresse-description-' . $adresse->id, 'class' => 'form-control']) !!}
+                        <button onclick="retirerConteneur($(this).parent())" class="btn-danger" type="button" >Retirer</button>
+                    </div>
+                @endforeach
+            @endif
+        </div>
+        <button onclick="ajouterAdresse()" id="bouton-ajouter-adresse" disabled class="btn-success" type="button">Ajouter une adresse</button>
 		<div id="conteneur-telephones">
-			<?php $telephones = $participant->telephones()->get(); ?>
+			<?php $telephones = $participant->telephones()->orderBy('id')->get(); ?>
 			@if(count($telephones) > 0)
 				@foreach($telephones as $telephone)
 					<div class="form-group conteneur-telephone">

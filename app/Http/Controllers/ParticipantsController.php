@@ -203,6 +203,10 @@ class ParticipantsController extends BaseController {
 			$participant = $this->construireParticipant($input, Participant::findOrFail($id));
 			$this->supprimerTelephones($participant);
 			$telephones = $this->construireListeTelephones($input);
+
+			$this->supprimerAdresses($participant);
+			$adresses = $this->construireListeAdresses($input);
+
 			if(!$participant->save()) {
 				DB::rollBack();
 				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
@@ -215,6 +219,16 @@ class ParticipantsController extends BaseController {
 				if(!$this->sauvegarderTelephone($telephone, $participant)) {
 					DB::rollBack();
 					return Redirect::back()->withInput()->withErrors($telephone->validationMessages());
+				}
+			}
+
+			//Sauvegarde toutes les adresses. Si erreur, annule tout.
+			foreach($adresses as $adresse) {
+				// sauvegarderAdresse() retourne true s'il n'y a pas
+				// d'adresse ou si l'insertion s'est bien passée.
+				if(!$this->sauvegarderAdresse($adresse, $participant)) {
+					DB::rollBack();
+					return Redirect::back()->withInput()->withErrors($adresses->validationMessages());
 				}
 			}
 
@@ -586,6 +600,19 @@ class ParticipantsController extends BaseController {
 	{
 		foreach ($participant->telephones()->get() as $telephone) {
 			$telephone->delete();
+		}
+	}
+
+	/**
+	 * Supprime les adresses de $participant de la BDD.
+	 *
+	 * @author Res260
+	 * @param $participant Participant Le participant à qui on supprime les adresses.
+	 */
+	private function supprimerAdresses($participant)
+	{
+		foreach ($participant->adresses()->get() as $adresse) {
+			$adresse->delete();
 		}
 	}
 }

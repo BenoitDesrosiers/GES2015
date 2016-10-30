@@ -28,6 +28,7 @@ function retirerConteneur(conteneur) {
 	$(conteneur).remove();
 	//S'assurer que le bouton se ré-active.
 	gererEtatBoutonAjouterTelephone();
+	gererEtatBoutonAjouterAdresse();
 }
 
 /**
