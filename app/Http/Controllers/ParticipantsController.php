@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Adresse;
 use App\Models\Telephone;
 use DB;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -81,6 +82,18 @@ class ParticipantsController extends BaseController {
 				DB::rollBack();
 				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 			}
+
+			$adresses= $this->construireListeAdresses($input);
+			//Sauvegarde toutes les adresses. Si erreur, annule tout.
+			foreach($adresses as $adresse) {
+				// sauvegarderAdresse() retourne true s'il n'y a pas
+				// d'adresse ou si l'insertion s'est bien passée.
+				if(!$this->sauvegarderAdresse($adresse, $participant)) {
+					DB::rollBack();
+					return Redirect::back()->withInput()->withErrors($adresse->validationMessages());
+				}
+			}
+
 			$telephones = $this->construireListeTelephones($input);
 			//Sauvegarde tous les téléphones. Si erreur, annule tout.
 			foreach($telephones as $telephone) {
@@ -417,8 +430,8 @@ class ParticipantsController extends BaseController {
 	public function construireTelephone($input, $index)
 	{
 		$numero = isset($input['telephone_numero'][$index])
-						? $this->formatterTelephone($input['telephone_numero'][$index])
-						: null;
+			? $this->formatterTelephone($input['telephone_numero'][$index])
+			: null;
 		$description = isset($input['telephone_description'][$index]) ? $input['telephone_description'][$index] : null;
 
 		$telephone = New Telephone;
@@ -429,10 +442,35 @@ class ParticipantsController extends BaseController {
 	}
 
 	/**
+	 * Construit et retourne l'adresse entrée par l'utilisateur.
+	 * Si aucune adresse n'est spécifiée, retourne null.
+	 *
+	 * @author Res260
+	 * @param $input array les valeurs entrées par l'utilisateur.
+	 * @param $index int l'index à aller chercher dans
+	 * 					 $input['adresse_description'] et $input['adresse_adresse'].
+	 * @return Adresse l'objet d'adresse à ajouter, ou null.
+	 */
+	public function construireAdresse($input, $index)
+	{
+		$adresseStr = isset($input['adresse_adresse'][$index])
+			? $input['adresse_adresse'][$index]
+			: null;
+		$description = isset($input['adresse_description'][$index]) ? $input['adresse_description'][$index] : null;
+
+		$adresse = New Adresse;
+		$adresse->description = $description;
+		$adresse->adresse = $adresseStr;
+		$return_value = $adresse->adresse ? $adresse : null;
+		return $return_value;
+	}
+
+	/**
 	 * Formatte $telephone s'il est composé de 10 chiffres selon le format
 	 * "(ind) XXX-XXXX". Sinon, enlève simplement les caractères
 	 * " ", "(", ")" et "-".
 	 *
+	 * @author Res260
 	 * @param $telephone string Une chaine de caractères d'un téléphone.
 	 * @return mixed Une version formattée de $telephone
 	 */
@@ -451,7 +489,7 @@ class ParticipantsController extends BaseController {
 	}
 
 	/**
-	 * Sauvegarde $telephone de $participant dans la BDD.
+	 * Sauvegarde le $telephone de $participant dans la BDD.
 	 *
 	 * @author Res260
 	 * @param $telephone Telephone|void l'objet téléphone à sauvegarder.
@@ -464,6 +502,26 @@ class ParticipantsController extends BaseController {
 		if($telephone) {
 			$telephone->participant()->associate($participant);
 			if (!$telephone->save()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Sauvegarde l'$adresse de $participant dans la BDD.
+	 *
+	 * @author Res260
+	 * @param $adresse Adresse|void l'objet d'adresse à sauvegarder.
+	 * @param $participant Participant Le participant à qui l'Adresse appartient.
+	 * @return bool True si la sauvegarde a fonctionné, false sinon.
+	 */
+	private function sauvegarderAdresse($adresse, $participant)
+	{
+		// Null si il l'adresse n'a pas été spécifiée.
+		if($adresse) {
+			$adresse->participant()->associate($participant);
+			if (!$adresse->save()) {
 				return false;
 			}
 		}
@@ -495,8 +553,33 @@ class ParticipantsController extends BaseController {
 	}
 
 	/**
+	 * Retourne la liste des adresses selon $input.
+	 *
+	 * @author Res260
+	 * @param $input array les valeurs entrées par l'utilisateur.
+	 * @return array[Adresse] La liste des adresses entrés par l'utilisateur.
+	 */
+	private function construireListeAdresses($input)
+	{
+		$adresses = [];
+		$i = 0;
+		// Tant qu'il y a des entrées d'adresses à ajouter, on boucle et on ajoute à la liste.
+		while ($i == count($adresses)) {
+			array_push($adresses, $this->construireAdresse($input, $i));
+			if(array_last($adresses)) {
+				$i++;
+			}
+		}
+		// Le dernier élément sera toujours null.
+		array_pop($adresses);
+
+		return $adresses;
+	}
+
+	/**
 	 * Supprime les téléphones de $participant de la BDD.
 	 *
+	 * @author Res260
 	 * @param $participant Participant Le participant à qui on supprime les téléphones.
 	 */
 	private function supprimerTelephones($participant)
