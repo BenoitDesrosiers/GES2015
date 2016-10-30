@@ -81,6 +81,14 @@
                         <button onclick="retirerConteneur($(this).parent())" class="btn-danger" type="button" >Retirer</button>
                     </div>
                 @endforeach
+			@else
+				<div class="form-group conteneur-adresse">
+					{!! Form::label('adresse-adresse-1', 'Adresse:') !!}
+					{!! Form::text('adresse_adresse[]', '', ['id' => 'adresse-adresse-1', 'class' => 'form-control']) !!}
+
+					{!! Form::label('adresse-description-1', 'Description de l\'adresse:') !!}
+					{!!  Form::text('adresse_description[]', '', ['id' => 'adresse-description-1', 'class' => 'form-control']) !!}
+				</div>
             @endif
         </div>
         <button onclick="ajouterAdresse()" id="bouton-ajouter-adresse" disabled class="btn-success" type="button">Ajouter une adresse</button>
