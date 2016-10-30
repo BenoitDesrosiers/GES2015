@@ -11,12 +11,11 @@
             {!! Form::open(array('action' => array('EpreuvesController@storeParticipants', $epreuve->id))) !!}
 
                 <!-- Début mon code ici -->
-                <?php
-                $regionArray = array();
-                for ($i=0; $i<count($regions); $i++) {
-                    $regionArray[$regions[$i]['id']]  = $regions[$i]['nom'];
-                }
-                ?>
+                <?php $regionArray = ["Toutes les régions"]; ?>
+                @foreach ($regions as $region)
+                    <?php $regionArray[$region->id] = $region->nom; ?>
+                @endforeach
+
                 <div class="form-group">
                     {!! Form::label('region_id', 'Région:') !!} <br/>
                     {!! Form::select('region_id', $regionArray) !!}
