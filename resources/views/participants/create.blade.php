@@ -89,13 +89,13 @@
         <div class="form-group">
             <select name="region_id" id="region_id">
                 @foreach ($regions as $region)
-                    <option value="{{ $region->id }}">{{$region->nom}}</option>
+                    <option value="{!! $region->id !!}">{!! $region->nom !!}</option>
                 @endforeach
             </select>
             {{ $errors->first('region_id') }}
         </div>
 		<div class="form-group">
-			{!! Form::label('sports', 'Sports:') !!} 
+			{!! Form::label('sports', 'Sports:') !!}
 			<div class="row">
 				<?php
 					foreach ($sports as $sport) {

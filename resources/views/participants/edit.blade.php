@@ -74,10 +74,10 @@
                 @foreach($adresses as $adresse)
                     <div class="form-group conteneur-adresse">
                         {!! Form::label('adresse-adresse-' . $adresse->id, 'Adresse:') !!}
-                        {!! Form::text('adresse_adresse[]', $adresse->adresse, ['id' => 'adresse-adresse-' . $adresse->id, 'class' => 'form-control']) !!}
+                        {{ Form::text('adresse_adresse[]', $adresse->adresse, ['id' => 'adresse-adresse-' . $adresse->id, 'class' => 'form-control']) }}
 
                         {!! Form::label('adresse-description-' . $adresse->id, 'Description de l\'adresse:') !!}
-                        {!! Form::text('adresse_description[]', $adresse->description, ['id' => 'adresse-description-' . $adresse->id, 'class' => 'form-control']) !!}
+                        {{ Form::text('adresse_description[]', $adresse->description, ['id' => 'adresse-description-' . $adresse->id, 'class' => 'form-control']) }}
                         <button onclick="retirerConteneur($(this).parent())" class="btn-danger" type="button" >Retirer</button>
                     </div>
                 @endforeach
@@ -102,12 +102,12 @@
 			@else
 				<div class="form-group conteneur-telephone">
 					{!! Form::label('telephone-numero-1', 'Numéro de téléphone:') !!}
-					{{ Form::text('telephone_numero[]', '',
-                    ['id' => 'telephone-numero-1', 'class' => 'form-control']) }}
+					{!! Form::text('telephone_numero[]', '',
+                    ['id' => 'telephone-numero-1', 'class' => 'form-control']) !!}
 
 					{!! Form::label('telephone-description-1', 'Description du téléphone:') !!}
-					{{ Form::text('telephone_description[]', '',
-                    ['id' => 'telephone-description-1', 'class' => 'form-control']) }}
+					{!!  Form::text('telephone_description[]', '',
+                    ['id' => 'telephone-description-1', 'class' => 'form-control']) !!}
 				</div>
 			@endif
 		</div>

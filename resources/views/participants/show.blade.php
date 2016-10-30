@@ -44,11 +44,11 @@
 					@foreach ($participant->telephones as $telephone)
 						<li>
 							<strong>
-								{!! $telephone->description != ""
+								{{ $telephone->description != ""
 										? $telephone->description
 										: "(pas de description)"
-								!!} :
-							</strong> 	{!! $telephone->numero !!}
+								}} :
+							</strong> 	{{ $telephone->numero }}
 						</li>
 					@endforeach
 				@else
@@ -63,11 +63,11 @@
 					@foreach ($participant->adresses as $adresse)
 						<li>
 							<strong>
-								{!! $adresse->description != ""
+								{{ $adresse->description != ""
 										? $adresse->description
 										: "(pas de description)"
-								!!} :
-							</strong> 	{!! $adresse->adresse !!}
+								}} :
+							</strong> 	{{ $adresse->adresse }}
 						</li>
 					@endforeach
 				@else
