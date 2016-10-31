@@ -12,11 +12,11 @@ class BenevolesTableSeeder extends Seeder {
 	{
         //nom, prenom, adresse, numTel, numCell, courriel, disponibilite, accreditation, verification
         $infos = [
-		["Desrosiers", "Jérémi", "123 rue Duniquab, Drummondville, J2C 1A1", "8194771234", "8198181234", "j.desrosiers@evenement-sportif.ca", "000A123", "À faire"],
-		["Pedneault", "Eric", "124 rue Petinichon, Drummondville, J2C 1A2", "8194772345", "8198182345", "e.pedneault@evenement-sportif.ca", "000B123", "En attente"],
-		["Girardin", "Simon", "125 rue Sainte-Paire, Drummondville, J2C 1A3", "8194773456", "8198183456", "s.girardin@evenement-sportif.ca", "000C123", "Fait" ],
-        ["Lehoux", "Alexandre", "126 boul. Delamarde, Drummondville, J2C 1A4", "8194774567", "8198184567", "a.lehoux@evenement-sportif.ca", "000D123", "Fait"],
-        ["Dubé", "Sarah", "127 rue Dunimportequoi, Drummondville, J2C 1A5", "8194775678", "8198185678", "s.dube@evenement-sportif.ca", "000E123", "Fait"],
+		["Desrosiers", "Jérémi", "123 rue Duniquab, Drummondville, J2C 1A1", "8194771234", "8198181234", "M", "j.desrosiers@evenement-sportif.ca", "000A123", "À faire" , "2016-10-10"],
+		["Pedneault", "Eric", "124 rue Petinichon, Drummondville, J2C 1A2", "8194772345", "8198182345", "M",  "e.pedneault@evenement-sportif.ca", "000B123", "En attente", "2016-10-10"],
+		["Girardin", "Simon", "125 rue Sainte-Paire, Drummondville, J2C 1A3", "8194773456", "8198183456", "M",  "s.girardin@evenement-sportif.ca", "000C123", "Fait", "2016-10-10"],
+        ["Lehoux", "Alexandre", "126 boul. Delamarde, Drummondville, J2C 1A4", "8194774567", "8198184567", "M",  "a.lehoux@evenement-sportif.ca", "000D123", "Fait", "2016-10-10"],
+        ["Dubé", "Sarah", "127 rue Dunimportequoi, Drummondville, J2C 1A5", "8194775678", "8198185678", "F", "s.dube@evenement-sportif.ca", "000E123", "Fait", "2016-10-10"],
 		];
 
         DB::table('benevoles')->delete();
@@ -27,10 +27,12 @@ class BenevolesTableSeeder extends Seeder {
 		    $benevole->adresse = $info[2];
 		    $benevole->numTel = $info[3];
 		    $benevole->numCell = $info[4];
-		    $benevole->courriel = $info[5];
-		    $benevole->accreditation = $info[6];
-		    $benevole->verification = $info[7];
-            $benevole->save();		
+		    $benevole->sexe = $info[5];
+		    $benevole->courriel = $info[6];
+		    $benevole->accreditation = $info[7];
+		    $benevole->verification = $info[8];
+		    $benevole->naissance= new DateTime;
+			$benevole->save();		
         }
 	}
 }

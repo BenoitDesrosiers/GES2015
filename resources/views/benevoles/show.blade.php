@@ -12,6 +12,9 @@
         <p><a href="{{ action('DisponibilitesController@show',$benevole->id) }}" class="btn btn-info">Afficher Disponibilités</a></p>
         <p>Accréditation : {{ $benevole->accreditation }}</p>
         <p>Vérification : {{ $benevole->verification }}</p>
+        <p>Sexe : {{ $benevole->sexe }}</p>
+        <p>Date de naissance: {!! $benevole->naissance !!}</p>
+
 	</div>
 </div>
 @stop

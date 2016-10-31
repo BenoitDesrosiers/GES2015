@@ -35,6 +35,7 @@ class Benevole extends EloquentValidating {
      		'adresse' => 'required',
             'numTel' => 'required|string',
 		    'accreditation' => 'required'
+            
 		    ];
     }
 
