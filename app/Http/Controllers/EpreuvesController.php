@@ -58,7 +58,8 @@ class EpreuvesController extends BaseController {
 		$sports = Sport::all();
 		$arbitres = Arbitre::orderBy('nom', 'asc')->get(); //TODO: quand les arbitres seront associés à un sport, ne prendre que les arbitre du sport associé à l'épreuve
 		$sportId = $this->checkSportId($sports, $sportId);
-		return View::make('epreuves.create', compact('sports', 'sportId', 'arbitres', 'arbitresUtilises'));
+		$terrains = Terrain::all();
+		return View::make('epreuves.create', compact('sports', 'sportId', 'arbitres', 'arbitresUtilises', 'terrains'));
 
 	}
 	
@@ -194,10 +195,11 @@ class EpreuvesController extends BaseController {
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
 			$arbitresEpreuves = $epreuve->arbitres;
+			$terrainsEpreuve = $epreuve->terrains;
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		return View::make('Epreuves.show', compact('epreuve', 'arbitresEpreuves'));
+		return View::make('Epreuves.show', compact('epreuve', 'arbitresEpreuves', 'terrainsEpreuve'));
 	}	
 
 	
@@ -227,6 +229,12 @@ class EpreuvesController extends BaseController {
             	}
 			} catch (Exception $e) {
 				App::abort(404);
+			}
+			//Association des terrains
+			if (is_array(Input::get('terrain'))) {
+				$epreuve->terrains()->sync(array_keys(Input::get('terrain')));
+			} else {
+				$epreuve->terrains()->detach();
 			}
 			return Redirect::action ( 'EpreuvesController@index', array (
 									  'sportId' => $input ["sportsListe"]));

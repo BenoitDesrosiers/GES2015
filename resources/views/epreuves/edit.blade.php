@@ -57,17 +57,17 @@
 		<div class="form-group">
 			{!! Form::label('terrains', 'Terrains:') !!}
 			<div class="row">
-				@if ($epreuveTerrains->isEmpty())
-					<p>Il n'y a pas de terrain disponible pour cette épreuve.</p>
-				@else
-					@foreach ($epreuveTerrains as $terrain)
-						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
-		                    <label class="btn btn-default btn-block {{ $terrain->active }}">
-		                        <input name="terrain[{{ $terrain->id }}]" type="checkbox" {{ $terrain->checked }}> {{ $terrain->nom }}
-		                    </label><br/>
-	                	</div>
-					@endforeach
-				@endif
+@if ($epreuveTerrains->isEmpty())
+				<p>Il n'y a pas de terrain disponible pour cette épreuve.</p>
+@else
+	@foreach ($epreuveTerrains as $terrain)
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
+		            <label class="btn btn-default btn-block {{ $terrain->active }}">
+		            	<input name="terrain[{{ $terrain->id }}]" type="checkbox" {{ $terrain->checked }}> {{ $terrain->nom }}
+		        	</label><br/>
+	        	</div>
+	@endforeach
+@endif
 			</div>
 		</div>
 		<div class="form-group">
