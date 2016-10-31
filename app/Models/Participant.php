@@ -49,6 +49,8 @@ class Participant extends EloquentValidating {
 
 	/**
 	 * Un participant a plusieurs téléphones.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function telephones() {
 		return $this->hasMany('App\Models\Telephone');
@@ -56,6 +58,8 @@ class Participant extends EloquentValidating {
 
 	/**
 	 * Un participant a plusieurs adresses.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function adresses() {
 		return $this->hasMany('App\Models\Adresse');
@@ -73,7 +77,6 @@ class Participant extends EloquentValidating {
 			'numero',
 			'sexe',
 			'naissance',
-			'adresse',
 			'region_id'
 		];
 

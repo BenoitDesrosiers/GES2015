@@ -12,6 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Adresse extends EloquentValidating
 {
+	/**
+	 * Un id ne change pas.
+	 *
+	 * @var array La liste des valeurs qui ne peuvent être modifiées.
+	 */
 	protected $guarded = array('id');
 
 	/**
@@ -32,6 +37,9 @@ class Adresse extends EloquentValidating
 		'participant_id'
 	];
 
+	/**
+	 * @var String le message à récupérer en cas d'erreur de validation.
+	 */
 	public $validationMessages;
 
 	/**

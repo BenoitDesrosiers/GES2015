@@ -11,6 +11,8 @@ class CreateTelephonesTable extends Migration
 {
     /**
      * Crée la table 'Telephones' dans la BDD.
+	 *
+	 * @return void
      */
     public function up()
     {

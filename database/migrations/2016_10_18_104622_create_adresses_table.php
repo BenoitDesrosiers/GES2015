@@ -11,6 +11,8 @@ class CreateAdressesTable extends Migration
 {
 	/**
 	 * Crée la table 'Adresses' dans la BDD.
+	 *
+	 * @return void
 	 */
 	public function up()
 	{

@@ -68,7 +68,8 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Enregistre dans la bd le participant qui vient d'être créé.
 	 *
-	 * @return
+	 * @return View La vue de création d'un participant, avec un message
+	 * 				d'état d'ajout du participant.
 	 */
 	public function store()
 	{
@@ -142,7 +143,8 @@ class ParticipantsController extends BaseController {
      * Affiche le formulaire pour éditer un participant.
      *
      * @param  int $id l'id du participant à éditer 
-     * @return Response
+     * @return View La vue de modification d'un participant s'il y a eu une erreur,
+	 * 				sinon la vue d'affichage du participant modifié.
      */
     public function edit($id)
     {
@@ -403,7 +405,7 @@ class ParticipantsController extends BaseController {
 	 *
 	 * @author Res260
 	 * @param $input array les valeurs que l'usager a entrés.
-	 * @param Participant $aParticipant le participant (s'il existe déjà).
+	 * @param $aParticipant Participant le participant (s'il existe déjà).
 	 * @return Participant le participant à créer.
 	 */
 	private function construireParticipant($input, $aParticipant = null)
