@@ -30,13 +30,60 @@
 			{!! Form::radio('genre', 'mixte', $epreuve->genre == "mixte") !!}
 			{!! Form::label('mixte', 'Mixte') !!}
 			<br/>
-			{!! Form::radio('genre', 'masculin', $epreuve->genre == "masculin", ['class' => 'radio_click', 'onclick' => 'confirmationPopup()']) !!}
+			{!! Form::radio('genre', 'masculin', $epreuve->genre == "masculin", ['class' => 'radio_click', 'id' => 'genreM']) !!}
+
 			{!! Form::label('masculin', 'Masculin') !!}
 			<br/>
-			{!! Form::radio('genre', 'feminin', $epreuve->genre == "feminin", ['class' => 'radio_click', 'onclick' => 'confirmationPopup()']) !!}
-			{!! Form::label('feminin', 'Feminin') !!}
+			{!! Form::radio('genre', 'féminin', $epreuve->genre == "féminin", ['class' => 'radio_click', 'id' => 'genreF']) !!}
+			{!! Form::label('féminin', 'Féminin') !!}
 			<br/>
 			{{ $errors->first('genre') }}
+			<script type="text/javascript">
+
+				// Cette fonction crée une alerte afin d'aviser l'usager d'un risque de suppression.
+				function confirmationPopup(genre) {
+					bootbox.alert({
+						title: "Attention".fontsize(8),
+						message: ('Il y a des participants de genre \'' + genre + '\' dans l\'épreuve.' +
+									' Lors de la confirmation, ceux-ci seront supprimés.').fontsize(4),
+						size: 'Large',
+						backdrop: true,
+						closeButton: false,
+						onEscape: true
+					});
+
+				};
+
+				if ('<?php if ($proportionGenre[0] > 0){
+							echo true;
+						}else{
+							echo false;
+						}?>') {
+						document.getElementById('genreF').onclick = function () {
+							confirmationPopup('masculin');
+						};
+				}
+
+				if ('<?php if ($proportionGenre[1] > 0){
+							echo true;
+						}else{
+							echo false;
+						}?>'){
+
+					document.getElementById('genreM').onclick = function() {
+						confirmationPopup('féminin');
+					};
+				}
+
+				if ('<?php if (($proportionGenre[0] > 0) && ($proportionGenre[1] > 0)){
+							echo true;
+						}else{
+							echo false;
+						}?>'){
+					document.getElementById('genre')
+
+				}
+			</script>
 		</div>
 		<div class="form-group">
 			{!! Form::label('description', 'Description courte:') !!} 
@@ -78,18 +125,7 @@
 
 			{!! Form::button('Sauvegarder', ['name' => 'save', 'type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
-			<script>
-				function confirmationPopup() {
-					bootbox.alert({
-						title: "Attention".fontsize(8),
-						message: "En changeant le genre tous, les participants incompatibles seront retirés de l'épreuve.".fontsize(4),
-						size: 'Large',
-						backdrop: true,
-						closeButton: false,
-						onEscape: true
-					});
-				}
-			</script>
+
 		</div>
 		{!! Form::close() !!}
 

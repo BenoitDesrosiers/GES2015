@@ -27,8 +27,8 @@
 			{!! Form::radio('genre', 'masculin') !!}
 			{!! Form::label('masculin', 'Masculin') !!}
 			<br/>
-			{!! Form::radio('genre', 'feminin') !!}
-			{!! Form::label('feminin', 'Feminin') !!}
+			{!! Form::radio('genre', 'féminin') !!}
+			{!! Form::label('féminin', 'Féminin') !!}
 			<br/>
 			{{ $errors->first('genre') }}
 		</div>

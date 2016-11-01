@@ -18,49 +18,49 @@
 namespace App\Models;
 
 class Epreuve extends EloquentValidating {
-	protected $guarded = array('id');
 
-/** 
- * Eloquent relationship: une épreuve appartient à un sport
- */
+    protected $guarded = array('id');
 
-public function sport() {
-	return $this->belongsTo('App\Models\Sport');
-}
+    /**
+     * Eloquent relationship: une épreuve appartient à un sport
+     */
 
-public function evenements() {
-	return $this->hasMany('App\Models\Evenement');
-}
-	
-public function participants() {
-	return $this->belongsToMany('App\Models\Participant');
-}
+    public function sport() {
+        return $this->belongsTo('App\Models\Sport');
+    }
 
-/**
- * Eloquent relationship: un épreuve est associé à plusieurs arbitres
- */
-public function arbitres() {
-	return $this->belongsToMany('App\Models\Arbitre');
-}
+    public function evenements() {
+        return $this->hasMany('App\Models\Evenement');
+    }
 
-/**
- * Validation
- *
- * une épreuve doit avoir:
- *  - nom: obligatoire, et unique pour un sport donné, mais je n'ai pas trouvé comment exprimer ca avec les règles de Laravel
- *  - genre: obligatoire, et la valeur donné doit être parmis les valeurs suivante: ['masculin', 'feminin', 'mixte']
- *  - Les autres champs sont falcultatifs.
- */
+    public function participants() {
+        return $this->belongsToMany('App\Models\Participant');
+    }
 
-public $validationMessages;
+    /**
+     * Eloquent relationship: un épreuve est associé à plusieurs arbitres
+     */
+    public function arbitres() {
+        return $this->belongsToMany('App\Models\Arbitre');
+    }
 
-public function validationRules() {
-    return [
-		'nom' => 'required',
-        'genre' => 'in:masculin,feminin,mixte',
-		];
-}
+    /**
+     * Validation
+     *
+     * une épreuve doit avoir:
+     *  - nom: obligatoire, et unique pour un sport donné, mais je n'ai pas trouvé comment exprimer ca avec les règles de Laravel
+     *  - genre: obligatoire, et la valeur donné doit être parmis les valeurs suivante: ['masculin', 'féminin', 'mixte']
+     *  - Les autres champs sont falcultatifs.
+     *
+     * @return array
+     */
 
+    public $validationMessages;
 
-
+    public function validationRules() {
+        return [
+            'nom' => 'required',
+            'genre' => 'in:masculin,féminin,mixte',
+            ];
+    }
 }
