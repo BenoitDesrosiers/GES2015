@@ -74,7 +74,13 @@ class BenevolesController extends BaseController {
 		$benevole->verification = $input['verification'];
 		
 		if($benevole->save()) {
-			return Redirect::action('BenevolesController@index');
+			if (is_array(Input::get('terrain'))) {  //FIXME: si le get plante, le save est déjà fait.
+				$benevole->terrains()->sync(array_keys(Input::get('terrain')));
+			} else {
+				$benevole->terrain()->detach();
+			}
+			//          Message de confirmation si la sauvegarde a réussi
+			return Redirect::action('BenevolesController@create')->with ( 'status', 'Le bénévole a été créé!' );
 		} else {
 			return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
 		}	
