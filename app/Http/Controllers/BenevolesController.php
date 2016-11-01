@@ -7,7 +7,7 @@ use Redirect;
 use Input;
 
 use App\Models\Benevole;
-use App\Models\Disponibilite;
+use App\Models\Terrain;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -42,8 +42,15 @@ class BenevolesController extends BaseController {
 	 * @return Response
 	 */
 	public function create()
-	{
-		return View::make('benevoles.create');	
+	{	
+		try {
+			$terrains = Terrain::all();
+		
+			return View::make('benevoles.create', compact('terrains', 'benevoleTerrains'));
+		
+		} catch (Exception $e) {
+			App:abort(404);
+		}
 	}
 
 
@@ -72,8 +79,6 @@ class BenevolesController extends BaseController {
 			return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
 		}	
 	}
-
-
 	/**
 	 * Affiche la ressource.
 	 *
@@ -89,7 +94,6 @@ class BenevolesController extends BaseController {
 		}
 		return View::make('benevoles.show', compact('benevole'));
 	}
-
    
 	/**
 	 * Affiche le formulaire pour éditer la ressource.
@@ -106,7 +110,6 @@ class BenevolesController extends BaseController {
         }
 		return View::make('benevoles.edit', compact('benevole'));
 	}
-
 	/**
 	 * Mise à jour de la ressource dans la bd.
 	 *
@@ -138,7 +141,6 @@ class BenevolesController extends BaseController {
                     App::abort(404);
         }
 	}
-
 	/**
 	 * Efface la ressource de la bd.
 	 *
@@ -156,5 +158,4 @@ class BenevolesController extends BaseController {
 		return Redirect::action('BenevolesController@index');
 	
 	}
-
 }
