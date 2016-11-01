@@ -67,7 +67,7 @@ class EpreuvesController extends BaseController {
 	 */
 	public function ajtParticipant($epreuveId) {
 		try{
-            $regions = Region::all(); // Ajout de cette ligne
+            $regions = Region::all();
 			$epreuve = Epreuve::findOrFail ( $epreuveId );
 			$sport = Sport::findOrFail( $epreuve->sport_id);
 			$participants = $sport->participants->sortBy('prenom');
@@ -75,7 +75,7 @@ class EpreuvesController extends BaseController {
 		} catch ( ModelNotFoundException $e ) {
 			App::abort ( 404 );
 		}
-		return View::make ( 'epreuves.ajtParticipant', compact ( 'epreuve', 'sport', 'participants', 'epreuveParticipants', 'regions') ); // Ajout de 'regions'
+		return View::make ( 'epreuves.ajtParticipant', compact ( 'epreuve', 'sport', 'participants', 'epreuveParticipants', 'regions') );
 	}
 	
 	/**
