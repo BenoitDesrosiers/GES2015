@@ -39,3 +39,11 @@ $factory->define(App\Models\Region::class, function (Faker\Generator $faker) {
 	];
 
 });
+
+$factory->define(App\Models\Sport::class, function (Faker\Generator $faker) {
+    return [
+        'nom' => $faker->jobTitle, // Pas rapport, mais il n'y avait pas de nom de sport...
+        'tournoi' => 0,
+        'saison' => 'e'
+    ];
+});

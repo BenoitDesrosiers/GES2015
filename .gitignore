@@ -1,11 +1,10 @@
-/vendor
+﻿/vendor
 /node_modules
 Homestead.yaml
 start_server.bat
 TODO.txt
-Proposition.txt
 .idea
-#.env   <<<<< a remettre plus tard, je l'ai enlevé juste pour que ca soit moins compliqué pour le étudiants. 
+Proposition.txt
+.env
 .settings/org.eclipse.core.resources.prefs
-*~
 .settings
