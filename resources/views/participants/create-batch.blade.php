@@ -16,24 +16,26 @@
                     <li>Les sports doivent être entrés sans faute d'orthographe et les majuscules ne sont pas considérées</li>
                     <li>Les régions doivent être entrées avec leur nom court. Par exemple: Centre-du-Québec est CDQ</li>
                     <li>Aucune entête doit être fournie dans le fichier CSV, seulement les données</li>
+                    <li>Chaque rangée doit terminer avec une nouvelle ligne (\n). Sinon elle n'est pas utilisée</li>
+                    <li>La date de naissance doit être écrite selon le format: JJ-MM-AAAA</li>
                 </ul>
                 {{ link_to('/assets/exemple/creer-batch-participants.csv', 'Exemple de fichier') }}
             </div>
         </div>
         <div class="panel-body">
             <div id="televersement" class="container-fluid">
-                {{ Form::open(["action" => "ParticipantsController", "class" => "form-horizontal", "method" => "POST"]) }}
-                    <div class="row">
-                        <div class="col-lg-3">
-                            {{ Form::label("fichier-csv", "Envoyez votre fichier CSV:") }}
-                        </div>
-                        <div class="col-lg-4">
-                            {{ Form::file("fichier-csv") }}
-                        </div>
-                        <div class="col-lg-1">
-                            {{ Form::submit("Envoyer", ["class" => "btn btn-info"]) }}
-                        </div>
+                {{ Form::open(["action" => "ParticipantsController@createFromCSV", "class" => "form-horizontal", "method" => "POST", "files" => true]) }}
+                <div class="row">
+                    <div class="col-lg-3">
+                        {{ Form::label("fichier-csv", "Envoyez votre fichier CSV:") }}
                     </div>
+                    <div class="col-lg-4">
+                        <input type="file" name="fichier-csv" id="fichier-csv">
+                    </div>
+                    <div class="col-lg-1">
+                        {{ Form::submit("Envoyer", ["class" => "btn btn-info"]) }}
+                    </div>
+                </div>
                 {{ Form::close() }}
             </div>
             <br/>
@@ -52,11 +54,11 @@
                     </tr>
                     @if (!is_null($rangees))
                         @foreach ($rangees as $rangee)
-                        <tr>
-                            @foreach ($rangee as $donnee)
-                                {{ $donnee }}
-                            @endforeach
-                        </tr>
+                            <tr>
+                                @foreach ($rangee as $donnee)
+                                    <td>{{ utf8_encode($donnee) }}</td>
+                                @endforeach
+                            </tr>
                         @endforeach
                     @endif
                 </table>

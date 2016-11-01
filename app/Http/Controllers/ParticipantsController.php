@@ -45,27 +45,32 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Créée des participants à partir d'un fichier CSV
 	 *
+	 * @param Request $request Variable contenant les données envoyées dans le formulaire
+	 *
 	 * @author ZeLarpMaster
 	 * @return Response
 	 */
 	public function createFromCSV(Request $request) {
 		$donnees = array();
 
-		$entete = array("Nom" => true, "Prénom" => true, "Numéro Téléphone" => false, "Nom Parent" => false, "Numéro" => true, "Genre" => true, "Date Naissance" => true, "Adresse" => false, "Région" => false, "Sports" => false);
+		$metadata = array("Nom" => [true, "string", "verifierVariable"], "Prénom" => [true, "string", "verifierVariable"], "Numéro Téléphone" => [false, "string", "verifierVariable"], "Nom Parent" => [false, "string", "verifierVariable"], "Numéro" => [true, "integer", "verifierNumero"], "Genre" => [true, "boolean", "verifierGenre"], "Date Naissance" => [true, "string", "verifierDate"], "Adresse" => [false, "string", "verifierVariable"], "Région" => [false, "string", "verifierRegion"], "Sports" => [false, "string", "verifierSport"]);
 
-		$fichierCsv = $request->input("fichier-csv", null);
+		$erreurs = null;
+		$fichierCsv = $request->file("fichier-csv", null);
 		if (is_null($fichierCsv) || !$fichierCsv->isValid()) {
 			$donneesCsv = null;
 			$plusLongueDonnee = 0;
 		} else {
-			$donneesCsv = ParticipantsController::transformerFichierCsv($fichierCsv);
-			$plusLongueDonnee = max(max(array_map("count", $donneesCsv)) - count($entete), 0);
+			$donneesCsv = $this->transformerFichierCsv($fichierCsv);
+			$plusLongueDonnee = max(max(array_map("count", $donneesCsv)) - count($metadata), 0) + 1;
+			$erreurs = $this->verifierDonneesCsv($metadata, $donneesCsv);
 		}
-		$rowspanEntete = 'rowspan="' . strval($plusLongueDonnee) . '"';
+		$rowspanEntete = 'colspan="' . strval($plusLongueDonnee) . '"';
 
-		$donnees["entetes"] = $entete;
+		$donnees["entetes"] = $metadata;
 		$donnees["rangees"] = $donneesCsv;
 		$donnees["rowspanEntete"] = $rowspanEntete;
+		$donnees["erreurs"] = $erreurs;
 
 		return View::make("participants.create-batch", $donnees);
 	}
@@ -323,12 +328,155 @@ class ParticipantsController extends BaseController {
 	 *
 	 * @param UploadedFile $fichierCsv
 	 * 			Fichier CSV à transformer.
-	 * @return Array $resultat. Tableau des valeurs du $fichierCsv
+	 * @return array $resultat. Tableau des valeurs du $fichierCsv
 	 */
 	private function transformerFichierCsv($fichierCsv) {
 		$contenuBrut = file_get_contents($fichierCsv->getRealPath());
-		$contenuTableau = str_getcsv($contenuBrut);
+		$contenuCoupe = str_replace("\r", "", $contenuBrut);
+		$contenuTableau = array();
+		// Sépare les rangées aux nouvelles lignes et enlève la dernière rangée
+		foreach(array_slice(explode("\n", $contenuCoupe), 0, -1) as $ligne) {
+			$contenuTableau[] = str_getcsv($ligne);
+		}
 		$resultat = $contenuTableau;
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie les données présentes dans le tableau CSV et retourne les erreurs
+	 *
+	 * @param array $metadataColonnes La liste de colonnes obligatoires ainsi que leur type
+	 * @param array $donneesCsv Le tableau CSV à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return array Une liste d'erreurs par rangée de données CSV
+	 */
+	private function verifierDonneesCsv($metadataColonnes, $donneesCsv) {
+		$resultat = array();
+		foreach ($donneesCsv as $rangee) {
+			$erreur = null;
+			$colonneMixe = array_map(null, $metadataColonnes, $rangee);
+			foreach ($colonneMixe as $colonne) {
+				list($metadataValeur, $valeur) = $colonne;
+				$valeurVide = !isset($valeur) || trim($valeur) == false;
+				if ($valeurVide && $metadataValeur[0]) {
+					$erreur = "Valeur obligatoire inexistante";
+				} elseif (!is_a($valeur, $metadataValeur[1])) {
+					$erreur = "Type de la valeur invalide";
+				} elseif (!call_user_func($metadataValeur[2], $valeur)) {
+					$erreur = "Valeur invalide";
+				}
+			}
+			// Si les données individuelles sont corrects, on regarde le reste.
+			if (is_null($erreur)) {
+				if ($this->verifierDoublon($rangee)) {
+					$erreur = "Existe déjà";
+				}
+			}
+			$resultat[] = $erreur;
+		}
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si la rangée correspond à un participant existant déjà dans la base de données
+	 *
+	 * @param array $rangee Une rangée de données à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si le participant existe déjà
+	 */
+	private function verifierDoublon($rangee) {
+		$region = Region::where("upper(nom_court)", "=", strtoupper($rangee[8]))->first();
+		$resultat = Participant::where("upper(nom)", "=", strtoupper($rangee[0]))
+							->where("upper(prenom)", "=", strtoupper($rangee[1]))
+							->where("numero", "=", $rangee[4])
+							->where("region_id", "=", $region->id)->exists();
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si un sport existe
+	 *
+	 * @param string $sport Le sport à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si le sport existe
+	 */
+	private function verifierSport($sport) {
+		$resultat = Sport::where("upper(nom)", "=", strtoupper($sport))->exists();
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si une région existe
+	 *
+	 * @param string $region La région à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si la région existe
+	 */
+	private function verifierRegion($region) {
+		$resultat = Region::where("upper(nom_court)", "=", strtoupper($region))->exists();
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si une date est valide
+	 * La date doit être écrite dans une string suivant le format Québécois: JJ-MM-AAAA
+	 *
+	 * @param string $date La date à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si la date est invalide
+	 */
+	private function verifierDate($date) {
+		$date_explosee = explode("-", $date, 2);
+		if ($date_explosee !== false && count($date_explosee) == 3) {
+			list($jour, $mois, $annee) = $date_explosee;
+			$resultat = checkdate($mois, $jour, $annee);
+		} else {
+			$resultat = false;
+		}
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si un numéro est invalide
+	 *
+	 * @param string $numero Le numéro à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si le numéro est invalide
+	 */
+	private function verifierNumero($numero) {
+		$resultat = !ctype_digit($numero);
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si la variable est une chaîne de caractères
+	 *
+	 * @param string $variable La variable à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si l'argument n'est pas une chaîne de caractères
+	 */
+	private function verifierVariable($variable) {
+		$resultat = !is_string($variable);
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si le genre est valide
+	 *
+	 * @param string $genre Le genre à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si le genre n'est pas "1" ou "0"
+	 */
+	private function verifierGenre($genre) {
+		$resultat = !($genre == "1" || $genre == "0");
 		return $resultat;
 	}
 
