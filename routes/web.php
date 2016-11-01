@@ -18,11 +18,11 @@ Route::get('/','HomeController@index');
 Route::get('/home','HomeController@index');
 Route::get('/about','AboutController@index');
 
-Route::resource('/organismes','OrganismesController');
-
 Auth::routes();
 
 Route::group(['middleware'=>'auth'], function() {
+
+	Route::resource('/organismes','OrganismesController');
 	
 	Route::resource('sports','SportsController');
 	Route::resource('sports.epreuves','SportsEpreuvesController');

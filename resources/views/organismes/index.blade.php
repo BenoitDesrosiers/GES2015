@@ -23,7 +23,9 @@
 					<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherContacts(this)"/>
 				</td>
 				<td>
-					{{ $organisme->nomOrganisme }}
+					<a href="{!! action('OrganismesController@show', $organisme->id) !!}">
+							{{ $organisme->nomOrganisme }}
+					</a>
 				</td>
 				<td>
 					@if ($organisme->telephone === NULL || $organisme->telephone === "")

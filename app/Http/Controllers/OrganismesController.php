@@ -54,7 +54,8 @@ class OrganismesController extends Controller
      */
     public function show($id)
     {
-        //
+        $organisme = Organisme::findOrFail($id);
+        return View::make('organismes.show', compact('organisme'));
     }
 
     /**
@@ -71,11 +72,11 @@ class OrganismesController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     * @param  Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id)
+    public function update(OrganismesRequest $request, $id)
     {
         $organisme = Organisme::findOrFail($id);
         $organisme->nomOrganisme = Input::get('nomOrganisme');
