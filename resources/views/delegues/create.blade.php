@@ -64,16 +64,17 @@
 		</div>
 		<div class="form-group telephone">
 			{!! Form::label('telephone', 'Téléphone:') !!}
-			{!! Form::text('telephone',null, ['class' => 'form-control']) !!}
+			{!! Form::text('telephone[1]',null, ['class' => 'form-control telephone_texte' ]) !!}
+
 			{{ $errors->first('telephone') }}
 		</div>
-			<button type ="button" id='add1'>Add</button>
-		<div class="form-group">
-			{!! Form::button('+', ['type' => 'button']) !!}
+			<button type = "button" id='add'>Ajouter un téléphone</button>
+		<div class="form-group courriel">
 			{!! Form::label('courriel', 'Courriel:') !!} 
-			{!! Form::text('courriel',null, ['class' => 'form-control']) !!}
+			{!! Form::text('courriel',null, ['class' => 'form-control courriel_texte']) !!}
 			{{ $errors->first('courriel') }}
 		</div>
+            <button type ="button" id='add2'>Ajouter un courriel</button>
 		<!--    Lister tous les rôles possibles      -->
 		<div class="form-group">
             {!! Form::label('roles', 'Rôles:') !!}
@@ -96,19 +97,52 @@
 </div>
 @stop
 @section('script')
-<script>
+<script type="text/javascript">
+
 	$(document).ready(function() {
-		var removeButton = "<button type = 'button' onclick='remove(this)' class='remove'>Remove</button>";
-		$('#add1').click(function() {
-			$('div.telephone:last').after($('div.telephone:first').clone());
-			$('div.telephone:last').append(removeButton);
+        var removeButton = "<button type = 'button' onclick='remove1(this)'>Enlever ce téléphone</button>";
+        $('#add').click(function () {
+            var last_id = $('div.telephone').length;
+            $('div.telephone:last').after($('div.telephone:first').clone());
+            $('div.telephone:last input').attr('name', 'telephone[' + (last_id + 1) + ']');
+            //$('div.telephone:last').setAttribute('nom','')
+            $('div.telephone:last').append(removeButton);
+            $('div.telephone:last input').each(function () {
+                this.value = '';
+            });
+        });
+    });
 
-		});
-	});
+        function remove1(element) {
+            var count = 1;
+            $(element).closest('div.telephone').remove();
+            $('div.telephone input').each(function () {
+                this.name = 'telephone[' + count + ']';
+                count = count + 1;
+            })
+        }
 
-	function remove(element) {
-		$(element).closest('div.telephone').remove();
-	}
+
+
+    $(document).ready(function() {
+
+        var removeButton = "<button type = 'button' onclick='remove2(this)' class='remove2'>Enlever ce courriel</button>";
+        $('#add2').click(function() {
+            $('div.courriel:last').after($('div.courriel:first').clone())
+            $('div.courriel:last').append(removeButton);
+            $('div.courriel:last input').each(function () {
+                this.value = '';
+            });
+        });
+    });
+
+    function remove2(element) {
+        $(element).closest('div.courriel').remove();
+    }
+
+
 
 </script>
+
+
 @stop

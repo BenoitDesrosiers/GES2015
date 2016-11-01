@@ -46,6 +46,7 @@ class DeleguesController extends BaseController {
 		try {
 			
 			$regions = Region::all();
+            $telephones = array();
 			$roles = Role::all();
 			//      La date par défaut du formulaire est <cette année> - 20 ans
 			//      pour être plus prêt de l'âge moyen attendu
@@ -55,7 +56,7 @@ class DeleguesController extends BaseController {
 			$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101); //FIXME: les délégués ne devraient pas être dépendant des Participants. Mettre cette fonction dans un helper. 
 			$listeMois = ParticipantsController::generer_liste(1, 12);
 			$listeJours = ParticipantsController::generer_liste(1, 31);
-			return View::make('delegues.create', compact('regions', 'roles', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+			return View::make('delegues.create', compact('regions', 'telephones', 'roles', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -70,12 +71,14 @@ class DeleguesController extends BaseController {
     public function store()
     { //FIXME:: identique à update
         try {
+
             $input = Input::all();
             $delegue = new Delegue;
             $delegue->nom = $input['nom'];
             $delegue->prenom = $input['prenom'];
             $delegue->region_id = $input['region_id'];
             $roles = Input::get('role');
+            $telephones = Input::get('telephone');
 
             //      Le champ 'accreditation' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement.
             if(Input::has('accreditation')) {
@@ -97,7 +100,7 @@ class DeleguesController extends BaseController {
                 $delegue->date_naissance = "invalide";
             }
             $delegue->adresse = $input['adresse'];
-            $delegue->telephone = $input['telephone'];
+            $delegue->telephone = "please merc....";
             $delegue->courriel = $input['courriel'];
 
             if($delegue->save()) {
