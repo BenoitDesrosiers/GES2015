@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\BaseController;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use League\Flysystem\Exception;
 use View;
 use Redirect;
@@ -20,7 +21,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  * Le controller pour les participants liés à un sport.
  * 
  * @author Mathieu & Alexandre
- * @version 0.0.1 rev 1
+ * @version 2.0.1
+ * @modified 20161031
 */
 class sportParticipantController extends BaseController{
     /**
@@ -42,21 +44,20 @@ class sportParticipantController extends BaseController{
 
     /**
      * liste les participants d'une région.
-     * Exclue les équipes.
-     * @param Request $request
-     * @return mixed $participants
+     * Exclue les équipes des participants retournés.
+     * @param Request $request L'id d'un région.
+     * @return mixed $participants La liste des participants selon une région.
      */
     public function listerParticipants(Request $request)
     {
         $region_id = $request->input('region_id');
         if ( isset($region_id) )
         {
-            $participants = Participant::with('sports')
+            return Participant::with('sports')
                 ->where('region_id', $region_id)
                 ->where('equipe', 0)
                 ->orderBy('nom')
                 ->get();
-            return $participants;
         }
         else
         {
@@ -66,19 +67,17 @@ class sportParticipantController extends BaseController{
 
     /**
      * Sauvegarde le lien entre un sport et des participants.
-     * @return View sportParticipant.index
+     * @return View La vue sportParticipant.index
      */
     public function store()
     {
-        $region_id = Input::get('region');
-        $sport_id = Input::get('sport');
-        $participation = Input::get('participation');
+        $infos = Input::all();
         $regions = Region::all()->sortBy('nom');
-        if (isset($region_id, $sport_id))
+        if (isset($infos['region_id'], $infos['sport']))
         {
             try {
-                $sport = Sport::findOrFail($sport_id);
-                $participants = Participant::where('region_id', $region_id)->get();
+                $sport = Sport::findOrFail($infos['sport']);
+                $participants = Participant::where('region_id', $infos['region_id'])->get();
 
                 // Pas efficace de toute les enlever et remettre ceux necessaire, mais la fonction sync, qui permetterait
                 // ça, a besoin de l'id de tous les participants pour le sport, cependant j'ai seulement ceux selon une région.
@@ -87,9 +86,9 @@ class sportParticipantController extends BaseController{
                     $sport->participants()->detach($participant->id);
                 }
 
-                if (count($participation) > 0)
+                if (isset($infos['participation']))
                 {
-                    foreach ($participation as $key => $value)
+                    foreach ($infos['participation'] as $key => $value)
                     {
                         if ($value)
                         {
@@ -114,7 +113,6 @@ class sportParticipantController extends BaseController{
         {
             App::abort(404);
         }
-
-        return view('sportParticipant.index', compact('sport', 'regions', 'region_id'));
+        return view('sportParticipant.index', ['sport'=>$sport, 'regions'=>$regions, 'region_id'=>$infos["region_id"]]);
     }
 }
