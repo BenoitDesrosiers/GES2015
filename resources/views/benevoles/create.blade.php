@@ -57,7 +57,7 @@
         </div>
 		<div class="form-group">
 			{!! Form::label('sexe', 'Sexe :') !!} 
-			{!! Form::select('sexe', ['M' => 'Masculin', 'F' => 'Féminin', 'A' => 'Autre']); !!}
+			{!! Form::select('sexe', ['masculin' => 'Masculin', 'feminin' => 'Féminin', 'autre' => 'Autre']); !!}
 			{{ $errors->first('sexe') }}
 		</div>
         

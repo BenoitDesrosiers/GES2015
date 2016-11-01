@@ -28,15 +28,17 @@ class Benevole extends EloquentValidating {
      *   obligatoire pour l'ajout d'un bénévole.
      */
 
+    public $validationMessages;
+
     public function validationRules() {
 	    return [
 		    'nom' => 'required',
             'prenom' => 'required',
      		'adresse' => 'required',
             'numTel' => 'required|string',
-		    'accreditation' => 'required'
-            
-		    ];
+		    'accreditation' => 'required',
+            'naissance' => 'required|date'
+            ];
     }
 
 }

@@ -6,6 +6,7 @@ use View;
 use Redirect;
 use Input;
 use DateTime;
+use App;
 
 use App\Models\Benevole;
 use App\Models\Disponibilite;
@@ -63,6 +64,7 @@ class BenevolesController extends BaseController {
 	 */
 	public function store()
 	{
+		try {
         $input = Input::all();
         		
 		$benevole = new Benevole;
@@ -92,8 +94,11 @@ class BenevolesController extends BaseController {
 			return Redirect::action('BenevolesController@index');
 		} else {
 			return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
-		}	
+		}
+		} catch (Exception $e) {
+            App:abort(404);	
 	}
+}
 
 
 	/**
