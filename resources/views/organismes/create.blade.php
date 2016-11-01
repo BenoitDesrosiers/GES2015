@@ -1,4 +1,8 @@
 @extends('layout')
+@section('stylesheet')
+    <link rel="stylesheet" href="{{ asset('/css/organismesCSS.css') }}">
+@stop
+
 @section('content')
 	{!! Form::open(['action'=> 'OrganismesController@index','class' => 'form']) !!}
 		<div class="form-group">
@@ -23,29 +27,4 @@
             <a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
         </div>
 	{!! Form::close() !!}
-
-<style>
-    .nomOrganismeBox {
-        width:300px;
-    }
-
-	.telephone {
-		width:120px;
-		display:inline-block;
-	}
-
-	.boiteDescription {
-		padding-bottom:7px;
-		width:500px;
-		height:34px;
-	}
-</style>
-
-<script type="text/javascript">
-function countChars(countfrom,displayto) {
-  var len = document.getElementById(countfrom).value.length;
-  document.getElementById(displayto).innerHTML = len;
-}
-</script>
-
 @stop

@@ -1,0 +1,14 @@
+.nomOrganismeBox {
+        width:300px;
+    }
+
+.telephone {
+		width:120px;
+		display:inline-block;
+	}
+
+.boiteDescription {
+		padding-bottom:7px;
+		width:500px;
+		height:34px;
+	}
