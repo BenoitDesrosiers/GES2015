@@ -54,8 +54,33 @@
 			{{ $errors->first('benevole') }}				
 		</div>
 		<div class="form-group">
+			{!! Form::label('terrains', 'Terrains:') !!} 
+			<div class="row">
+				<?php
+					foreach ($terrains as $terrain) {
+						$checked = "";
+						$active = "";
+						foreach ($benevoleTerrains as $benTerrain) {
+							if ($benTerrain->id == $terrain->id) {
+								$checked = " checked";
+								$active = " active";
+								continue;
+							}
+						}
+				?>
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
+			        <label class="btn btn-default btn-block<?=$active?>">
+			            <input name="terrain[{{ $terrain->id }}]" type="checkbox"<?=$checked?>> {{ $terrain->nom }}
+			        </label><br/>
+			    </div>
+				<?php
+					}
+				?>
+			</div>
+		</div>
+		<div class="form-group">
 			{!! Form::button('Modifier', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-            <a href="{{ action('BenevolesController@show',$benevole->id) }}" class="btn btn-danger">Annuler</a>
+            <a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
 		</div>
 		{!! Form::close() !!}
 	</div>

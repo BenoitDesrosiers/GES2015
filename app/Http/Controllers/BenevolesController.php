@@ -111,10 +111,12 @@ class BenevolesController extends BaseController {
 	{
         try{
 		    $benevole = Benevole::findOrFail($id);
+		    $terrains = Terrain::all();
+		    $benevoleTerrains = Benevole::find($id)->terrains;
+		    return View::make('benevoles.edit', compact('benevole', 'terrains', 'benevoleTerrains'));
         } catch(ModelNotFoundException $e) {
             App::abort(404);
         }
-		return View::make('benevoles.edit', compact('benevole'));
 	}
 	/**
 	 * Mise à jour de la ressource dans la bd.
@@ -134,14 +136,20 @@ class BenevolesController extends BaseController {
 	        $benevole->numTel = $input['numTel'];
             $benevole->numCell = $input['numCell'];
             $benevole->courriel = $input['courriel'];
-	        $benevole->accreditation = $input['accreditaiton'];
+	        $benevole->accreditation = $input['accreditation'];
 	        $benevole->verification = $input['verification'];
 	
 	        if($benevole->save()) {
-		        return Redirect::action('BenevolesController@index');
-	        } else {
-		        return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
-	        }
+		        if (is_array(Input::get('terrain'))) {
+					$benevole->terrains()->sync(array_keys(Input::get('terrain')));
+				} else {
+					$benevole->terrains()->detach();
+				}
+//         		Message de confirmation si la sauvegarde a réussi
+				return Redirect::action('BenevolesController@show', $benevole->id)->with ( 'status', 'Le benevole a été mis a jour!' );
+			} else {
+				return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
+        	}
         }
         catch (ModelNotFoundException $e) {
                     App::abort(404);

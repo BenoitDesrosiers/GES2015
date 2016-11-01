@@ -5,6 +5,11 @@
 		<h2 class="panel-title"><a href="{{ action('BenevolesController@index', $benevole->id) }}">Liste <- {{ $benevole->nom }}, {{ $benevole->prenom }}</a></h2>
 	</div>
 	<div class="panel-body">
+		@if (session('status'))
+            <div class="alert alert-success">
+                {!! session('status') !!}
+            </div>
+        @endif
 		<p>Adresse : {{ $benevole->adresse }}</p>
 		<p>Numéro de Téléphone : {{ $benevole->numTel }}</p>
         <p>Numéro de Cellulaire : {{ $benevole->numCell }}</p>
