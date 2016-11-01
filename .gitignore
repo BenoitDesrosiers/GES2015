@@ -8,3 +8,5 @@ Proposition.txt
 .env
 .settings/org.eclipse.core.resources.prefs
 .settings
+_ide_helper.php
+.phpstorm.meta.php
