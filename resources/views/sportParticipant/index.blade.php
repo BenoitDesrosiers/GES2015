@@ -4,7 +4,7 @@
 	<div class="panel panel-default">
 		<input name="sport" type="hidden" value="{!! $sport->id !!}">
 		<div class="panel-heading">
-			<h2>Liste des participants pour {!! strtolower($sport->nom) !!}</h2>
+			<h2>Liste des participants pour {{  strtolower($sport->nom) }}</h2>
 
 			@if ($regions->isEmpty())
 				<p>Il n'existe aucune région dans le système.</p>
@@ -12,9 +12,9 @@
 				<select id="region" name="region_id" title="Choix de région">
 					@foreach($regions as $region)
 						@if (isset($region_id) && $region_id == $region->id)
-							<option value="{!! $region->id !!}" selected>{!! $region->nom !!}</option>
+							<option value="{!! $region->id !!}" selected>{{ $region->nom }}</option>
 						@else
-							<option value="{!! $region->id !!}">{!! $region->nom !!}</option>
+							<option value="{!! $region->id !!}">{{ $region->nom }}</option>
 						@endif
 					@endforeach
 				</select>

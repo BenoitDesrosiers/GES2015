@@ -21,8 +21,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  * Le controller pour les participants liés à un sport.
  * 
  * @author Mathieu & Alexandre
- * @version 2.0.1
- * @modified 20161031
+ * @version 2.0.2
+ * @modified 20161101
 */
 class sportParticipantController extends BaseController{
     /**
@@ -50,19 +50,19 @@ class sportParticipantController extends BaseController{
      */
     public function listerParticipants(Request $request)
     {
-        $region_id = $request->input('region_id');
-        if ( isset($region_id) )
+        if ($request->ajax())
         {
-            return Participant::with('sports')
-                ->where('region_id', $region_id)
-                ->where('equipe', 0)
-                ->orderBy('nom')
-                ->get();
+            $region_id = $request->input('region_id');
+            if ( isset($region_id) )
+            {
+                return Participant::with('sports')
+                    ->where('region_id', $region_id)
+                    ->where('equipe', 0)
+                    ->orderBy('nom')
+                    ->get();
+            }
         }
-        else
-        {
-            App::abort(404);
-        }
+        App::abort(403);
     }
 
     /**
