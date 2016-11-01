@@ -5,7 +5,8 @@ start_server.bat
 TODO.txt
 .idea
 Proposition.txt
-.env
+.env # << copiez .env_GES2016 pour vous créer votre .env
+composer.lock
 .settings/org.eclipse.core.resources.prefs
 .settings
 _ide_helper.php
