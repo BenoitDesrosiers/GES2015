@@ -78,10 +78,15 @@ class AboutController extends BaseController {
                 )
             ),
             2016 => array(
-                array(
-                    "Alexandre Caron",
-                    "Association d'un sport à un participant à partir d'un sport"
-                )
+				array(
+					"Alexandre Caron",
+					"Association d'un sport à un participant à partir d'un sport"
+				),
+
+				array(
+					"Émilio Gonzalez",
+					"Ajout de plusieurs téléphones et adresses pour les participants (fini le 161101)."
+				)
             )
         );
 
