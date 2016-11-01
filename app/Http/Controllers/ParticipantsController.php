@@ -56,12 +56,16 @@ class ParticipantsController extends BaseController {
 		$fichierCsv = $request->input("fichier-csv", null);
 		if (is_null($fichierCsv) || !$fichierCsv->isValid()) {
 			$donneesCsv = null;
+			$plusLongueDonnee = 0;
 		} else {
 			$donneesCsv = ParticipantsController::transformerFichierCsv($fichierCsv);
+			$plusLongueDonnee = max(max(array_map("count", $donneesCsv)) - count($entete), 0);
 		}
+		$rowspanEntete = 'rowspan="' . strval($plusLongueDonnee) . '"';
 
 		$donnees["entetes"] = $entete;
 		$donnees["rangees"] = $donneesCsv;
+		$donnees["rowspanEntete"] = $rowspanEntete;
 
 		return View::make("participants.create-batch", $donnees);
 	}

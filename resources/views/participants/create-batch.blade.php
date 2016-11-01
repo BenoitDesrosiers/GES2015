@@ -22,7 +22,7 @@
         </div>
         <div class="panel-body">
             <div id="televersement" class="container-fluid">
-                {{ Form::open(["class" => "form-horizontal"]) }}
+                {{ Form::open(["action" => "ParticipantsController", "class" => "form-horizontal", "method" => "POST"]) }}
                     <div class="row">
                         <div class="col-lg-3">
                             {{ Form::label("fichier-csv", "Envoyez votre fichier CSV:") }}
@@ -43,6 +43,8 @@
                         @foreach ($entetes as $entete => $obligatoire)
                             @if ($obligatoire)
                                 <th><u>{{ $entete }}</u></th>
+                            @elseif ($loop->last)
+                                <th {{ $rowspanEntete }}>{{ $entete }}</th>
                             @else
                                 <th>{{ $entete }}</th>
                             @endif
