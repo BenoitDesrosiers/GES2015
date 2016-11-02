@@ -8,13 +8,14 @@ use Input;
 
 use App\Models\Sport;
 use App\Models\Terrain;
-
+use App\Models\Arbitre;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
  * Le controller pour les sports
  * 
  * @author benou
- * @version 0.1
+ * 		   Francis M
+ * @version 0.1.1
  */
 class SportsController extends BaseController {
 
@@ -44,7 +45,8 @@ class SportsController extends BaseController {
 	{
 		try {
 			$terrains = Terrain::all();
-			return View::make('sports.create', compact('terrains'));
+			$arbitres = Arbitre::all();
+			return View::make('sports.create', compact('terrains', 'arbitres'));
 		} catch(Exception $e) {
 			App::abort(404);
 		}	
@@ -72,6 +74,8 @@ class SportsController extends BaseController {
 			$sport->url_logo = $input['url_logo'];
 			$sport->url_page_officielle = $input['url_page_officielle'];
 			$sport->tournoi = $input['tournoi'];
+			$arbitresSports = $sport->arbitres;
+			$arbitres = SportsController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresSports);
 			
 			if($sport->save()) {
 				if (is_array(Input::get('terrain'))) {
@@ -115,8 +119,10 @@ class SportsController extends BaseController {
 			$sport = Sport::findOrFail($id);
 			$terrainSports = Sport::find($id)->terrains; //FIXME: on a déjà le sport
 			$terrains = Terrain::all();
-
-			return View::make('sports.edit', compact('sport', 'terrainSports', 'terrains'));
+			$arbitres = Arbitre::all();
+			$arbitresSports = $sport->arbitres;
+			$arbitres = SportsController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresSports);
+			return View::make('sports.edit', compact('sport', 'terrainSports', 'terrains', 'arbitres', 'arbitresSports'));
 		} catch(Exception $e) {
 			App::abort(404);
 		}
@@ -145,15 +151,25 @@ class SportsController extends BaseController {
 			$sport->url_logo = $input['url_logo'];
 			$sport->url_page_officielle = $input['url_page_officielle'];
 			$sport->tournoi = $input['tournoi'];
-			
 			if($sport->save()) {
 				if (is_array(Input::get('terrain'))) {
                     $sport->terrains()->sync(array_keys(Input::get('terrain')));
-                } else {
+                } 
+                else {
                     $sport->terrains()->detach();
                 }
-				return Redirect::action('SportsController@index')->with('status', 'Sport mis à jour!');
-			} else {
+                $arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
+                //Vérification qu'il y ai bien un arbitre à entrer dans la BD.
+                if (SportsController::verifier_existence($arbitresAEntrer)) {
+                	
+                	$sport->arbitres()->sync($arbitresAEntrer);
+                }
+                else {
+                	$sport->arbitres()->detach();
+                }
+                return Redirect::action('SportsController@index')->with('status', 'Sport mis à jour!');
+			} 
+			else {
 				return Redirect::back()->withInput()->withErrors($sport->validationMessages());
 			}
 		} catch(Exception $e) {
@@ -179,4 +195,35 @@ class SportsController extends BaseController {
 		}
 	}
 
+	/**
+	 * Vérifie si les arbitres sont sous formes d'array etsi il y en as. 0 veut dire qu'il n'y a pas d'arbitres.
+	 * @param $arbitres
+	 * @return boolean
+	 */
+	protected function verifier_existence($arbitresAEntrer) {
+		if (is_array($arbitresAEntrer) AND ($arbitresAEntrer[0] != "0") AND ($arbitresAEntrer[0] !="")) {
+			$retour = TRUE;  //FIXME: pourquoi ne pas juste retourner le résultat du IF?
+		}else{
+			$retour = FALSE;
+		}
+		return $retour;
+	}
+	
+	/**
+	 * filtre les arbitres pour retirer ceux déjà attribués à une épreuve.
+	 * @param array $arbitres
+	 * @param array $arbitresEpreuves
+	 */
+	protected function filtrer_arbitres($arbitres, $arbitresSports){
+		if ($arbitresSports){
+			foreach ($arbitres as $index => $arbitre){
+				foreach ($arbitresSports as $arbitreSports) {
+					if ($arbitreSports->id == $arbitre->id) {
+						$arbitres->pull($index);
+					}
+				}
+			}
+		}
+		return $arbitres;
+	}
 }

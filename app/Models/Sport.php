@@ -28,7 +28,13 @@ class Sport extends EloquentValidating {
 		return $this->belongsToMany('App\Models\Participant');
 	}
 	
-
+	/** 
+	 * Eloquent relationship: un sport peut avoir plusieurs arbitres
+	 */
+	public function arbitres() {
+		return $this->belongsToMany('App\Models\Arbitre', 'arbitres_sports', 'sport_id', 'arbitre_id');
+	}
+	
 /**
  * Validation
  *
