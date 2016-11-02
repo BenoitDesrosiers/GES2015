@@ -53,7 +53,7 @@ class ParticipantsController extends BaseController {
 	public function createFromCSV(Request $request) {
 		$donnees = array();
 
-		$metadata = array("Nom" => [true, "string", "verifierVariable"], "Prénom" => [true, "string", "verifierVariable"], "Numéro Téléphone" => [false, "string", "verifierVariable"], "Nom Parent" => [false, "string", "verifierVariable"], "Numéro" => [true, "integer", "verifierNumero"], "Genre" => [true, "boolean", "verifierGenre"], "Date Naissance" => [true, "string", "verifierDate"], "Adresse" => [false, "string", "verifierVariable"], "Région" => [false, "string", "verifierRegion"], "Sports" => [false, "string", "verifierSport"]);
+		$metadata = array("Nom" => [true, "string", "verifierVariable"], "Prénom" => [true, "string", "verifierVariable"], "Numéro Téléphone" => [false, "string", "verifierVariable"], "Nom Parent" => [false, "string", "verifierVariable"], "Numéro" => [true, 9, "verifierNumero"], "Genre" => [true, true, "verifierGenre"], "Date Naissance" => [true, "string", "verifierDate"], "Adresse" => [false, "string", "verifierVariable"], "Région" => [false, "string", "verifierRegion"], "Sports" => [false, "string", "verifierSport"]);
 
 		$erreurs = null;
 		$fichierCsv = $request->file("fichier-csv", null);
@@ -353,7 +353,7 @@ class ParticipantsController extends BaseController {
 	 */
 	private function verifierDonneesCsv($metadataColonnes, $donneesCsv) {
 		$resultat = array();
-		foreach ($donneesCsv as $rangee) {
+		foreach ($donneesCsv as $cle => $rangee) {
 			$erreur = null;
 			$colonneMixe = array_map(null, $metadataColonnes, $rangee);
 			foreach ($colonneMixe as $colonne) {
@@ -361,7 +361,7 @@ class ParticipantsController extends BaseController {
 				$valeurVide = !isset($valeur) || trim($valeur) == false;
 				if ($valeurVide && $metadataValeur[0]) {
 					$erreur = "Valeur obligatoire inexistante";
-				} elseif (!is_a($valeur, $metadataValeur[1])) {
+				} elseif (!is_a($valeur, gettype($metadataValeur[1]))) { // TODO: Fix this line
 					$erreur = "Type de la valeur invalide";
 				} elseif (!call_user_func($metadataValeur[2], $valeur)) {
 					$erreur = "Valeur invalide";
@@ -373,7 +373,7 @@ class ParticipantsController extends BaseController {
 					$erreur = "Existe déjà";
 				}
 			}
-			$resultat[] = $erreur;
+			$resultat[$cle] = $erreur;
 		}
 		return $resultat;
 	}

@@ -1,5 +1,6 @@
 @extends('layout')
 @section('content')
+    <link rel="stylesheet" href="{!! asset("/css/participants/create-batch.css") !!}">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2>Création de participants</h2>
@@ -18,6 +19,7 @@
                     <li>Aucune entête doit être fournie dans le fichier CSV, seulement les données</li>
                     <li>Chaque rangée doit terminer avec une nouvelle ligne (\n). Sinon elle n'est pas utilisée</li>
                     <li>La date de naissance doit être écrite selon le format: JJ-MM-AAAA</li>
+                    <li>Genre: 0 = Homme, 1 = Femme</li>
                 </ul>
                 {{ link_to('/assets/exemple/creer-batch-participants.csv', 'Exemple de fichier') }}
             </div>
@@ -42,8 +44,9 @@
             <div id="tableau">
                 <table class="table table-bordered">
                     <tr>
+                        <th>Erreur</th>
                         @foreach ($entetes as $entete => $obligatoire)
-                            @if ($obligatoire)
+                            @if ($obligatoire[0] === true)
                                 <th><u>{{ $entete }}</u></th>
                             @elseif ($loop->last)
                                 <th {{ $rowspanEntete }}>{{ $entete }}</th>
@@ -53,11 +56,16 @@
                         @endforeach
                     </tr>
                     @if (!is_null($rangees))
-                        @foreach ($rangees as $rangee)
-                            <tr>
-                                @foreach ($rangee as $donnee)
-                                    <td>{{ utf8_encode($donnee) }}</td>
-                                @endforeach
+                        @foreach ($rangees as $cle => $rangee)
+                            @if (is_null($erreurs[$cle]))
+                                <tr>
+                            @else
+                                <tr class="rangeeErronee">
+                            @endif
+                                <td>{{ $erreurs[$cle] }}</td>
+                            @foreach ($rangee as $donnee)
+                                <td>{{ utf8_encode($donnee) }}</td>
+                            @endforeach
                             </tr>
                         @endforeach
                     @endif
