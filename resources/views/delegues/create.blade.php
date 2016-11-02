@@ -70,8 +70,8 @@
 		</div>
 			<button type = "button" id='add'>Ajouter un téléphone</button>
 		<div class="form-group courriel">
-			{!! Form::label('courriel', 'Courriel:') !!} 
-			{!! Form::text('courriel',null, ['class' => 'form-control courriel_texte']) !!}
+			{!! Form::label('courriels', 'Courriel:') !!}
+			{!! Form::text('courriel[1]',null, ['class' => 'form-control courriel_texte']) !!}
 			{{ $errors->first('courriel') }}
 		</div>
             <button type ="button" id='add2'>Ajouter un courriel</button>
@@ -105,7 +105,6 @@
             var last_id = $('div.telephone').length;
             $('div.telephone:last').after($('div.telephone:first').clone());
             $('div.telephone:last input').attr('name', 'telephone[' + (last_id + 1) + ']');
-            //$('div.telephone:last').setAttribute('nom','')
             $('div.telephone:last').append(removeButton);
             $('div.telephone:last input').each(function () {
                 this.value = '';
@@ -128,7 +127,9 @@
 
         var removeButton = "<button type = 'button' onclick='remove2(this)' class='remove2'>Enlever ce courriel</button>";
         $('#add2').click(function() {
+            var last_id = $('div.courriel').length;
             $('div.courriel:last').after($('div.courriel:first').clone())
+            $('div.courriel:last input').attr('name', 'courriel[' + (last_id + 1) + ']');
             $('div.courriel:last').append(removeButton);
             $('div.courriel:last input').each(function () {
                 this.value = '';
@@ -137,7 +138,12 @@
     });
 
     function remove2(element) {
+        var count =1;
         $(element).closest('div.courriel').remove();
+        $('div.courriel input').each(function () {
+            this.name = 'courriel[' + count + ']';
+            count = count + 1;
+        })
     }
 
 

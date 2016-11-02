@@ -78,9 +78,7 @@ class Delegue extends EloquentValidating {
 			'accreditation' => 'required|boolean',
 			'sexe' => 'required|boolean',
 			'date_naissance' => 'required|date',
-     		'adresse' => 'string',
-            'telephone' => 'array',
-			'courriel' => 'email|string|unique:delegues,courriel'.($this->id ? ",$this->id" : '')
+     		'adresse' => 'string'
 		    ];
     }
 }

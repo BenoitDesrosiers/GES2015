@@ -71,15 +71,12 @@ class DeleguesController extends BaseController {
     public function store()
     { //FIXME:: identique à update
         try {
-
             $input = Input::all();
             $delegue = new Delegue;
             $delegue->nom = $input['nom'];
             $delegue->prenom = $input['prenom'];
             $delegue->region_id = $input['region_id'];
             $roles = Input::get('role');
-            $telephones = Input::get('telephone');
-
             //      Le champ 'accreditation' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement.
             if(Input::has('accreditation')) {
                 $delegue->accreditation = true;
@@ -105,6 +102,17 @@ class DeleguesController extends BaseController {
 
             if($delegue->save()) {
                 //		Associer les rôles au délégué.
+                $telephones = Input::get('telephone');
+                foreach($telephones as $telephone) {
+                    $telephone->delegue()->associate($delegue);
+                    $telephone->save();
+                }
+                $courriels = Input::get('courriel');
+                foreach($courriels as $courriel) {
+                    $courriel->delegue()->associate($delegue);
+                    $courriel->save();
+                }
+
                 if ($roles) {
                     if (is_array($roles)) {
                         $delegue->roles()->sync($roles);
