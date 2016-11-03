@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Models\DelegueTelephone;
 use View;
 use Redirect;
 use Input;
@@ -97,20 +98,22 @@ class DeleguesController extends BaseController {
                 $delegue->date_naissance = "invalide";
             }
             $delegue->adresse = $input['adresse'];
-            $delegue->telephone = "please merc....";
-            $delegue->courriel = $input['courriel'];
 
             if($delegue->save()) {
                 //		Associer les rôles au délégué.
                 $telephones = Input::get('telephone');
                 foreach($telephones as $telephone) {
-                    $telephone->delegue()->associate($delegue);
-                    $telephone->save();
+                    $objet_telephone = New DelegueTelephone();
+                    $objet_telephone->numero = $telephone;
+                    $objet_telephone->delegue_telephone()->associate($delegue);
+                    $objet_telephone->save();
                 }
                 $courriels = Input::get('courriel');
                 foreach($courriels as $courriel) {
-                    $courriel->delegue()->associate($delegue);
-                    $courriel->save();
+                    $objet_courriel = New DelegueTelephone();
+                    $objet_courriel->numero = $telephone;
+                    $objet_courriel->delegue_courriel()->associate($delegue);
+                    $objet_courriel->save();
                 }
 
                 if ($roles) {

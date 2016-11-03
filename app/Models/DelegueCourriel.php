@@ -8,8 +8,28 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 
-class DelegueCourriel
+class DelegueCourriel extends EloquentValidating
 {
+
+    protected $guarded = array('id');
+
+    public function delegue_Courriel() {
+        return $this->belongsTo(Delegue::class);
+    }
+
+    protected $fillable = [
+        'courriel',
+        'delegue_id'
+    ];
+
+    public function validationRules()
+    {
+        return [
+            'courriel' => 'string'
+        ];
+    }
+
 
 }
