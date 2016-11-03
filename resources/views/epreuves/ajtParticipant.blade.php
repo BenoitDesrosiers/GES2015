@@ -16,14 +16,11 @@
                 @foreach ($regions as $region)
                     <?php $regionArray[$region->id] = $region->nom; ?>
                 @endforeach
-                {!! Form::open(array('action' => array('EpreuvesController@listeParticipant', $region->id))) !!}
-                    <div class="form-group">
-                        {!! Form::label('region_id', 'Région:') !!} <br/>
-                        {!! Form::select('region_id', $regionArray) !!}
-                        {{ $errors->first('region_id') }}
-                    </div>
-                {!! Form::close() !!}
-
+                <div class="form-group">
+                    {!! Form::label('region_id', 'Région:') !!} <br/>
+                    {!! Form::select('region_id', $regionArray) !!}
+                    {{ $errors->first('region_id') }}
+                </div>
 
                 <div>
                     <!-- Entête tableau -->
@@ -72,5 +69,21 @@
             {!! Form::close() !!}
         </tbody>
     </table>
+    <script>
+        var participants = {
+            @for($i = 0; $i < count($participants);$i++)
+                {{ $i }}: {
+                    id:"{{ $participants[$i]->id }}",
+                    nom:"{{ $participants[$i]->nom }}, {{ $participants[$i]->prenom }}",
+                    region:"{{ $participants[$i]->region->nom }}"
+                },
+
+            @endfor
+        };
+        alert(participants[0]["id"] + " " + participants[0]["nom"] + " " + participants[0]["region"] + " " + participants[1]["id"] + " " + participants[1]["nom"] + " " + participants[1]["region"]);
+    </script>
+    <script src="{!! asset('/js/trierParticipants.js') !!}">
+
+    </script>
 </div>
 @stop
