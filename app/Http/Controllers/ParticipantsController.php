@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use View;
@@ -53,7 +54,7 @@ class ParticipantsController extends BaseController {
 	public function createFromCSV(Request $request) {
 		$donnees = array();
 
-		$metadata = array("Nom" => [true, "string", "verifierVariable"], "Prénom" => [true, "string", "verifierVariable"], "Numéro Téléphone" => [false, "string", "verifierVariable"], "Nom Parent" => [false, "string", "verifierVariable"], "Numéro" => [true, 9, "verifierNumero"], "Genre" => [true, true, "verifierGenre"], "Date Naissance" => [true, "string", "verifierDate"], "Adresse" => [false, "string", "verifierVariable"], "Région" => [false, "string", "verifierRegion"], "Sports" => [false, "string", "verifierSport"]);
+		$metadata = array("Nom" => [true, "is_string", "verifierVariable"], "Prénom" => [true, "is_string", "verifierVariable"], "Numéro Téléphone" => [false, "is_string", "verifierVariable"], "Nom Parent" => [false, "is_string", "verifierVariable"], "Numéro" => [true, "is_numeric", "verifierNumero"], "Genre" => [true, "is_numeric", "verifierGenre"], "Date Naissance" => [true, "is_string", "verifierDate"], "Adresse" => [false, "is_string", "verifierVariable"], "Région" => [false, "is_string", "verifierRegion"], "Sports" => [false, "is_string", "verifierSport"]);
 
 		$erreurs = null;
 		$fichierCsv = $request->file("fichier-csv", null);
@@ -353,21 +354,26 @@ class ParticipantsController extends BaseController {
 	 */
 	private function verifierDonneesCsv($metadataColonnes, $donneesCsv) {
 		$resultat = array();
+		$derniereMetadata = end($metadataColonnes);
 		foreach ($donneesCsv as $cle => $rangee) {
-			$erreur = null;
+			$erreur = "";
 			$colonneMixe = array_map(null, $metadataColonnes, $rangee);
-			foreach ($colonneMixe as $colonne) {
+			foreach ($colonneMixe as $cleColonne => $colonne) {
 				list($metadataValeur, $valeur) = $colonne;
-				$valeurVide = !isset($valeur) || trim($valeur) == false;
+				if (is_null($metadataValeur)) {
+					$metadataValeur = $derniereMetadata;
+				}
+				$valeurVide = !isset($valeur) || (strlen(trim($valeur)) === 0);
 				if ($valeurVide && $metadataValeur[0]) {
-					$erreur = "Valeur obligatoire inexistante";
-				} elseif (!is_a($valeur, gettype($metadataValeur[1]))) { // TODO: Fix this line
-					$erreur = "Type de la valeur invalide";
-				} elseif (!call_user_func($metadataValeur[2], $valeur)) {
-					$erreur = "Valeur invalide";
+					$erreur = $cleColonne . " Valeur obligatoire inexistante";
+				} elseif (!call_user_func($metadataValeur[1], $valeur)) {
+					$erreur = $cleColonne . " Type de la valeur invalide";
+				} elseif (call_user_func(array($this, $metadataValeur[2]), $valeur)) {
+					$erreur = $cleColonne . " Valeur invalide";
 				}
 			}
 			// Si les données individuelles sont corrects, on regarde le reste.
+			// TODO: Fix this \/
 			if (is_null($erreur)) {
 				if ($this->verifierDoublon($rangee)) {
 					$erreur = "Existe déjà";
@@ -387,9 +393,9 @@ class ParticipantsController extends BaseController {
 	 * @return bool true si le participant existe déjà
 	 */
 	private function verifierDoublon($rangee) {
-		$region = Region::where("upper(nom_court)", "=", strtoupper($rangee[8]))->first();
-		$resultat = Participant::where("upper(nom)", "=", strtoupper($rangee[0]))
-							->where("upper(prenom)", "=", strtoupper($rangee[1]))
+		$region = Region::where("upper(nom_court) = ?", [strtoupper($rangee[8])])->first();
+		$resultat = Participant::whereRaw("upper(nom) = ?", [strtoupper($rangee[0])])
+							->whereRaw("upper(prenom) = ?", [strtoupper($rangee[1])])
 							->where("numero", "=", $rangee[4])
 							->where("region_id", "=", $region->id)->exists();
 		return $resultat;
@@ -403,8 +409,8 @@ class ParticipantsController extends BaseController {
 	 * @author ZeLarpMaster
 	 * @return bool true si le sport existe
 	 */
-	private function verifierSport($sport) {
-		$resultat = Sport::where("upper(nom)", "=", strtoupper($sport))->exists();
+	public function verifierSport($sport) {
+		$resultat = Sport::whereRaw("upper(nom) = ?", [strtoupper($sport)])->exists();
 		return $resultat;
 	}
 
@@ -414,11 +420,11 @@ class ParticipantsController extends BaseController {
 	 * @param string $region La région à vérifier
 	 *
 	 * @author ZeLarpMaster
-	 * @return bool true si la région existe
+	 * @return bool true si la région n'existe pas
 	 */
-	private function verifierRegion($region) {
-		$resultat = Region::where("upper(nom_court)", "=", strtoupper($region))->exists();
-		return $resultat;
+	public function verifierRegion($region) {
+		$resultat = Region::whereRaw("upper(`nom_court`) = ?", [strtoupper($region)])->exists();
+		return !$resultat;
 	}
 
 	/**
@@ -430,7 +436,7 @@ class ParticipantsController extends BaseController {
 	 * @author ZeLarpMaster
 	 * @return bool true si la date est invalide
 	 */
-	private function verifierDate($date) {
+	public function verifierDate($date) {
 		$date_explosee = explode("-", $date, 2);
 		if ($date_explosee !== false && count($date_explosee) == 3) {
 			list($jour, $mois, $annee) = $date_explosee;
@@ -449,7 +455,7 @@ class ParticipantsController extends BaseController {
 	 * @author ZeLarpMaster
 	 * @return bool true si le numéro est invalide
 	 */
-	private function verifierNumero($numero) {
+	public function verifierNumero($numero) {
 		$resultat = !ctype_digit($numero);
 		return $resultat;
 	}
@@ -462,7 +468,7 @@ class ParticipantsController extends BaseController {
 	 * @author ZeLarpMaster
 	 * @return bool true si l'argument n'est pas une chaîne de caractères
 	 */
-	private function verifierVariable($variable) {
+	public function verifierVariable($variable) {
 		$resultat = !is_string($variable);
 		return $resultat;
 	}
@@ -475,7 +481,7 @@ class ParticipantsController extends BaseController {
 	 * @author ZeLarpMaster
 	 * @return bool true si le genre n'est pas "1" ou "0"
 	 */
-	private function verifierGenre($genre) {
+	public function verifierGenre($genre) {
 		$resultat = !($genre == "1" || $genre == "0");
 		return $resultat;
 	}

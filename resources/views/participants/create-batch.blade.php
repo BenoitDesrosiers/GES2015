@@ -57,12 +57,12 @@
                     </tr>
                     @if (!is_null($rangees))
                         @foreach ($rangees as $cle => $rangee)
-                            @if (is_null($erreurs[$cle]))
+                            @if (empty($erreurs[$cle]))
                                 <tr>
                             @else
                                 <tr class="rangeeErronee">
                             @endif
-                                <td>{{ $erreurs[$cle] }}</td>
+                            <td>{{ $erreurs[$cle] }}</td>
                             @foreach ($rangee as $donnee)
                                 <td>{{ utf8_encode($donnee) }}</td>
                             @endforeach
