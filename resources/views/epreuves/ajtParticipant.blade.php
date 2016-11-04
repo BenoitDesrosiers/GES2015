@@ -80,7 +80,7 @@
 
             @endfor
         };
-        alert(participants[0]["id"] + " " + participants[0]["nom"] + " " + participants[0]["region"] + " " + participants[1]["id"] + " " + participants[1]["nom"] + " " + participants[1]["region"]);
+        //alert(participants[0]["id"] + " " + participants[0]["nom"] + " " + participants[0]["region"] + " " + participants[1]["id"] + " " + participants[1]["nom"] + " " + participants[1]["region"]);
     </script>
     <script src="{!! asset('/js/trierParticipants.js') !!}">
 
