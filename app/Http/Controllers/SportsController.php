@@ -76,15 +76,27 @@ class SportsController extends BaseController {
 			$sport->tournoi = $input['tournoi'];
 			$arbitresSports = $sport->arbitres;
 			$arbitres = SportsController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresSports);
-			
 			if($sport->save()) {
 				if (is_array(Input::get('terrain'))) {
-	                    $sport->terrains()->attach(array_keys(Input::get('terrain')));
-	                }
-				return Redirect::action('SportsController@index')->with('status', 'Sport ajouté!');
-			} else {
+					$sport->terrains()->sync(array_keys(Input::get('terrain')));
+				}
+				else {
+					$sport->terrains()->detach();
+				}
+				$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
+				//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
+				if (SportsController::verifier_existence($arbitresAEntrer)) {
+					 
+					$sport->arbitres()->sync($arbitresAEntrer);
+				}
+				else {
+					$sport->arbitres()->detach();
+				}
+				return Redirect::action('SportsController@index')->with('status', 'Sport mis à jour!');
+			}
+			else {
 				return Redirect::back()->withInput()->withErrors($sport->validationMessages());
-			}	
+			}
 		} catch(Exception $e) {
 			App::abort(404);
 		}
@@ -210,9 +222,9 @@ class SportsController extends BaseController {
 	}
 	
 	/**
-	 * filtre les arbitres pour retirer ceux déjà attribués à une épreuve.
+	 * filtre les arbitres pour retirer ceux déjà attribués à un sport.
 	 * @param array $arbitres
-	 * @param array $arbitresEpreuves
+	 * @param array $arbitresSports
 	 */
 	protected function filtrer_arbitres($arbitres, $arbitresSports){
 		if ($arbitresSports){

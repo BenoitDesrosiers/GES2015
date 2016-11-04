@@ -15,16 +15,16 @@ use App\Models\Sport;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
- * Le controller pour les participants liés à un sport.
+ * Le controller pour les arbitres liés à un sport.
  * 
  * @author Francis
  * @version 0.0.1
 */
 class SportsArbitresController extends BaseController{
     /**
-	 * Affiche les arbitres associés au sport sélectionné par région.
+	 * Affiche les arbitres associés au sport sélectionné.
 	 *
-	 * @param[in] int $id l'id de l'arbitre qu'on sélectionne.
+	 * @param $sport = Sport::findOrFail($id); l'id de l'arbitre qu'on sélectionne.
 	 */
 	public function index($id)
 	{

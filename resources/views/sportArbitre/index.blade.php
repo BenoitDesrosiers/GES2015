@@ -22,10 +22,10 @@
 	@foreach($arbitresSports as $arbitreSport)
 				<a class="list-group-item">{{ $arbitreSport->nom }}, {{ $arbitreSport->prenom }}</a>
 	@endforeach
-	<?php  ?>
 			</div>
 		</div>
 @endif
 	</div>
+	<a href="{{ URL::previous() }}" class="btn btn-danger">Retour</a>
 </div>
 @stop
