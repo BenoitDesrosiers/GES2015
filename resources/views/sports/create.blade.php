@@ -53,10 +53,6 @@
                 ?>
             </div>
         </div>
-<!-- 
-	Copie de epreuves.create pour que les arbitres puissent être ajoutés lors de la création d'un sport.
-	D'ici à la fin (60 - 114)
--->
 		<div class="form-group">
 			<!-- Code original par "Dey-Dey" adapté pour le site --> <?php //TODO: mettre ca dans un include car c'est commun a create et edit ?>
 			<div class="container bootstrap snippet">
@@ -69,7 +65,7 @@
 @endforeach
 			      </div>
 		        </div>
-		        <div class="col-md-2 boutonTableEpreuve-center">
+		        <div class="col-md-2 boutonTableSports-center">
 		     		<a title="Ajouter" class="btn btn-default center-block ajouter"><i class="glyphicon glyphicon-chevron-right"></i></a>
 		            <a title="Retirer" class="btn btn-default center-block retirer"><i class="glyphicon glyphicon-chevron-left"></i></a>
 		        </div>

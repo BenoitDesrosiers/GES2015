@@ -208,7 +208,7 @@ class SportsController extends BaseController {
 	}
 
 	/**
-	 * Vérifie si les arbitres sont sous formes d'array etsi il y en as. 0 veut dire qu'il n'y a pas d'arbitres.
+	 * Vérifie si les arbitres sont sous formes d'array et si il y en a 0, ça veut dire qu'il n'y a pas d'arbitres.
 	 * @param $arbitres
 	 * @return boolean
 	 */

@@ -63,10 +63,6 @@
                 ?>
             </div>
         </div>
-        <!--
-        	Copie de epreuves.edit afin d'implémenter la liste des arbitres
-        	D'ici à la fin (70 - 128)
-         -->
 		<div class="form-group">
 			<label>Arbitres: </label>
 			<!-- Code original par "Dey-Dey" adapté pour le site -->
@@ -80,7 +76,7 @@
 @endforeach
 			      		</div>
 					</div>
-						<div class="col-md-2 boutonTableEpreuve-center">
+						<div class="col-md-2 boutonTableSports-center">
 			     			<a title="Ajouter" class="btn btn-default center-block ajouter"><i class="glyphicon glyphicon-chevron-right"></i></a>
 			        	    <a title="Retirer" class="btn btn-default center-block retirer"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						</div>
