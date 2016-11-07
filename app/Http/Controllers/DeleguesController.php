@@ -100,7 +100,7 @@ class DeleguesController extends BaseController {
             $delegue->adresse = $input['adresse'];
 
             if($delegue->save()) {
-                //		Associer les rôles au délégué.
+                //		Associer les téléphones au délégué.
                 $telephones = Input::get('telephone');
                 foreach($telephones as $telephone) {
                     $objet_telephone = New DelegueTelephone();
@@ -108,6 +108,7 @@ class DeleguesController extends BaseController {
                     $objet_telephone->delegue_telephone()->associate($delegue);
                     $objet_telephone->save();
                 }
+                //		Associer les courriels au délégué.
                 $courriels = Input::get('courriel');
                 foreach($courriels as $courriel) {
                     $objet_courriel = New DelegueTelephone();
@@ -115,7 +116,7 @@ class DeleguesController extends BaseController {
                     $objet_courriel->delegue_courriel()->associate($delegue);
                     $objet_courriel->save();
                 }
-
+                //		Associer les rôles au délégué.
                 if ($roles) {
                     if (is_array($roles)) {
                         $delegue->roles()->sync($roles);
@@ -224,11 +225,25 @@ class DeleguesController extends BaseController {
 				$delegue->date_naissance = "invalide";
 			}
 			$delegue->adresse = $input['adresse'];
-			$delegue->telephone = $input['telephone'];
-			$delegue->courriel = $input['courriel'];
 
 			if($delegue->save()) {
-				//		Associer les rôles au délégué
+                //		Associer les téléphones au délégué.
+                $telephones = Input::get('telephone');
+                foreach($telephones as $telephone) {
+                    $objet_telephone = New DelegueTelephone();
+                    $objet_telephone->numero = $telephone;
+                    $objet_telephone->delegue_telephone()->associate($delegue);
+                    $objet_telephone->save();
+                }
+                //		Associer les courriels au délégué.
+                $courriels = Input::get('courriel');
+                foreach($courriels as $courriel) {
+                    $objet_courriel = New DelegueTelephone();
+                    $objet_courriel->courriel = $courriel;
+                    $objet_courriel->delegue_courriel()->associate($delegue);
+                    $objet_courriel->save();
+                }
+			    //		Associer les rôles au délégué
 				if ($roles) {
 					if (is_array($roles)) {
 						$delegue->roles()->sync($roles);

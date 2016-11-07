@@ -49,6 +49,26 @@ class Delegue extends EloquentValidating {
 	public function nombreRoles() {
 		return $this->roles->count();
 	}
+
+
+    /**
+     * Un délégué a plusieurs courriels.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function courriels() {
+        return $this->hasMany('App\Models\DelegueCourriel');
+    }
+
+    /**
+     *
+     * Un délégué a plusieurs téléphones.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function telephones() {
+        return $this->hasMany('App\Models\DelegueTelephone');
+    }
 	
 	
 	 /**

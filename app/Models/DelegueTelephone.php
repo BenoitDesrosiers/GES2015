@@ -17,11 +17,18 @@ class DelegueTelephone extends EloquentValidating
         return $this->belongsTo(Delegue::class);
     }
 
+
+    /**
+     * Identifie les colonnes qui peuvent être modifiées
+     */
     protected $fillable = [
         'telephone',
         'delegue_id'
     ];
 
+    /**
+     * Le champs «courriel» doit être un «string»
+     */
     public function validationRules()
     {
         return [

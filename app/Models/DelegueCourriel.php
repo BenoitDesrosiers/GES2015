@@ -19,10 +19,18 @@ class DelegueCourriel extends EloquentValidating
         return $this->belongsTo(Delegue::class);
     }
 
+    /**
+     * Identifie les colonnes qui peuvent être modifiées
+     */
+
     protected $fillable = [
         'courriel',
         'delegue_id'
     ];
+
+    /**
+     * Le champs «courriel» doit être un «string»
+     */
 
     public function validationRules()
     {
