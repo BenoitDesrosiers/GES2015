@@ -3,7 +3,7 @@
  * Un arbitre est une personne associée à une région et à des sports
  * 
  * 
- * @author Sarah Laflamme
+ * @author Sarah Laflamme (modifié par Simon Gagné)
  * @version 0.0.1 rev 1
  */
 
@@ -32,6 +32,20 @@ class Arbitre extends EloquentValidating {
 	public function epreuves() {
 		return $this->belongsToMany('App\Models\Epreuve');
 	}
+	
+	
+	/**
+	 * Eloquent relationship: 
+	 * - Un arbitre est associé à plusieurs numéros de téléphone
+	 * - Un arbitre est associté à plusieurs adresses courriel
+	 */
+	public function arbitreTelephone() {
+		return $this->hasMany('App\Models\ArbitreTelephone');
+	}
+	
+	public function arbitreCourriel() {
+		return $this->hasMany('App\Models\ArbitreCourriel');
+	}
 
 	/**
 	 * Identifie les colonnes qui peuvent être modifiées
@@ -42,7 +56,6 @@ class Arbitre extends EloquentValidating {
 	        'region_id',
 	        'numero_accreditation',
 	        'association',
-	        'numero_telephone',
 	        'sexe',
 	        'adresse',
 	        'date_naissance'
@@ -52,7 +65,7 @@ class Arbitre extends EloquentValidating {
 	 * Validation
 	 *
 	 * Un arbitre doit avoir:
-	 *  - nom, prenom, region_id, numero_accreditation, association, numero_telephone et sexe
+	 *  - nom, prenom, region_id, numero_accreditation, association et sexe
 	 *  - Les autres champs sont falcultatifs.
 	 */
 
@@ -65,7 +78,6 @@ class Arbitre extends EloquentValidating {
 			'region_id' => 'required|integer',
 			'numero_accreditation' => 'required|string',
 			'association' => 'required|string',
-			'numero_telephone' => 'required|string',
 			'sexe' => 'required|boolean',
 			'adresse' => 'string',
 			'date_naissance' => 'date'

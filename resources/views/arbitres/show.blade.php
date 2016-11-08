@@ -8,7 +8,41 @@
 		<p>Région : {{ $arbitre->region->nom }}</p>
 		<p>Numéro d'accréditation : {{ $arbitre->numero_accreditation }}</p>
 		<p>Association : {{ $arbitre->association }}</p>
-		<p>Numéro de téléphone : {{ $arbitre->numero_telephone }}</p>
+		
+		<p>Numéro(s) de téléphone :</p>
+		<table class="tableTelephoneCourrielArbitre">
+			<thead>
+				<tr>
+					<th>Numéro</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($arbitre->arbitreTelephone as $telephone){echo "<tr><td>".$telephone->numero_telephone."</td><td>".$telephone->description."</td></tr>";}?>
+			</tbody>
+		</table>
+		<br>
+		
+		@if (count($arbitre->arbitreCourriel) < 1)
+			<p>Adresses courriel : Aucune adresse courriel enregistrée</p>
+		@else
+			<p>Adresses courriel :</p>
+			<table class="tableTelephoneCourrielArbitre">
+				<thead>
+					<tr>
+						<th>Courriel</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ($arbitre->arbitreCourriel as $courriel){echo "<tr><td>".$courriel->courriel."</td><td>".$courriel->description."</td></tr>";}?>
+				</tbody>
+			</table>
+			<br>
+		@endif
+		
+		
+		
 		<p>Sexe :
 	        @if (!$arbitre->sexe)
 	            Masculin

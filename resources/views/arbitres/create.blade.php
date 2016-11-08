@@ -62,7 +62,24 @@
 
 		<!--    Champ de texte pour le numéro de téléphone -->
 		<div class="form-group">
-			{!! Form::label('numero_telephone', '* Numéro de téléphone :') !!} 
+			{!! Form::label('numero_telephone', '* Numéro de téléphone :') !!}
+			<table class="tableTelephoneCourrielArbitre">
+			<thead>
+				<tr>
+					<th>Numéro</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{!! Form::text('numero_telephone',null, ['class' => 'form-control']) !!}</td>
+					<td>{!! Form::text('description',null, ['class' => 'form-control']) !!}</td>
+					<td><button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="ajouterTelephone(this)"/></td>
+				</tr>
+			</tbody>
+		</table>
+		<br>
+			
 			{!! Form::text('numero_telephone',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('numero_telephone') }}
 		</div>
@@ -127,4 +144,20 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+
+<script>
+// 	Ajoute un champ de téléphone
+	function ajouterTelephone(bouton) {
+		rangee = bouton.parentNode.parentNode;
+		if (rangee.classList.contains("actif")) {
+			bouton.classList.remove("glyphicon-minus");
+			bouton.classList.add("glyphicon-plus");
+			rangee.classList.remove("actif");
+		} else {
+			bouton.classList.remove("glyphicon-plus");
+			bouton.classList.add("glyphicon-minus");
+			rangee.classList.add("actif");
+		}
+	}
+</script>
 @stop

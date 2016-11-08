@@ -4,3 +4,13 @@
   justify-content:center;
   flex-flow: column wrap;
 }
+
+.tableTelephoneCourrielArbitre{
+	margin-left:50px;
+}
+
+.tableTelephoneCourrielArbitre th, .tableTelephoneCourrielArbitre td{
+	padding:5px;
+	border: 1px solid black;
+	text-align:center;
+}

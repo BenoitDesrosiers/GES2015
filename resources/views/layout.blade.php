@@ -8,6 +8,7 @@
 	    <meta name="csrf-token" content="{{ csrf_token() }}">
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{{ asset('/css/style.css') }}">
+		<link rel="stylesheet" href="{{ asset('/css/tableCSS.css') }}">
 		@yield('stylesheet')
 		<script src="//code.jquery.com/jquery.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>

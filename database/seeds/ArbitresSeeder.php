@@ -15,15 +15,16 @@ class ArbitresTableSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('arbitre_epreuve')->delete();
+		DB::table("arbitre_telephone")->delete();
 		DB::table("arbitres")->delete();
 		
 		$epreuves=Epreuve::all();
 		$entrees = [
-			//prénom	  nom			numéro      association 	telephone 		  sexe
-			["Benoit" ,   "Desrosiers"	,  "1",		"AQSFR",		"819-578-6489",		0],
-			["Guy"	, 	  "Bernard"	,      "1",		"OSQ",			"450-715-6915",		0],
-			["Jonathan"	, "Gareau" ,  	   "1",		"ASSQ",			"514-763-2485",		0],
-			["Stéphane",  "Janvier" ,	   "2",		"ASAQ",			"450-571-1203",		0]
+			//prénom	  nom			numéro      association 	  sexe
+			["Benoit" ,   "Desrosiers"	,  "1",		"AQSFR",			0],
+			["Guy"	, 	  "Bernard"	,      "1",		"OSQ",				0],
+			["Jonathan"	, "Gareau" ,  	   "1",		"ASSQ",				0],
+			["Stéphane",  "Janvier" ,	   "2",		"ASAQ",				0]
 		];
 
 		$regions = Region::all();
@@ -35,8 +36,7 @@ class ArbitresTableSeeder extends Seeder {
 			$arbitre->region_id = $regions->random()->id;
 			$arbitre->numero_accreditation = $entree[2];
 			$arbitre->association = $entree[3];
-			$arbitre->numero_telephone = $entree[4];
-			$arbitre->sexe = $entree[5];
+			$arbitre->sexe = $entree[4];
 			$date_temp = new DateTime;
 			$date_temp->setDate(1994, 1, 1);
 			$arbitre->date_naissance=$date_temp;
