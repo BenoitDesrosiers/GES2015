@@ -19,3 +19,31 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\Models\Participant::class, function (Faker\Generator $faker) {
+	return [
+		'nom' => $faker->lastName,
+		'prenom' => $faker->firstName,
+		'region_id' => factory(App\Models\Region::class)->create()->id,
+		'equipe' => 0,
+		'sexe' => $faker->numberBetween(0,1),
+		'naissance' => $faker->date()
+	];
+});
+
+$factory->define(App\Models\Region::class, function (Faker\Generator $faker) {
+	return [
+		'nom' => $faker->lastName,
+		'tournoi' => 0,
+		'saison' => 'h'
+	];
+
+});
+
+$factory->define(App\Models\Sport::class, function (Faker\Generator $faker) {
+    return [
+        'nom' => $faker->jobTitle, // Pas rapport, mais il n'y avait pas de nom de sport...
+        'tournoi' => 0,
+        'saison' => 'e'
+    ];
+});
