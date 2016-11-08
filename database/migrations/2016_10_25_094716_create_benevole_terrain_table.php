@@ -16,15 +16,15 @@ class CreateBenevoleTerrainTable extends Migration
     		$table->unsignedInteger('benevole_id');
     		$table->unsignedInteger('terrain_id');
     		$table->foreign('benevole_id')
-    		->references('id')
-    		->on('benevoles')
-    		->onDelete('cascade')
-    		->onUpdate('cascade');
+		    		->references('id')
+		    		->on('benevoles')
+		    		->onDelete('cascade')
+		    		->onUpdate('cascade');
     		$table->foreign('terrain_id')
-    		->references('id')
-    		->on('terrains')
-    		->onDelete('cascade')
-    		->onUpdate('cascade');
+		    		->references('id')
+		    		->on('terrains')
+		    		->onDelete('cascade')
+		    		->onUpdate('cascade');
     	});
     }
 
