@@ -66,7 +66,9 @@ class EpreuvesController extends BaseController {
 	 * @param[in] get int $epreuveId l'id de l'épreuve qu'on sélectionne.
 	 */
 	public function ajtParticipant($epreuveId) {
+		
 		try{
+			
 			$epreuve = Epreuve::findOrFail ( $epreuveId );
 			$sport = Sport::findOrFail( $epreuve->sport_id);
 			$participants = $sport->participants->sortBy('region');
