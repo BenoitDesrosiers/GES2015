@@ -3,11 +3,8 @@
 Homestead.yaml
 start_server.bat
 TODO.txt
-.idea
 Proposition.txt
-.env # << copiez .env_GES2016 pour vous créer votre .env
-composer.lock
+#.env   <<<<< a remettre plus tard, je l'ai enlevé juste pour que ca soit moins compliqué pour le étudiants. 
 .settings/org.eclipse.core.resources.prefs
-.settings
-_ide_helper.php
-.phpstorm.meta.php
+*~
+composer.lock
