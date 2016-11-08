@@ -27,6 +27,8 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('sports','SportsController');
 	Route::resource('sports.epreuves','SportsEpreuvesController');
 	Route::resource('sports.participants','sportParticipantController');
+
+    Route::resource('cafeterias', 'CafeteriaController');
 	
 	Route::get ( 'ajtParticipant/{epreuveId}', 'EpreuvesController@ajtParticipant' );
 	Route::post ( 'storeParticipants/{epreuveId}', 'EpreuvesController@storeParticipants' );
