@@ -3,15 +3,10 @@
 
 	<script>
 		function collapse_tbody(a_tbody, a_sign){
-			if(a_tbody.style.display=='none'){
-				a_tbody.style.display='table-row-group';
-				a_sign.classList.remove("glyphicon-plus");
-				a_sign.classList.add("glyphicon-minus");
-			}else{
-				a_tbody.style.display='none';
-				a_sign.classList.remove("glyphicon-minus");
-				a_sign.classList.add("glyphicon-plus");
-			}
+			a_tbody.classList.toggle("hidden");
+			a_tbody.classList.toggle("show-tbody");
+			a_sign.classList.toggle("glyphicon-minus");
+			a_sign.classList.toggle("glyphicon-plus");
 		}
 	</script>
 									
@@ -31,12 +26,13 @@
 		@if(count($participants) == 0)
 			<p>Aucun participant d'inscrit.</p>
 		@else
+			
 			<thead>
 				<tr>
-					<th style="width: 5%;">&nbsp;</th>
-					<th style="width: 45%">Nom</th>
-					<th style="width: 45%">Région</th>
-					<th style="width: 5%">Numéro</th>
+					<th class="col-sm-3">&nbsp;</th>
+					<th class="col-sm-3">Nom</th>
+					<th class="col-sm-3">Région</th>
+					<th class="col-sm-1">Numéro</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -52,14 +48,14 @@
 				@if ($current_region != $participant->region->nom)
 						<?php $current_region = $participant->region->nom ?>
 						</tbody>
-						<tr style="CURSOR: pointer" id="expanderHead">
+						<tr id="expanderHead">
 							
 							<td colspan="4">
 									<button id="expanderSign{{$current_region}}" class="btn btn-default btn-mini glyphicon glyphicon-plus" type="button" onclick="collapse_tbody(document.getElementById('expanderContent{{$current_region}}'), document.getElementById('expanderSign{{$current_region}}'))"></button>
 								{{$current_region}}
 							</td>
 						</tr>
-						<tbody style="display:none;" id="expanderContent{{$current_region}}">
+						<tbody class="hidden" id="expanderContent{{$current_region}}">
 				@endif
 					<tr>
 						<td>
