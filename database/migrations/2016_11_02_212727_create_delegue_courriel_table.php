@@ -14,9 +14,11 @@ class CreateDelegueCourrielTable extends Migration
     public function up()
     {
         {
-            Schema::create('DelegueCourriels', function (Blueprint $table) {
-                $table->integer('delegue_id');
+            Schema::create('Delegue_Courriels', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('delegue_id');
                 $table->string("courriel");
+                $table->timestamps();
                 $table->foreign('delegue_id')->references('id')
                     ->on('delegues')
                     ->onDelete('cascade')
@@ -32,6 +34,6 @@ class CreateDelegueCourrielTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('DelegueCourriels');
+        Schema::dropIfExists('Delegue_Courriels');
     }
 }

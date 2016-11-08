@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Models\DelegueCourriel;
 use App\Models\DelegueTelephone;
 use View;
 use Redirect;
@@ -104,16 +105,16 @@ class DeleguesController extends BaseController {
                 $telephones = Input::get('telephone');
                 foreach($telephones as $telephone) {
                     $objet_telephone = New DelegueTelephone();
-                    $objet_telephone->numero = $telephone;
-                    $objet_telephone->delegue_telephone()->associate($delegue);
+                    $objet_telephone->telephone = $telephone;
+                    $objet_telephone->delegue()->associate($delegue);
                     $objet_telephone->save();
                 }
                 //		Associer les courriels au délégué.
                 $courriels = Input::get('courriel');
                 foreach($courriels as $courriel) {
-                    $objet_courriel = New DelegueTelephone();
-                    $objet_courriel->numero = $telephone;
-                    $objet_courriel->delegue_courriel()->associate($delegue);
+                    $objet_courriel = New DelegueCourriel();
+                    $objet_courriel->courriel = $courriel;
+                    $objet_courriel->delegue()->associate($delegue);
                     $objet_courriel->save();
                 }
                 //		Associer les rôles au délégué.
@@ -198,9 +199,10 @@ class DeleguesController extends BaseController {
 	public function update($id)
 	{  //FIXME: identique à store()
 		try {
+            $this->destroy($id);
 			$input = Input::all();
-			$delegue = Delegue::findOrFail($id);
-			$delegue->nom = $input['nom'];
+            $delegue = Delegue::findOrFail($id);
+            $delegue->nom = $input['nom'];
 			$delegue->prenom = $input['prenom'];
             $delegue->region_id = $input['region_id'];
 			$roles = Input::get('role');
@@ -231,16 +233,16 @@ class DeleguesController extends BaseController {
                 $telephones = Input::get('telephone');
                 foreach($telephones as $telephone) {
                     $objet_telephone = New DelegueTelephone();
-                    $objet_telephone->numero = $telephone;
-                    $objet_telephone->delegue_telephone()->associate($delegue);
+                    $objet_telephone->telephone = $telephone;
+                    $objet_telephone->delegue()->associate($delegue);
                     $objet_telephone->save();
                 }
                 //		Associer les courriels au délégué.
                 $courriels = Input::get('courriel');
                 foreach($courriels as $courriel) {
-                    $objet_courriel = New DelegueTelephone();
+                    $objet_courriel = New DelegueCourriel();
                     $objet_courriel->courriel = $courriel;
-                    $objet_courriel->delegue_courriel()->associate($delegue);
+                    $objet_courriel->delegue()->associate($delegue);
                     $objet_courriel->save();
                 }
 			    //		Associer les rôles au délégué

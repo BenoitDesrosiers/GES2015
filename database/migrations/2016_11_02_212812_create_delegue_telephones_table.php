@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDelegueTelephones extends Migration
+class CreateDelegueTelephonesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateDelegueTelephones extends Migration
      */
     public function up()
     {
-        Schema::create('DelegueTelephones', function (Blueprint $table) {
-            $table->integer('delegue_id');
+        Schema::create('Delegue_Telephones', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('delegue_id');
             $table->string("telephone");
+            $table->timestamps();
             $table->foreign('delegue_id')->references('id')
                 ->on('delegues')
                 ->onDelete('cascade')
@@ -30,7 +32,7 @@ class CreateDelegueTelephones extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('DelegueTelephones');
+        Schema::dropIfExists('Delegue_Telephones');
     }
 }
 

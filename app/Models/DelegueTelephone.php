@@ -9,11 +9,14 @@
 namespace App\Models;
 
 
+/**
+ * @property  telephone
+ */
 class DelegueTelephone extends EloquentValidating
 {
     protected $guarded = array('id');
 
-    public function delegue_telephone() {
+    public function delegue() {
         return $this->belongsTo(Delegue::class);
     }
 
@@ -27,7 +30,7 @@ class DelegueTelephone extends EloquentValidating
     ];
 
     /**
-     * Le champs «courriel» doit être un «string»
+     * Le champs «téléphone» doit être un «string»
      */
     public function validationRules()
     {

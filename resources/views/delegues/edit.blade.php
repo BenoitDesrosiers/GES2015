@@ -70,18 +70,36 @@
 			{!! Form::text('adresse',$delegue->adresse, ['class' => 'form-control']) !!}
 			{{ $errors->first('adresse') }}
 		</div>
-		<div class="form-group telephone">
-			{!! Form::label('telephone', 'Téléphone:') !!} 
-			{!! Form::text('telephone',$delegue->telephone, ['class' => 'form-control']) !!}
-			{{ $errors->first('telephone') }}
+		<div class="form-group">
+
+			<?php $telephones = $delegue->telephones()->orderBy('delegue_id')->get(); ?>
+				@if(count($telephones) > 0)
+					@foreach($telephones as $telephone)
+						<div class="telephone form-group">
+							{!! Form::label('telephone', 'Téléphone:') !!}
+							{!! Form::text('telephone',$telephone->telephone, ['class' => 'form-control']) !!}
+							{{ $errors->first('telephone') }}
+						</div>
+					@endforeach
+				@endif
+				<button type = "button" id='add'>Ajouter un téléphone</button>
 		</div>
-			<button type = "button" id='add'>Ajouter un téléphone</button>
-		<div class="form-group courriel">
-			{!! Form::label('courriel', 'Courriel:') !!} 
-			{!! Form::text('courriel',$delegue->courriel, ['class' => 'form-control']) !!}
-			{{ $errors->first('courriel') }}
+
+		<div class="form-group">
+
+			<?php $courriels = $delegue->courriels()->orderBy('delegue_id')->get(); ?>
+				@if(count($courriels) > 0)
+					@foreach($courriels as $courriel)
+						<div class="courriel form-group">
+							{!! Form::label('courriel', 'Courriel:') !!}
+							{!! Form::text('courriel',$courriel->courriel, ['class' => 'form-control']) !!}
+							{{ $errors->first('courriel') }}
+						</div>
+					@endforeach
+				@endif
+				<button type ="button" id='add2'>Ajouter un courriel</button>
 		</div>
-			<button type ="button" id='add2'>Ajouter un courriel</button>
+
 		<!--    Lister tous les rôles possibles      -->
 		<div class="form-group">
             {!! Form::label('roles', 'Rôles:') !!}

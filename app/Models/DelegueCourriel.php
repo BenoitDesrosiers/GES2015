@@ -15,7 +15,7 @@ class DelegueCourriel extends EloquentValidating
 
     protected $guarded = array('id');
 
-    public function delegue_Courriel() {
+    public function delegue() {
         return $this->belongsTo(Delegue::class);
     }
 
