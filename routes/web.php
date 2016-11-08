@@ -32,6 +32,8 @@ Route::group(['middleware'=>'auth'], function() {
 	
 	Route::resource('epreuves','EpreuvesController');
 
+	Route::post('participants/annuler-batch', 'ParticipantsController@annulerCSV');
+	Route::post('participants/confirmer-batch', 'ParticipantsController@confirmerCSV');
 	Route::get('participants/create-batch', 'ParticipantsController@createFromCSV')->name("participants.create-batch");
 	Route::post('participants/create-batch', 'ParticipantsController@createFromCSV')->name("participants.create-batch");
 	Route::resource('participants','ParticipantsController');

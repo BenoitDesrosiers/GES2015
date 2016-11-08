@@ -21,7 +21,6 @@
                     <li>La date de naissance doit être écrite selon le format: JJ-MM-AAAA</li>
                     <li>Genre: 0 = Homme, 1 = Femme</li>
                 </ul>
-                {{ link_to('/assets/exemple/creer-batch-participants.csv', 'Exemple de fichier') }}
             </div>
         </div>
         <div class="panel-body">
@@ -71,6 +70,22 @@
                     @endif
                 </table>
             </div>
+            @if ($a_pas_erreurs && !is_null($nom_fichier))
+                <div class="row" id="confirmer-tableau">
+                    <div class="col-lg-1">
+                        {{ Form::open(["action" => "ParticipantsController@annulerCSV", "class" => "form-horizontal", "method" => "POST"]) }}
+                            {{ Form::hidden("fichier-precedent", "$nom_fichier") }}
+                            {{ Form::submit("Annuler", ["class" => "btn btn-warning"]) }}
+                        {{ Form::close() }}
+                    </div>
+                    <div class="col-lg-1">
+                        {{ Form::open(["action" => "ParticipantsController@confirmerCSV", "class" => "form-horizontal", "method" => "POST"]) }}
+                            {{ Form::hidden("fichier-precedent", "$nom_fichier") }}
+                            {{ Form::submit("Confirmer", ["class" => "btn btn-success"]) }}
+                        {{ Form::close() }}
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 @stop
