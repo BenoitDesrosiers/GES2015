@@ -9,8 +9,6 @@
         <tbody>
 
             {!! Form::open(array('action' => array('EpreuvesController@storeParticipants', $epreuve->id))) !!}
-
-                <!-- Début mon code ici -->
                 <!-- Dropdown -->
                 <?php $regionArray = ["Toutes les régions"]; ?>
                 @foreach ($regions as $region)
@@ -32,10 +30,8 @@
                             <th>Région</th>
                         </tr>
                 </div>
-                    <!-- Fin de mon code ici -->
                     <div>
                     <!-- TODO: séparer les participants par régions, ou encore mieux, avoir un filtre de région -->
-                    <!-- Début modification syntaxe ici (pour blade) -->
                     <tr>
                         @foreach ($participants as $participant)
                             <?php $checked = " "; ?>
@@ -52,15 +48,26 @@
                             <th>
                                 <input type="checkbox" name="participants[{{$participant->id}}]" <?=$checked?>>
                             </th>
-                            <th>{{$participant->id}}</th>
+                            <script>
+
+                            </script>
+                            <th>{{$participant->numero}}</th>
                             <th>{{$participant->nom}}, {{$participant->prenom}}</th>
                             <th>{{$region->nom}}</th>
                             <br/>
+                            <!--
+                            * if participant->region->id = regionid
+                            *      if participant.isEmpty
+                            *          print aucun participant
+                            *      else
+                            *          print participant
+                            * elseif regionid = 0
+                            *      print participant //tous les participants
+                            -->
                         </div>
                         @endforeach
                     </table>
                 </div>
-                <!-- Fin modification syntaxe ici (pour blade) -->
             <div class="form-group">
                 {!! Form::submit('Appliquer', array('class' => 'btn btn-primary')) !!}
                 <a href="{{ action('EpreuvesController@index') }}" class="btn btn-danger">Annuler</a>
@@ -71,16 +78,15 @@
     </table>
     <script>
         var participants = {
-            @for($i = 0; $i < count($participants);$i++)
-                {{ $i }}: {
-                    id:"{{ $participants[$i]->id }}",
-                    nom:"{{ $participants[$i]->nom }}, {{ $participants[$i]->prenom }}",
-                    region:"{{ $participants[$i]->region->nom }}"
+            @foreach($participants as $participant)
+                {{ $participant->id }}: {
+                    numero: "{{ $participant->numero  }}",
+                    nom:"{{ $participant->nom }}, {{ $participant->prenom }}",
+                    participant_region_id:"{{ $participant->region->id }}",
+                    region:"{{ $participant->region->nom }}"
                 },
-
-            @endfor
+            @endforeach
         };
-        //alert(participants[0]["id"] + " " + participants[0]["nom"] + " " + participants[0]["region"] + " " + participants[1]["id"] + " " + participants[1]["nom"] + " " + participants[1]["region"]);
     </script>
     <script src="{!! asset('/js/trierParticipants.js') !!}">
 
