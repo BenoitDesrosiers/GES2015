@@ -10,10 +10,15 @@ use Redirect;
 use App\Models\Organisme;
 use View;
 
+/**
+ * Le controlleur pour les organismes
+ *
+ * @author ettdro
+ */
 class OrganismesController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Liste tous les organismes ainsi que leurs contacts.
      *
      * @return \Illuminate\Http\Response
      */
@@ -24,7 +29,7 @@ class OrganismesController extends Controller
     }
     
     /**
-     * Show the form for creating a new resource.
+     * Affiche la vue pour créer un organisme.
      *
      * @return \Illuminate\Http\Response
      */
@@ -34,7 +39,7 @@ class OrganismesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Inscrit un nouvel organisme dans la table 'organismes'.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -47,7 +52,7 @@ class OrganismesController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Affiche les informations d'un organisme.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -59,7 +64,7 @@ class OrganismesController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Affiche la vue pour modifier un organisme.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -71,7 +76,7 @@ class OrganismesController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour l'organisme choisit dans la table 'organismes'.
      * @param  Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -88,7 +93,7 @@ class OrganismesController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprime l'organisme choisit de la table 'organismes'.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

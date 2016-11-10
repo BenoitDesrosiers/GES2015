@@ -20,7 +20,7 @@
 		@foreach($organismes as $organisme)
 			<tr class="rangeeOrganisme" >
 				<td>
-					<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherContacts(this)"/>
+					<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherContacts(this)"/> <!-- Servira à afficher les contacts lorsqu'ils seront instaurés dans le site. -->
 				</td>
 				<td>
 					<a href="{!! action('OrganismesController@show', $organisme->id) !!}">
@@ -55,7 +55,7 @@
 @stop
 
 <script>
-// 	Affiche ou masque les membres d'une équipe donnée
+// 	Affiche ou masque les contacts des organismes.
 	function afficherContacts(bouton) {
 		rangee = bouton.parentNode.parentNode;
 		if (rangee.classList.contains("actif")) {
@@ -75,7 +75,7 @@
 	.rangeeOrganisme + .rangeeContact {
 		display: none;
 	}
-	/* Les membres sont visibles quand la rangée équipe a la classe .actif	 */
+	/* Les membres sont visibles quand la rangée organisme a la classe .actif	 */
 	.rangeeOrganisme.actif + .rangeeContact {
 		display: table-row;
 	}

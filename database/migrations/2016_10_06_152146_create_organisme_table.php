@@ -7,13 +7,13 @@ use Illuminate\Database\Migrations\Migration;
 class CreateOrganismeTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Exécuter la migration.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('organisme', function($table)
+        Schema::create('organismes', function($table)
         {
             $table->increments('id');
             $table->string('nomOrganisme');
@@ -24,12 +24,12 @@ class CreateOrganismeTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Inverser la migration.
      *
      * @return void
      */
     public function down()
     {
-        Schema::drop('organisme');
+        Schema::drop('organismes');
     }
 }

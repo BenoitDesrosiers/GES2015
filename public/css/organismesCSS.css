@@ -1,14 +1,25 @@
-.nomOrganismeBox {
-        width:300px;
-    }
+/** Le fichier CSS étant utilisé pour les vues du dossier organismes. **/
+
+.nomOrganismeBoite {
+    width:300px;
+}
 
 .telephone {
-		width:120px;
-		display:inline-block;
-	}
+	width:130px;
+	display:inline-block;
+}
 
 .boiteDescription {
-		padding-bottom:7px;
-		width:500px;
-		height:34px;
-	}
+	padding-bottom:7px;
+	width:500px;
+	height:34px;
+}
+
+.exempleTelephone {
+	display: inline-block;
+	color:#b0b4ba;
+}
+
+.nomOrganismeModifie {
+	color:#428bca;
+}
