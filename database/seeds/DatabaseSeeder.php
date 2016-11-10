@@ -24,14 +24,15 @@ class DatabaseSeeder extends Seeder {
 		
 		$this->call('UserTableSeeder');
 		$this->call('SportsTableSeeder');
-		$this->call('EpreuvesTableSeeder');
+        $this->call('TypesEvenementTableSeeder');
+        $this->call('EpreuvesTableSeeder');
 		$this->call('RegionsTableSeeder');
 		$this->call('ParticipantsTableSeeder');
 		$this->call('EquipesSeeder');
 		$this->call('ArbitresTableSeeder');
-		$this->call('EvenementsTableSeeder');
 		$this->call('info_event');
 		$this->call('TerrainsTableSeeder');
+        $this->call('EvenementsTableSeeder');
         $this->call('BenevolesTableSeeder');
         $this->call('DisponibilitesTableSeeder');
 		$this->call('RolesTableSeeder');
