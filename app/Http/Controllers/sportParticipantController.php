@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
-use Illuminate\Database\QueryException;
+//use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use League\Flysystem\Exception;
+//use Illuminate\Support\Facades\App;
+//use League\Flysystem\Exception;
 use View;
 use Redirect;
 use Input;
@@ -58,7 +58,7 @@ class sportParticipantController extends BaseController{
                 return Participant::with('sports')
                     ->where('region_id', $region_id)
                     ->where('equipe', 0)
-                    ->orderBy('nom')
+                    ->orderBy('nom')   //<<<<< j'aurai passé un paramètre pour ca
                     ->get();
             }
         }
