@@ -22,7 +22,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Models\Taches::class, function (Faker\Generator $faker) {
     return [
-    	'identifiant' => rand(1,1000),
+    	'identifiant' => rand(1,1000),    //<<<< c'est quoi ca identifiant?
     	'nom' => $faker->name,
         'description' => $faker->email
         ];

@@ -9,7 +9,7 @@ class Taches extends Model
 	protected $guarded = array('id');
 
 	/** 
-	 * Eloquent relationship: un rôle a plusieurs bénévoles -- pour 
+	 * Eloquent relationship: un rôle a plusieurs bénévoles -- pour   <<<<pour quoi??? francais
 	 */
 
 	public function benevoles() {
@@ -20,7 +20,7 @@ class Taches extends Model
 	 *
 	 * une tâche doit avoir:
 	 * - nom: obligatoire, et unique dans toute la table
-	 * - Le champ description est falcultatifs.
+	 * - Le champ description est falcultatifs.   <<<< falcultatifs ???? francais
 	 */
 	
 	protected $fillable = ['nom', 'description'];
