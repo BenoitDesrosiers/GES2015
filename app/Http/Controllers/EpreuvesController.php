@@ -142,6 +142,9 @@ class EpreuvesController extends BaseController {
             $sportId = $epreuve->sport->id;
 			$sports = Sport::all();
 			$arbitresEpreuves = $epreuve->arbitres;
+
+            // Cette partie dénombre le nombre participant dans l'épreuve qui sont de genre
+            // masculin (false) ou féminin (true)
             $participantsMasculin = $epreuve->participants->where('sexe', false);
             $participantsFeminin = $epreuve->participants->where('sexe', true);
             $proportionGenre = array(count($participantsMasculin),count($participantsFeminin));
@@ -233,7 +236,7 @@ class EpreuvesController extends BaseController {
 		}
 		$epreuve->sport_id = $sport->id;
 		if($epreuve->save()) {
-            $epreuve->participants()->sync($this->filtrer_participants($epreuveId,true));
+            $epreuve->participants()->sync($this->filtrer_participants($epreuveId));
 			$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 			//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
             if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
@@ -325,23 +328,18 @@ class EpreuvesController extends BaseController {
 	}
 
     /**
-     * Filtre les participants selon la validité ou l'invalidité de la liste.
+     * Filtre les participants pour retirer ceux n'ayant pas le bon genre..
      *
      * @param int $epreuveId
      *
-     * @param boolean $valide
-     *
      * @return array
      */
-    protected function filtrer_participants($epreuveId, $valide){
+    protected function filtrer_participants($epreuveId){
         try{
             $epreuve = Epreuve::findOrFail ( $epreuveId );
             $participants = $epreuve->participants;
             if ($epreuve->genre != 'mixte'){
                 $genreRequis = $epreuve->genre == 'féminin';
-                if (!$valide){
-                    $genreRequis = !valide;
-                }
                 $participants = $epreuve->participants->where('sexe',$genreRequis);
             }
             return $participants;
