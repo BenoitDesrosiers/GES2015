@@ -40,17 +40,17 @@ class DeleguesTableSeeder extends Seeder {
 
             $telephone_del = New DelegueTelephone();
             $telephone_del->telephone = $item[8];
-            $telephone_del->delegue_telephone()->associate($delegue);
+            $telephone_del->delegue()->associate($delegue);
             $telephone_del->save();
 
             $telephone_del = New DelegueTelephone();
             $telephone_del->telephone = $item[9];
-            $telephone_del->delegue_telephone()->associate($delegue);
+            $telephone_del->delegue()->associate($delegue);
             $telephone_del->save();
 
             $courriel_del = New DelegueCourriel();
             $courriel_del->courriel = $item[10];
-            $courriel_del->delegue_courriel()->associate($delegue);
+            $courriel_del->delegue()->associate($delegue);
             $courriel_del->save();
 
 
