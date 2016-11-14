@@ -71,30 +71,53 @@
 			{{ $errors->first('adresse') }}
 		</div>
 		<div class="form-group">
-
-			<?php $telephones = $delegue->telephones()->orderBy('delegue_id')->get(); ?>
+		<!--  @autor Marc P | Afficher toute les téléphones dans la vue de modification d'un délégué    -->
+			<?php $telephones = $delegue->telephones()->orderBy('delegue_id')->get();
+            $nombreTel = 0; ?>
 				@if(count($telephones) > 0)
 					@foreach($telephones as $telephone)
-						<div class="telephone form-group">
-							{!! Form::label('telephone', 'Téléphone:') !!}
-							{!! Form::text('telephone',$telephone->telephone, ['class' => 'form-control']) !!}
-							{{ $errors->first('telephone') }}
-						</div>
+                        @if($nombreTel == 0)
+                            <div class="telephone form-group">
+                                {!! Form::label('telephone', 'Téléphone:') !!}
+                                {!! Form::text('telephone[]',$telephone->telephone, ['class' => 'form-control']) !!}
+                                {{ $errors->first('telephone') }}
+                                <?php $nombreTel = 1; ?>
+                            </div>
+                        @else
+                            <div class="telephone form-group">
+                                {!! Form::label('telephone', 'Téléphone:') !!}
+                                {!! Form::text('telephone[]',$telephone->telephone, ['class' => 'form-control']) !!}
+                                <button type = 'button' onclick='remove1(this)'>Enlever ce téléphone</button>
+                                {{ $errors->first('telephone') }}
+                            </div>
+                        @endif
 					@endforeach
 				@endif
 				<button type = "button" id='add'>Ajouter un téléphone</button>
 		</div>
 
 		<div class="form-group">
+		<!--  @autor Marc P | Afficher toute les courriels dans la vue de modification d'un délégué    -->
+			<?php $courriels = $delegue->courriels()->orderBy('delegue_id')->get();
+                $nombre = 0;?>
+                @if(count($courriels) > 0)
 
-			<?php $courriels = $delegue->courriels()->orderBy('delegue_id')->get(); ?>
-				@if(count($courriels) > 0)
-					@foreach($courriels as $courriel)
-						<div class="courriel form-group">
-							{!! Form::label('courriel', 'Courriel:') !!}
-							{!! Form::text('courriel',$courriel->courriel, ['class' => 'form-control']) !!}
-							{{ $errors->first('courriel') }}
-						</div>
+                    @foreach($courriels as $courriel)
+						@if($nombre == 0)
+                            <div class="courriel form-group">
+                                {!! Form::label('courriel', 'Courriel:') !!}
+                                {!! Form::text('courriel[]',$courriel->courriel, ['class' => 'form-control']) !!}
+                                {{ $errors->first('courriel') }}
+                                <?php $nombre = 1; ?>
+                            </div>
+                        @else
+                        <div class="courriel form-group">
+                            {!! Form::label('courriel', 'Courriel:') !!}
+                            {!! Form::text('courriel[]',$courriel->courriel, ['class' => 'form-control']) !!}
+                            <button type = 'button' onclick='remove2(this)' class='remove2'>Enlever ce courriel</button>
+                            {{ $errors->first('courriel') }}
+                        </div>
+                        @endif
 					@endforeach
 				@endif
 				<button type ="button" id='add2'>Ajouter un courriel</button>
@@ -133,6 +156,9 @@
 <script>
 
 	/**
+	 *
+	 * @author Marc P
+	 *
 	 * Script actif en tout temps sur la page. Cette fonction est activée lors que le bouton d'ajout
 	 * pour les téléphones (avec le id --> add) est appuyé et clone l'ajout d'une entrée de téléphone
 	 */
@@ -150,6 +176,9 @@
 	});
 
 	/**
+	 *
+	 * @author Marc P
+	 *
 	 * Fonction effacant la div .telephone la plus proche. Permet d'effacer une entrée de téléphone
 	 * @param element --> le bouton ayant été appuyé.
 	 */
@@ -166,6 +195,9 @@
 
 	$(document).ready(function() {
 		/**
+		 *
+		 * @author Marc P
+		 *
 		 * Script actif en tout temps sur la page. Cette fonction est activée lors que le bouton d'ajout
 		 * pour les courriels (avec le id --> add2) est appuyé et clone l'ajout d'une entrée de courriel
 		 */
@@ -181,6 +213,9 @@
 		});
 	});
 	/**
+	 *
+	 * @author Marc P
+	 *
 	 * Fonction effacant la div .courriel la plus proche. Permet d'effacer une entrée de courriel
 	 * @param element --> le bouton ayant été appuyé.
 	 */

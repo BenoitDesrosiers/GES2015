@@ -3,7 +3,7 @@
  * La classe Delegue
  * 
  * 
- * @author SteveL
+ * @author SteveL, Marc P
  * @version 0.1
  */
  
@@ -54,6 +54,8 @@ class Delegue extends EloquentValidating {
     /**
      * Un délégué a plusieurs courriels.
      *
+     * @author Marc P
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function courriels() {
@@ -63,6 +65,8 @@ class Delegue extends EloquentValidating {
     /**
      *
      * Un délégué a plusieurs téléphones.
+     *
+     * @author Marc P
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

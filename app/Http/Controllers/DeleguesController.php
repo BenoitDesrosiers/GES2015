@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\BaseController;
 use App\Models\DelegueCourriel;
 use App\Models\DelegueTelephone;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use View;
 use Redirect;
 use Input;
@@ -67,11 +69,13 @@ class DeleguesController extends BaseController {
 
 	/**
 	 * Enregistre dans la bd la ressource qui vient d'être créée.
-*
-* @return Response
-*/
+    *
+     * @author Steve L, Marc P
+     *
+    * @return Response
+    */
     public function store()
-    { //FIXME:: identique à update
+    {
         try {
             $input = Input::all();
             $delegue = new Delegue;
@@ -192,16 +196,28 @@ class DeleguesController extends BaseController {
 
 	/**
 	 * Mise à jour de la ressource dans la bd.
+     *
+     * @author Steve L, Marc P
 	 *
 	 * @param  int  $id l'id du rôle à changer.
 	 * @return Response
 	 */
 	public function update($id)
-	{  //FIXME: identique à store()
+	{
 		try {
+            DB::beginTransaction();
+            $input = Input::all();
+		    $ancien_delegue = Delegue::findOrFail($id);
+            foreach ($ancien_delegue->telephones()->get() as $telephone)
+            {
+                $telephone->delete();
+            }
+            foreach ($ancien_delegue->courriels()->get() as $courriel)
+            {
+                $courriel->delete();
+            }
             $this->destroy($id);
-			$input = Input::all();
-            $delegue = Delegue::findOrFail($id);
+            $delegue = new Delegue;
             $delegue->nom = $input['nom'];
 			$delegue->prenom = $input['prenom'];
             $delegue->region_id = $input['region_id'];
@@ -228,7 +244,8 @@ class DeleguesController extends BaseController {
 			}
 			$delegue->adresse = $input['adresse'];
 
-			if($delegue->save()) {
+			if($delegue->save())
+			{
                 //		Associer les téléphones au délégué.
                 $telephones = Input::get('telephone');
                 foreach($telephones as $telephone) {
@@ -255,11 +272,14 @@ class DeleguesController extends BaseController {
 				} else {
 					$delegue->roles()->detach();
 				}
+                DB::commit();
 				return Redirect::action('DeleguesController@index');
 			} else {
-				return Redirect::back()->withInput()->withErrors($delegue->validationMessages());
+                DB::rollBack();
+			    return Redirect::back()->withInput()->withErrors($delegue->validationMessages());
 			}
 		} catch(ModelNotFoundException $e) {
+            DB::rollBack();
 			App::abort(404);
 		}
 	}

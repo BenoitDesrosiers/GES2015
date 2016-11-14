@@ -62,14 +62,18 @@
 			{!! Form::text('adresse',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('adresse') }}
 		</div>
-		<div class="form-group telephone">
+            <!--  Champ du téléphone de base et bouton pour en ajouter     -->
+            <!--  @autor Marc P    -->
+        <div class="form-group telephone">
 			{!! Form::label('telephone', 'Téléphone:') !!}
 			{!! Form::text('telephone[1]',null, ['class' => 'form-control telephone_texte' ]) !!}
 
 			{{ $errors->first('telephone') }}
 		</div>
 			<button type = "button" id='add'>Ajouter un téléphone</button>
-		<div class="form-group courriel">
+            <!--  Champ du courriel de base et bouton pour en ajouter     -->
+            <!--  @autor Marc P    -->
+        <div class="form-group courriel">
 			{!! Form::label('courriels', 'Courriel:') !!}
 			{!! Form::text('courriel[1]',null, ['class' => 'form-control courriel_texte']) !!}
 			{{ $errors->first('courriel') }}
@@ -100,6 +104,9 @@
 <script type="text/javascript">
 
     /**
+     *
+     * @author Marc P
+     *
      * Script actif en tout temps sur la page. Cette fonction est activée lors que le bouton d'ajout
      * pour les téléphones (avec le id --> add) est appuyé et clone l'ajout d'une entrée de téléphone
      */
@@ -117,6 +124,9 @@
     });
 
     /**
+     *
+     * @author Marc P
+     *
      * Fonction effacant la div .telephone la plus proche. Permet d'effacer une entrée de téléphone
      * @param element --> le bouton ayant été appuyé.
      */
@@ -133,6 +143,9 @@
 
     $(document).ready(function() {
         /**
+         *
+         * @author Marc P
+         *
          * Script actif en tout temps sur la page. Cette fonction est activée lors que le bouton d'ajout
          * pour les courriels (avec le id --> add2) est appuyé et clone l'ajout d'une entrée de courriel
          */
@@ -148,6 +161,9 @@
         });
     });
     /**
+     *
+     * @author Marc P
+     *
      * Fonction effacant la div .courriel la plus proche. Permet d'effacer une entrée de courriel
      * @param element --> le bouton ayant été appuyé.
      */
