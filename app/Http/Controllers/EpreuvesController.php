@@ -265,6 +265,7 @@ class EpreuvesController extends BaseController {
 			App::abort ( 404 );
 		}
 		$epreuve->sport_id = $sport->id;
+		
 		if($epreuve->save()) {
 			$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 			//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
