@@ -66,7 +66,7 @@ public function run()
 		$participant->sports()->attach([$sports[$entree[4]]->id]);
 
 		$telephone = New Telephone;
-		$telephone->numero = strval(rand(1000000000, 9999999999));
+		$telephone->numero = strval(rand(1000000000, 2000000000));
 		$telephone->description = str_random(10);
 		$telephone->participant()->associate($participant);
 		$telephone->save();
