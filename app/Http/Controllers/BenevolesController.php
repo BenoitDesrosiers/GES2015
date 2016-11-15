@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
  * Le controller pour les bénévoles
  * 
- * @author dada
+ * @author Maxime
  * @version 0.1
  */
 class BenevolesController extends BaseController {
@@ -112,8 +112,8 @@ class BenevolesController extends BaseController {
         try{
 		    $benevole = Benevole::findOrFail($id);
 		    $terrains = Terrain::all();
-		    $benevoleTerrains = Benevole::find($id)->terrains;
-		    return View::make('benevoles.edit', compact('benevole', 'terrains', 'benevoleTerrains'));
+			$benevoleTerrains = Benevole::find($id)->terrains;
+			return View::make('benevoles.edit', compact('benevole', 'terrains', 'benevoleTerrains'));
         } catch(ModelNotFoundException $e) {
             App::abort(404);
         }
@@ -140,7 +140,7 @@ class BenevolesController extends BaseController {
 	        $benevole->verification = $input['verification'];
 	
 	        if($benevole->save()) {
-		        if (is_array(Input::get('terrain'))) {
+	        if (is_array(Input::get('terrain'))) {
 					$benevole->terrains()->sync(array_keys(Input::get('terrain')));
 				} else {
 					$benevole->terrains()->detach();
