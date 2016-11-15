@@ -30,6 +30,14 @@ class Terrain extends EloquentValidating {
     public function region() {
         return $this->belongsTo('App\Models\Region');
     }
+    
+    /**
+     * Eloquent relationship: un terrain est associée à plusieurs épreuves
+     */
+    public function epreuves()
+    {
+    	return $this->belongsToMany('App\Models\Epreuve');
+    }
 
 /**
  * Validation

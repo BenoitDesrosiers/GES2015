@@ -17,6 +17,16 @@
 			</div>
 		</div>
 @endif
+@if ($terrainsEpreuve->isEmpty())
+		<p>Aucun terrain n'est associé à cette épreuve.</p>
+@else
+		<p>Terrains: </p>
+		<ul>
+	@foreach ($terrainsEpreuve as $terrain)
+			<li>{{ $terrain->nom }}</li>
+	@endforeach
+		</ul>
+@endif
 	</div>
 </div>
 @stop
