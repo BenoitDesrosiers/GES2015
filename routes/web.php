@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Http\Request;
 
 
 /*
@@ -17,10 +18,13 @@ use App\Http\Controllers\Auth\RegisterController;
 Route::get('/','HomeController@index');
 Route::get('/home','HomeController@index');
 Route::get('/about','AboutController@index');
+Route::get('/tableau_participants', 'sportParticipantController@listerParticipants');
 
 Auth::routes();
 
 Route::group(['middleware'=>'auth'], function() {
+
+	Route::resource('organismes','OrganismesController');
 	
 	Route::resource('sports','SportsController');
 	Route::resource('sports.epreuves','SportsEpreuvesController');
@@ -40,7 +44,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('benevoles','BenevolesController');
 	Route::resource('roles','RolesController');
 	Route::resource('codes','CodesController');
-
+	Route::resource('taches','TachesController');
     Route::resource('disponibilites','DisponibilitesController');
 
 	Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');

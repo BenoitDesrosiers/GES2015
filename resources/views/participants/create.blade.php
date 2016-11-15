@@ -1,5 +1,13 @@
+{{-----------------------------------------------------------------
+| create.blade.php
+| Description: Vue de création d'un participant.
+| Créé le: Avant automne 2016
+| Modifié le: 161027
+| Par: (Auteur précédent inconnu), Res260 (A2016)
+-----------------------------------------------------------------}}
 @extends('layout')
 @section('content')
+<link rel="stylesheet" href="{!! asset('/css/participants/create-edit.css') !!}">
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Création d'un participant</h2>
@@ -25,11 +33,6 @@
             {!! Form::label('prenom', '*Prenom:') !!} 
             {!! Form::text('prenom', '', ['class' => 'form-control']) !!}
             {{ $errors->first('prenom') }}
-        </div>
-        <div class="form-group">
-            {!! Form::label('telephone', 'Numéro de téléphone:') !!} 
-            {!! Form::text('telephone','', ['class' => 'form-control']) !!}
-            {{ $errors->first('telephone') }}
         </div>
         <div class="form-group">
             {!! Form::label('nom_parent', 'Nom d\'un parent:') !!} 
@@ -62,24 +65,37 @@
             {!! Form::select('jour_naissance',$listeJours, $jourDefaut, ['style' => 'width:3em!important;']) !!}
             {{ $errors->first('naissance') }}
         </div>
-        <div class="form-group">
-            {!! Form::label('adresse', 'Adresse:') !!} 
-            {!! Form::text('adresse','', ['class' => 'form-control']) !!}
-            {{ $errors->first('adresse') }}
+        <div id="conteneur-adresses">
+            <div class="form-group conteneur-adresse">
+                {!! Form::label('adresse-adresse-1', 'Adresse:') !!}
+                {!! Form::text('adresse_adresse[]','', ['id' => 'adresse-adresse-1', 'class' => 'form-control']) !!}
+
+                {!! Form::label('adresse-description-1', 'Description de l\'adresse:') !!}
+                {!! Form::text('adresse_description[]','', ['id' => 'adresse-description-1', 'class' => 'form-control']) !!}
+            </div>
         </div>
-        <?php
-            $regionArray = array();
-            for ($i=0; $i<count($regions); $i++) {
-                $regionArray[$i+1] = $regions[$i]['nom'];
-            }
-        ?>
+        <button onclick="ajouterAdresse()" id="bouton-ajouter-adresse" disabled class="btn-success" type="button">Ajouter une adresse</button>
+        <div id="conteneur-telephones">
+            <div class="form-group conteneur-telephone">
+                {!! Form::label('telephone-numero-1', 'Numéro de téléphone:') !!}
+                {!! Form::text('telephone_numero[]','', ['id' => 'telephone-numero-1', 'class' => 'form-control']) !!}
+
+                {!! Form::label('telephone-description-1', 'Description du téléphone:') !!}
+                {!! Form::text('telephone_description[]','', ['id' => 'telephone-description-1', 'class' => 'form-control']) !!}
+            </div>
+        </div>
+        <button onclick="ajouterTelephone()" id="bouton-ajouter-telephone" disabled class="btn-success" type="button">Ajouter un téléphone</button>
+
         <div class="form-group">
-            {!! Form::label('region_id', 'Région:') !!} <br/>
-            {!! Form::select('region_id', $regionArray) !!}
+            <select name="region_id" id="region_id">
+                @foreach ($regions as $region)
+                    <option value="{!! $region->id !!}">{!! $region->nom !!}</option>
+                @endforeach
+            </select>
             {{ $errors->first('region_id') }}
         </div>
 		<div class="form-group">
-			{!! Form::label('sports', 'Sports:') !!} 
+			{!! Form::label('sports', 'Sports:') !!}
 			<div class="row">
 				<?php
 					foreach ($sports as $sport) {
@@ -101,4 +117,5 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+<script src="{!! asset('/js/participants/gerer-infos-contact.js') !!}"></script>
 @stop
