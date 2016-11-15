@@ -28,9 +28,7 @@ public function type() {
 public $validationMessages;
 
 public function validationRules() {
-	return [
-		//'nom' => 'required',
-		];
+	return [];
 }
 
 

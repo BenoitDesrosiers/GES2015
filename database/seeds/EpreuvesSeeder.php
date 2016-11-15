@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Jessee
+ * @version 0.0.2 rev 1
+ */
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -7,7 +10,11 @@ use App\Models\Epreuve;
 
 class EpreuvesTableSeeder extends Seeder {
 
-
+    /**
+     * Exécuter le seeder de la table.
+     *
+     * @return void
+     */
 	public function run()
 	{
 		DB::table('epreuves')->delete();

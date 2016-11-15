@@ -32,14 +32,28 @@
 
         <!-- Ajout de chaque événement de la base de données dans table des événements -->
             <tr>
-                <td><a href="{{ action('EvenementsController@show', $evenement->id) }}">{{ $evenement->nom }}</a></td>
-                <td class="hidden-xs">{{substr($evenement->date_heure, 0, 16)}}</td>
-                <td class="hidden-xs">{{$evenement->type->titre}}</td>
-                <td><a href="{{ action('EvenementsController@edit',$evenement->id) }}" class="btn btn-info">Modifier</a></td>
-                <td>{!! Form::open(array('action' => array('EvenementsController@destroy',$evenement->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}
-                    <button type="submit" href="{{ URL::route('evenements.destroy', $evenement->id) }}" class="btn btn-danger btn-mini">Effacer</button>
-                    {!! Form::close() !!}   {{-- méthode pour faire le delete tel que décrit sur http://www.codeforest.net/laravel-4-tutorial-part-2 , 
-                                            un script js est appelé pour tous les form qui ont un "data-confirm" (voir assets/js/script.js) --}}
+                <td>
+                    <a href="{{ action('EvenementsController@show', $evenement->id) }}">
+                        {{ $evenement->nom }}
+                    </a>
+                </td>
+                <td class="hidden-xs">
+                    {{$evenement->date_heure}}
+                </td>
+                <td class="hidden-xs">
+                    {{$evenement->type->titre}}
+                </td>
+                <td>
+                    <a href="{{ action('EvenementsController@edit',$evenement->id) }}" class="btn btn-info">
+                        Modifier
+                    </a>
+                </td>
+                <td>
+                    {!! Form::open(array('action' => array('EvenementsController@destroy',$evenement->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}
+                    <button type="submit" href="{{ URL::route('evenements.destroy', $evenement->id) }}" class="btn btn-danger btn-mini">
+                        Effacer
+                    </button>
+                    {!! Form::close() !!}
                 </td>
             </tr>
 @endforeach

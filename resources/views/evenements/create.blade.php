@@ -7,7 +7,6 @@
     <div class="panel-heading">
         <h2>Création d'un événement</h2>
     </div>
-    <?php //todo: ajouter la liste des erreurs en rouge en haut?>
     <div class="panel-body">
         {!! Form::open(['action'=> 'EvenementsController@index', 'class' => 'form']) !!}
         @foreach ($errors->all() as $error)
@@ -38,7 +37,7 @@
         ?>
         <div class="form-group">
             {!! Form::label('type_id', '* Type:') !!} <br/>
-            {!! Form::select('type_id', $typeArray) !!}
+            {!! Form::select('type_id', $typeArray, null, ['class' => 'form-control largeurPetite']) !!}
         </div>
         <?php
             $epreuveArray = array();
@@ -48,7 +47,7 @@
         ?>
         <div class="form-group">
             {!! Form::label('epreuve_id', '* Épreuve:') !!} <br/>
-            {!! Form::select('epreuve_id', $epreuveArray) !!}
+            {!! Form::select('epreuve_id', $epreuveArray, null, ['class' => 'form-control largeurPetite']) !!}
         </div>
         <div class="form-group">
             {!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}

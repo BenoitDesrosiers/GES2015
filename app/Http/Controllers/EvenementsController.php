@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\EvenementsRequest;
-use Doctrine\DBAL\Types\Type;
+
 use View;
 use Redirect;
 use Input;
@@ -16,7 +16,7 @@ use App\Models\TypeEvenement;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
- * Le controller pour les événements
+ * Le contrôleur pour les événements
  *
  * @author Jessee
  * @version 0.1
@@ -80,7 +80,7 @@ class EvenementsController extends BaseController
     }
 
     /**
-     * Affiche un événement selon le id spécifié.
+     * Affiche un événement selon l'id spécifié.
      *
      * @param  int  $id l'id de l'événement
      * @return Response
@@ -107,6 +107,7 @@ class EvenementsController extends BaseController
             $evenement = Evenement::findOrFail($id);
             $types = TypeEvenement::all();
             $epreuves = Epreuve::all();
+            // La 'date' dans 'date_heure' est enmagasinée avec des '-' comme séparateurs, mais la fonction 'strtotime' utilise des '/' pour séparer la date
             $date = date('Y-m-d', strtotime(str_replace('-', '/', $evenement->date_heure)));
             $heure = date('G:i', strtotime($evenement->date_heure));
             return View::make('evenements.edit', compact('evenement', 'types', 'epreuves', 'date', 'heure'));

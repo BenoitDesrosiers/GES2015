@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Jessee
+ * @version 0.0.1 rev 1
+ */
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +12,11 @@ use App\Models\Evenement;
 
 class EvenementsTableSeeder extends Seeder {
 
-
+    /**
+     * Exécuter le seeder de la table.
+     *
+     * @return void
+     */
 	public function run()
 	{
 	    // Suppression de la table 'evenements' de la base de données

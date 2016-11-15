@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Jessee
+ * @version 0.0.1 rev 1
+ */
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,7 +11,7 @@ use App\Models\TypeEvenement;
 class TypesEvenementTableSeeder extends Seeder
 {
     /**
-     * Lancer le seeder de la table.
+     * Exécuter le seeder de la table.
      *
      * @return void
      */

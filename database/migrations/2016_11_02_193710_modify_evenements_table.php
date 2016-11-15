@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Jessee
+ * @version 0.0.1 rev 1
+ */
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -7,7 +10,7 @@ use Illuminate\Database\Migrations\Migration;
 class ModifyEvenementsTable extends Migration
 {
         /**
-     * Run the migrations.
+     * Exécute la migration.
      *
      * @return void
      */
@@ -37,7 +40,7 @@ class ModifyEvenementsTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Annule la migration.
      *
      * @return void
      */
