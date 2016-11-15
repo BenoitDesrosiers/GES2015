@@ -1,7 +1,7 @@
 <?php
 /**
- * @author BinarMorker
- * @version 0.0.1 rev 1
+ * @author Jessee
+ * @version 0.0.2 rev 1
  */
 
 namespace App\Models;
@@ -17,10 +17,10 @@ public function epreuve() {
 	return $this->belongsTo('App\Models\Epreuve');
 }
 
-public function resultats() {
-	return $this->hasMany('App\Models\Resultat');
+public function type() {
+    return $this->hasOne('App\Models\TypeEvenement', 'id', 'type_id');
 }
-	
+
 /**
  * Validation
  */
@@ -28,9 +28,7 @@ public function resultats() {
 public $validationMessages;
 
 public function validationRules() {
-	return [
-		'nom' => 'required',
-		];
+	return [];
 }
 
 

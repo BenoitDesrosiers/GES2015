@@ -25,7 +25,7 @@
 				<td class="hidden-xs"><?php if ($epreuve->description == "") {echo "Aucune description";} else {echo $epreuve->description;} ?></td>
 				<td><a href="{{ action('SportsEpreuvesController@edit', [$sport->id, $epreuve->id]) }}" class="btn btn-info">Modifier</a></td>				
 				<td>{!! Form::open(array('action' => array('SportsEpreuvesController@destroy',$sport->id, $epreuve->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}								
-					<button type="submit" href="{{ action('SportsEpreuvesController@destroy', $sport->id, $epreuve->id) }}" class="btn btn-danger btn-mini">Effacer</button>
+					<button type="submit" href="{{ URL::route('sports.epreuves.destroy', [$sport->id, $epreuve->id]) }}" class="btn btn-danger btn-mini">Effacer</button>
 					
 					{!! Form::close() !!}
 				</td>
