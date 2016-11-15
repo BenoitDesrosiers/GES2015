@@ -26,7 +26,7 @@ class OrganismesRequest extends FormRequest
     {
         return [
             'nomOrganisme' => 'required|string|max:30',
-            'telephone' => 'regex:^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$^',
+            'telephone' => array('regex:^((\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})|[0-9]{3}$^'),
             'description' => 'string|max:50'
         ];
     }

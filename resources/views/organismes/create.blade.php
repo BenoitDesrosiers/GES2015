@@ -28,9 +28,9 @@
         </div>
         <div class="form-group">
             {!! Form::label('telephone', 'Téléphone:') !!}
-            </br>
+            <br/>
             {!! Form::text('telephone', null, ['class' => 'form-control telephone']) !!}
-            <p class="exempleTelephone">ex: 819-123-4567, (819) 123-4567</p>
+            <small class="form-text text-muted">ex: 819-123-4567, (819) 123-4567</small>
         </div>
         <div class="form-group">
             {!! Form::label('description', 'Description:') !!} 

@@ -24,7 +24,7 @@
         </div>
         <div class="form-group">
             {!! Form::label('telephone', 'Téléphone:') !!}
-            </br>
+            <br/>
             {!! Form::text('telephone',$organisme->telephone, ['class' => 'form-control telephone']) !!}
         </div>
         <div class="form-group">
