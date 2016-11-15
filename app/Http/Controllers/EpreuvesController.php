@@ -16,6 +16,8 @@ use App\Models\Participant;
 use App\Models\EpreuveParticipants;
 use Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Collection;
+use App\Models\Terrain;
 
 /**
  * Le controller pour les épreuves liées à un sport
@@ -56,7 +58,8 @@ class EpreuvesController extends BaseController {
 		$sports = Sport::all();
 		$arbitres = Arbitre::orderBy('nom', 'asc')->get(); //TODO: quand les arbitres seront associés à un sport, ne prendre que les arbitre du sport associé à l'épreuve
 		$sportId = $this->checkSportId($sports, $sportId);
-		return View::make('epreuves.create', compact('sports', 'sportId', 'arbitres', 'arbitresUtilises'));
+		$terrains = Terrain::all();
+		return View::make('epreuves.create', compact('sports', 'sportId', 'arbitres', 'arbitresUtilises', 'terrains'));
 
 	}
 	
@@ -140,11 +143,46 @@ class EpreuvesController extends BaseController {
 			//       et fournir la liste des ids des arbitresEpreuves
 			//       $arbitres = Arbitre::all()->whereNotIn('id', $arbitresEpreuves->pluck('id')) ->get();
 			$sportId = $this->checkSportId($sports, $sportId);
+			$epreuveTerrains = $this->listerTerrains($epreuveId);
 				
-			return View::make('epreuves.edit', compact('epreuve', 'sports', 'sportId', 'arbitres', 'arbitresEpreuves'));
+			return View::make('epreuves.edit', compact('epreuve', 'sports', 'sportId', 'arbitres', 'arbitresEpreuves', 'epreuveTerrains'));
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
+	}
+	
+	/**
+	 * Retourne une collection des terrains qui sont associés au sport
+	 * de l'épreuve. Les propriétés 'checked' et 'active' sont ajoutées
+	 * aux terrains pour indiquer si le terrain est associé à l'épreuve.
+	 * 
+	 * @param
+	 * 			[in] int $epreuveId l'id de l'épreuve
+	 * @return
+	 * 			Collection de terrrains
+	 */
+	public function listerTerrains($epreuveId) {
+		$epreuve = Epreuve::findOrFail($epreuveId);
+		$epreuveTerrains = new Collection();
+		$terrains = Terrain::all();
+		foreach ($terrains as $terrain) {
+			foreach ($terrain->sports as $terrSport) {
+				//Vérifie que le sport de l'épreuve est le même que celui du terrain
+				if ($terrSport->id == $epreuve->sport->id) {
+					$terrain->checked = "";
+					$terrain->active = "";
+					//Vérifie que le terrain est déjà associé à l'épreuve
+					foreach ($epreuve->terrains as $terrainAssocie) {
+						if ($terrain->id == $terrainAssocie->id) {
+							$terrain->checked = " checked";
+							$terrain->active = " active";
+						}
+					}
+					$epreuveTerrains->add($terrain);
+				}
+			}
+		}
+		return $epreuveTerrains;
 	}
 	
 	/**
@@ -157,10 +195,11 @@ class EpreuvesController extends BaseController {
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
 			$arbitresEpreuves = $epreuve->arbitres;
+			$terrainsEpreuve = $epreuve->terrains;
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		return View::make('Epreuves.show', compact('epreuve', 'arbitresEpreuves'));
+		return View::make('Epreuves.show', compact('epreuve', 'arbitresEpreuves', 'terrainsEpreuve'));
 	}	
 
 	
@@ -191,6 +230,12 @@ class EpreuvesController extends BaseController {
 			} catch (Exception $e) {
 				App::abort(404);
 			}
+			//Association des terrains
+			if (is_array(Input::get('terrain'))) {
+				$epreuve->terrains()->sync(array_keys(Input::get('terrain')));
+			} else {
+				$epreuve->terrains()->detach();
+			}
 			return Redirect::action ( 'EpreuvesController@index', array (
 									  'sportId' => $input ["sportsListe"]));
 		} else {
@@ -220,6 +265,7 @@ class EpreuvesController extends BaseController {
 			App::abort ( 404 );
 		}
 		$epreuve->sport_id = $sport->id;
+		
 		if($epreuve->save()) {
 			$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 			//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
@@ -227,7 +273,13 @@ class EpreuvesController extends BaseController {
                 $epreuve->arbitres()->sync($arbitresAEntrer);
             } else {
                 $epreuve->arbitres()->detach();
-            } 
+            }
+            //Association des terrains
+            if (is_array(Input::get('terrain'))) {
+            	$epreuve->terrains()->sync(array_keys(Input::get('terrain')));
+            } else {
+            	$epreuve->terrains()->detach();
+            }
 			return Redirect::action('EpreuvesController@index',array('sportId'=>$input["sportsListe"]));
 		} else {
 			return Redirect::back ()->withInput ()->withErrors ( $epreuve->validationMessages () );

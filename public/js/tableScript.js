@@ -2,6 +2,7 @@
  *  Par Dey-Dey
  *  Permet de gérer la table de choix des arbitres dans la page des épreuves
  *  Adapté par Jérémi Pedneault pour respecter les besoins du site.
+ *  Généralisé par Francis Mathieu afin que le tableau puisse être réutilisé.
  */
 /*
 $('.ajouter').click(function(){
@@ -32,6 +33,7 @@ $('.retirer').click(function(){
 });
 */
 
+/* transfère les éléments cochés dans la liste de droite */
 function transfererDroite(){
     $('.all').prop("checked",false);
     var items = $("#list1 input:checked:not('.all')");
@@ -48,6 +50,7 @@ function transfererDroite(){
     }	
 };
 
+/* transfère les éléments cochés dans la liste de gauche */
 function transfererGauche(){
     $('.all').prop("checked",false);
     var items = $("#list2 input:checked:not('.all')");
@@ -60,7 +63,7 @@ function transfererGauche(){
       });
   	}
     else {
-  		alert("Choisissez un arbitre parmis ceux déjà assignés à l'épreuve");
+  		alert("Choisissez un arbitre parmis ceux déjà assignés");
     }
 };
 

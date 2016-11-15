@@ -71,15 +71,58 @@
 			{{ $errors->first('adresse') }}
 		</div>
 		<div class="form-group">
-			{!! Form::label('telephone', 'Téléphone:') !!} 
-			{!! Form::text('telephone',$delegue->telephone, ['class' => 'form-control']) !!}
-			{{ $errors->first('telephone') }}
+		<!--  @autor Marc P | Afficher tous les téléphones dans la vue de modification d'un délégué    -->
+			<?php $telephones = $delegue->telephones()->orderBy('delegue_id')->get();
+            $nombreTel = 0; ?>
+				@if(count($telephones) > 0)
+					@foreach($telephones as $telephone)
+                        @if($nombreTel == 0)
+                            <div class="telephone form-group">
+                                {!! Form::label('telephone', 'Téléphone:') !!}
+                                {!! Form::text('telephone[]',$telephone->telephone, ['class' => 'form-control']) !!}
+                                {{ $errors->first('telephone') }}
+                                <?php $nombreTel = 1; ?>
+                            </div>
+                        @else
+                            <div class="telephone form-group">
+                                {!! Form::label('telephone', 'Téléphone:') !!}
+                                {!! Form::text('telephone[]',$telephone->telephone, ['class' => 'form-control']) !!}
+                                <button type = 'button' onclick='remove1(this)'>Enlever ce téléphone</button>
+                                {{ $errors->first('telephone') }}
+                            </div>
+                        @endif
+					@endforeach
+				@endif
+				<button type = "button" id='add'>Ajouter un téléphone</button>
 		</div>
+
 		<div class="form-group">
-			{!! Form::label('courriel', 'Courriel:') !!} 
-			{!! Form::text('courriel',$delegue->courriel, ['class' => 'form-control']) !!}
-			{{ $errors->first('courriel') }}
+		<!--  @autor Marc P | Afficher tous les courriels dans la vue de modification d'un délégué    -->
+			<?php $courriels = $delegue->courriels()->orderBy('delegue_id')->get();
+                $nombre = 0;?>
+                @if(count($courriels) > 0)
+
+                    @foreach($courriels as $courriel)
+						@if($nombre == 0)
+                            <div class="courriel form-group">
+                                {!! Form::label('courriel', 'Courriel:') !!}
+                                {!! Form::text('courriel[]',$courriel->courriel, ['class' => 'form-control']) !!}
+                                {{ $errors->first('courriel') }}
+                                <?php $nombre = 1; ?>
+                            </div>
+                        @else
+                        <div class="courriel form-group">
+                            {!! Form::label('courriel', 'Courriel:') !!}
+                            {!! Form::text('courriel[]',$courriel->courriel, ['class' => 'form-control']) !!}
+                            <button type = 'button' onclick='remove2(this)' class='remove2'>Enlever ce courriel</button>
+                            {{ $errors->first('courriel') }}
+                        </div>
+                        @endif
+					@endforeach
+				@endif
+				<button type ="button" id='add2'>Ajouter un courriel</button>
 		</div>
+
 		<!--    Lister tous les rôles possibles      -->
 		<div class="form-group">
             {!! Form::label('roles', 'Rôles:') !!}
@@ -108,4 +151,6 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+
+<script src="{!! asset('/js/script_delegue.js') !!}"></script>
 @stop
