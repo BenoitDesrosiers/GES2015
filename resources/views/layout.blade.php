@@ -32,6 +32,7 @@
                     <li<?php if ($route == "terrains") { ?> class="active"<?php } ?>><a href="{{ action('TerrainsController@index') }}">Terrains</a></li>
           			<li<?php if ($route == "resultats") { ?> class="active"<?php } ?>><a href="{{ action('ResultatsController@index') }}">Résultats</a></li>
           			<li<?php if ($route == "benevoles") { ?> class="active"<?php } ?>><a href="{{ action('BenevolesController@index') }}">Bénévoles</a></li>
+          			<li<?php if ($route == "taches") { ?> class="active"<?php } ?>><a href="{{ action('TachesController@index') }}">Tâches</a></li>
           			<li<?php if ($route == "arbitres") { ?> class="active"<?php } ?>><a href="{{ action('ArbitresController@index') }}">Arbitres</a></li>
 					<li<?php if ($route == "pointages") { ?> class="active"<?php } ?>><a href="{{ action('PointagesController@index') }}">Pointages</a></li>
 					<li<?php if ($route == "codes") { ?> class="active"<?php } ?>><a href="{{ action('CodesController@index') }}">Codes</a></li>

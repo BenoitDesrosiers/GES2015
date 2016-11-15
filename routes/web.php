@@ -42,6 +42,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('benevoles','BenevolesController');
 	Route::resource('roles','RolesController');
 	Route::resource('codes','CodesController');
+	Route::resource('taches','TachesController');
 	
     Route::resource('disponibilites','DisponibilitesController');
 
