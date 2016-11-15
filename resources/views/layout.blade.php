@@ -29,6 +29,7 @@
           			<li<?php if ($route == "participants") { ?> class="active"<?php } ?>><a href="{{ action('ParticipantsController@index') }}">Participants</a></li>
           			<li<?php if ($route == "equipes") { ?> class="active"<?php } ?>><a href="{{ action('EquipesController@index') }}">Équipes</a></li>
          			<li<?php if ($route == "systeme") { ?> class="active"<?php } ?>><a href="{{ action('SystemeController@index') }}">Système</a></li>
+         			<li<?php if ($route == "cafeterias") { ?> class="active"<?php } ?>><a href="{{ action('CafeteriasController@index') }}">Cafétérias</a></li>
                     <li<?php if ($route == "terrains") { ?> class="active"<?php } ?>><a href="{{ action('TerrainsController@index') }}">Terrains</a></li>
           			<li<?php if ($route == "resultats") { ?> class="active"<?php } ?>><a href="{{ action('ResultatsController@index') }}">Résultats</a></li>
           			<li<?php if ($route == "benevoles") { ?> class="active"<?php } ?>><a href="{{ action('BenevolesController@index') }}">Bénévoles</a></li>

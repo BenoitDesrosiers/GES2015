@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cafeteria;
 use Illuminate\Http\Request;
 
-class CafeteriaController extends Controller
+class CafeteriasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,8 @@ class CafeteriaController extends Controller
      */
     public function index()
     {
-        //
+        $cafeterias = Cafeteria::all()->sortBy('nom');
+        return view('cafeterias.index', compact('cafeterias'));
     }
 
     /**
