@@ -1,4 +1,4 @@
-/vendor
+﻿/vendor
 /node_modules
 Homestead.yaml
 start_server.bat
@@ -8,3 +8,5 @@ Proposition.txt
 .settings/org.eclipse.core.resources.prefs
 *~
 composer.lock
+.phpstorm.meta.php
+_ide_helper.php
