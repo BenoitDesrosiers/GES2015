@@ -7,7 +7,7 @@ use Redirect;
 use Input;
 
 use App\Models\Benevole;
-use App\Models\Disponibilite;
+use App\Models\Sport;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -42,8 +42,15 @@ class BenevolesController extends BaseController {
 	 * @return Response
 	 */
 	public function create()
-	{
-		return View::make('benevoles.create');	
+	{	
+		try {
+			$sports = Sport::all();
+		
+			return View::make('benevoles.create', compact('sports', 'benevoleSports'));
+		
+		} catch (Exception $e) {
+			App:abort(404);
+		}
 	}
 
 
@@ -54,23 +61,34 @@ class BenevolesController extends BaseController {
 	 */
 	public function store()
 	{
-        $input = Input::all();
-        		
-		$benevole = new Benevole;
-        $benevole->prenom = $input['prenom'];
-		$benevole->nom = $input['nom'];
-		$benevole->adresse = $input['adresse'];
-		$benevole->numTel = $input['numTel'];
-        $benevole->numCell = $input['numCell'];
-        $benevole->courriel = $input['courriel'];
-		$benevole->accreditation = $input['accreditation'];
-		$benevole->verification = $input['verification'];
-		
-		if($benevole->save()) {
-			return Redirect::action('BenevolesController@index');
-		} else {
-			return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
-		}	
+		try {
+	        $input = Input::all();
+	        		
+			$benevole = new Benevole;
+	        $benevole->prenom = $input['prenom'];
+			$benevole->nom = $input['nom'];
+			$benevole->adresse = $input['adresse'];
+			$benevole->numTel = $input['numTel'];
+	        $benevole->numCell = $input['numCell'];
+	        $benevole->courriel = $input['courriel'];
+			$benevole->accreditation = $input['accreditation'];
+			$benevole->verification = $input['verification'];
+			
+			if($benevole->save()) {
+				// Association avec les sports sélectionnés
+				if (is_array(Input::get('sport'))) {
+					$benevole->sports()->sync(array_keys(Input::get('sport')));
+				} else {
+					$benevole->sports()->detach();
+				}
+				// Message de confirmation si la sauvegarde a réussi
+				return Redirect::action('BenevolesController@create')->with ( 'status', 'Le bénévole a été créé.' );
+			} else {
+				return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
+			}
+		} catch (Exception $e) {
+			App:abort(404);
+		}
 	}
 
 
@@ -101,10 +119,12 @@ class BenevolesController extends BaseController {
 	{
         try{
 		    $benevole = Benevole::findOrFail($id);
+		    $sports = Sport::all();
+		    $benevoleSports = Benevole::find($id)->sports;
         } catch(ModelNotFoundException $e) {
             App::abort(404);
         }
-		return View::make('benevoles.edit', compact('benevole'));
+		return View::make('benevoles.edit', compact('benevole', 'sports', 'benevoleSports'));
 	}
 
 	/**
@@ -125,10 +145,18 @@ class BenevolesController extends BaseController {
 	        $benevole->numTel = $input['numTel'];
             $benevole->numCell = $input['numCell'];
             $benevole->courriel = $input['courriel'];
-	        $benevole->accreditation = $input['accreditaiton'];
+	        $benevole->accreditation = $input['accreditation'];
 	        $benevole->verification = $input['verification'];
 	
 	        if($benevole->save()) {
+	        	
+	        	// Association avec les sports sélectionnés
+	        	if (is_array(Input::get('sport'))) {
+	        		$benevole->sports()->sync(array_keys(Input::get('sport')));
+	        	} else {
+	        		$benevole->sports()->detach();
+	        	}
+	        	
 		        return Redirect::action('BenevolesController@index');
 	        } else {
 		        return Redirect::back()->withInput()->withErrors($benevole->validationMessages());

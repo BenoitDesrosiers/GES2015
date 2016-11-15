@@ -24,7 +24,7 @@ Vous devez créer une BD nommée GestionEvenementsSportifs.
 
 Vous devez changer l'information dans le fichier .env afin de fournir votre compte et mot de passe pour accéder à MySQL. 
 
-Une fois la BD créer, vous devez faire les migrations et le seed. 
+Une fois la BD créée, vous devez faire les migrations et le seed. 
 
 php artisan migrate
 
