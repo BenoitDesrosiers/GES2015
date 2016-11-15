@@ -1,6 +1,15 @@
 @extends('layout')
 @section('content')
     <link rel="stylesheet" href="{!! asset("/css/participants/create-batch.css") !!}">
+    @if ($erreur)
+        <p class="alert alert-danger">{{ $erreur }}</p>
+    @endif
+    <!--    Affiche un message de confirmation après un enregistrement réussi -->
+    @if ($status)
+        <div class="alert alert-success">
+            {{ $status }}
+        </div>
+    @endif
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2>Création de participants</h2>
@@ -18,7 +27,7 @@
                     <li>Les régions doivent être entrées avec leur nom court. Par exemple: Centre-du-Québec est CDQ</li>
                     <li>Aucune entête doit être fournie dans le fichier CSV, seulement les données</li>
                     <li>Chaque rangée doit terminer avec une nouvelle ligne (\n). Sinon elle n'est pas utilisée</li>
-                    <li>La date de naissance doit être écrite selon le format: JJ-MM-AAAA</li>
+                    <li>La date de naissance doit être écrite selon le format: AAAA-MM-JJ</li>
                     <li>Genre: 0 = Homme, 1 = Femme</li>
                 </ul>
             </div>

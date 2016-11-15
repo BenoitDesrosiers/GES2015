@@ -59,6 +59,8 @@ class ParticipantsController extends BaseController {
 		$erreurs = null;
 		$nomFichier = null;
 		$aPasErreurs = false;
+		$status = "";
+		$erreur = "";
 		$fichierCsv = $request->file("fichier-csv", null);
 		if (is_null($fichierCsv) || !$fichierCsv->isValid()) {
 			$donneesCsv = null;
@@ -73,8 +75,11 @@ class ParticipantsController extends BaseController {
 			$erreurs = $this->verifierDonneesCsv($metadata, $donneesCsv);
 			$aPasErreurs = empty(array_filter($erreurs));
 			if ($aPasErreurs) {
+				$status = "Le fichier est exempt d'erreurs. Vous pouvez maintenant confirmer.";
 				$nomFichier = uniqid() . ".csv";
 				$fichierCsv->move(resource_path("assets/temp/"), $nomFichier);
+			} else {
+				$erreur = "Le fichier contient des erreurs. Veuillez les corriger.";
 			}
 		}
 		$rowspanEntete = 'colspan="' . strval($plusLongueDonnee) . '"';
@@ -86,7 +91,8 @@ class ParticipantsController extends BaseController {
 		$donnees["a_pas_erreurs"] = $aPasErreurs;
 		$donnees["nom_fichier"] = $nomFichier;
 
-		//TODO: Utiliser le status.
+		$donnees["status"] = $status ? $status : $request->session()->get("status", "");
+		$donnees["erreur"] = $erreur ? $erreur : $request->session()->get("erreur", "");
 
 		return View::make("participants.create-batch", $donnees);
 	}
@@ -102,12 +108,20 @@ class ParticipantsController extends BaseController {
 	public function annulerCSV(Request $request) {
 		$donnees = array();
 
-		$chemin_temporaire = $request->input("fichier-precedent", null);
-		$status = $this->supprimerFichierCsvTemporaire($chemin_temporaire);
+		$status = "";
+		$erreur = "";
+		try {
+			$chemin_temporaire = $request->input("fichier-precedent", null);
+			$this->supprimerFichierCsvTemporaire($chemin_temporaire);
+		} catch (Exception $e) {
+			$erreur = "Erreur: " . $e->getMessage();
+		}
 
-		$donnees["status-annuler"] = $status;
+		$donnees["status"] = $status;
+		$donnees["erreur"] = $erreur;
 
-		return redirect()->action("ParticipantsController@createFromCSV", $donnees);
+		return redirect()->action("ParticipantsController@createFromCSV")
+			->with($donnees);
 	}
 
 	/**
@@ -121,16 +135,27 @@ class ParticipantsController extends BaseController {
 	public function confirmerCSV(Request $request) {
 		$donnees = array();
 
-		$chemin_temporaire = $request->input("fichier-precedent", null);
-		$fichier_temporaire = new \Symfony\Component\HttpFoundation\File\UploadedFile($chemin_temporaire, "temp.csv");
-		$donneesCsv = $this->transformerFichierCsv($fichier_temporaire);
-		$status = $this->supprimerFichierCsvTemporaire($chemin_temporaire);
+		$status = "";
+		$erreur = "";
+		try {
+			$nom_temporaire = $request->input("fichier-precedent", null);
+			$chemin_temporaire = resource_path("assets/temp/" . $nom_temporaire);
+			$fichier_temporaire_symfony = new \Symfony\Component\HttpFoundation\File\UploadedFile($chemin_temporaire, "temp.csv");
+			$fichier_temporaire = UploadedFile::createFromBase($fichier_temporaire_symfony);
+			$donneesCsv = $this->transformerFichierCsv($fichier_temporaire);
+			$this->supprimerFichierCsvTemporaire($nom_temporaire);
 
-		$this->ajouterDonneesCsv($donneesCsv);
+			$this->ajouterDonneesCsv($donneesCsv);
+			$status = "Les participants ont été ajoutés.";
+		} catch (Exception $e) {
+			$erreur = "Erreur: " . $e->getMessage();
+		}
 
-		$donnees["status-confirmer"] = $status;
+		$donnees["status"] = $status;
+		$donnees["erreur"] = $erreur;
 
-		return redirect()->action("ParticipantsController@createFromCSV", $donnees);
+		return redirect()->action("ParticipantsController@createFromCSV")
+			->with($donnees);
 	}
 	
 	/**
@@ -406,20 +431,14 @@ class ParticipantsController extends BaseController {
 	 * @param string $nomFichier Le nom du fichier temporaire
 	 *
 	 * @author ZeLarpMaster
-	 * @return bool Si le fichier a bel et bien été supprimé, retourne true
+	 * @throws Exception si le nom de fichier est nul.
 	 */
 	private function supprimerFichierCsvTemporaire($nomFichier) {
-		$status = false;
-
 		if (!is_null($nomFichier)) {
-			try {
-				unlink(resource_path("assets/temp/" . $nomFichier));
-				$status = true;
-			} catch (Exception $e) {
-				// Rien faire avec l'exception.
-			}
+			unlink(resource_path("assets/temp/" . $nomFichier));
+		} else {
+			throw new Exception("Nom de fichier nul.");
 		}
-		return $status;
 	}
 
 	/**
@@ -430,9 +449,27 @@ class ParticipantsController extends BaseController {
 	 * @author ZeLarpMaster
 	 */
 	private function ajouterDonneesCsv($donneesCsv) {
-		// TODO: This
-		// TODO: Associer les sports
-		$colonnes = array("nom", "prenom", "telephone", "nom_parent", "numero", "sexe", "naissance", "adresse", "region_id");
+		foreach ($donneesCsv as $donneesParticipant) {
+			$region_id = Region::whereRaw("upper(nom_court) = ?",
+				[strtoupper($donneesParticipant[8])])->first()->id;
+			$participant = Participant::create([
+				"nom" => $donneesParticipant[0],
+				"prenom" => $donneesParticipant[1],
+				"numero" => $donneesParticipant[4],
+				"region_id" => $region_id,
+				"equipe" => 0,
+				"sexe" => $donneesParticipant[5],
+				"naissance" => $donneesParticipant[6],
+				"adresse" => $donneesParticipant[7],
+				"nom_parent" => $donneesParticipant[3],
+				"telephone" => $donneesParticipant[2]
+			]);
+			foreach (array_filter(array_slice($donneesParticipant, 9)) as $nom_sport) {
+				$sport = Sport::whereRaw("upper(nom) = ?",
+					[strtoupper($nom_sport)])->first();
+				$participant->sports()->attach($sport->id);
+			}
+		}
 	}
 
 	/**
@@ -498,11 +535,11 @@ class ParticipantsController extends BaseController {
 	 * @param string $sport Le sport à vérifier
 	 *
 	 * @author ZeLarpMaster
-	 * @return bool true si le sport existe
+	 * @return bool true si le sport n'existe pas
 	 */
 	public function verifierSport($sport) {
-		$resultat = Sport::whereRaw("upper(nom) = ?", [strtoupper($sport)])->exists();
-		return $resultat;
+		$resultat = Sport::whereRaw("upper(`nom`) = ?", [strtoupper($sport)])->exists();
+		return !$resultat;
 	}
 
 	/**
