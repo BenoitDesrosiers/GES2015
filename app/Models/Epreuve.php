@@ -37,10 +37,18 @@ public function participants() {
 }
 
 /**
- * Eloquent relationship: un épreuve est associé à plusieurs arbitres
+ * Eloquent relationship: une épreuve est associée à plusieurs arbitres
  */
 public function arbitres() {
 	return $this->belongsToMany('App\Models\Arbitre');
+}
+
+/**
+ * Eloquent relationship: une épreuve est associée à plusieurs terrains
+ */
+public function terrains()
+{
+	return $this->belongsToMany('App\Models\Terrain');
 }
 	
 /**

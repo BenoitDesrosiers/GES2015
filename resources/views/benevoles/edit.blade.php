@@ -54,6 +54,31 @@
 			{{ $errors->first('benevole') }}				
 		</div>
 		<div class="form-group">
+			{!! Form::label('sports', 'Sports:') !!} 
+			<div class="row">
+				<?php
+					foreach ($sports as $sport) {
+						$checked = "";
+						$active = "";
+						foreach ($benevoleSports as $beneSport) {
+							if ($beneSport->id == $sport->id) {
+								$checked = " checked";
+								$active = " active";
+								continue;
+							}
+						}
+				?>
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
+			        <label class="btn btn-default btn-block<?=$active?>">
+			            <input name="sport[{{ $sport->id }}]" type="checkbox"<?=$checked?>> {{ $sport->nom }}
+			        </label><br/>
+			    </div>
+				<?php
+					}
+				?>
+			</div>
+		</div>
+		<div class="form-group">
 			{!! Form::button('Modifier', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
             <a href="{{ action('BenevolesController@show',$benevole->id) }}" class="btn btn-danger">Annuler</a>
 		</div>

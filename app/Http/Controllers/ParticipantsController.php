@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Adresse;
+use App\Models\Telephone;
+use DB;
+use phpDocumentor\Reflection\Types\Boolean;
 use View;
 use Redirect;
 use Input;
@@ -17,8 +21,8 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * Le controller pour les participants
  *
- * @author BinarMorker
- * @version 0.0.1 rev 1
+ * @author BinarMorker, Res260 (A2016)
+ * @version 161027
  */
 class ParticipantsController extends BaseController {
 	
@@ -64,48 +68,57 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Enregistre dans la bd le participant qui vient d'être créé.
 	 *
-	 * @return Response
+	 * @return View La vue de création d'un participant, avec un message
+	 * 				d'état d'ajout du participant.
 	 */
 	public function store()
 	{
         try {
+			DB::beginTransaction();
             $input = Input::all();
-            $participant = new Participant;
-            $participant->equipe = false;
-            $participant->nom = $input['nom'];
-            $participant->prenom = $input['prenom'];
-            $participant->telephone = $input['telephone'];
-            $participant->nom_parent = $input['nom_parent'];
-            $participant->numero = $input['numero'];
-            $participant->sexe = $input['sexe'];
-            $participant->adresse = $input['adresse'];
-            $participant->region_id = $input['region_id'];
+			$participant = $this->construireParticipant($input);
 
-    //      Création de la date de naissance à partir des valeurs des trois comboboxes
-			$anneeNaissance = $input['annee_naissance']-1;
-			$moisNaissance = $input['mois_naissance']-1;
-			$jourNaissance = $input['jour_naissance']-1;
-			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
-				$dateTest = new DateTime;
-				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
-				$participant->naissance=$dateTest;
-			} else {
-				$participant->naissance = "invalide";
+
+            if(!$participant->save()) {
+				DB::rollBack();
+				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 			}
 
-            if($participant->save()) {
-                if (is_array(Input::get('sport'))) {  //FIXME: si le get plante, le save est déjà fait. 
-                    $participant->sports()->sync(array_keys(Input::get('sport')));
-                } else {
-                    $participant->sports()->detach();
-                }
-    //          Message de confirmation si la sauvegarde a réussi
-                return Redirect::action('ParticipantsController@create')->with ( 'status', 'Le partipant a été créé!' );
-            } else {
-                return Redirect::back()->withInput()->withErrors($participant->validationMessages());
-            }
+			$adresses= $this->construireListeAdresses($input);
+			//Sauvegarde toutes les adresses. Si erreur, annule tout.
+			foreach($adresses as $adresse) {
+				// sauvegarderAdresse() retourne true s'il n'y a pas
+				// d'adresse ou si l'insertion s'est bien passée.
+				if(!$this->sauvegarderAdresse($adresse, $participant)) {
+					DB::rollBack();
+					return Redirect::back()->withInput()->withErrors($adresse->validationMessages());
+				}
+			}
+
+			$telephones = $this->construireListeTelephones($input);
+			//Sauvegarde tous les téléphones. Si erreur, annule tout.
+			foreach($telephones as $telephone) {
+				// sauvegarderTelephone() retourne true s'il n'y a pas
+				// de téléphone ou si l'insertion s'est bien passée.
+				if(!$this->sauvegarderTelephone($telephone, $participant)) {
+					DB::rollBack();
+					return Redirect::back()->withInput()->withErrors($telephone->validationMessages());
+				}
+			}
+
+			if (is_array(Input::get('sport'))) {  //FIXME: si le get plante, le save est déjà fait.
+				$participant->sports()->sync(array_keys(Input::get('sport')));
+			} else {
+				$participant->sports()->detach();
+			}
+
+			DB::commit();
+			// Message de confirmation si la sauvegarde a réussi
+			return Redirect::action('ParticipantsController@create')->with ( 'status', 'Le partipant a été créé!' );
+
         } catch (Exception $e) {
-            App:abort(404);
+			DB::rollBack();
+            App:abort(503);
         }
 	}
 	
@@ -130,7 +143,8 @@ class ParticipantsController extends BaseController {
      * Affiche le formulaire pour éditer un participant.
      *
      * @param  int $id l'id du participant à éditer 
-     * @return Response
+     * @return View La vue de modification d'un participant s'il y a eu une erreur,
+	 * 				sinon la vue d'affichage du participant modifié.
      */
     public function edit($id)
     {
@@ -180,49 +194,58 @@ class ParticipantsController extends BaseController {
      * Mise à jour du participant dans la bd.
      *
      * @param  int $id l'id du participant à changer.
-     * @return Response
+     * @return
      */
     public function update($id)
     {
         try {
+			DB::beginTransaction();
 			$input = Input::all();
-			$participant = Participant::findOrFail($id);
-			$participant->equipe = false;
-			$participant->nom = $input['nom'];
-			$participant->prenom = $input['prenom'];
-			$participant->telephone = $input['telephone'];
-			$participant->nom_parent = $input['nom_parent'];
-			$participant->numero = $input['numero'];
-			$participant->sexe = $input['sexe'];
-			$participant->adresse = $input['adresse'];
-			$participant->region_id = $input['region_id'];
 
-//      	Création de la date de naissance à partir des valeurs des trois comboboxes
-			$anneeNaissance = $input['annee_naissance']-1;
-			$moisNaissance = $input['mois_naissance']-1;
-			$jourNaissance = $input['jour_naissance']-1;
-			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
-				$dateTest = new DateTime;
-				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
-				$participant->naissance=$dateTest;
-			} else {
-// 				Un message d'erreur sera généré lors de la validation
-				$participant->naissance = "invalide";
-			}
+			$participant = $this->construireParticipant($input, Participant::findOrFail($id));
+			$this->supprimerTelephones($participant);
+			$telephones = $this->construireListeTelephones($input);
 
-			if($participant->save()) {
-				if (is_array(Input::get('sport'))) {
-					$participant->sports()->sync(array_keys(Input::get('sport')));
-				} else {
-					$participant->sports()->detach();
-				}
-//         		Message de confirmation si la sauvegarde a réussi
-				return Redirect::action('ParticipantsController@show', $participant->id)->with ( 'status', 'Le partipant a été mis a jour!' );
-			} else {
+			$this->supprimerAdresses($participant);
+			$adresses = $this->construireListeAdresses($input);
+
+			if(!$participant->save()) {
+				DB::rollBack();
 				return Redirect::back()->withInput()->withErrors($participant->validationMessages());
 			}
+
+			//Sauvegarde tous les téléphones. Si erreur, annule tout.
+			foreach($telephones as $telephone) {
+				// sauvegarderTelephone() retourne true s'il n'y a pas
+				// de téléphone ou si l'insertion s'est bien passée.
+				if(!$this->sauvegarderTelephone($telephone, $participant)) {
+					DB::rollBack();
+					return Redirect::back()->withInput()->withErrors($telephone->validationMessages());
+				}
+			}
+
+			//Sauvegarde toutes les adresses. Si erreur, annule tout.
+			foreach($adresses as $adresse) {
+				// sauvegarderAdresse() retourne true s'il n'y a pas
+				// d'adresse ou si l'insertion s'est bien passée.
+				if(!$this->sauvegarderAdresse($adresse, $participant)) {
+					DB::rollBack();
+					return Redirect::back()->withInput()->withErrors($adresses->validationMessages());
+				}
+			}
+
+			if (is_array(Input::get('sport'))) {
+				$participant->sports()->sync(array_keys(Input::get('sport')));
+			} else {
+				$participant->sports()->detach();
+			}
+
+			DB::commit();
+//         		Message de confirmation si la sauvegarde a réussi
+			return Redirect::action('ParticipantsController@show', $participant->id)->with ( 'status', 'Le partipant a été mis a jour!' );
         } catch (Exception $e) {
-            App:abort(404);
+			DB::rollBack();
+            App:abort(503);
         }
     }
 
@@ -312,7 +335,7 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Retourne les informations de tri.
 	 *
-	 * @return Array $infosTri. Contient les informations de tri.
+	 * @return array $infosTri. Contient les informations de tri.
 	 */
 	private function getInfosTri() {
 		$parametreDeTri = Input::get ( 'parametreDeTri' );
@@ -355,7 +378,7 @@ class ParticipantsController extends BaseController {
 	/**
 	 * Retourne la liste des noms courts de tous les régions.
 	 * 
-	 * @return Array $listeRecherches. Contient les noms courts des régions.
+	 * @return array $listeRecherches. Contient les noms courts des régions.
 	 */
 	 //TODO: renommer cette fonction getRegions
 	private function getListeRecherches() {
@@ -375,5 +398,223 @@ class ParticipantsController extends BaseController {
 				'Région'
 		];
 		return $listeFiltres;
+	}
+
+	/**
+	 * Associe les valeurs reçues au participant (qui peut exister ou non).
+	 *
+	 * @author Res260
+	 * @param $input array les valeurs que l'usager a entrés.
+	 * @param $aParticipant Participant le participant (s'il existe déjà).
+	 * @return Participant le participant à créer.
+	 */
+	private function construireParticipant($input, $aParticipant = null)
+	{
+		$participant = ($aParticipant) ? $aParticipant : New Participant;
+		$participant->equipe = false;
+		$participant->nom = $input['nom'];
+		$participant->prenom = $input['prenom'];
+		$participant->nom_parent = $input['nom_parent'];
+		$participant->numero = $input['numero'];
+		$participant->sexe = $input['sexe'];
+		$participant->region_id = $input['region_id'];
+
+		//Création de la date de naissance à partir des valeurs des trois comboboxes
+		$anneeNaissance = $input['annee_naissance']-1;
+		$moisNaissance = $input['mois_naissance']-1;
+		$jourNaissance = $input['jour_naissance']-1;
+		if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
+			$dateTest = new DateTime;
+			$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
+			$participant->naissance=$dateTest;
+		} else {
+			$participant->naissance = "invalide";
+		}
+		return $participant;
+	}
+
+	/**
+	 * Construit et retourne le téléphone entré par l'utilisateur.
+	 * Si aucun numéro n'est spécifié, retourne null.
+	 *
+	 * @author Res260
+	 * @param $input array les valeurs entrées par l'utilisateur.
+	 * @param $index int l'index à aller chercher dans
+	 * 					 $input['telephone_description'] et $input['telephone_numero'].
+	 * @return Telephone l'objet de téléphone à ajouter, ou null.
+	 */
+	public function construireTelephone($input, $index)
+	{
+		$numero = isset($input['telephone_numero'][$index])
+			? $this->formatterTelephone($input['telephone_numero'][$index])
+			: null;
+		$description = isset($input['telephone_description'][$index]) ? $input['telephone_description'][$index] : null;
+
+		$telephone = New Telephone;
+		$telephone->description = $description;
+		$telephone->numero = $numero;
+		$return_value = $telephone->numero ? $telephone : null;
+		return $return_value;
+	}
+
+	/**
+	 * Construit et retourne l'adresse entrée par l'utilisateur.
+	 * Si aucune adresse n'est spécifiée, retourne null.
+	 *
+	 * @author Res260
+	 * @param $input array les valeurs entrées par l'utilisateur.
+	 * @param $index int l'index à aller chercher dans
+	 * 					 $input['adresse_description'] et $input['adresse_adresse'].
+	 * @return Adresse l'objet d'adresse à ajouter, ou null.
+	 */
+	public function construireAdresse($input, $index)
+	{
+		$adresseStr = isset($input['adresse_adresse'][$index])
+			? $input['adresse_adresse'][$index]
+			: null;
+		$description = isset($input['adresse_description'][$index]) ? $input['adresse_description'][$index] : null;
+
+		$adresse = New Adresse;
+		$adresse->description = $description;
+		$adresse->adresse = $adresseStr;
+		$return_value = $adresse->adresse ? $adresse : null;
+		return $return_value;
+	}
+
+	/**
+	 * Formatte $telephone s'il est composé de 10 chiffres selon le format
+	 * "(ind) XXX-XXXX". Sinon, enlève simplement les caractères
+	 * " ", "(", ")" et "-".
+	 *
+	 * @author Res260
+	 * @param $telephone string Une chaine de caractères d'un téléphone.
+	 * @return mixed Une version formattée de $telephone
+	 */
+	private function formatterTelephone($telephone) {
+		$telephoneFormatte = substr($telephone, 0);
+		$telephoneFormatte = str_replace(' ', '', $telephoneFormatte);
+		$telephoneFormatte = str_replace('(', '', $telephoneFormatte);
+		$telephoneFormatte = str_replace(')', '', $telephoneFormatte);
+		$telephoneFormatte = str_replace('-', '', $telephoneFormatte);
+		if(strlen($telephoneFormatte) == 10) {
+			$telephoneFormatte = '(' . substr($telephoneFormatte, 0, 3) .
+				 				 ') '. substr($telephoneFormatte, 3, 3) .
+								 '-' . substr($telephoneFormatte, 6, 4);
+		}
+		return $telephoneFormatte;
+	}
+
+	/**
+	 * Sauvegarde le $telephone de $participant dans la BDD.
+	 *
+	 * @author Res260
+	 * @param $telephone Telephone|void l'objet téléphone à sauvegarder.
+	 * @param $participant Participant Le participant à qui le Telephone appartient.
+	 * @return bool True si la sauvegarde a fonctionné, false sinon.
+	 */
+	private function sauvegarderTelephone($telephone, $participant)
+	{
+		// Null si il le # de téléphone n'a pas été spécifié.
+		if($telephone) {
+			$telephone->participant()->associate($participant);
+			if (!$telephone->save()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Sauvegarde l'$adresse de $participant dans la BDD.
+	 *
+	 * @author Res260
+	 * @param $adresse Adresse|void l'objet d'adresse à sauvegarder.
+	 * @param $participant Participant Le participant à qui l'Adresse appartient.
+	 * @return bool True si la sauvegarde a fonctionné, false sinon.
+	 */
+	private function sauvegarderAdresse($adresse, $participant)
+	{
+		// Null si il l'adresse n'a pas été spécifiée.
+		if($adresse) {
+			$adresse->participant()->associate($participant);
+			if (!$adresse->save()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Retourne la liste des téléphones selon $input.
+	 *
+	 * @author Res260
+	 * @param $input array les valeurs entrées par l'utilisateur.
+	 * @return array[Telephone] La liste des téléphones entrés par l'utilisateur.
+	 */
+	private function construireListeTelephones($input)
+	{
+		$telephones = [];
+		$i = 0;
+		// Tant qu'il y a des entrées de téléphones à ajouter, on boucle et on ajoute à la liste.
+		while ($i == count($telephones)) {
+			array_push($telephones, $this->construireTelephone($input, $i));
+			if(array_last($telephones)) {
+				$i++;
+			}
+		}
+		// Le dernier élément sera toujours null.
+		array_pop($telephones);
+
+		return $telephones;
+	}
+
+	/**
+	 * Retourne la liste des adresses selon $input.
+	 *
+	 * @author Res260
+	 * @param $input array les valeurs entrées par l'utilisateur.
+	 * @return array[Adresse] La liste des adresses entrés par l'utilisateur.
+	 */
+	private function construireListeAdresses($input)
+	{
+		$adresses = [];
+		$i = 0;
+		// Tant qu'il y a des entrées d'adresses à ajouter, on boucle et on ajoute à la liste.
+		while ($i == count($adresses)) {
+			array_push($adresses, $this->construireAdresse($input, $i));
+			if(array_last($adresses)) {
+				$i++;
+			}
+		}
+		// Le dernier élément sera toujours null.
+		array_pop($adresses);
+
+		return $adresses;
+	}
+
+	/**
+	 * Supprime les téléphones de $participant de la BDD.
+	 *
+	 * @author Res260
+	 * @param $participant Participant Le participant à qui on supprime les téléphones.
+	 */
+	private function supprimerTelephones($participant)
+	{
+		foreach ($participant->telephones()->get() as $telephone) {
+			$telephone->delete();
+		}
+	}
+
+	/**
+	 * Supprime les adresses de $participant de la BDD.
+	 *
+	 * @author Res260
+	 * @param $participant Participant Le participant à qui on supprime les adresses.
+	 */
+	private function supprimerAdresses($participant)
+	{
+		foreach ($participant->adresses()->get() as $adresse) {
+			$adresse->delete();
+		}
 	}
 }

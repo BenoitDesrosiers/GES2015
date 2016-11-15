@@ -51,6 +51,22 @@
 			</div>
 		</div>
 		<div class="form-group">
+			{!! Form::label('terrains', 'Terrains:') !!}
+			<div class="row">
+@if ($terrains->isEmpty())
+				<p>Il n'y a pas de terrain disponible.</p>
+@else
+	@foreach ($terrains as $terrain)
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
+		            <label class="btn btn-default btn-block">
+		            	<input name="terrain[{{ $terrain->id }}]" type="checkbox"> {{ $terrain->nom }}
+		        	</label><br/>
+	        	</div>
+	@endforeach
+@endif
+			</div>
+		</div>
+		<div class="form-group">
 			{!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
 		</div>
