@@ -36,35 +36,6 @@ class Sport extends EloquentValidating {
 		return $this->belongsToMany('App\Models\Arbitre', 'arbitres_sports', 'sport_id', 'arbitre_id');
 	}
 	
-/**
- * Validation
- *
- * un sport doit avoir:
- * - nom: obligatoire, et unique dans toute la table
- * - saison : obligatoire, e (été), ou h (hiver)
- * - tournoi : obligatoire, booléen
- * - Les autres champs sont falcultatifs.
- */
-
-public function validationRules() {
-	return [
-		'nom' => 'required|unique:sports,nom'.($this->id ? ",$this->id" : ''),
- 		'saison' => 'in:e,h',
-		'tournoi' => 'required|boolean'
-			
-		];
-	}
-
-	/**
-	 * Eloquent relationship: Un sport peut avoir de 0 à plusieurs bénévoles.
-	 *
-	 * @return Benevole[]
-	 */
-	public function benevoles() {
-		return $this->belongsToMany('App\Models\Benevole');
-	}
-
-
 	/**
 	 * Validation
 	 *
@@ -74,14 +45,24 @@ public function validationRules() {
 	 * - tournoi : obligatoire, booléen
 	 * - Les autres champs sont falcultatifs.
 	 */
-
+	
 	public function validationRules() {
 		return [
-				'nom' => 'required|unique:sports,nom'.($this->id ? ",$this->id" : ''),
-				'saison' => 'in:e,h',
-				'tournoi' => 'required|boolean'
-
-		];
+			'nom' => 'required|unique:sports,nom'.($this->id ? ",$this->id" : ''),
+	 		'saison' => 'in:e,h',
+			'tournoi' => 'required|boolean'
+				
+			];
+		}
+	
+	/**
+	 * Eloquent relationship: Un sport peut avoir de 0 à plusieurs bénévoles.
+	 *
+	 * @return Benevole[]
+	 */
+		
+	public function benevoles() {
+		return $this->belongsToMany('App\Models\Benevole');
 	}
 
 }
