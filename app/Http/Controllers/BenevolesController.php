@@ -45,7 +45,6 @@ class BenevolesController extends BaseController {
 	public function create()
 	{	
 		try {
-			return View::make('benevoles.create', compact('sports', 'benevoleSports'));
 			$sports = Sport::all();
 			$terrains = Terrain::all();
 		
@@ -132,7 +131,7 @@ class BenevolesController extends BaseController {
         } catch(ModelNotFoundException $e) {
             App::abort(404);
         }
-		return View::make('benevoles.edit', compact('benevole', 'sports', 'terrains', 'benevoleSports', 'benevoleTerrains'));
+		return View::make('benevoles.edit', compact('benevole', 'terrains', 'sports', 'benevoleSports', 'benevoleTerrains'));
 	}
 	/**
 	 * Mise à jour de la ressource dans la bd.

@@ -71,7 +71,6 @@
 				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
 			        <label class="btn btn-default btn-block<?=$active?>">
 			            <input name="sport[{{ $sport->id }}]" type="checkbox"<?=$checked?>> {{ $sport->nom }}
-			            <input name="terrain[{{ $terrain->id }}]" type="checkbox"<?=$checked?>> {{ $terrain->nom }}
 			        </label><br/>
 			    </div>
 				<?php
@@ -97,7 +96,6 @@
 				?>
 				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
 			        <label class="btn btn-default btn-block<?=$active?>">
-			            <input name="sport[{{ $sport->id }}]" type="checkbox"<?=$checked?>> {{ $sport->nom }}
 			            <input name="terrain[{{ $terrain->id }}]" type="checkbox"<?=$checked?>> {{ $terrain->nom }}
 			        </label><br/>
 			    </div>
