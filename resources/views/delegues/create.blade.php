@@ -62,16 +62,23 @@
 			{!! Form::text('adresse',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('adresse') }}
 		</div>
-		<div class="form-group">
-			{!! Form::label('telephone', 'Téléphone:') !!} 
-			{!! Form::text('telephone',null, ['class' => 'form-control']) !!}
+            <!--  Champ du téléphone de base et bouton pour en ajouter     -->
+            <!--  @autor Marc P    -->
+        <div class="form-group telephone">
+			{!! Form::label('telephone', 'Téléphone:') !!}
+			{!! Form::text('telephone[1]',null, ['class' => 'form-control telephone_texte' ]) !!}
+
 			{{ $errors->first('telephone') }}
 		</div>
-		<div class="form-group">
-			{!! Form::label('courriel', 'Courriel:') !!} 
-			{!! Form::text('courriel',null, ['class' => 'form-control']) !!}
+			<button type = "button" id='add'>Ajouter un téléphone</button>
+            <!--  Champ du courriel de base et bouton pour en ajouter     -->
+            <!--  @autor Marc P    -->
+        <div class="form-group courriel">
+			{!! Form::label('courriels', 'Courriel:') !!}
+			{!! Form::text('courriel[1]',null, ['class' => 'form-control courriel_texte']) !!}
 			{{ $errors->first('courriel') }}
 		</div>
+            <button type ="button" id='add2'>Ajouter un courriel</button>
 		<!--    Lister tous les rôles possibles      -->
 		<div class="form-group">
             {!! Form::label('roles', 'Rôles:') !!}
@@ -92,4 +99,5 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+<script src="{!! asset('/js/script_delegue.js') !!}"></script>
 @stop
