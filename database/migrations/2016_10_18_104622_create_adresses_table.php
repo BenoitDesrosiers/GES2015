@@ -16,7 +16,7 @@ class CreateAdressesTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('Adresses', function (Blueprint $table) {
+		Schema::create('adresses', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('adresse');
 			$table->string('description')->nullable();
@@ -37,6 +37,6 @@ class CreateAdressesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('Adresses');
+		Schema::drop('adresses');
 	}
 }
