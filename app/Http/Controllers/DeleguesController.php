@@ -69,10 +69,10 @@ class DeleguesController extends BaseController {
 
 	/**
 	 * Enregistre dans la bd la ressource qui vient d'être créée.
-    *
+     *
      * @author Steve L, Marc P
      *
-    * @return Response
+     * @return Response
     */
     public function store()
     {

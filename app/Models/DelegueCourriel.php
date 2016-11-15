@@ -2,7 +2,7 @@
 /**
  * La classe DelegueCourriel
  *
- *@author Marc P
+ * @author Marc P
  *
  * @version 0.1
  */
@@ -30,7 +30,7 @@ class DelegueCourriel extends EloquentValidating
     ];
 
     /**
-     * Le champs «courriel» doit être un «string»
+     * Le champ «courriel» doit être un «string»
      */
 
     public function validationRules()

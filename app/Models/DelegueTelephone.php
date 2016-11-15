@@ -2,7 +2,7 @@
 /**
  * La classe DelegueTelephone
  *
- *@author Marc P
+ * @author Marc P
  *
  * @version 0.1
  */
@@ -11,9 +11,6 @@
 namespace App\Models;
 
 
-/**
- * @property  telephone
- */
 class DelegueTelephone extends EloquentValidating
 {
     protected $guarded = array('id');
@@ -32,7 +29,7 @@ class DelegueTelephone extends EloquentValidating
     ];
 
     /**
-     * Le champs «téléphone» doit être un «string»
+     * Le champ «téléphone» doit être un «string»
      */
     public function validationRules()
     {
