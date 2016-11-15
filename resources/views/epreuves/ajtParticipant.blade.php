@@ -38,11 +38,11 @@
     </div>
             {!! Form::close() !!}
         {!! Form::close() !!}
+
     <script>
         var participants = {
             @foreach($participants as $participant)
                 {{ $participant->id }}: {
-                    // Les variables commencent par des lettres de l'alphabet, car ils se classent par ordre alphabétique.
                     numero: "{{ $participant->numero  }}",
                     nom:"{{ $participant->nom }}, {{ $participant->prenom }}",
                     region:"{{ $participant->region->nom }}",
