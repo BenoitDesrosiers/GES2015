@@ -55,7 +55,7 @@ class Sport extends EloquentValidating {
 			];
 		}
 	
-	/**
+	/**   <<<< pourquoi avoir déplacé cette fonction?
 	 * Eloquent relationship: Un sport peut avoir de 0 à plusieurs bénévoles.
 	 *
 	 * @return Benevole[]

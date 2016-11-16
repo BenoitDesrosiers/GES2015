@@ -83,7 +83,7 @@
 					<div class="col-sm-4">
 		    		  	<div class="list-group" id="list2">
 			  	        	<a class="list-group-item active"><span class="glyphicon glyphicon-user"></span>Arbitres attitrés<input title="toggle all" type="checkbox" class="all pull-right"></a>
- @foreach($arbitresSports as $arbitresSport) 
+ @foreach($arbitresSports as $arbitresSport)   //<<< ce code est commun a create et a edit, a part ce petit bout. Il aurait été DRY de mettre ca dans un include. 
 							<a name="{{ $arbitresSport->id }}" class="list-group-item">{{ $arbitresSport->nom }}, {{ $arbitresSport->prenom }}<input type="checkbox" class="pull-right"></a>  									   	
   @endforeach
 		        	  	</div>
@@ -103,7 +103,7 @@
 </div>
 @stop
 
-@section('script')
+@section('script')   <<<< code répété dans edit et create
 	<script type="text/javascript">
 		$('.ajouter').click(function(){
 			transfererDroite();

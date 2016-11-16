@@ -60,6 +60,8 @@ class SportsController extends BaseController {
 	public function store()
 	{
 		try {
+			// <<< ca serait bien de tout protéger par une transaction et un rollback en cas d'Exception
+			// <<< non ce n'est pas fait dans le reste du code, mais Emilio l'a fait. 
 			$input = Input::all();
 			if(isset($input['tournoi'])) {				
 				$input['tournoi'] = '1';
@@ -84,7 +86,7 @@ class SportsController extends BaseController {
 					$sport->terrains()->detach();
 				}
 				$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
-				//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
+				//Vérification qu'il y ait bien un arbitre à entrer dans la BD.
 				if (SportsController::verifier_existence($arbitresAEntrer)) {
 					 
 					$sport->arbitres()->sync($arbitresAEntrer);
@@ -209,12 +211,12 @@ class SportsController extends BaseController {
 
 	/**
 	 * Vérifie si les arbitres sont sous formes d'array et si il y en a 0, ça veut dire qu'il n'y a pas d'arbitres.
-	 * @param $arbitres
+	 * @param $arbitres  <<< c'est quoi le type?
 	 * @return boolean
 	 */
 	protected function verifier_existence($arbitresAEntrer) {
 		if (is_array($arbitresAEntrer) AND ($arbitresAEntrer[0] != "0") AND ($arbitresAEntrer[0] !="")) {
-			$retour = TRUE;  //FIXME: pourquoi ne pas juste retourner le résultat du IF?
+			$retour = TRUE;  //FIXME: pourquoi ne pas juste retourner le résultat du IF?  <<<<< le commentaire était pas assez évident ???? FIXME !!!!
 		}else{
 			$retour = FALSE;
 		}
@@ -224,7 +226,7 @@ class SportsController extends BaseController {
 	/**
 	 * filtre les arbitres pour retirer ceux déjà attribués à un sport.
 	 * @param array $arbitres
-	 * @param array $arbitresSports
+	 * @param array $arbitresSports <<<< pas de return value ?
 	 */
 	protected function filtrer_arbitres($arbitres, $arbitresSports){
 		if ($arbitresSports){
