@@ -87,6 +87,11 @@ class AboutController extends BaseController {
 					"Émilio Gonzalez",
 					"Ajout de plusieurs téléphones et adresses pour les participants (fini le 161101)."
 				)
+				
+				array(
+					"Steve Duquet",
+					"Association de sports à un bénévole à partir d'un bénévole."
+				)
             )
         );
 
