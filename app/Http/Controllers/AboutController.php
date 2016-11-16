@@ -97,6 +97,11 @@ class AboutController extends BaseController {
 					"Charles Lemay",
 					"Association des terrains aux épreuves."
 				)
+				
+				array(
+					"Pascal Belisle",
+					"Afficher les participants par région dans AjtParticipant."
+				)
             )
         );
 
