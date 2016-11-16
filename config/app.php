@@ -176,6 +176,11 @@ return [
     	 * Pour réintroduire les helpers HTML et FORM
     	 */
     	'Collective\Html\HtmlServiceProvider',
+
+		/*
+		 * Pour édition avec PHPStorm
+		 */
+		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         
         'MaddHatter\LaravelFullcalendar\ServiceProvider',
 

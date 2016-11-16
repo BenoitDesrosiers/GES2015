@@ -7,14 +7,15 @@ use Redirect;
 use Input;
 
 use App\Models\Benevole;
-use App\Models\Disponibilite;
+use App\Models\Sport;
+use App\Models\Terrain;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Le controller pour les bénévoles
  * 
- * @author dada
+ * @author Maxime
  * @version 0.1
  */
 class BenevolesController extends BaseController {
@@ -42,8 +43,16 @@ class BenevolesController extends BaseController {
 	 * @return Response
 	 */
 	public function create()
-	{
-		return View::make('benevoles.create');	
+	{	
+		try {
+			$sports = Sport::all();
+			$terrains = Terrain::all();
+		
+			return View::make('benevoles.create', compact('terrains', 'sports', 'benevoleSports', 'benevoleTerrains'));
+		
+		} catch (Exception $e) {
+			App:abort(404);
+		}
 	}
 
 
@@ -54,26 +63,41 @@ class BenevolesController extends BaseController {
 	 */
 	public function store()
 	{
-        $input = Input::all();
-        		
-		$benevole = new Benevole;
-        $benevole->prenom = $input['prenom'];
-		$benevole->nom = $input['nom'];
-		$benevole->adresse = $input['adresse'];
-		$benevole->numTel = $input['numTel'];
-        $benevole->numCell = $input['numCell'];
-        $benevole->courriel = $input['courriel'];
-		$benevole->accreditation = $input['accreditation'];
-		$benevole->verification = $input['verification'];
-		
-		if($benevole->save()) {
-			return Redirect::action('BenevolesController@index');
-		} else {
-			return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
-		}	
+		try {
+	        $input = Input::all();
+	        		
+			$benevole = new Benevole;
+	        $benevole->prenom = $input['prenom'];
+			$benevole->nom = $input['nom'];
+			$benevole->adresse = $input['adresse'];
+			$benevole->numTel = $input['numTel'];
+	        $benevole->numCell = $input['numCell'];
+	        $benevole->courriel = $input['courriel'];
+			$benevole->accreditation = $input['accreditation'];
+			$benevole->verification = $input['verification'];
+			
+			if($benevole->save()) {
+				// Association avec les sports sélectionnés
+				if (is_array(Input::get('sport'))) {
+					$benevole->sports()->sync(array_keys(Input::get('sport')));
+				} else {
+					$benevole->sports()->detach();
+				}
+				// Association avec les terrains sélectionnés
+				if (is_array(Input::get('terrain'))) {  //FIXME: si le get plante, le save est déjà fait.
+					$benevole->terrains()->sync(array_keys(Input::get('terrain')));
+				} else {
+					$benevole->terrain()->detach();
+				}
+				// Message de confirmation si la sauvegarde a réussi
+				return Redirect::action('BenevolesController@create')->with ( 'status', 'Le bénévole a été créé.' );
+			} else {
+				return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
+			}
+		} catch (Exception $e) {
+			App:abort(404);
+		}
 	}
-
-
 	/**
 	 * Affiche la ressource.
 	 *
@@ -89,7 +113,6 @@ class BenevolesController extends BaseController {
 		}
 		return View::make('benevoles.show', compact('benevole'));
 	}
-
    
 	/**
 	 * Affiche le formulaire pour éditer la ressource.
@@ -101,12 +124,15 @@ class BenevolesController extends BaseController {
 	{
         try{
 		    $benevole = Benevole::findOrFail($id);
+		    $sports = Sport::all();
+		    $benevoleSports = Benevole::find($id)->sports;
+		    $terrains = Terrain::all();
+			$benevoleTerrains = Benevole::find($id)->terrains;
         } catch(ModelNotFoundException $e) {
             App::abort(404);
         }
-		return View::make('benevoles.edit', compact('benevole'));
+		return View::make('benevoles.edit', compact('benevole', 'terrains', 'sports', 'benevoleSports', 'benevoleTerrains'));
 	}
-
 	/**
 	 * Mise à jour de la ressource dans la bd.
 	 *
@@ -125,11 +151,25 @@ class BenevolesController extends BaseController {
 	        $benevole->numTel = $input['numTel'];
             $benevole->numCell = $input['numCell'];
             $benevole->courriel = $input['courriel'];
-	        $benevole->accreditation = $input['accreditaiton'];
+	        $benevole->accreditation = $input['accreditation'];
 	        $benevole->verification = $input['verification'];
 	
 	        if($benevole->save()) {
-		        return Redirect::action('BenevolesController@index');
+	        	
+	        	// Association avec les sports sélectionnés
+	        	if (is_array(Input::get('sport'))) {
+	        		$benevole->sports()->sync(array_keys(Input::get('sport')));
+	        	} else {
+	        		$benevole->sports()->detach();
+	        	}
+	        	// Association avec les terrains sélectionnés
+	        	if (is_array(Input::get('terrain'))) {
+					$benevole->terrains()->sync(array_keys(Input::get('terrain')));
+				} else {
+					$benevole->terrains()->detach();
+				}
+				// Message de confirmation si la sauvegarde a réussi
+				return Redirect::action('BenevolesController@show', $benevole->id)->with ( 'status', 'Le benevole a été mis a jour!' );
 	        } else {
 		        return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
 	        }
@@ -138,7 +178,6 @@ class BenevolesController extends BaseController {
                     App::abort(404);
         }
 	}
-
 	/**
 	 * Efface la ressource de la bd.
 	 *
@@ -156,5 +195,4 @@ class BenevolesController extends BaseController {
 		return Redirect::action('BenevolesController@index');
 	
 	}
-
 }

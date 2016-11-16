@@ -23,7 +23,7 @@ class AboutController extends BaseController {
             	array(
             			"Benoit Desrosiers",
                			"Prof du cours 420-CN2-DM, design original du projet"
-         	), 
+         	    ),
             	array(
             			"Guillaume Boudreau, Jaymz Latour, Cédric Lemire, Anthony Martel, Philippe Paquette, Marc-Antoine Renaud",
            				"Étudiants du cours à l'automne 2014 ayant développé une copie du projet."
@@ -32,7 +32,7 @@ class AboutController extends BaseController {
                     "François Allard",
                     "Conception de la version originale du projet qui a été conservé pour les années suivantes."
                 )
-                ),
+            ),
             2015 => array(
                 
                 
@@ -75,10 +75,35 @@ class AboutController extends BaseController {
                 array(
                     "Benoit Desrosiers",
                     "Gestion du projet"
+                )
+            ),
+            2016 => array(
+				array(
+					"Alexandre Caron",
+					"Association d'un sport à un participant à partir d'un sport"
+				),
 
-                )
-                )
-            );
+				array(
+					"Émilio Gonzalez",
+					"Ajout de plusieurs téléphones et adresses pour les participants (fini le 161101)."
+				)
+				
+				array(
+					"Steve Duquet",
+					"Association de sports à un bénévole à partir d'un bénévole."
+				)
+				
+				array(
+					"Charles Lemay",
+					"Association des terrains aux épreuves."
+				)
+				
+				array(
+					"Pascal Belisle",
+					"Afficher les participants par région dans AjtParticipant."
+				)
+            )
+        );
 
         return View::make('about', compact('liste_etudiants'));
     }

@@ -37,23 +37,28 @@ class Epreuve extends EloquentValidating {
         return $this->belongsToMany('App\Models\Participant');
     }
 
-    /**
-     * Eloquent relationship: un épreuve est associé à plusieurs arbitres
-     */
-    public function arbitres() {
-        return $this->belongsToMany('App\Models\Arbitre');
-    }
+/**
+ * Eloquent relationship: une épreuve est associée à plusieurs arbitres
+ */
+public function arbitres() {
+	return $this->belongsToMany('App\Models\Arbitre');
+}
 
-    /**
-     * Validation
-     *
-     * une épreuve doit avoir:
-     *  - nom: obligatoire, et unique pour un sport donné, mais je n'ai pas trouvé comment exprimer ca avec les règles de Laravel
-     *  - genre: obligatoire, et la valeur donné doit être parmis les valeurs suivante: ['masculin', 'féminin', 'mixte']
-     *  - Les autres champs sont falcultatifs.
-     *
-     * @return array
-     */
+/**
+ * Eloquent relationship: une épreuve est associée à plusieurs terrains
+ */
+public function terrains()
+{
+	return $this->belongsToMany('App\Models\Terrain');
+}
+	
+/**
+ * Validation
+ *
+ * une épreuve doit avoir:
+ *  - nom: obligatoire, et unique pour un sport donné, mais je n'ai pas trouvé comment exprimer ca avec les règles de Laravel
+ *  - Les autres champs sont falcultatifs.
+ */
 
     public $validationMessages;
 
