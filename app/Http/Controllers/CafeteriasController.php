@@ -25,7 +25,7 @@ class CafeteriasController extends Controller
      */
     public function create()
     {
-        //
+        return view('cafeterias.create');
     }
 
     /**
