@@ -1,6 +1,10 @@
 @extends('layout')
-@section('content')
+
+@section('stylesheet')
     <link rel="stylesheet" href="{!! asset("/css/participants/create-batch.css") !!}">
+@endsection
+
+@section('content')
     @if ($erreur)
         <p class="alert alert-danger">{{ $erreur }}</p>
     @endif

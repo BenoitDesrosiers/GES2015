@@ -67,7 +67,9 @@ class ParticipantsController extends BaseController {
 			$plusLongueDonnee = 0;
 		} else {
 			$donneesCsv = $this->transformerFichierCsv($fichierCsv);
-			if (count($donnees) > 0) {
+			if (count($donneesCsv) > 0) {
+				// Calcule la largeur supplémentaire du tableau
+				// C-a-d le nombre de sports qui dépasse
 				$plusLongueDonnee = max(max(array_map("count", $donneesCsv)) - count($metadata), 0) + 1;
 			} else {
 				$plusLongueDonnee = 0;
@@ -421,8 +423,7 @@ class ParticipantsController extends BaseController {
 		foreach(array_slice(explode("\n", $contenuCoupe), 0, -1) as $ligne) {
 			$contenuTableau[] = str_getcsv($ligne);
 		}
-		$resultat = $contenuTableau;
-		return $resultat;
+		return $contenuTableau;
 	}
 
 	/**
@@ -557,7 +558,7 @@ class ParticipantsController extends BaseController {
 
 	/**
 	 * Vérifie si une date est valide
-	 * La date doit être écrite dans une string suivant le format Québécois: JJ-MM-AAAA
+	 * La date doit être écrite dans une string suivant le format Québécois: AAAA-MM-JJ
 	 *
 	 * @param string $date La date à vérifier
 	 *
@@ -565,9 +566,9 @@ class ParticipantsController extends BaseController {
 	 * @return bool true si la date est invalide
 	 */
 	public function verifierDate($date) {
-		$date_explosee = explode("-", $date, 2);
+		$date_explosee = explode("-", $date, 3);
 		if ($date_explosee !== false && count($date_explosee) == 3) {
-			list($jour, $mois, $annee) = $date_explosee;
+			list($annee, $mois, $jour) = $date_explosee;
 			$resultat = checkdate($mois, $jour, $annee);
 		} else {
 			$resultat = false;
