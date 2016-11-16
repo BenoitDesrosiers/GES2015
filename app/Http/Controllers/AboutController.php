@@ -92,6 +92,11 @@ class AboutController extends BaseController {
 					"Steve Duquet",
 					"Association de sports à un bénévole à partir d'un bénévole."
 				)
+				
+				array(
+					"Charles Lemay",
+					"Association des terrains aux épreuves."
+				)
             )
         );
 
