@@ -1,4 +1,9 @@
 @extends('layout')
+
+@section('script')
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+@stop
+
 @section('content')
 <div class="panel panel-default">
 	<div class="panel-heading">
@@ -14,9 +19,71 @@
 			{!! Form::select('sportsListe', $sportsListe, $sportId, array('id' => 'sportsListe')) !!}
 		</div> <!-- liste-sports -->
 		<div class="form-group">
-			{!! Form::label('nom', 'Nom:') !!} 
+			{!! Form::label('nom', '*Nom:') !!}
 			{!! Form::text('nom',$epreuve->nom, ['class' => 'form-control']) !!}
 			{{ $errors->first('nom') }}
+		</div>
+		<div class="form-group">
+			{!! Form::open() !!}
+			{!! Form::label('genre', '*Genre:') !!}
+			<br/>
+			{!! Form::radio('genre', 'mixte', $epreuve->genre == "mixte") !!}
+			{!! Form::label('mixte', 'Mixte') !!}
+			<br/>
+			{!! Form::radio('genre', 'masculin', $epreuve->genre == "masculin", ['class' => 'radio_click', 'id' => 'genreM']) !!}
+
+			{!! Form::label('masculin', 'Masculin') !!}
+			<br/>
+			{!! Form::radio('genre', 'féminin', $epreuve->genre == "féminin", ['class' => 'radio_click', 'id' => 'genreF']) !!}
+			{!! Form::label('féminin', 'Féminin') !!}
+			<br/>
+			{{ $errors->first('genre') }}
+			<script type="text/javascript">
+
+				// Cette fonction crée une alerte afin d'aviser l'usager d'un risque de suppression.
+				function confirmationPopup(genre) {
+					bootbox.alert({
+						title: "Attention".fontsize(8),
+						message: ('Il y a des participants de genre \'' + genre + '\' dans l\'épreuve.' +
+									' Lors de la confirmation, ceux-ci seront supprimés.').fontsize(4),
+						size: 'Large',
+						backdrop: true,
+						closeButton: false,
+						onEscape: true
+					});
+
+				};
+
+				if ('<?php if ($proportionGenre[0] > 0){
+							echo true;
+						}else{
+							echo false;
+						}?>') {
+						document.getElementById('genreF').onclick = function () {
+							confirmationPopup('masculin');
+						};
+				}
+
+				if ('<?php if ($proportionGenre[1] > 0){
+							echo true;
+						}else{
+							echo false;
+						}?>'){
+
+					document.getElementById('genreM').onclick = function() {
+						confirmationPopup('féminin');
+					};
+				}
+
+				if ('<?php if (($proportionGenre[0] > 0) && ($proportionGenre[1] > 0)){
+							echo true;
+						}else{
+							echo false;
+						}?>'){
+					document.getElementById('genre')
+
+				}
+			</script>
 		</div>
 		<div class="form-group">
 			{!! Form::label('description', 'Description courte:') !!} 
@@ -48,23 +115,28 @@
 @endforeach
 		          </div>
 		          <div>
-					<input type="hidden" name="arbitresUtilises" id="arbitresUtilises"></input>
+					<input type="hidden" name="arbitresUtilises" id="arbitresUtilises">
 		          </div>
 		        </div>
 			  </div>
 			</div>
 		</div>
 		<div class="form-group">
-			{!! Form::button('Sauvegarder', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+
+			{!! Form::button('Sauvegarder', ['name' => 'save', 'type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
+
 		</div>
 		{!! Form::close() !!}
+
 	</div>
 </div>
 @stop
 
 @section('script')
+
 	<script type="text/javascript">
+
 		$('.ajouter').click(function(){
 			transfererDroite();
 			changer_liste();

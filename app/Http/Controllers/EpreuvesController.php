@@ -69,14 +69,21 @@ class EpreuvesController extends BaseController {
 		try{
 			$epreuve = Epreuve::findOrFail ( $epreuveId );
 			$sport = Sport::findOrFail( $epreuve->sport_id);
-			$participants = $sport->participants->sortBy('prenom');
-			$epreuveParticipants = $epreuve::find($epreuveId)->participants;
+            if($epreuve->genre == 'mixte'){
+                $participants = $sport->participants->sortBy('prenom');
+            }else{
+                $genreRequis = ($epreuve->genre == 'féminin');
+                $participants = $sport->participants->where('sexe',$genreRequis)->sortBy('prenom');
+            }
+			$epreuveParticipants = ($epreuve::find($epreuveId)->participants);
 		} catch ( ModelNotFoundException $e ) {
 			App::abort ( 404 );
 		}
 		return View::make ( 'epreuves.ajtParticipant', compact ( 'epreuve', 'sport', 'participants', 'epreuveParticipants') );
 	}
-	
+
+
+
 	/**
 	 * Entrepose dans la bd un ou des participants/équipes qui seront associés à une épreuve.
 	 */
@@ -97,8 +104,8 @@ class EpreuvesController extends BaseController {
 		}
 
 		if ($epreuve->save ()) {
-			if (is_array ( Input::get ( 'participants' ) )) { //FIXME: si participants n'existe pas, $epreuve est déjà sauvegardée, et ca va planter. 
-				$epreuve->participants()->sync ( array_keys ( Input::get ( 'participants' )));
+			if (is_array ( Input::get ( 'participants' ) )) { //FIXME: si participants n'existe pas, $epreuve est déjà sauvegardée, et ca va planter.
+                $epreuve->participants()->sync ( array_keys ( Input::get ( 'participants' )));
 			} else {
 				$epreuve->participants()->detach();
 			}
@@ -132,20 +139,26 @@ class EpreuvesController extends BaseController {
 	{
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
-			$sportId = $epreuve->sport->id;
+            $sportId = $epreuve->sport->id;
 			$sports = Sport::all();
 			$arbitresEpreuves = $epreuve->arbitres;
+
+            // Cette partie dénombre le nombre participant dans l'épreuve qui sont de genre
+            // masculin (false) ou féminin (true)
+            $participantsMasculin = $epreuve->participants->where('sexe', false);
+            $participantsFeminin = $epreuve->participants->where('sexe', true);
+            $proportionGenre = array(count($participantsMasculin),count($participantsFeminin));
 			$arbitres = EpreuvesController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresEpreuves);
 			//FIXME: au lieu d'avoir une fonction pour filtrer les arbitres déjà associés à une épreuve, on peut se servir du whereNotIn
 			//       et fournir la liste des ids des arbitresEpreuves
 			//       $arbitres = Arbitre::all()->whereNotIn('id', $arbitresEpreuves->pluck('id')) ->get();
 			$sportId = $this->checkSportId($sports, $sportId);
-				
-			return View::make('epreuves.edit', compact('epreuve', 'sports', 'sportId', 'arbitres', 'arbitresEpreuves'));
+
+			return View::make('epreuves.edit', compact('epreuve', 'sports', 'sportId', 'proportionGenre', 'arbitres', 'arbitresEpreuves'));
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
-	}
+    }
 	
 	/**
 	 * Affiche une épreuve
@@ -177,6 +190,7 @@ class EpreuvesController extends BaseController {
 		}
 		$epreuve = new Epreuve;
 		$epreuve->nom = $input['nom'];
+        $epreuve->genre = $input['genre'];
 		$epreuve->description = $input['description'];
 		$epreuve->sport_id = $sport->id; 
 		if($epreuve->save()) {
@@ -197,7 +211,7 @@ class EpreuvesController extends BaseController {
 			return Redirect::back ()->withInput ()->withErrors ( $epreuve->validationMessages () );
 		}
 	}
-	
+
 	/**
 	 * Mise à jour d'une épreuve associée
 	 *
@@ -213,6 +227,7 @@ class EpreuvesController extends BaseController {
 			App::abort ( 404 );
 		}
 		$epreuve->nom = $input ['nom'];
+        $epreuve->genre = $input ['genre'];
 		$epreuve->description = $input ['description'];
 		try {
 			$sport = Sport::findOrFail ( $input ["sportsListe"] );
@@ -221,6 +236,7 @@ class EpreuvesController extends BaseController {
 		}
 		$epreuve->sport_id = $sport->id;
 		if($epreuve->save()) {
+            $epreuve->participants()->sync($this->filtrer_participants($epreuveId));
 			$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 			//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
             if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
@@ -310,12 +326,35 @@ class EpreuvesController extends BaseController {
 		}
 		return $retour;
 	}
-	
-	/**
-	 * filtre les arbitres pour retirer ceux déjà attribués à une épreuve.
-	 * @param array $arbitres
-	 * @param array $arbitresEpreuves
-	 */
+
+    /**
+     * Filtre les participants pour retirer ceux n'ayant pas le bon genre..
+     *
+     * @param int $epreuveId
+     *
+     * @return array
+     */
+    protected function filtrer_participants($epreuveId){
+        try{
+            $epreuve = Epreuve::findOrFail ( $epreuveId );
+            $participants = $epreuve->participants;
+            if ($epreuve->genre != 'mixte'){
+                $genreRequis = $epreuve->genre == 'féminin';
+                $participants = $epreuve->participants->where('sexe',$genreRequis);
+            }
+            return $participants;
+        } catch ( ModelNotFoundException $e ) {
+            App::abort ( 404 );
+        }
+    }
+
+    /**
+     * filtre les arbitres pour retirer ceux déjà attribués à une épreuve.
+     * @param array $arbitres
+     * @param array $arbitresEpreuves
+     *
+     * @return array
+     */
 	protected function filtrer_arbitres($arbitres, $arbitresEpreuves){
 		if ($arbitresEpreuves){
 			foreach ($arbitres as $index => $arbitre){
@@ -328,6 +367,5 @@ class EpreuvesController extends BaseController {
 		}
 		return $arbitres;
 	}
-
 
 }
