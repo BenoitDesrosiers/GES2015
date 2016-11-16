@@ -10,7 +10,7 @@ $('#region_id').change(function() {
     regionId = $('#region_id');
 
     if (regionId.val() == 0) {
-        participants_region.push(participants);
+        participants_region = participants;
     } else {
         for (id in participants) {
             if (participants[id]["participant_region_id"] == regionId.val()) {
@@ -30,9 +30,11 @@ $('#region_id').change(function() {
  */
 function listerParticipants(participants_region) {
 
-    if (table) {
+    if (true) {
         detruireTable("1");
     }
+
+    console.log(participants_region);
 
     var corps = document.getElementsByTagName('tbody')[0];
     var table = document.createElement('table');
@@ -47,31 +49,32 @@ function listerParticipants(participants_region) {
         corpsTable.appendChild(texte)
     } else {
         var titre = document.createElement('tr');
+        var colonneCheckbox = document.createElement('th');
         var titreNumero = document.createElement('th');
         var titreParticipant = document.createElement('th');
         var titreRegion = document.createElement('th');
-        var colonneCheckbox = document.createElement('th');
 
         titreNumero.innerHTML = 'Numéro';
         titreParticipant.innerHTML = 'Participant';
         titreRegion.innerHTML = 'Région';
-        colonneCheckbox.innerHTML = '                                                               ';
+        colonneCheckbox.innerHTML += '&nbsp;';
 
         titre.appendChild(colonneCheckbox);
         titre.appendChild(titreNumero);
         titre.appendChild(titreParticipant);
         titre.appendChild(titreRegion);
 
+        corpsTable.appendChild(titre);
+
         for (participant in participants_region) {
             var ligneParticipant = document.createElement('tr');
-            var headerCheckbox = document.createElement('td');
+            var headerCheckbox = document.createElement('th');
             var checkbox = document.createElement('input');
             checkbox.name = 'participant[' + participants_region[participant]["participant_id"] + ']';
             checkbox.type = 'checkbox';
 
             headerCheckbox.appendChild(checkbox);
             ligneParticipant.appendChild(headerCheckbox);
-            ligneParticipant.appendChild(checkbox);
 
             var numeroParticipant = document.createElement('th');
             numeroParticipant.innerHTML = participants_region[participant]['numero'];
@@ -84,10 +87,9 @@ function listerParticipants(participants_region) {
             var regionParticipant = document.createElement('th');
             regionParticipant.innerHTML = participants_region[participant]['region'];
             ligneParticipant.appendChild(regionParticipant);
-        }
 
-        corpsTable.appendChild(titre);
-        corpsTable.appendChild(ligneParticipant);
+            corpsTable.appendChild(ligneParticipant);
+        }
     }
 
     table.appendChild(corpsTable);

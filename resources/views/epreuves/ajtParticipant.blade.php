@@ -53,5 +53,16 @@
         };
     </script>
     <script src="{!! asset('/js/trierParticipants.js') !!}"></script>
+    <script>
+        /**
+         * Lance la fonction pour afficher tous les participants au chargement de la page.
+         */
+        $(document).ready(function () {
+            var participants_region = [];
+            participants_region = participants;
+
+            listerParticipants(participants_region);
+        });
+    </script>
 </div>
 @stop
