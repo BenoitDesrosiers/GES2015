@@ -1,7 +1,7 @@
 ﻿@extends('layout') 
 @section('content')
 
-	<script>
+	<script> /* <<<< devrait être dans un fichier de script et mis en commun avec equipes/index.blade */
 		function collapse_tbody(a_tbody, a_sign){
 			a_tbody.classList.toggle("hidden");
 			a_tbody.classList.toggle("show-tbody");
