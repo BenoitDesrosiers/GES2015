@@ -81,7 +81,7 @@ class ParticipantsController extends BaseController {
 				$nomFichier = uniqid() . ".csv";
 				$fichierCsv->move(resource_path("assets/temp/"), $nomFichier);
 			} else {
-				$erreur = "Le fichier contient des erreurs. Veuillez les corriger.";
+				$erreur = "Le fichier contient des erreurs. Veuillez les corriger et renvoyer le fichier corrigé.";
 			}
 		}
 		$rowspanEntete = 'colspan="' . strval($plusLongueDonnee) . '"';
@@ -484,22 +484,31 @@ class ParticipantsController extends BaseController {
 	 */
 	private function verifierDonneesCsv($metadataColonnes, $donneesCsv) {
 		$resultat = array();
+		$nomColonnes = array_keys($metadataColonnes);
+		$nbColonnes = count($nomColonnes);
 		$derniereMetadata = end($metadataColonnes);
+		$nomDerniereColonne = end($nomColonnes);
 		foreach ($donneesCsv as $cle => $rangee) {
 			$erreur = "";
 			$colonneMixe = array_map(null, $metadataColonnes, $rangee);
 			foreach ($colonneMixe as $cleColonne => $colonne) {
 				list($metadataValeur, $valeur) = $colonne;
+				// Obtient le nom de la colonne. La dernière colonne si ça dépasse le nombre de colonnes.
+				$nomColonne = $cleColonne < $nbColonnes ? $nomColonnes[$cleColonne] : $nomDerniereColonne;
 				if (is_null($metadataValeur)) {
 					$metadataValeur = $derniereMetadata;
 				}
 				$valeurVide = !isset($valeur) || (strlen(trim($valeur)) === 0);
-				if ($valeurVide && $metadataValeur[0]) {
-					$erreur = $cleColonne . " Valeur obligatoire inexistante";
-				} elseif (!call_user_func($metadataValeur[1], $valeur)) {
-					$erreur = $cleColonne . " Type de la valeur invalide";
-				} elseif (call_user_func(array($this, $metadataValeur[2]), $valeur)) {
-					$erreur = $cleColonne . " Valeur invalide";
+				if ($valeurVide) {
+					if ($metadataValeur[0]) {
+						$erreur = $nomColonne . ": Valeur obligatoire inexistante";
+					}
+				} else {
+					if (!call_user_func($metadataValeur[1], $valeur)) {
+						$erreur = $nomColonne . ": Type de la valeur invalide";
+					} elseif (call_user_func(array($this, $metadataValeur[2]), $valeur)) {
+						$erreur = $nomColonne . ": Valeur invalide";
+					}
 				}
 			}
 			// Si les données individuelles sont corrects, on regarde le reste.
@@ -569,7 +578,7 @@ class ParticipantsController extends BaseController {
 		$date_explosee = explode("-", $date, 3);
 		if ($date_explosee !== false && count($date_explosee) == 3) {
 			list($annee, $mois, $jour) = $date_explosee;
-			$resultat = checkdate($mois, $jour, $annee);
+			$resultat = !checkdate($mois, $jour, $annee);
 		} else {
 			$resultat = false;
 		}
