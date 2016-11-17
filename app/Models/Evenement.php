@@ -6,7 +6,7 @@
 
 namespace App\Models;
 
-class Evenement extends EloquentValidating {
+class Evenement extends EloquentValidating {  // <<<< étant donné que tu te sers des requests, tu devrais hériter directement de model
 	protected $guarded = array('id');
 
 /** 
@@ -25,7 +25,7 @@ public function type() {
  * Validation
  */
 
-public $validationMessages;
+public $validationMessages; // <<<< étant donné que tu te sers des requests, tu n'as plus besoin de ca
 
 public function validationRules() {
 	return [];

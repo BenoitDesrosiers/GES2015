@@ -108,7 +108,7 @@ class EvenementsController extends BaseController
             $types = TypeEvenement::all();
             $epreuves = Epreuve::all();
             // La 'date' dans 'date_heure' est enmagasinée avec des '-' comme séparateurs, mais la fonction 'strtotime' utilise des '/' pour séparer la date
-            $date = date('Y-m-d', strtotime(str_replace('-', '/', $evenement->date_heure)));
+            $date = date('Y-m-d', strtotime(str_replace('-', '/', $evenement->date_heure)));  //<<<< biz car la docum de strtotime indique qu'elle prend les 2 formats. 
             $heure = date('G:i', strtotime($evenement->date_heure));
             return View::make('evenements.edit', compact('evenement', 'types', 'epreuves', 'date', 'heure'));
         } catch(Exception $e) {
@@ -126,7 +126,7 @@ class EvenementsController extends BaseController
     public function update(EvenementsRequest $request, $id)
     {
         try {
-            $input = Input::all($request->all());
+            $input = Input::all($request->all()); //<<<< le request remplace les inputs
             $evenement = Evenement::findOrFail($id);
             $evenement->nom = $input['nom'];
             $evenement->type_id = $input['type_id'];
