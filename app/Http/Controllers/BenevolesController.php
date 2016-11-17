@@ -148,7 +148,7 @@ class BenevolesController extends BaseController {
 		return View::make('benevoles.edit', compact('benevole', 'listeAnnees', 'listeMois', 'listeJours','anneeDefaut','moisDefaut','jourDefaut'));
 	}
 
-	    /**
+	    /**   <<<<<< code dupliqué (participant, delegues, arbitres.  
      * Construit une liste continue d'entiers sur un intervalle donné
      *
      * @param int $debut La valeur de départ
