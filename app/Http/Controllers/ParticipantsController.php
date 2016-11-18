@@ -55,7 +55,7 @@ class ParticipantsController extends BaseController {
 		$donnees = array();
 
 		$metadata = array("Nom" => [true, "is_string", "verifierVariable"], "Prénom" => [true, "is_string", "verifierVariable"], "Numéro Téléphone" => [false, "is_string", "verifierVariable"], "Nom Parent" => [false, "is_string", "verifierVariable"], "Numéro" => [true, "is_numeric", "verifierNumero"], "Genre" => [true, "is_numeric", "verifierGenre"], "Date Naissance" => [true, "is_string", "verifierDate"], "Adresse" => [false, "is_string", "verifierVariable"], "Région" => [false, "is_string", "verifierRegion"], "Sports" => [false, "is_string", "verifierSport"]);
-
+		// <<<<< ca respecte pas tout à fait la norme des 80 charactères par lignes
 		$erreurs = null;
 		$nomFichier = null;
 		$aPasErreurs = false;
@@ -86,7 +86,7 @@ class ParticipantsController extends BaseController {
 		}
 		$rowspanEntete = 'colspan="' . strval($plusLongueDonnee) . '"';
 
-		$donnees["entetes"] = $metadata;
+		$donnees["entetes"] = $metadata;   // <<<<un peu d'information sur ces champs aiderait grandement à la compréhension. 
 		$donnees["rangees"] = $donneesCsv;
 		$donnees["rowspanEntete"] = $rowspanEntete;
 		$donnees["erreurs"] = $erreurs;
@@ -421,7 +421,7 @@ class ParticipantsController extends BaseController {
 		$contenuTableau = array();
 		// Sépare les rangées aux nouvelles lignes et enlève la dernière rangée
 		foreach(array_slice(explode("\n", $contenuCoupe), 0, -1) as $ligne) {
-			$contenuTableau[] = str_getcsv($ligne);
+			$contenuTableau[] = str_getcsv($ligne);  //<<< ca aurait été cool de pouvoir spécifier le séparateur
 		}
 		return $contenuTableau;
 	}
