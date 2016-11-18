@@ -78,13 +78,13 @@ class BenevolesController extends BaseController {
 			
 			if($benevole->save()) {
 				// Association avec les sports sélectionnés
-				if (is_array(Input::get('sport'))) {
+				if (is_array(Input::get('sport'))) { //FIXME: protéger avec une transaction dans le try/catch
 					$benevole->sports()->sync(array_keys(Input::get('sport')));
 				} else {
 					$benevole->sports()->detach();
 				}
 				// Association avec les terrains sélectionnés
-				if (is_array(Input::get('terrain'))) {  //FIXME: si le get plante, le save est déjà fait.
+				if (is_array(Input::get('terrain'))) {  //FIXME: protéger avec une transaction dans le try/catch
 					$benevole->terrains()->sync(array_keys(Input::get('terrain')));
 				} else {
 					$benevole->terrain()->detach();
@@ -157,13 +157,13 @@ class BenevolesController extends BaseController {
 	        if($benevole->save()) {
 	        	
 	        	// Association avec les sports sélectionnés
-	        	if (is_array(Input::get('sport'))) {
+	        	if (is_array(Input::get('sport'))) {//FIXME: protéger avec une transaction dans le try/catch
 	        		$benevole->sports()->sync(array_keys(Input::get('sport')));
 	        	} else {
 	        		$benevole->sports()->detach();
 	        	}
 	        	// Association avec les terrains sélectionnés
-	        	if (is_array(Input::get('terrain'))) {
+	        	if (is_array(Input::get('terrain'))) {//FIXME: protéger avec une transaction dans le try/catch
 					$benevole->terrains()->sync(array_keys(Input::get('terrain')));
 				} else {
 					$benevole->terrains()->detach();
@@ -188,7 +188,7 @@ class BenevolesController extends BaseController {
 	{
         try{
 		    $benevole = Benevole::findOrFail($id);
-		    $benevole->delete();
+		    $benevole->delete(); //FIXME: protéger avec une transaction dans le try/catch
 		 } catch(ModelNotFoundException $e) {
             App::abort(404);
         }

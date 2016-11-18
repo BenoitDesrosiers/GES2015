@@ -23,7 +23,6 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-<<<<<<< HEAD
 
 $factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) {
 	return [
@@ -59,7 +58,7 @@ $factory->define(App\Models\Sport::class, function (Faker\Generator $faker) {
         'saison' => 'e'
     ];
 });
-=======
+
 //Pour les tests 'TerrainsEpreuvesTest'
 $factory->define(App\Models\Epreuve::class, function (Faker\Generator $faker) {
 	return [
@@ -75,4 +74,3 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 			'region_id' => rand(0, 100)
 	];
 });
->>>>>>> 0a9d2a881ea95875011006d0312a0152897769c3

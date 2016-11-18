@@ -6,17 +6,17 @@ use App\Http\Controllers\BaseController;
 use View;
 use Redirect;
 use Input;
-
+use Request;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use DB;
+
 use App\Models\Sport;
 use App\Models\Arbitre;
 use App\Models\Region;
 use App\Models\Epreuve;
 use App\Models\Participant;
 use App\Models\EpreuveParticipants;
-use Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\Collection;
 use App\Models\Terrain;
 
 /**
@@ -105,7 +105,7 @@ class EpreuvesController extends BaseController {
 		}
 
 		if ($epreuve->save ()) {
-			if (is_array ( Input::get ( 'participants' ) )) { //FIXME: si participants n'existe pas, $epreuve est déjà sauvegardée, et ca va planter.
+			if (is_array ( Input::get ( 'participants' ) )) { //FIXME: protéger par une transaction dans le try/catch
                 $epreuve->participants()->sync ( array_keys ( Input::get ( 'participants' )));
 			} else {
 				$epreuve->participants()->detach();
@@ -144,7 +144,7 @@ class EpreuvesController extends BaseController {
 			$sports = Sport::all();
 			$arbitresEpreuves = $epreuve->arbitres;
 
-            // Cette partie dénombre le nombre participant dans l'épreuve qui sont de genre
+            // Cette partie dénombre le nombre de participants dans l'épreuve qui sont de genre
             // masculin (false) ou féminin (true)
             $participantsMasculin = $epreuve->participants->where('sexe', false);
             $participantsFeminin = $epreuve->participants->where('sexe', true);
@@ -196,7 +196,7 @@ class EpreuvesController extends BaseController {
 		$epreuve->description = $input['description'];
 		$epreuve->sport_id = $sport->id; 
 		if($epreuve->save()) {
-			try {
+			try { //FIXME: protéger par une transaction dans le try/catch
 				$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 				//Vérification qu'il y a bien un arbitre à entrer dans la BD.
                 if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
@@ -273,7 +273,7 @@ class EpreuvesController extends BaseController {
 	 */
 	public function destroy($epreuveId) {
 		$epreuve = Epreuve::findOrFail ( $epreuveId );
-		$epreuve->delete ();
+		$epreuve->delete (); //FIXME: protéger par une transaction dans un try/catch
 		
 		return Redirect::action ( 'EpreuvesController@index' );
 	}
