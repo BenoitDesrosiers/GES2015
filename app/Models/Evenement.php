@@ -6,7 +6,7 @@
 
 namespace App\Models;
 
-class Evenement extends EloquentValidating {
+class Evenement extends EloquentValidating { //FIXME: devrait hériter directement de model puisque que la validation est fait par request dans le controlleur
 	protected $guarded = array('id');
 
 /** 
@@ -25,9 +25,9 @@ public function type() {
  * Validation
  */
 
-public $validationMessages;
+public $validationMessages; //FIXME: plus nécessaire
 
-public function validationRules() {
+public function validationRules() { //FIXME: plus nécessaire
 	return [];
 }
 
