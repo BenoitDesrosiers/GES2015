@@ -78,6 +78,10 @@ class AboutController extends BaseController {
                 )
             ),
             2016 => array(
+            	array(
+           			"Benoit Desrosiers",
+         			"Gestion du projet"
+           		),
 				array(
 					"Alexandre Caron",
 					"Association d'un sport à un participant à partir d'un sport"
@@ -86,7 +90,33 @@ class AboutController extends BaseController {
 				array(
 					"Émilio Gonzalez",
 					"Ajout de plusieurs téléphones et adresses pour les participants (fini le 161101)."
-				)
+				),
+				
+				array(
+					"Steve Duquet",
+					"Association de sports à un bénévole à partir d'un bénévole."
+				),
+				
+				array(
+					"Charles Lemay",
+					"Association des terrains aux épreuves."
+				),
+				
+				array(
+					"Pascal Belisle",
+					"Afficher les participants par région dans AjtParticipant."
+				),
+
+                array(
+                    "Guillaume Hamel-Gagné",
+                    "Ajout d'un sexe aux épreuves. Ajout d'un filtre lors de l’ajout de participants 
+                    à une épreuve selon le sexe de l’épreuve et des participants."
+                ),
+
+                array(
+                    "Étienne Drolet",
+                    "CRUD des organismes."
+                ),
             )
         );
 

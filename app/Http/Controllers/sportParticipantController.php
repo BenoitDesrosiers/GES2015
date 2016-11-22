@@ -6,7 +6,6 @@ use App\Http\Controllers\BaseController;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use League\Flysystem\Exception;
 use View;
 use Redirect;
 use Input;
@@ -75,7 +74,7 @@ class sportParticipantController extends BaseController{
         $regions = Region::all()->sortBy('nom');
         if (isset($infos['region_id'], $infos['sport']))
         {
-            try {
+            try {  //FIXME: protéger par une transaction dans le try/catch
                 $sport = Sport::findOrFail($infos['sport']);
                 $participants = Participant::where('region_id', $infos['region_id'])->get();
 

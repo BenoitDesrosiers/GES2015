@@ -18,29 +18,38 @@
 namespace App\Models;
 
 class Epreuve extends EloquentValidating {
-	protected $guarded = array('id');
 
-/** 
- * Eloquent relationship: une épreuve appartient à un sport
- */
+    protected $guarded = array('id');
 
-public function sport() {
-	return $this->belongsTo('App\Models\Sport');
-}
+    /**
+     * Eloquent relationship: une épreuve appartient à un sport
+     */
 
-public function evenements() {
-	return $this->hasMany('App\Models\Evenement');
-}
-	
-public function participants() {
-	return $this->belongsToMany('App\Models\Participant');
-}
+    public function sport() {
+        return $this->belongsTo('App\Models\Sport');
+    }
+
+    public function evenements() {
+        return $this->hasMany('App\Models\Evenement');
+    }
+
+    public function participants() {
+        return $this->belongsToMany('App\Models\Participant');
+    }
 
 /**
- * Eloquent relationship: un épreuve est associé à plusieurs arbitres
+ * Eloquent relationship: une épreuve est associée à plusieurs arbitres
  */
 public function arbitres() {
 	return $this->belongsToMany('App\Models\Arbitre');
+}
+
+/**
+ * Eloquent relationship: une épreuve est associée à plusieurs terrains
+ */
+public function terrains()
+{
+	return $this->belongsToMany('App\Models\Terrain');
 }
 	
 /**
@@ -51,13 +60,12 @@ public function arbitres() {
  *  - Les autres champs sont falcultatifs.
  */
 
-public $validationMessages;
+    public $validationMessages;
 
-public function validationRules() {
-	return [
-		'nom' => 'required',
-		];
-}
-
-
+    public function validationRules() {
+        return [
+            'nom' => 'required',
+            'genre' => 'in:masculin,féminin,mixte',
+            ];
+    }
 }

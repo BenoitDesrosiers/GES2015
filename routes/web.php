@@ -29,6 +29,7 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('sports','SportsController');
 	Route::resource('sports.epreuves','SportsEpreuvesController');
 	Route::resource('sports.participants','sportParticipantController');
+	Route::resource('sports.arbitres', 'SportsArbitresController');
 	
 	Route::get ( 'ajtParticipant/{epreuveId}', 'EpreuvesController@ajtParticipant' );
 	Route::post ( 'storeParticipants/{epreuveId}', 'EpreuvesController@storeParticipants' );
@@ -45,14 +46,14 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('roles','RolesController');
 	Route::resource('codes','CodesController');
 	Route::resource('taches','TachesController');
-	
-    Route::resource('disponibilites','DisponibilitesController');
+	Route::resource('disponibilites','DisponibilitesController');
+	Route::resource('conditionsParticulieres','ConditionsParticulieresController');
 
 	Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');
 	Route::resource('pointages','PointagesController');
 
 	Route::resource('delegues','DeleguesController');
-	
+
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
@@ -61,7 +62,8 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('benevoles','BenevolesController');
 
 	Route::resource('roles','RolesController');
-   
+    Route::resource('evenements','EvenementsController');
+
 });
 
 
