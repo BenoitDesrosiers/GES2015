@@ -24,6 +24,10 @@ class Terrain extends EloquentValidating {
     public function region() {
         return $this->belongsTo('App\Models\Region');
     }
+	
+	public function evenements() {
+        return $this->hasMany('App\Models\Evenement');
+    }
 
 /**
  * Validation

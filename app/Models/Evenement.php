@@ -20,6 +20,10 @@ public function epreuve() {
 public function resultats() {
 	return $this->hasMany('App\Models\Resultat');
 }
+
+public function terrain() {
+	return $this->belongsTo('App\Models\Terrain');
+}
 	
 /**
  * Validation
