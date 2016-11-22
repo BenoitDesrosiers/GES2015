@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="539345c8-ad0b-43d2-afbc-32b88032ead0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/epreuves/ajtParticipant.blade.php" afterPath="$PROJECT_DIR$/resources/views/epreuves/ajtParticipant.blade.php" />
-    </list>
+    <list default="true" id="539345c8-ad0b-43d2-afbc-32b88032ead0" name="Default" comment="" />
     <ignored path="GES2015.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -515,12 +512,12 @@
       <workItem from="1479733784645" duration="1110000" />
       <workItem from="1479736201287" duration="618000" />
       <workItem from="1479774921712" duration="868000" />
-      <workItem from="1479820244351" duration="5389000" />
+      <workItem from="1479820244351" duration="5850000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="126635000" />
+    <option name="totallyTimeSpent" value="127096000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2869" y="-11" width="2182" height="1312" extended-state="6" />
@@ -945,6 +942,14 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/AboutController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
