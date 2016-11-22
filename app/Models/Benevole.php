@@ -33,6 +33,7 @@ class Benevole extends EloquentValidating {
 		return $this->belongsToMany('App\Models\Terrain', 'benevole_terrain', 'benevole_id', 'terrain_id');
 	}
 
+
 	/**
 	 * Validation
 	 *
@@ -45,14 +46,18 @@ class Benevole extends EloquentValidating {
 	 *   obligatoire pour l'ajout d'un bénévole.
 	 */
 
-	public function validationRules() {
-		return [
-				'nom' => 'required',
-				'prenom' => 'required',
-				'adresse' => 'required',
-				'numTel' => 'required|string',
-				'accreditation' => 'required'
-		];
-	}
-	
+    public $validationMessages;
+
+    public function validationRules() {
+	    return [
+		    'nom' => 'required',
+            'prenom' => 'required',
+     		'adresse' => 'required',
+            'numTel' => 'required|string',
+		    'accreditation' => 'required',
+            'naissance' => 'required|date'
+            ];
+    }
 }
+	
+	

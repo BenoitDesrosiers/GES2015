@@ -76,6 +76,7 @@ class AboutController extends BaseController {
                     "Benoit Desrosiers",
                     "Gestion du projet"
                 )
+
             ),
             2016 => array(
             	array(
@@ -119,6 +120,11 @@ class AboutController extends BaseController {
                 ),
             )
         );
+
+
+            
+            );
+
 
         return View::make('about', compact('liste_etudiants'));
     }
