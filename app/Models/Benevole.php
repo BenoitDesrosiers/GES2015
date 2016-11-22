@@ -33,6 +33,7 @@ class Benevole extends EloquentValidating {
 		return $this->belongsToMany('App\Models\Terrain', 'benevole_terrain', 'benevole_id', 'terrain_id');
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Validation
 	 *
@@ -44,6 +45,20 @@ class Benevole extends EloquentValidating {
 	 * - Les périodes de disponibilité et l'accréditation n'est pas
 	 *   obligatoire pour l'ajout d'un bénévole.
 	 */
+=======
+    public $validationMessages;
+
+    public function validationRules() {
+	    return [
+		    'nom' => 'required',
+            'prenom' => 'required',
+     		'adresse' => 'required',
+            'numTel' => 'required|string',
+		    'accreditation' => 'required',
+            'naissance' => 'required|date'
+            ];
+    }
+>>>>>>> felixolivier
 
 	public function validationRules() {
 		return [
