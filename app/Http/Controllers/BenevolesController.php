@@ -45,30 +45,24 @@ class BenevolesController extends BaseController {
 	 * @return Response
 	 */
 	public function create()
-<<<<<<< HEAD
 	{	
 		try {
 			$sports = Sport::all();
 			$terrains = Terrain::all();
+			$anneeDefaut = date ( 'Y' ) - 20;
+			$moisDefaut = 0;
+			$jourDefaut = 0;
 		
-			return View::make('benevoles.create', compact('terrains', 'sports', 'benevoleSports', 'benevoleTerrains'));
+			$listeAnnees = BenevolesController::generer_liste ( date ( 'Y' ) - 100, 101 );
+			$listeMois = BenevolesController::generer_liste ( 1, 12 );
+			$listeJours = BenevolesController::generer_liste ( 1, 31 );
 		
 		} catch (Exception $e) {
 			App:abort(404);
 		}
-=======
-	{
-
-		$anneeDefaut = date ( 'Y' ) - 20;
-		$moisDefaut = 0;
-		$jourDefaut = 0;
-		
-		$listeAnnees = BenevolesController::generer_liste ( date ( 'Y' ) - 100, 101 );
-		$listeMois = BenevolesController::generer_liste ( 1, 12 );
-		$listeJours = BenevolesController::generer_liste ( 1, 31 );
-		return View::make('benevoles.create',compact ('listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut' ));	
->>>>>>> felixolivier
+		return View::make('benevoles.create', compact('terrains', 'sports', 'benevoleSports', 'benevoleTerrains', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut' ));
 	}
+
 
 
 	/**
@@ -79,43 +73,8 @@ class BenevolesController extends BaseController {
 	public function store()
 	{
 		try {
-<<<<<<< HEAD
-	        $input = Input::all();
-	        		
-			$benevole = new Benevole;
-	        $benevole->prenom = $input['prenom'];
-			$benevole->nom = $input['nom'];
-			$benevole->adresse = $input['adresse'];
-			$benevole->numTel = $input['numTel'];
-	        $benevole->numCell = $input['numCell'];
-	        $benevole->courriel = $input['courriel'];
-			$benevole->accreditation = $input['accreditation'];
-			$benevole->verification = $input['verification'];
-			
-			if($benevole->save()) {
-				// Association avec les sports sélectionnés
-				if (is_array(Input::get('sport'))) { //FIXME: protéger avec une transaction dans le try/catch
-					$benevole->sports()->sync(array_keys(Input::get('sport')));
-				} else {
-					$benevole->sports()->detach();
-				}
-				// Association avec les terrains sélectionnés
-				if (is_array(Input::get('terrain'))) {  //FIXME: protéger avec une transaction dans le try/catch
-					$benevole->terrains()->sync(array_keys(Input::get('terrain')));
-				} else {
-					$benevole->terrain()->detach();
-				}
-				// Message de confirmation si la sauvegarde a réussi
-				return Redirect::action('BenevolesController@create')->with ( 'status', 'Le bénévole a été créé.' );
-			} else {
-				return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
-			}
-		} catch (Exception $e) {
-			App:abort(404);
-		}
-	}
-=======
-        $input = Input::all();
+
+      $input = Input::all();
         		
 		$benevole = new Benevole;
         $benevole->prenom = $input['prenom'];
@@ -139,19 +98,36 @@ class BenevolesController extends BaseController {
 			} else {
 				$benevole->naissance = "invalide";
 			}
-		
-		if($benevole->save()) {
-			return Redirect::action('BenevolesController@index');
-		} else {
-			return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
-		}
+			
+			if($benevole->save()) {
+				// Association avec les sports sélectionnés
+				if (is_array(Input::get('sport'))) { //FIXME: protéger avec une transaction dans le try/catch
+					$benevole->sports()->sync(array_keys(Input::get('sport')));
+				} else {
+					$benevole->sports()->detach();
+				}
+				// Association avec les terrains sélectionnés
+				if (is_array(Input::get('terrain'))) {  //FIXME: protéger avec une transaction dans le try/catch
+					$benevole->terrains()->sync(array_keys(Input::get('terrain')));
+				} else {
+					$benevole->terrain()->detach();
+				}
+				// Message de confirmation si la sauvegarde a réussi
+				return Redirect::action('BenevolesController@create')->with ( 'status', 'Le bénévole a été créé.' );
+			} else {
+				return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
+			}
 		} catch (Exception $e) {
-            App:abort(404);	
+			App:abort(404);
+		}
 	}
-}
+
+  
+		
 
 
->>>>>>> felixolivier
+
+
 	/**
 	 * Affiche la ressource.
 	 *
@@ -182,14 +158,7 @@ class BenevolesController extends BaseController {
 		    $benevoleSports = Benevole::find($id)->sports;
 		    $terrains = Terrain::all();
 			$benevoleTerrains = Benevole::find($id)->terrains;
-        } catch(ModelNotFoundException $e) {
-            App::abort(404);
-        }
-<<<<<<< HEAD
-		return View::make('benevoles.edit', compact('benevole', 'terrains', 'sports', 'benevoleSports', 'benevoleTerrains'));
-	}
-=======
-        	$anneeDefaut = date('Y')- 20;
+			$anneeDefaut = date('Y')- 20;
 			$moisDefaut = 0;
 			$jourDefaut = 0;
 			if ($benevole->naissance) {
@@ -203,8 +172,14 @@ class BenevolesController extends BaseController {
 			$listeAnnees = BenevolesController::generer_liste(date('Y')-100, 101);
 			$listeMois = BenevolesController::generer_liste(1, 12);
 			$listeJours = BenevolesController::generer_liste(1, 31);
-		return View::make('benevoles.edit', compact('benevole', 'listeAnnees', 'listeMois', 'listeJours','anneeDefaut','moisDefaut','jourDefaut'));
+			
+        } catch(ModelNotFoundException $e) {
+            App::abort(404);
+        }
+
+		return View::make('benevoles.edit', compact('benevole', 'terrains', 'sports', 'benevoleSports', 'benevoleTerrains', 'listeAnnees', 'listeMois', 'listeJours','anneeDefaut','moisDefaut','jourDefaut'));
 	}
+
 
 	    /**
      * Construit une liste continue d'entiers sur un intervalle donné
@@ -222,7 +197,7 @@ class BenevolesController extends BaseController {
         return $liste;
     }
 
->>>>>>> felixolivier
+
 	/**
 	 * Mise à jour de la ressource dans la bd.
 	 *
@@ -242,10 +217,9 @@ class BenevolesController extends BaseController {
             $benevole->numCell = $input['numCell'];
             $benevole->courriel = $input['courriel'];
 	        $benevole->accreditation = $input['accreditation'];
-<<<<<<< HEAD
-=======
+
 	        $benevole->sexe = $input['sexe'];
->>>>>>> felixolivier
+
 	        $benevole->verification = $input['verification'];
 
 	        //      	Création de la date de naissance à partir des valeurs des trois comboboxes
@@ -284,12 +258,12 @@ class BenevolesController extends BaseController {
         catch (ModelNotFoundException $e) {
                     App::abort(404);
         }
-<<<<<<< HEAD
-	}
-=======
-    }
 
->>>>>>> felixolivier
+	}
+
+    
+
+
 	/**
 	 * Efface la ressource de la bd.
 	 *
