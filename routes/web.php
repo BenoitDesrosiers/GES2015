@@ -31,6 +31,11 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::get ( 'listeParticipant/{epreuveId}', 'EpreuvesController@listeParticipant' );
 	
 	Route::resource('epreuves','EpreuvesController');
+
+	Route::post('participants/annuler-batch', 'ParticipantsController@annulerCSV');
+	Route::post('participants/confirmer-batch', 'ParticipantsController@confirmerCSV');
+	Route::get('participants/create-batch', 'ParticipantsController@createFromCSV')->name("participants.create-batch");
+	Route::post('participants/create-batch', 'ParticipantsController@createFromCSV')->name("participants.create-batch");
 	Route::resource('participants','ParticipantsController');
 	Route::resource('resultats','ResultatsController');
 	Route::resource('systeme', 'SystemeController');

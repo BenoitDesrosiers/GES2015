@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use View;
 use Redirect;
 use Input;
@@ -38,6 +41,123 @@ class ParticipantsController extends BaseController {
 		$participants = ParticipantsController::trierColonnes ( $participants );
 		
 		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'listeRecherches', 'valeurFiltre', 'valeurRecherche' ) );
+	}
+
+	/**
+	 * Créée des participants à partir d'un fichier CSV
+	 *
+	 * @param Request $request Variable contenant les données envoyées dans le formulaire
+	 *
+	 * @author ZeLarpMaster
+	 * @return Response
+	 */
+	public function createFromCSV(Request $request) {
+		$donnees = array();
+
+		$metadata = array("Nom" => [true, "is_string", "verifierVariable"], "Prénom" => [true, "is_string", "verifierVariable"], "Numéro Téléphone" => [false, "is_string", "verifierVariable"], "Nom Parent" => [false, "is_string", "verifierVariable"], "Numéro" => [true, "is_numeric", "verifierNumero"], "Genre" => [true, "is_numeric", "verifierGenre"], "Date Naissance" => [true, "is_string", "verifierDate"], "Adresse" => [false, "is_string", "verifierVariable"], "Région" => [false, "is_string", "verifierRegion"], "Sports" => [false, "is_string", "verifierSport"]);
+		// <<<<< ca respecte pas tout à fait la norme des 80 charactères par lignes
+		$erreurs = null;
+		$nomFichier = null;
+		$aPasErreurs = false;
+		$status = "";
+		$erreur = "";
+		$fichierCsv = $request->file("fichier-csv", null);
+		if (is_null($fichierCsv) || !$fichierCsv->isValid()) {
+			$donneesCsv = null;
+			$plusLongueDonnee = 0;
+		} else {
+			$donneesCsv = $this->transformerFichierCsv($fichierCsv);
+			if (count($donneesCsv) > 0) {
+				// Calcule la largeur supplémentaire du tableau
+				// C-a-d le nombre de sports qui dépasse
+				$plusLongueDonnee = max(max(array_map("count", $donneesCsv)) - count($metadata), 0) + 1;
+			} else {
+				$plusLongueDonnee = 0;
+			}
+			$erreurs = $this->verifierDonneesCsv($metadata, $donneesCsv);
+			$aPasErreurs = empty(array_filter($erreurs));
+			if ($aPasErreurs) {
+				$status = "Le fichier est exempt d'erreurs. Vous pouvez maintenant confirmer.";
+				$nomFichier = uniqid() . ".csv";
+				$fichierCsv->move(resource_path("assets/temp/"), $nomFichier);
+			} else {
+				$erreur = "Le fichier contient des erreurs. Veuillez les corriger et renvoyer le fichier corrigé.";
+			}
+		}
+		$rowspanEntete = 'colspan="' . strval($plusLongueDonnee) . '"';
+
+		$donnees["entetes"] = $metadata;   // <<<<un peu d'information sur ces champs aiderait grandement à la compréhension. 
+		$donnees["rangees"] = $donneesCsv;
+		$donnees["rowspanEntete"] = $rowspanEntete;
+		$donnees["erreurs"] = $erreurs;
+		$donnees["a_pas_erreurs"] = $aPasErreurs;
+		$donnees["nom_fichier"] = $nomFichier;
+
+		$donnees["status"] = $status ? $status : $request->session()->get("status", "");
+		$donnees["erreur"] = $erreur ? $erreur : $request->session()->get("erreur", "");
+
+		return View::make("participants.create-batch", $donnees);
+	}
+
+	/**
+	 * Annule l'utilisation du fichier CSV temporaire.
+	 *
+	 * @param Request $request Variable contenant les données envoyées dans le formulaire
+	 *
+	 * @author ZeLarpMaster
+	 * @return Response
+	 */
+	public function annulerCSV(Request $request) {
+		$donnees = array();
+
+		$status = "";
+		$erreur = "";
+		try {
+			$chemin_temporaire = $request->input("fichier-precedent", null);
+			$this->supprimerFichierCsvTemporaire($chemin_temporaire);
+		} catch (Exception $e) {
+			$erreur = "Erreur: " . $e->getMessage();
+		}
+
+		$donnees["status"] = $status;
+		$donnees["erreur"] = $erreur;
+
+		return redirect()->action("ParticipantsController@createFromCSV")
+			->with($donnees);
+	}
+
+	/**
+	 * Confirme l'utilisation du fichier CSV temporaire et sauvegarde les données.
+	 *
+	 * @param Request $request Variable contenant les données envoyées dans le formulaire
+	 *
+	 * @author ZeLarpMaster
+	 * @return Response
+	 */
+	public function confirmerCSV(Request $request) {
+		$donnees = array();
+
+		$status = "";
+		$erreur = "";
+		try {
+			$nom_temporaire = $request->input("fichier-precedent", null);
+			$chemin_temporaire = resource_path("assets/temp/" . $nom_temporaire);
+			$fichier_temporaire_symfony = new \Symfony\Component\HttpFoundation\File\UploadedFile($chemin_temporaire, "temp.csv");
+			$fichier_temporaire = UploadedFile::createFromBase($fichier_temporaire_symfony);
+			$donneesCsv = $this->transformerFichierCsv($fichier_temporaire);
+			$this->supprimerFichierCsvTemporaire($nom_temporaire);
+
+			$this->ajouterDonneesCsv($donneesCsv);
+			$status = "Les participants ont été ajoutés.";
+		} catch (Exception $e) {
+			$erreur = "Erreur: " . $e->getMessage();
+		}
+
+		$donnees["status"] = $status;
+		$donnees["erreur"] = $erreur;
+
+		return redirect()->action("ParticipantsController@createFromCSV")
+			->with($donnees);
 	}
 	
 	/**
@@ -287,7 +407,223 @@ class ParticipantsController extends BaseController {
 		
 		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'listeRecherches', 'valeurFiltre', 'valeurRecherche' ) );
 	}
-	
+
+	/**
+	 * Transforme un fichier CSV en array
+	 *
+	 * @param UploadedFile $fichierCsv
+	 * 			Fichier CSV à transformer.
+	 * @return array $resultat. Tableau des valeurs du $fichierCsv
+	 */
+	private function transformerFichierCsv($fichierCsv) {
+		$contenuBrut = file_get_contents($fichierCsv->getRealPath());
+		$contenuCoupe = str_replace("\r", "", $contenuBrut);
+		$contenuTableau = array();
+		// Sépare les rangées aux nouvelles lignes et enlève la dernière rangée
+		foreach(array_slice(explode("\n", $contenuCoupe), 0, -1) as $ligne) {
+			$contenuTableau[] = str_getcsv($ligne);  //<<< ca aurait été cool de pouvoir spécifier le séparateur
+		}
+		return $contenuTableau;
+	}
+
+	/**
+	 * Supprime le fichier CSV temporaire.
+	 *
+	 * @param string $nomFichier Le nom du fichier temporaire
+	 *
+	 * @author ZeLarpMaster
+	 * @throws Exception si le nom de fichier est nul.
+	 */
+	private function supprimerFichierCsvTemporaire($nomFichier) {
+		if (!is_null($nomFichier)) {
+			unlink(resource_path("assets/temp/" . $nomFichier));
+		} else {
+			throw new Exception("Nom de fichier nul.");
+		}
+	}
+
+	/**
+	 * Ajoute les données csv dans la base de données
+	 *
+	 * @param array $donneesCsv Tableau de données à ajouter dans les participants
+	 *
+	 * @author ZeLarpMaster
+	 */
+	private function ajouterDonneesCsv($donneesCsv) {
+		foreach ($donneesCsv as $donneesParticipant) {
+			$region_id = Region::whereRaw("upper(nom_court) = ?",
+				[strtoupper($donneesParticipant[8])])->first()->id;
+			$participant = Participant::create([
+				"nom" => $donneesParticipant[0],
+				"prenom" => $donneesParticipant[1],
+				"numero" => $donneesParticipant[4],
+				"region_id" => $region_id,
+				"equipe" => 0,
+				"sexe" => $donneesParticipant[5],
+				"naissance" => $donneesParticipant[6],
+				"adresse" => $donneesParticipant[7],
+				"nom_parent" => $donneesParticipant[3],
+				"telephone" => $donneesParticipant[2]
+			]);
+			foreach (array_filter(array_slice($donneesParticipant, 9)) as $nom_sport) {
+				$sport = Sport::whereRaw("upper(nom) = ?",
+					[strtoupper($nom_sport)])->first();
+				$participant->sports()->attach($sport->id);
+			}
+		}
+	}
+
+	/**
+	 * Vérifie les données présentes dans le tableau CSV et retourne les erreurs
+	 *
+	 * @param array $metadataColonnes La liste de colonnes obligatoires ainsi que leur type
+	 * @param array $donneesCsv Le tableau CSV à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return array Une liste d'erreurs par rangée de données CSV
+	 */
+	private function verifierDonneesCsv($metadataColonnes, $donneesCsv) {
+		$resultat = array();
+		$nomColonnes = array_keys($metadataColonnes);
+		$nbColonnes = count($nomColonnes);
+		$derniereMetadata = end($metadataColonnes);
+		$nomDerniereColonne = end($nomColonnes);
+		foreach ($donneesCsv as $cle => $rangee) {
+			$erreur = "";
+			$colonneMixe = array_map(null, $metadataColonnes, $rangee);
+			foreach ($colonneMixe as $cleColonne => $colonne) {
+				list($metadataValeur, $valeur) = $colonne;
+				// Obtient le nom de la colonne. La dernière colonne si ça dépasse le nombre de colonnes.
+				$nomColonne = $cleColonne < $nbColonnes ? $nomColonnes[$cleColonne] : $nomDerniereColonne;
+				if (is_null($metadataValeur)) {
+					$metadataValeur = $derniereMetadata;
+				}
+				$valeurVide = !isset($valeur) || (strlen(trim($valeur)) === 0);
+				if ($valeurVide) {
+					if ($metadataValeur[0]) {
+						$erreur = $nomColonne . ": Valeur obligatoire inexistante";
+					}
+				} else {
+					if (!call_user_func($metadataValeur[1], $valeur)) {
+						$erreur = $nomColonne . ": Type de la valeur invalide";
+					} elseif (call_user_func(array($this, $metadataValeur[2]), $valeur)) {
+						$erreur = $nomColonne . ": Valeur invalide";
+					}
+				}
+			}
+			// Si les données individuelles sont corrects, on regarde le reste.
+			if (strlen($erreur) === 0) {
+				if ($this->verifierDoublon($rangee)) {
+					$erreur = "Existe déjà";
+				}
+			}
+			$resultat[$cle] = $erreur;
+		}
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si la rangée correspond à un participant existant déjà dans la base de données
+	 *
+	 * @param array $rangee Une rangée de données à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si le participant existe déjà
+	 */
+	private function verifierDoublon($rangee) {
+		$region = Region::whereRaw("upper(nom_court) = ?", [strtoupper($rangee[8])])->first();
+		$resultat = Participant::whereRaw("upper(nom) = ?", [strtoupper($rangee[0])])
+							->whereRaw("upper(prenom) = ?", [strtoupper($rangee[1])])
+							->where("numero", "=", $rangee[4])
+							->where("region_id", "=", $region->id)->exists();
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si un sport existe
+	 *
+	 * @param string $sport Le sport à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si le sport n'existe pas
+	 */
+	public function verifierSport($sport) {
+		$resultat = Sport::whereRaw("upper(`nom`) = ?", [strtoupper($sport)])->exists();
+		return !$resultat;
+	}
+
+	/**
+	 * Vérifie si une région existe
+	 *
+	 * @param string $region La région à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si la région n'existe pas
+	 */
+	public function verifierRegion($region) {
+		$resultat = Region::whereRaw("upper(`nom_court`) = ?", [strtoupper($region)])->exists();
+		return !$resultat;
+	}
+
+	/**
+	 * Vérifie si une date est valide
+	 * La date doit être écrite dans une string suivant le format Québécois: AAAA-MM-JJ
+	 *
+	 * @param string $date La date à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si la date est invalide
+	 */
+	public function verifierDate($date) {
+		$date_explosee = explode("-", $date, 3);
+		if ($date_explosee !== false && count($date_explosee) == 3) {
+			list($annee, $mois, $jour) = $date_explosee;
+			$resultat = !checkdate($mois, $jour, $annee);
+		} else {
+			$resultat = false;
+		}
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si un numéro est invalide
+	 *
+	 * @param string $numero Le numéro à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si le numéro est invalide
+	 */
+	public function verifierNumero($numero) {
+		$resultat = !ctype_digit($numero);
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si la variable est une chaîne de caractères
+	 *
+	 * @param string $variable La variable à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si l'argument n'est pas une chaîne de caractères
+	 */
+	public function verifierVariable($variable) {
+		$resultat = !is_string($variable);
+		return $resultat;
+	}
+
+	/**
+	 * Vérifie si le genre est valide
+	 *
+	 * @param string $genre Le genre à vérifier
+	 *
+	 * @author ZeLarpMaster
+	 * @return bool true si le genre n'est pas "1" ou "0"
+	 */
+	public function verifierGenre($genre) {
+		$resultat = !($genre == "1" || $genre == "0");
+		return $resultat;
+	}
+
 	/**
 	 * Trie une collection.
 	 *

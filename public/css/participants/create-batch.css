@@ -1,0 +1,12 @@
+/*******************************************************************************
+Fichier: create-batch.css
+Description: Fichier de style pour la page d'ajout (et de modification)
+             de plusieurs participants.
+Créé le: 2016-11-01
+Modifié le: 2016-11-01
+Par: ZeLarpMaster
+*******************************************************************************/
+
+.rangeeErronee {
+    background-color: #ff8888;
+}
