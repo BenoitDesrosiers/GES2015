@@ -104,18 +104,7 @@
 @stop
 
 @section('script')
-	<script type="text/javascript">
-		$('.ajouter').click(function(){
-			transfererDroite();
-			changer_liste();
-		});
-
-		$('.retirer').click(function(){
-			transfererGauche();
-			changer_liste();
-		});
-			
-	</script>
+	<script src="{{ asset('js/script_transfererArbitre.js') }}"></script>
 	<script src="{{ asset('js/tableScript.js') }}"></script>
 @stop
 

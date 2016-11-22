@@ -24,7 +24,8 @@ class SportsArbitresController extends BaseController{
     /**
 	 * Affiche les arbitres associés au sport sélectionné.
 	 *
-	 * @param $sport = Sport::findOrFail($id); l'id de l'arbitre qu'on sélectionne.
+	 * @param int $id L'id des arbitres utilisé
+	 * @return Illuminate/Http/Response
 	 */
 	public function index($id)
 	{
