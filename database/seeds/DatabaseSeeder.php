@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder {
         Model::unguard();
 		
 		$this->call('UserTableSeeder');
+        $this->call('RolesSeeder');
+        $this->call('UsersRolesSeederTable');
 		$this->call('SportsTableSeeder');
         $this->call('TypesEvenementTableSeeder');
         $this->call('EpreuvesTableSeeder');
@@ -35,10 +37,10 @@ class DatabaseSeeder extends Seeder {
         $this->call('EvenementsTableSeeder');
         $this->call('BenevolesTableSeeder');
         $this->call('DisponibilitesTableSeeder');
-        $this->call('RolesTableSeeder');
+        $this->call('RolesPourDeleguesTableSeeder');
 		$this->call('PointagesTableSeeder');
 		$this->call('DeleguesTableSeeder');
-		$this->call('DeleguesRolesTableSeeder');
+		$this->call('DeleguesRolesPourDeleguesTableSeeder');
 		$this->call('TachesTableSeeder');
 		$this->call('ConditionsParticulieresSeeder');
 		//$this->call('ResultatTournoisTableSeeder');
@@ -47,18 +49,4 @@ class DatabaseSeeder extends Seeder {
 		
 	}
 
-}
-
-class UserTableSeeder extends Seeder {
-
-	public function run()
-	{
-		DB::table('users')->delete();
-		DB::table('password_resets')->delete();
-		$user = new User();
-		$user->name = 'usager';
-		$user->email = 'usager@chose.com';
-		$user->password = Hash::make('usager');
-		$user->save();
-	}
 }

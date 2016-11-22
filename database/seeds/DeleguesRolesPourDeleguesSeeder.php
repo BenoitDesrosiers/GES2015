@@ -6,7 +6,7 @@ use App\Models\RolesPourDelegue;
 use App\Models\Delegue;
 
 
-class DeleguesRolesTableSeeder extends Seeder {
+class DeleguesRolesPourDeleguesTableSeeder extends Seeder {
 
 
     public function run()

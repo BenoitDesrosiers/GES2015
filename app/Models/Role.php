@@ -16,7 +16,7 @@ class Role extends EntrustRole
     protected $guarded = array('id');
 
     /**
-     * Eloquent relationship: un rôle de délégué à plusieurs délégués
+     * Eloquent relationship: un rôle d'usager à plusieurs délégués
      */
 
     public function Usagers() {
