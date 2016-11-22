@@ -16,17 +16,20 @@ class Permission extends EntrustPermission
     protected $guarded = array('id');
 
     /**
-     * Eloquent relationship: un rôle de délégué à plusieurs délégués
+     * Eloquent relationship: une permission a 0 ou plusieurs rôles.
+     *
+     * @return Role[]
      */
 
     public function roles() {
-        return $this->hasMany('App\Models\Role');
+        return $this->belongsToMany('App\Models\Role', 'permission_role', 'permission_id', 'role_id');
     }
+
     /**
      * Validation
      *
      * Une permission doit avoir:
-     * - nom: obligatoire, et unique dans toute la table
+     * - name: obligatoire, et unique dans toute la table
      * - Les autres champs sont falcultatifs.
      */
 

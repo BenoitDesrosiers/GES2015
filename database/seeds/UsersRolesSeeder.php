@@ -27,7 +27,6 @@ class UsersRolesSeederTable extends Seeder
             foreach($rolesAssigne as $roleAssigne){
                 $users[$item[0]]->roles()->attach($roles[$roleAssigne]);
             }
-            //$users[$item[0]]->roles()->attach($roles[$item[1]->id]);
         }
     }
 }
