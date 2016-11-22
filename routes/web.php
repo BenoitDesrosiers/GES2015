@@ -43,7 +43,7 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('terrains','TerrainsController');
 	Route::resource('equipes','EquipesController');
     Route::resource('benevoles','BenevolesController');
-	Route::resource('roles','RolesController');
+	Route::resource('roles','RolesPourDeleguesController');
 	Route::resource('codes','CodesController');
 	Route::resource('taches','TachesController');
 	Route::resource('disponibilites','DisponibilitesController');
@@ -61,7 +61,7 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::post('resultatPourEvenementResultats', 'ResultatsController@resultatPourEvenement');
     Route::resource('benevoles','BenevolesController');
 
-	Route::resource('roles','RolesController');
+	Route::resource('roles','RolesPourDeleguesController');
     Route::resource('evenements','EvenementsController');
 
 });

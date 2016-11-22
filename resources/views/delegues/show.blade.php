@@ -12,7 +12,7 @@
 				<ul>
 					@foreach ($delegue->roles as $role)
 						<li>
-							<a href="{!! action('RolesController@show', $role->id) !!}">
+							<a href="{!! action('RolesPourDeleguesController@show', $role->id) !!}">
 								{!! $role->nom !!}
 							</a>
 						</li>

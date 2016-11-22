@@ -5,7 +5,7 @@
 		<h2>Modification d'un rôle</h2>
 	</div>
 	<div class="panel-body">
-		{!! Form::open(['action'=> array('RolesController@update', $role->id), 'method' => 'PUT', 'class' => 'form']) !!}
+		{!! Form::open(['action'=> array('RolesPourDeleguesController@update', $role->id), 'method' => 'PUT', 'class' => 'form']) !!}
 		<div class="form-group">
 			{!! Form::label('nom', 'Nom:') !!} 
 			{!! Form::text('nom',$role->nom, ['class' => 'form-control']) !!}

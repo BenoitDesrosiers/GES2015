@@ -47,7 +47,7 @@ class Delegue extends EloquentValidating {
      * @return int Le nombre de rôles.
      */
     public function nombreRoles() {
-        return $this->rolesPourDelegue()->count();
+        return $this->rolesPourDelegues()->count();
     }
 
 

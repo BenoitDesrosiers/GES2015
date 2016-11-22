@@ -6,7 +6,7 @@ use View;
 use Redirect;
 use Input;
 
-use App\Models\Role;
+use App\Models\RolesPourDelegue;
 
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  * @author SteveL
  * @version 0.1
  */
-class RolesController extends BaseController {
+class RolesPourDeleguesController extends BaseController {
 
 	/**
 	 * Affiche une liste de rôle.
@@ -26,7 +26,7 @@ class RolesController extends BaseController {
 	public function index()
 	{
 		try {
-			$roles = Role::all()->sortby('nom');
+			$roles = RolesPourDelegue::all()->sortby('nom');
 			foreach($roles as $role){
 				if ($role->description == "")
 					{
@@ -61,14 +61,14 @@ class RolesController extends BaseController {
 		try {
 			$input = Input::all();
 			
-			$role = new Role;
+			$role = new RolesPourDelegue;
 			$role->nom = $input['nom'];
 			$role->description = $input['description'];
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
 		if($role->save()) {
-			return Redirect::action('RolesController@index');
+			return Redirect::action('RolesPourDeleguesController@index');
 		} else {
 			return Redirect::back()->withInput()->withErrors($role->validationMessages());
 		}	
@@ -85,7 +85,7 @@ class RolesController extends BaseController {
 	public function show($id)
 	{
 		try {
-			$role = Role::findOrFail($id);
+			$role = RolesPourDelegue::findOrFail($id);
 			if ($role->description == "") {
 				$role->description = "Aucune description";
 			}
@@ -105,7 +105,7 @@ class RolesController extends BaseController {
 	public function edit($id)
 	{
 		try {
-			$role = Role::findOrFail($id);
+			$role = RolesPourDelegue::findOrFail($id);
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -124,7 +124,7 @@ class RolesController extends BaseController {
 		try {
 			$input = Input::all();
 
-			$role = Role::findOrFail($id);
+			$role = RolesPourDelegue::findOrFail($id);
 			$role->nom = $input['nom'];
 			$role->description = $input['description'];
 		} catch(ModelNotFoundException $e) {
@@ -133,7 +133,7 @@ class RolesController extends BaseController {
 
 		
 		if($role->save()) {
-			return Redirect::action('RolesController@index');
+			return Redirect::action('RolesPourDeleguesController@index');
 		} else {
 			return Redirect::back()->withInput()->withErrors($role->validationMessages());
 		}
@@ -149,12 +149,12 @@ class RolesController extends BaseController {
 	public function destroy($id)
 	{
 		try {
-			$role = Role::findOrFail($id);
+			$role = RolesPourDelegue::findOrFail($id);
 			$role->delete();
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		return Redirect::action('RolesController@index');
+		return Redirect::action('RolesPourDeleguesController@index');
 	
 	}
 

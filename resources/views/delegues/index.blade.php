@@ -30,7 +30,7 @@
 								<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherRoles(this)"/>
 							@elseif ($delegue->nombreRoles() == 1)
 								@foreach($delegue->rolesPourDelegues as $role)
-									<a href="{!! action('RolesController@show', $role->id) !!}">
+									<a href="{!! action('RolesPourDeleguesController@show', $role->id) !!}">
 										{!! $role->nom !!}
 									</a>
 								@endforeach
@@ -52,7 +52,7 @@
 									<ul>
 										@foreach($delegue->rolesPourDelegues as $role)
 											<li>
-												<a href="{!! action('RolesController@show', $role->id) !!}">
+												<a href="{!! action('RolesPourDeleguesController@show', $role->id) !!}">
 													{!! $role->nom !!}
 												</a>
 											</li>

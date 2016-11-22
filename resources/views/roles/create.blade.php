@@ -6,7 +6,7 @@
 		<h2>Création d'un rôle</h2>
 	</div>
 	<div class="panel-body">
-		{!! Form::open(['action'=> 'RolesController@index', 'class' => 'form']) !!}
+		{!! Form::open(['action'=> 'RolesPourDeleguesController@index', 'class' => 'form']) !!}
 		<!--    Affiche les messages d'erreur après un enregistrement raté -->
         @foreach ($errors->all() as $error)
             <p class="alert alert-danger">{{ $error }}</p>
@@ -23,7 +23,7 @@
 		</div>
 		<div class="form-group">
 			{!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-			<a href="{{ action('RolesController@index') }}" class="btn btn-danger">Annuler</a>
+			<a href="{{ action('RolesPourDeleguesController@index') }}" class="btn btn-danger">Annuler</a>
 		</div>
 		{!! Form::close() !!}
 	</div>

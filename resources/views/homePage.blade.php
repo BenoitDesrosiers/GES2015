@@ -14,7 +14,7 @@
 		<a class="btn btn-lg btn-success" href="{{ action('TachesController@index') }}" role="button">Tâches</a>
 		<a class="btn btn-lg btn-success" href="{{ action('ArbitresController@index') }}" role="button">Arbitres</a>
 		<a class="btn btn-lg btn-success" href="{{ action('DeleguesController@index') }}" role="button">Délégués</a>
-		<a class="btn btn-lg btn-success" href="{{ action('RolesController@index') }}" role="button">Rôles</a></p>
+		<a class="btn btn-lg btn-success" href="{{ action('RolesPourDeleguesController@index') }}" role="button">Rôles</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('PointagesController@index') }}" role="button">Pointages</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('TerrainsController@index') }}" role="button">Terrains</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('EvenementsController@index') }}" role="button">Événements</a></p>
