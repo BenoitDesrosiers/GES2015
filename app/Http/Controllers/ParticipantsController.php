@@ -54,14 +54,14 @@ class ParticipantsController extends BaseController {
 	public function createFromCSV(Request $request) {
 		$donnees = array();
 
-		$metadata = array("Nom" => [true, "is_string", "verifierVariable"], "Prénom" => [true, "is_string", "verifierVariable"], "Numéro Téléphone" => [false, "is_string", "verifierVariable"], "Nom Parent" => [false, "is_string", "verifierVariable"], "Numéro" => [true, "is_numeric", "verifierNumero"], "Genre" => [true, "is_numeric", "verifierGenre"], "Date Naissance" => [true, "is_string", "verifierDate"], "Adresse" => [false, "is_string", "verifierVariable"], "Région" => [false, "is_string", "verifierRegion"], "Sports" => [false, "is_string", "verifierSport"]);
+		$metadata = $this->genererEntete();
 
 		$erreurs = null;
 		$nomFichier = null;
 		$aPasErreurs = false;
 		$status = "";
 		$erreur = "";
-		$fichierCsv = $request->file("fichier-csv", null);
+		$fichierCsv = $request->file("fichier_csv", null);
 		if (is_null($fichierCsv) || !$fichierCsv->isValid()) {
 			$donneesCsv = null;
 			$plusLongueDonnee = 0;
@@ -96,7 +96,7 @@ class ParticipantsController extends BaseController {
 		$donnees["status"] = $status ? $status : $request->session()->get("status", "");
 		$donnees["erreur"] = $erreur ? $erreur : $request->session()->get("erreur", "");
 
-		return View::make("participants.create-batch", $donnees);
+		return View::make("participants.createBatch", $donnees);
 	}
 
 	/**
@@ -113,7 +113,7 @@ class ParticipantsController extends BaseController {
 		$status = "";
 		$erreur = "";
 		try {
-			$chemin_temporaire = $request->input("fichier-precedent", null);
+			$chemin_temporaire = $request->input("fichier_precedent", null);
 			$this->supprimerFichierCsvTemporaire($chemin_temporaire);
 		} catch (Exception $e) {
 			$erreur = "Erreur: " . $e->getMessage();
@@ -140,7 +140,7 @@ class ParticipantsController extends BaseController {
 		$status = "";
 		$erreur = "";
 		try {
-			$nom_temporaire = $request->input("fichier-precedent", null);
+			$nom_temporaire = $request->input("fichier_precedent", null);
 			$chemin_temporaire = resource_path("assets/temp/" . $nom_temporaire);
 			$fichier_temporaire_symfony = new \Symfony\Component\HttpFoundation\File\UploadedFile($chemin_temporaire, "temp.csv");
 			$fichier_temporaire = UploadedFile::createFromBase($fichier_temporaire_symfony);
@@ -406,6 +406,39 @@ class ParticipantsController extends BaseController {
 		$participants = ParticipantsController::trierColonnes ( $participants );
 		
 		return View::make ( 'participants.index', compact ( 'participants', 'routeActionName', 'infosTri', 'listeFiltres', 'listeRecherches', 'valeurFiltre', 'valeurRecherche' ) );
+	}
+
+	/**
+	 * Génère et retourne l'entête du tableau de création par CSV
+	 *
+	 * L'entête contient des valeurs suivant le format suivant:
+	 * Cle => Valeur   où Cle est le nom de la colonne et valeur est un tableau
+	 *
+	 * Valeur contient 3 éléments: Requis, VerifType, VerifSpecifique
+	 * Requis est un booléen déterminant si la colonne est requise ou non
+	 * VerifType est le nom d'une fonction qui retourne true si la valeur
+	 *  	donnée est de ce type
+	 *  	(ex.: is_string retourne true si c'est une string)
+	 * VerifSpecifique est le nom d'une fonction qui doit être dans
+	 *  	ce Controller. La fonction doit retourner true si la valeur
+	 *  	donnée est erronée
+	 *  	(ex.: verifierDate retourne true si la date est invalide)
+	 *
+	 * @return array Entête du tableau de création par CSV
+	 */
+	private function genererEntete() {
+		return array(
+			"Nom" => [true, "is_string", "verifierVariable"],
+			"Prénom" => [true, "is_string", "verifierVariable"],
+			"Numéro Téléphone" => [false, "is_string", "verifierVariable"],
+			"Nom Parent" => [false, "is_string", "verifierVariable"],
+			"Numéro" => [true, "is_numeric", "verifierNumero"],
+			"Genre" => [true, "is_numeric", "verifierGenre"],
+			"Date Naissance" => [true, "is_string", "verifierDate"],
+			"Adresse" => [false, "is_string", "verifierVariable"],
+			"Région" => [false, "is_string", "verifierRegion"],
+			"Sports" => [false, "is_string", "verifierSport"]
+		);
 	}
 
 	/**

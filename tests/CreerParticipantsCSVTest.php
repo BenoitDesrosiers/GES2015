@@ -31,7 +31,7 @@ class CreerParticipantsCSVTest extends TestCase {
 
 		$this->visit("/participants")
 			->click("Créer des participants")
-			->seePageIs("/participants/create-batch");
+			->seePageIs("/participants/createBatch");
 	}
 
 	/**
@@ -42,7 +42,7 @@ class CreerParticipantsCSVTest extends TestCase {
 	public function testPresenceSectionAideCreationCSV() {
 		$this->loginAsUser();
 
-		$this->visit("/participants/create-batch")
+		$this->visit("/participants/createBatch")
 			->see("aide");
 	}
 
@@ -54,7 +54,7 @@ class CreerParticipantsCSVTest extends TestCase {
 	public function testPresenceBoutonEnvoiFichierCSV() {
 		$this->loginAsUser();
 
-		$this->visit("/participants/create-batch")
+		$this->visit("/participants/createBatch")
 			->see("Envoyer un fichier CSV");
 	}
 }

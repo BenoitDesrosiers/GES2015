@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('stylesheet')
-    <link rel="stylesheet" href="{!! asset("/css/participants/create-batch.css") !!}">
+    <link rel="stylesheet" href="{!! asset("/css/participants/createBatch.css") !!}">
 @endsection
 
 @section('content')
@@ -41,10 +41,10 @@
                 {{ Form::open(["action" => "ParticipantsController@createFromCSV", "class" => "form-horizontal", "method" => "POST", "files" => true]) }}
                 <div class="row">
                     <div class="col-lg-3">
-                        {{ Form::label("fichier-csv", "Envoyez votre fichier CSV:") }}
+                        {{ Form::label("fichier_csv", "Envoyez votre fichier CSV:") }}
                     </div>
                     <div class="col-lg-4">
-                        <input type="file" name="fichier-csv" id="fichier-csv">
+                        <input type="file" name="fichier_csv" id="fichier_csv">
                     </div>
                     <div class="col-lg-1">
                         {{ Form::submit("Envoyer", ["class" => "btn btn-info"]) }}
@@ -87,13 +87,13 @@
                 <div class="row" id="confirmer-tableau">
                     <div class="col-lg-1">
                         {{ Form::open(["action" => "ParticipantsController@annulerCSV", "class" => "form-horizontal", "method" => "POST"]) }}
-                            {{ Form::hidden("fichier-precedent", "$nom_fichier") }}
+                            {{ Form::hidden("fichier_precedent", "$nom_fichier") }}
                             {{ Form::submit("Annuler", ["class" => "btn btn-warning"]) }}
                         {{ Form::close() }}
                     </div>
                     <div class="col-lg-1">
                         {{ Form::open(["action" => "ParticipantsController@confirmerCSV", "class" => "form-horizontal", "method" => "POST"]) }}
-                            {{ Form::hidden("fichier-precedent", "$nom_fichier") }}
+                            {{ Form::hidden("fichier_precedent", "$nom_fichier") }}
                             {{ Form::submit("Confirmer", ["class" => "btn btn-success"]) }}
                         {{ Form::close() }}
                     </div>

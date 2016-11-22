@@ -77,7 +77,13 @@ class AboutController extends BaseController {
                     "Gestion du projet"
 
                 )
-                )
+                ),
+				2016 => array(
+					array(
+						"Guillaume Jean",
+						"Création de participants par CSV"
+					)
+				)
             );
 
         return View::make('about', compact('liste_etudiants'));
