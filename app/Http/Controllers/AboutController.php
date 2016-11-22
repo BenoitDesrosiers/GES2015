@@ -117,6 +117,12 @@ class AboutController extends BaseController {
                     "Étienne Drolet",
                     "CRUD des organismes."
                 ),
+
+
+            	array(
+            		"Francis Mathieu",
+           			"Ajouter un arbitre à un sport"
+            	),
             )
         );
 
