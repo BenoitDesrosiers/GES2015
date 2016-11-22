@@ -152,7 +152,7 @@ class EvenementsController extends BaseController
     {
         try {
             $evenement = Evenement::findOrFail($id);
-            $evenement->delete();
+            $evenement->delete(); //FIXME: protéger par une transaction dans le try/catch
 
             return Redirect::action('EvenementsController@index')->with('status', 'Événement détruit!');
         } catch(Exception $e) {

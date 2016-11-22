@@ -77,7 +77,7 @@ class SportsController extends BaseController {
 			$arbitresSports = $sport->arbitres;
 			$arbitres = SportsController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresSports);
 			if($sport->save()) {
-				if (is_array(Input::get('terrain'))) {
+				if (is_array(Input::get('terrain'))) { //FIXME: protéger par une transaction dans le try/catch
 					$sport->terrains()->sync(array_keys(Input::get('terrain')));
 				}
 				else {
@@ -164,7 +164,7 @@ class SportsController extends BaseController {
 			$sport->url_page_officielle = $input['url_page_officielle'];
 			$sport->tournoi = $input['tournoi'];
 			if($sport->save()) {
-				if (is_array(Input::get('terrain'))) {
+				if (is_array(Input::get('terrain'))) { //FIXME: protéger par une transaction dans le try/catch
                     $sport->terrains()->sync(array_keys(Input::get('terrain')));
                 } 
                 else {
@@ -199,7 +199,7 @@ class SportsController extends BaseController {
 	{
 		try {
 			$sport = Sport::findOrFail($id);
-			$sport->delete();
+			$sport->delete(); //FIXME: protéger par une transaction dans le try/catch
 			
 			return Redirect::action('SportsController@index');
 		} catch(Exception $e) {

@@ -105,7 +105,7 @@ class SportsEpreuvesController extends BaseController
 		$epreuve->nom = $input['nom'];
 		$epreuve->description = $input['description'];
 		if($epreuve->save()) {
-			try {
+			try { //FIXME: protéger par une transaction dans le try/catch
 				//associe le sport aux épreuves (one to many)
 				$epreuve = $sport->epreuves()->save($epreuve);
 			} catch (Exception $e) {
@@ -152,7 +152,7 @@ class SportsEpreuvesController extends BaseController
 	public function destroy($sportId, $epreuveId)
 	{
 		$epreuve = Epreuve::findOrFail($epreuveId);
-		$epreuve->delete();
+		$epreuve->delete(); //FIXME: protéger par une transaction dans le try/catch
 		
 		return Redirect::action('SportsEpreuvesController@index', $sportId);
 	}

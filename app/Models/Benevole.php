@@ -12,6 +12,7 @@ namespace App\Models;
 class Benevole extends EloquentValidating {
 	protected $guarded = array('id');
 
+
 	public function disponibilites() {
 		return $this->hasMany('App\Models\Disponibilite');
 	}
@@ -23,6 +24,13 @@ class Benevole extends EloquentValidating {
 	 */
 	public function sports() {
 		return $this->belongsToMany('App\Models\Sport', 'benevoles_sports', 'benevole_id', 'sport_id');
+	}
+	
+	/**
+	 * Eloquent relationship: un bénévole peut avoir de 0 à plusieurs terrains.
+	 */
+	public function terrains() {
+		return $this->belongsToMany('App\Models\Terrain', 'benevole_terrain', 'benevole_id', 'terrain_id');
 	}
 
 	/**
