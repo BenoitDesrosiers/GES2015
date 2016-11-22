@@ -8,6 +8,7 @@ use App\Http\Requests\OrganismesRequest;
 use Input;
 use Redirect;
 use App\Models\Organisme;
+use App\Models\Contact;
 use View;
 
 /**
@@ -25,7 +26,8 @@ class OrganismesController extends Controller
     public function index()
     {
         $organismes = Organisme::all();
-        return View::make('organismes.index', compact('organismes'));
+        $contacts = Contact::all();
+        return View::make('organismes.index', compact('organismes', 'contacts'));
     }
     
     /**

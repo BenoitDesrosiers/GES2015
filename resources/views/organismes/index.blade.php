@@ -21,7 +21,7 @@
 			<tr class="rangeeOrganisme" >
 				<td>
 					<!-- Servira à afficher les contacts lorsqu'ils seront instaurés dans le site. -->
-					<!-- <button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherContacts(this)"/> -->
+					<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherContacts(this)"/>
 				</td>
 				<td>
 					<a href="{!! action('OrganismesController@show', $organisme->id) !!}">
