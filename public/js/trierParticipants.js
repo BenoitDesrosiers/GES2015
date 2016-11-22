@@ -34,8 +34,6 @@ function listerParticipants(participants_region) {
         detruireTable("1");
     }
 
-    console.log(participants_region);
-
     var corps = document.getElementsByTagName('tbody')[0];
     var table = document.createElement('table');
     var corpsTable = document.createElement('tbody');
@@ -70,7 +68,7 @@ function listerParticipants(participants_region) {
             var ligneParticipant = document.createElement('tr');
             var headerCheckbox = document.createElement('th');
             var checkbox = document.createElement('input');
-            checkbox.name = 'participant[' + participants_region[participant]["participant_id"] + ']';
+            checkbox.name = 'participants[' + participants_region[participant]["participant_id"] + ']';
             checkbox.type = 'checkbox';
 
             headerCheckbox.appendChild(checkbox);

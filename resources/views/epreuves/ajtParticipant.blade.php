@@ -47,7 +47,8 @@
                     nom:"{{ $participant->nom }}, {{ $participant->prenom }}",
                     region:"{{ $participant->region->nom }}",
                     participant_region_id:"{{ $participant->region->id }}",
-                    participant_id:"{{ $participant->id }}"
+                    participant_id:"{{ $participant->id }}",
+                    is_check:"{{ $checked == " checked" ? 'true' : 'false' }}" // Vrm utile???
                 },
             @endforeach
         };
