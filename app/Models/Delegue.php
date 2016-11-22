@@ -22,10 +22,10 @@ class Delegue extends EloquentValidating {
     /**
      * Eloquent relationship: Un délégué peut avoir entre 0 et plusieurs rôles.
      *
-     * @return rolePourDelegue[]
+     * @return rolesPourDelegue[]
      */
     public function rolesPourDelegues() {
-        return $this->belongsToMany('App\Models\rolePourDelegue', 'delegues_rolesPourDelegues', 'delegue_id', 'rolePourDelegue_id');
+        return $this->belongsToMany('App\Models\RolesPourDelegue', 'delegues_roles_pour_delegues', 'delegue_id', 'role_pour_delegue_id');
     }
 
     /**

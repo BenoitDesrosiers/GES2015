@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\RolePourDelegue;
+use App\Models\RolesPourDelegue;
 use App\Models\Delegue;
 
 
@@ -20,14 +20,13 @@ class DeleguesRolesTableSeeder extends Seeder {
 
         $delegues = Delegue::all();
 
-        $roles = RolePourDelegue::all();
+        $roles = RolesPourDelegue::all();
 
 
         DB::table('delegues_roles_pour_delegues')->delete();
 
 
         foreach($items as $item) {
-            print_r($items);
             $delegues[$item[0]]->rolesPourDelegues()->attach($roles[$item[1]]->id);
         }
     }

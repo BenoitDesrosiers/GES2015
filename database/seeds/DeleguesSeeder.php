@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Delegue;
 use App\Models\Region;
-use App\Models\RolePourDelegue;
+use App\Models\RolesPourDelegue;
 
 
 class DeleguesTableSeeder extends Seeder {
@@ -17,8 +17,7 @@ class DeleguesTableSeeder extends Seeder {
 	{
 		
 		$regions = Region::all();
-		$roles = RolePourDelegue::all();
-		
+		$roles = RolesPourDelegue::all();
 		$items = [
 		//nom, prenom, region_id, role_pour_delegue_id, accreditation (1=oui, 0=non), sexe(1=Femme, 0=Homme), date_naissance, adresse, telephone x 2, courriel
 		["Gates","Bill",14,1,1,0,"2000-01-23","123 rue Delatortue","819-472-5555","819-472-5","billgates@microsoft.com"],

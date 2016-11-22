@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder {
         $this->call('EvenementsTableSeeder');
         $this->call('BenevolesTableSeeder');
         $this->call('DisponibilitesTableSeeder');
-		$this->call('DeleguesRolesTableSeeder');
+        $this->call('RolesTableSeeder');
 		$this->call('PointagesTableSeeder');
 		$this->call('DeleguesTableSeeder');
 		$this->call('DeleguesRolesTableSeeder');

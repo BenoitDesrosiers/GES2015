@@ -9,7 +9,7 @@
 
 namespace App\Models;
 
-class RolePourDelegue extends EloquentValidating {
+class RolesPourDelegue extends EloquentValidating {
     /**
      * La table associée au modèle.
      *

@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\RolePourDelegue;
+use App\Models\RolesPourDelegue;
 
 class RolesTableSeeder extends Seeder {
 
@@ -21,7 +21,7 @@ class RolesTableSeeder extends Seeder {
 
 		DB::table('roles_pour_delegues')->delete();
 		foreach($items as $item) {
-			$role = new RolePourDelegue();
+			$role = new RolesPourDelegue();
 		    $role->nom = $item[0];
 		    $role->description = $item[1];
             $role->save();	
