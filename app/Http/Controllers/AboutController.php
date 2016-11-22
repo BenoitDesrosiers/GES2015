@@ -128,10 +128,6 @@ class AboutController extends BaseController {
         );
 
 
-            
-            );
-
-
         return View::make('about', compact('liste_etudiants'));
     }
 
