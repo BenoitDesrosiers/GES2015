@@ -22,7 +22,10 @@ class CreateBenevolesTable extends Migration
 			$table->string('numCell')->nullable();
 			$table->string('courriel')->nullable();
             $table->string('accreditation');
+            $table->string('sexe');
             $table->string('verification')->nullable();
+            $table->date('naissance');
+
 			$table->timestamps();
 		});
     }
