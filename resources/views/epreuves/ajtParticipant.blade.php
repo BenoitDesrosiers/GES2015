@@ -6,10 +6,10 @@
 	<div class="panel-heading">
 		<h2>Ajouter un participant : {{$epreuve->nom}}</h2>
 	</div>
-	
+
+    {!! Form::open(array('action' => array('EpreuvesController@storeParticipants', $epreuve->id))) !!}
     <table class="table table-striped table-hover">
         <tbody>
-            {!! Form::open(array('action' => array('EpreuvesController@storeParticipants', $epreuve->id))) !!}
                 <!-- Dropdown -->
                 <?php $regionArray = ["Toutes les régions"]; ?>
                 @foreach ($regions as $region)
@@ -36,8 +36,8 @@
         {!! Form::submit('Appliquer', array('class' => 'btn btn-primary')) !!}
         <a href="{{ action('EpreuvesController@index') }}" class="btn btn-danger">Annuler</a>
     </div>
-            {!! Form::close() !!}
         {!! Form::close() !!}
+    {!! Form::close() !!}
 
     <script>
         var participants = {
@@ -47,8 +47,7 @@
                     nom:"{{ $participant->nom }}, {{ $participant->prenom }}",
                     region:"{{ $participant->region->nom }}",
                     participant_region_id:"{{ $participant->region->id }}",
-                    participant_id:"{{ $participant->id }}",
-                    is_check:"{{ $checked == " checked" ? 'true' : 'false' }}" // Vrm utile???
+                    participant_id:"{{ $participant->id }}"
                 },
             @endforeach
         };
