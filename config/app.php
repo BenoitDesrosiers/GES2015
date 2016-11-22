@@ -171,7 +171,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
     	App\Providers\BroadcastServiceProvider::class,
-    		
+
+        Zizaco\Entrust\EntrustServiceProvider::class,
+
     	/*
     	 * Pour réintroduire les helpers HTML et FORM
     	 */
@@ -183,6 +185,7 @@ return [
 		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         
         'MaddHatter\LaravelFullcalendar\ServiceProvider',
+
 
     ],
 
@@ -233,11 +236,15 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-    		
+
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+
     	'Form' 		=> 'Collective\Html\FormFacade',
     	'Html' 		=> 'Collective\Html\HtmlFacade',
 
         'Calendar' => 'MaddHatter\LaravelFullcalendar\Facades\Calendar',
+
+
 
     ],
 
