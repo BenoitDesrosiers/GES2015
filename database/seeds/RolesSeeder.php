@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Role;
+use App\Models\RolePourDelegue;
 
 class RolesTableSeeder extends Seeder {
 
@@ -19,9 +19,9 @@ class RolesTableSeeder extends Seeder {
 		["Accompagnateur","Un accompagnateur accompagne un athlète pour qu'il ne soit pas seul."]
 		];
 
-		DB::table('roles')->delete();
+		DB::table('roles_pour_delegues')->delete();
 		foreach($items as $item) {
-			$role = new Role();
+			$role = new RolePourDelegue();
 		    $role->nom = $item[0];
 		    $role->description = $item[1];
             $role->save();	

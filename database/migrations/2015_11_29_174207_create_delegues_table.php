@@ -17,7 +17,7 @@ class CreateDeleguesTable extends Migration
 			$table->string('nom');
 			$table->string('prenom');
 			$table->unsignedInteger('region_id');
-			$table->unsignedInteger('role_id');
+			$table->unsignedInteger('role_pour_delegue_id');
 			$table->boolean('accreditation');
 			$table->boolean('sexe');
 			$table->date('date_naissance');
