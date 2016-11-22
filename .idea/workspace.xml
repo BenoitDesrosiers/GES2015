@@ -27,8 +27,8 @@
       <file leaf-file-name="ajtParticipant.blade.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/epreuves/ajtParticipant.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="900">
-              <caret line="39" column="4" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="4" />
+            <state relative-caret-position="347">
+              <caret line="44" column="90" selection-start-line="44" selection-start-column="90" selection-end-line="44" selection-end-column="90" />
               <folding />
             </state>
           </provider>
@@ -37,8 +37,8 @@
       <file leaf-file-name="trierParticipants.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/trierParticipants.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="67" column="32" selection-start-line="67" selection-start-column="32" selection-end-line="67" selection-end-column="32" />
+            <state relative-caret-position="800">
+              <caret line="71" column="39" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -78,8 +78,8 @@
         <option value="$PROJECT_DIR$/tests/MenuDeroulant.php" />
         <option value="$PROJECT_DIR$/resources/views/delegues/create.blade.php" />
         <option value="$PROJECT_DIR$/storage/framework/views/bb159429780aa94f12165dd867d3d655d3b1ad5e.php" />
-        <option value="$PROJECT_DIR$/public/js/trierParticipants.js" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/EpreuvesController.php" />
+        <option value="$PROJECT_DIR$/public/js/trierParticipants.js" />
         <option value="$PROJECT_DIR$/resources/views/epreuves/ajtParticipant.blade.php" />
       </list>
     </option>
@@ -515,12 +515,12 @@
       <workItem from="1479733784645" duration="1110000" />
       <workItem from="1479736201287" duration="618000" />
       <workItem from="1479774921712" duration="868000" />
-      <workItem from="1479820244351" duration="4293000" />
+      <workItem from="1479820244351" duration="5389000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="125539000" />
+    <option name="totallyTimeSpent" value="126635000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2869" y="-11" width="2182" height="1312" extended-state="6" />
@@ -928,16 +928,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/trierParticipants.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="67" column="32" selection-start-line="67" selection-start-column="32" selection-end-line="67" selection-end-column="32" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/EpreuvesController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="922">
@@ -948,10 +938,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/trierParticipants.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="800">
+          <caret line="71" column="39" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/epreuves/ajtParticipant.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="39" column="4" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="4" />
+        <state relative-caret-position="347">
+          <caret line="44" column="90" selection-start-line="44" selection-start-column="90" selection-end-line="44" selection-end-column="90" />
           <folding />
         </state>
       </provider>

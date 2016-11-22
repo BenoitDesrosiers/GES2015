@@ -40,6 +40,10 @@
     {!! Form::close() !!}
 
     <script>
+        /**
+         * Mets les informations de tous les participants dans une variable de
+         * type javascript pour pouvoir les trier et les afficher selon la région choisie.
+        */
         var participants = {
             @foreach($participants as $participant)
                 {{ $participant->id }}: {
