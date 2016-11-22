@@ -35,7 +35,7 @@ class Delegue extends EloquentValidating {
      */
     public function idRoles() { //FIXME: Cette fonction ne devrait pas exister, le délégué ne devrait pas exposer la structure des des roles.  Faudrait changer le code qui s'en sert.
         $idRoles = [];
-        foreach($this->rolesPourDelegues as $role) {
+        foreach($this->rolesPourDelegues() as $role) {
             $idRoles[] = $role->id;
         }
         return $idRoles;
@@ -47,7 +47,7 @@ class Delegue extends EloquentValidating {
      * @return int Le nombre de rôles.
      */
     public function nombreRoles() {
-        return $this->rolesPourDelegue->count();
+        return $this->rolesPourDelegue()->count();
     }
 
 

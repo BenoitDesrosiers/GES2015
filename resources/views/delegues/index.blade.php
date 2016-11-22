@@ -29,7 +29,7 @@
 							@if ($delegue->nombreRoles() >= 2)
 								<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherRoles(this)"/>
 							@elseif ($delegue->nombreRoles() == 1)
-								@foreach($delegue->roles as $role)
+								@foreach($delegue->rolesPourDelegues as $role)
 									<a href="{!! action('RolesController@show', $role->id) !!}">
 										{!! $role->nom !!}
 									</a>
@@ -44,13 +44,13 @@
 													un script js est appelé pour tous les form qui ont un "data-confirm" (voir assets/js/script.js) --}}
 						</td>
 						<!--	Afficher tous les rôles du délégué	 -->
-						@if(!$delegue->roles->isEmpty())
+						@if(!$delegue->rolesPourDelegues->isEmpty())
 							<tr class="active rangeeMembres">
 								<td/>
 								<td/>
 								<td colspan="5">
 									<ul>
-										@foreach($delegue->roles as $role)
+										@foreach($delegue->rolesPourDelegues as $role)
 											<li>
 												<a href="{!! action('RolesController@show', $role->id) !!}">
 													{!! $role->nom !!}

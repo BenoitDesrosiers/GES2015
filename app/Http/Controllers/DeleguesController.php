@@ -10,7 +10,7 @@ use DateTime;
 
 use App\Models\Delegue;
 use App\Models\Region;
-use App\Models\Role;
+use App\Models\RolesPourDelegue;
 use App\Models\DelegueCourriel;
 use App\Models\DelegueTelephone;
 
@@ -50,7 +50,7 @@ class DeleguesController extends BaseController {
 			
 			$regions = Region::all();
             $telephones = array();
-			$roles = Role::all();
+			$roles = RolesPourDelegue::all();
 			//      La date par défaut du formulaire est <cette année> - 20 ans
 			//      pour être plus prêt de l'âge moyen attendu
 			$anneeDefaut = date('Y')- 20;
@@ -124,12 +124,12 @@ class DeleguesController extends BaseController {
                 //		Associer les rôles au délégué.
                 if ($roles) {
                     if (is_array($roles)) {
-                        $delegue->roles()->sync($roles);
+                        $delegue->rolesPourDelegues()->sync($roles);
                     } else {
-                        $delegue->roles()->sync([$roles]);
+                        $delegue->rolesPourDelegues()->sync([$roles]);
                     }
                 } else {
-                    $delegue->roles()->detach();
+                    $delegue->rolesPourDelegues()->detach();
                 }
                 return Redirect::action('DeleguesController@index');
             } else {
@@ -170,7 +170,7 @@ class DeleguesController extends BaseController {
 		try {
 			$delegue = Delegue::findOrFail($id);
 			$regions = Region::all();
-			$roles = Role::all();
+			$roles = RolesPourDelegue::all();
 			$postes = $delegue->idRoles();
 			//      Si de vieilles entrées n'ont pas de date de naissance, on utilise les valeurs par défaut
 			$anneeDefaut = date('Y')- 20;
@@ -265,12 +265,12 @@ class DeleguesController extends BaseController {
 			    //		Associer les rôles au délégué
 				if ($roles) {
 					if (is_array($roles)) {
-						$delegue->roles()->sync($roles);
+						$delegue->rolesPourDelegues()->sync($roles);
 					} else {
-						$delegue->roles()->sync([$roles]);
+						$delegue->rolesPourDelegues()->sync([$roles]);
 					}
 				} else {
-					$delegue->roles()->detach();
+					$delegue->rolesPourDelegues()->detach();
 				}
                 DB::commit();
 				return Redirect::action('DeleguesController@index');
