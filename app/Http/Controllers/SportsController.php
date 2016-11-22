@@ -213,10 +213,9 @@ class SportsController extends BaseController {
 	 * @return boolean
 	 */
 	protected function verifier_existence($arbitresAEntrer) {
-		if (is_array($arbitresAEntrer) AND ($arbitresAEntrer[0] != "0") AND ($arbitresAEntrer[0] !="")) {
-			$retour = TRUE;
-		}
-		return $retour;
+		return (is_array($arbitresAEntrer) AND ($arbitresAEntrer[0] != "0") AND ($arbitresAEntrer[0] !=""));
+
+		
 	}
 	
 	/**
