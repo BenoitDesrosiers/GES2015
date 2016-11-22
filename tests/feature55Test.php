@@ -20,19 +20,8 @@ class feature55Test extends TestCase
         	->see('Liste des cafétérias');
     }
 
-    /**
-     * Si on appuie sur cafétéria dans le menu, on arrive à l'index des cafétérias.
-     * @test
-     * @return void
-     */
-    public function le_bouton_de_cafeteria_existe_dans_le_menu()
-    {
-    	$this->connexion();
-    	$this->visit('/')
-    		->press('cafeterias')
-    		->assertRedirectTo('/');
-    }
-
+    
+    
     private function connexion()
     {
     	$user = User::where('email', 'usager@chose.com')->firstOrFail();
