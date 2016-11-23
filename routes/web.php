@@ -22,48 +22,54 @@ Route::get('/tableau_participants', 'sportParticipantController@listerParticipan
 
 Auth::routes();
 
-Route::group(['middleware'=>'auth'], function() {
+Route::group(['middleware' => ['role:admin']], function (){
+    Route::resource('users', 'UserController');
+});
 
-	Route::resource('organismes','OrganismesController');
-	
-	Route::resource('sports','SportsController');
-	Route::resource('sports.epreuves','SportsEpreuvesController');
-	Route::resource('sports.participants','sportParticipantController');
-	Route::resource('sports.arbitres', 'SportsArbitresController');
-	
-	Route::get ( 'ajtParticipant/{epreuveId}', 'EpreuvesController@ajtParticipant' );
-	Route::post ( 'storeParticipants/{epreuveId}', 'EpreuvesController@storeParticipants' );
-	Route::get ( 'listeParticipant/{epreuveId}', 'EpreuvesController@listeParticipant' );
-	
-	Route::resource('epreuves','EpreuvesController');
-	Route::resource('participants','ParticipantsController');
-	Route::resource('resultats','ResultatsController');
-	Route::resource('systeme', 'SystemeController');
-	Route::resource('arbitres','ArbitresController');
-	Route::resource('terrains','TerrainsController');
-	Route::resource('equipes','EquipesController');
+Route::group(['middleware' => ['role:admin|responsable']], function (){
+    Route::resource('organismes','OrganismesController');
+    Route::resource('sports','SportsController');
+    Route::resource('sports.epreuves','SportsEpreuvesController');
+    Route::resource('sports.participants','sportParticipantController');
+    Route::resource('sports.arbitres', 'SportsArbitresController');
+
+    Route::get ( 'ajtParticipant/{epreuveId}', 'EpreuvesController@ajtParticipant' );
+    Route::post ( 'storeParticipants/{epreuveId}', 'EpreuvesController@storeParticipants' );
+    Route::get ( 'listeParticipant/{epreuveId}', 'EpreuvesController@listeParticipant' );
+
+    Route::resource('epreuves','EpreuvesController');
+    Route::resource('participants','ParticipantsController');
+    Route::resource('resultats','ResultatsController');
+    Route::resource('systeme', 'SystemeController');
+    Route::resource('arbitres','ArbitresController');
+    Route::resource('terrains','TerrainsController');
+    Route::resource('equipes','EquipesController');
     Route::resource('benevoles','BenevolesController');
-	Route::resource('roles','RolesPourDeleguesController');
-	Route::resource('codes','CodesController');
-	Route::resource('taches','TachesController');
-	Route::resource('disponibilites','DisponibilitesController');
-	Route::resource('conditionsParticulieres','ConditionsParticulieresController');
+    Route::resource('roles','RolesPourDeleguesController');
+    Route::resource('codes','CodesController');
+    Route::resource('taches','TachesController');
+    Route::resource('disponibilites','DisponibilitesController');
+    Route::resource('conditionsParticulieres','ConditionsParticulieresController');
 
-	Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');
-	Route::resource('pointages','PointagesController');
+    Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');
+    Route::resource('pointages','PointagesController');
 
-	Route::resource('delegues','DeleguesController');
+    Route::resource('delegues','DeleguesController');
 
-	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
-	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
-	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
-	Route::post('participants/recherche','ParticipantsController@recherche');
-	Route::post('resultatPourEvenementResultats', 'ResultatsController@resultatPourEvenement');
+    Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
+    Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
+    Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
+    Route::post('participants/recherche','ParticipantsController@recherche');
+    Route::post('resultatPourEvenementResultats', 'ResultatsController@resultatPourEvenement');
     Route::resource('benevoles','BenevolesController');
 
-	Route::resource('roles','RolesPourDeleguesController');
+    Route::resource('roles','RolesPourDeleguesController');
     Route::resource('evenements','EvenementsController');
+});
 
+Route::group(['middleware' => ['role:admin|responsable|employe']], function (){
+    Route::resource('usagers', 'UserController',
+        ['only' => ['monCompte']]);
 });
 
 
