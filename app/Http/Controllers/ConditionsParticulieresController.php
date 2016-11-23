@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConditionParticuliere;
 use Illuminate\Http\Request;
 use View;
 
@@ -21,6 +22,12 @@ class ConditionsParticulieresController extends Controller
 	 * @return \Illuminate\Contracts\View\View La page d'index des conditions particulières.
 	 */
 	public function index() {
-		return View::make('conditionsParticulieres.index');
+		return View::make('conditionsParticulieres.index',
+			['conditionsParticulieres' => ConditionParticuliere::all()]);
+	}
+
+	public function show($id) {
+		return View::make('conditionsParticulieres.show',
+			['condition' => ConditionParticuliere::find($id)]);
 	}
 }
