@@ -16,16 +16,6 @@ class Permission extends EntrustPermission
     protected $guarded = array('id');
 
     /**
-     * Eloquent relationship: une permission a 0 ou plusieurs rôles.
-     *
-     * @return Role[]
-     */
-
-    public function roles() {
-        return $this->belongsToMany('App\Models\Role', 'permission_role', 'permission_id', 'role_id');
-    }
-
-    /**
      * Validation
      *
      * Une permission doit avoir:

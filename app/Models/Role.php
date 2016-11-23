@@ -10,31 +10,13 @@ namespace App\Models;
 
 
 use Zizaco\Entrust\EntrustRole;
+use Zizaco\Entrust\Traits\EntrustRoleTrait;
 
 class Role extends EntrustRole
 {
+    use EntrustRoleTrait;
+
     protected $guarded = array('id');
-
-    /**
-     * Eloquent relationship: un rôle d'usager a 0 ou plusieurs usagers.
-     *
-     * @return User[]
-     */
-
-    public function Usagers() {
-        return $this->belongsToMany('App\Models\Role', 'role_user', 'role_id', 'user_id');
-    }
-
-    /**
-     * Eloquent relationship: un rôle d'usager a 0 ou plusieurs permissions
-     *
-     * @return Permission[]
-     */
-
-    public function Permissions() {
-        return $this->belongsToMany('App\Models\Permission', 'permission_role', 'role_id', 'permission_id');
-    }
-
 
     /**
      * Validation

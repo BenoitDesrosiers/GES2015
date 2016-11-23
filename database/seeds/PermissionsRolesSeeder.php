@@ -22,7 +22,7 @@ class PermissionsRolesSeederTable extends Seeder
         foreach($items as $item) {
             $groupe_Permissions = $item[1];
             foreach($groupe_Permissions as $permission){
-                $roles[$item[0]]->Permissions()->attach($permissions[$permission]);
+                $roles[$item[0]]->attachPermission($permissions[$permission]);
             }
         }
     }

@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Models\EloquentValidating;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -20,15 +19,6 @@ class User extends Model  implements AuthenticatableContract, CanResetPasswordCo
      * @var string
      */
     protected $table = 'users';
-
-    /**
-     * Eloquent relationship: Un usager peut avoir entre 0 et plusieurs rôles.
-     *
-     * @return role[]
-     */
-    public function roles() {
-        return $this->belongsToMany('App\Models\Role', 'role_user', 'user_id', 'role_id');
-    }
 
     /**
      * The attributes that are mass assignable.
