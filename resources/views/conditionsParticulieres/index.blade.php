@@ -10,18 +10,19 @@
 
 @extends('layout')
 @section('content')
+    <link rel="stylesheet" href="{!! asset('/css/conditionsParticulieres/index.css') !!}">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2>Conditions particulières</h2>
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid" id="conteneur-conditions-particulieres">
             <div class="row">
                 <div class="col-xs-6">
                     <strong>Condition particulière</strong>
                 </div>
             </div>
             @foreach($conditionsParticulieres as $condition)
-                <div class="row contenu-condition-particuliere">
+                <div class="row contenu-condition-particuliere flex-ran">
                     <div class="col-xs-8">
                         <a href="{!! URL::route('conditionsParticulieres.show', $condition->id) !!}">
                             {{ $condition->nom }}

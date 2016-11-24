@@ -10,6 +10,7 @@
 
 @extends('layout')
 @section('content')
+    <link rel="stylesheet" href="{!! asset('/css/conditionsParticulieres/index.css') !!}">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2>{{ $condition->nom }}</h2>
@@ -22,6 +23,14 @@
                 @else
                     <em>Aucune description.</em>
                 @endif
+            </div>
+            <div class="row">
+                <strong>Créée le:</strong>
+                <span>{!! $condition->created_at !!}</span>
+            </div>
+            <div class="row">
+                <strong>Modifiée le:</strong>
+                <span>{!! $condition->updated_at !!}</span>
             </div>
             <div class="row">
                 <a href="{!! URL::route('conditionsParticulieres.index') !!}" class="btn btn-md btn-primary">Retour</a>

@@ -1,0 +1,34 @@
+/*******************************************************************************
+Fichier: index.css
+Description: Feuille de style pour la page d'index d'une condition particulière.
+Créé le: 161124
+Modifié le: 161124
+Par: Res260
+*******************************************************************************/
+
+.flex-col {
+	display:flex;
+	flex-direction:column;
+	height:100%;
+}
+
+.flex-ran {
+	display:flex;
+	flex-direction: row;
+	height:100%;
+}
+
+.flex-ran >*, .flex-col >*,
+.flex-ran-pas-mobile >*, .flex-col-pas-mobile >* {
+	flex:0 1 auto;
+	align-self:center;
+}
+
+#conteneur-conditions-particulieres>.row {
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+#conteneur-conditions-particulieres>.row:nth-child(2n) {
+	background:rgb(230,230,230);
+}
