@@ -54,7 +54,7 @@
 
 				};
 
-				if ('<?php if ($proportionGenre[0] > 0){
+				if ('<?php if ($proportionGenre[0] > 0){ // <<< echo $proportionGenre[0] >0  ???? 
 							echo true;
 						}else{
 							echo false;
@@ -78,9 +78,9 @@
 				if ('<?php if (($proportionGenre[0] > 0) && ($proportionGenre[1] > 0)){
 							echo true;
 						}else{
-							echo false;
+							echo false;    //<<<<<< eee ca fait quoi la ligne ci-dessous ?
 						}?>'){
-					document.getElementById('genre')
+					document.getElementById('genre')   
 
 				}
 			</script>

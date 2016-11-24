@@ -72,7 +72,7 @@ class EpreuvesController extends BaseController {
             if($epreuve->genre == 'mixte'){
                 $participants = $sport->participants->sortBy('prenom');
             }else{
-                $genreRequis = ($epreuve->genre == 'féminin');
+                $genreRequis = ($epreuve->genre == 'féminin'); //<<<< méchant hack de logique, j'ai du aller voir dans la BD pour comprendre 
                 $participants = $sport->participants->where('sexe',$genreRequis)->sortBy('prenom');
             }
 			$epreuveParticipants = ($epreuve::find($epreuveId)->participants);
@@ -147,7 +147,7 @@ class EpreuvesController extends BaseController {
             // masculin (false) ou féminin (true)
             $participantsMasculin = $epreuve->participants->where('sexe', false);
             $participantsFeminin = $epreuve->participants->where('sexe', true);
-            $proportionGenre = array(count($participantsMasculin),count($participantsFeminin));
+            $proportionGenre = array(count($participantsMasculin),count($participantsFeminin)); //<<<<< ca serait beaucoup plus lisible avec un array associative
 			$arbitres = EpreuvesController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresEpreuves);
 			//FIXME: au lieu d'avoir une fonction pour filtrer les arbitres déjà associés à une épreuve, on peut se servir du whereNotIn
 			//       et fournir la liste des ids des arbitresEpreuves
@@ -339,7 +339,7 @@ class EpreuvesController extends BaseController {
             $epreuve = Epreuve::findOrFail ( $epreuveId );
             $participants = $epreuve->participants;
             if ($epreuve->genre != 'mixte'){
-                $genreRequis = $epreuve->genre == 'féminin';
+                $genreRequis = $epreuve->genre == 'féminin'; // <<<< ici aussi, la logique est assez difficile à saisir. 
                 $participants = $epreuve->participants->where('sexe',$genreRequis);
             }
             return $participants;
