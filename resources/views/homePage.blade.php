@@ -19,7 +19,8 @@
 		<a class="btn btn-lg btn-success" href="{{ action('PointagesController@index') }}" role="button">Pointages</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('TerrainsController@index') }}" role="button">Terrains</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('EvenementsController@index') }}" role="button">Événements</a></p>
-		<a class="btn btn-lg btn-success" href="{{ action('CodesController@index') }}" role="button">Codes</a></p>	
+		<a class="btn btn-lg btn-success" href="{{ action('CodesController@index') }}" role="button">Codes</a></p>
+		<a class="btn btn-lg btn-success" href="{{ action('PostesController@index') }}" role="button">Postes</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('AboutController@index') }}" role="button">À propos</a></p>
 
 	</div>

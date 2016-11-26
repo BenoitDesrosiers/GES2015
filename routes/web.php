@@ -47,6 +47,7 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('codes','CodesController');
 	Route::resource('taches','TachesController');
     Route::resource('disponibilites','DisponibilitesController');
+    Route::resource('postes','PostesController');
 
 	Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');
 	Route::resource('pointages','PointagesController');

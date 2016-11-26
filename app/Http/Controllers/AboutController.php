@@ -119,11 +119,16 @@ class AboutController extends BaseController {
                     "CRUD des organismes."
                 ),
 
-
             	array(
             		"Francis Mathieu",
            			"Ajouter un arbitre à un sport"
             	),
+
+                array(
+                    "Nicolas Bisson",
+                    "Grouper les participants par région dans 'Ajouter un participant à une épreuve'.
+                    CRUD des postes pour les bénévoles."
+                ),
             )
         );
 

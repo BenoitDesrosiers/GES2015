@@ -40,6 +40,7 @@
 					<li<?php if ($route == "codes") { ?> class="active"<?php } ?>><a href="{{ action('CodesController@index') }}">Codes</a></li>
 					<li<?php if ($route == "delegues") { ?> class="active"<?php } ?>><a href="{{ action('DeleguesController@index') }}">Délégués</a></li>
 					<li<?php if ($route == "roles") { ?> class="active"<?php } ?>><a href="{{ action('RolesController@index') }}">Rôles</a></li>
+					<li<?php if ($route == "routes") { ?> class="active"<?php } ?>><a href="{{ action('PostesController@index') }}">Postes</a></li>
           			@if (Auth::user() == "")
           				<li><a href="{{ url('/login') }}">Connexion</a></li>
           				<li><a href="{{ url('/register') }}">Inscription</a></li>
