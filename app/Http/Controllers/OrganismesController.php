@@ -62,7 +62,8 @@ class OrganismesController extends Controller
     public function show($id)
     {
         $organisme = Organisme::findOrFail($id);
-        return View::make('organismes.show', compact('organisme'));
+        $contacts = Contact::all();
+        return View::make('organismes.show', compact('organisme', 'contacts'));
     }
 
     /**
@@ -103,6 +104,10 @@ class OrganismesController extends Controller
     public function destroy($id)
     {
         $organisme = Organisme::findOrFail($id);
+        $contacts = Contact::where('organisme_id', $id)->get();
+        foreach ($contacts as $contact) {
+            $contact->delete();
+        }
         $organisme->delete(); //FIXME: proteger par un try/catch et une transaction
         return Redirect::action('OrganismesController@index');
     }
