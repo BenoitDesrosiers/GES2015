@@ -11,9 +11,18 @@
 @extends('layout')
 @section('content')
     <link rel="stylesheet" href="{!! asset('/css/conditionsParticulieres/index.css') !!}">
+    @if(Session::has('message'))
+        <div class="alert {!! Session::has('alert-class')
+                                ? Session::get('alert-class')
+                                : 'alert-info' !!}">
+            <span>{!! Session::get('message') !!}</span>
+        </div>
+    @endif
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2>Conditions particulières</h2>
+            <a href="{!! URL::route('conditionsParticulieres.create') !!}"
+               class="btn btn-md btn-info">Créer une condition particulière</a>
         </div>
         <div class="container-fluid" id="conteneur-conditions-particulieres">
             <div class="row">
@@ -33,8 +42,10 @@
                                 class="btn btn-md btn-primary">Modifier</button>
                     </div>
                     <div class="col-xs-2">
-                        <button href="{!! URL::route('conditionsParticulieres.destroy', $condition->id) !!}"
-                                class="btn btn-md btn-danger">Supprimer</button>
+                       {!! Form::open(['method' => 'delete', 'route' => ['conditionsParticulieres.destroy', $condition->id]]) !!}
+
+                            <button type="submit" class="btn btn-md btn-danger">Supprimer</button>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             @endforeach

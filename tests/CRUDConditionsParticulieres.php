@@ -11,12 +11,26 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
  * conditions particulières.
  *
  * @author Res260
- * @created_at 160022
- * @modified_at 160022
+ * @created_at 161122
+ * @modified_at 161126
  */
 class CRUDConditionsParticulieres extends TestCase
 {
-	public function test1() {
+	/**
+	 * Débute une transaction pour les tests.
+	 * DOIT ÊTRE LE PREMIER TEST.
+	 */
+	public function testDebut() {
+		DB::beginTransaction();
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * Fait un rollback des tests.
+	 * DOIT ÊTRE LE DERNIER TEST.
+	 */
+	public function testFin() {
+		DB::rollback();
 		$this->assertTrue(true);
 	}
 }
