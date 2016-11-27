@@ -32,4 +32,31 @@ class DisponibilitesBenevoles extends TestCase
     			'end'=>$disponibilite->end
     	]);
     }
+    
+    /**
+     * @test
+     * La date peut être entrée dans le format AAAA-MM-JJ HH:MM:SS
+     */
+    public function le_format_date_aaaa_mm_jj_hh_mm_ss_est_valide()
+    {
+    	$disponibilite = new disponibilite;
+    	$disponibilite->start = "2000-12-25 10:00:00";
+    	$this->assertTrue("2000-12-25 10:00:00"==$disponibilite->start);
+    	$disponibilite->start = "1999-12-25 10:00:00";
+    	$this->assertTrue("1999-12-25 10:00:00"==$disponibilite->start);
+    	$disponibilite->start = "3000-12-25 10:00:00";
+    	$this->assertTrue("3000-12-25 10:00:00"==$disponibilite->start);
+    	$disponibilite->start = "1869-12-25 10:00:00";
+    	$this->assertTrue("1869-12-25 10:00:00"==$disponibilite->start);
+    	
+    	$disponibilite->end = "2000-12-25 10:00:00";
+    	$this->assertTrue("2000-12-25 10:00:00"==$disponibilite->end);
+    	$disponibilite->end = "1999-12-25 10:00:00";
+    	$this->assertTrue("1999-12-25 10:00:00"==$disponibilite->end);
+    	$disponibilite->end = "3000-12-25 10:00:00";
+    	$this->assertTrue("3000-12-25 10:00:00"==$disponibilite->end);
+    	$disponibilite->end = "1869-12-25 10:00:00";
+    	$this->assertTrue("1869-12-25 10:00:00"==$disponibilite->end);
+    
+    }
 }
