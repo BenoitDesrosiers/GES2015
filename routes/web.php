@@ -47,6 +47,11 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('codes','CodesController');
 	Route::resource('taches','TachesController');
     Route::resource('disponibilites','DisponibilitesController');
+    Route::get('disponibilites/{id}/create', 'DisponibilitesController@create');
+    Route::post('disponibilites/store', 'DisponibilitesController@store');
+    Route::get('disponibilites/{id}/show', 'DisponibilitesController@showDisponibilites');
+    Route::post('disponibilites/update', 'DisponibilitesController@update');
+    Route::post('disponibilites/destroy', 'DisponibilitesController@destroy');
 
 	Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');
 	Route::resource('pointages','PointagesController');
