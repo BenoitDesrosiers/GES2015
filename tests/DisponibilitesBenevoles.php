@@ -12,7 +12,7 @@ class DisponibilitesBenevoles extends TestCase
 	
 	/**
 	 * @test
-	 * Sauvegarder les disponibilités dans une BD
+	 * Sauvegarder les disponibilitÃ©s dans une BD
 	 */
     public function sauvegarde_d_un_bon_modele()
     {
