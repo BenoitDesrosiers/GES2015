@@ -16,7 +16,7 @@ class DisponibilitesBenevoles extends TestCase
 	 */
     public function sauvegarde_d_un_bon_modele()
     {
-    	$disponibilite = new Disponibilite;
+    	$disponibilite = new disponibilite;
     	$disponibilite->benevole_id = "1";
     	$disponibilite->title = 'test';
     	$disponibilite->isAllDay = "0";
