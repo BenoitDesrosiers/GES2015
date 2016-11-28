@@ -1,13 +1,15 @@
 {{-----------------------------------------------------------------
-| create.blade.php
-| Description: Page de création pour une condition particulière.
-| Créé le: 161126
+| edit.blade.php
+| Description: Page de modification pour une condition particulière.
+|              $condition doit être accessible et être une
+|              ConditionParticuliere.
+| Créé le: 161127
 | Modifié le: 161127
 | Par: Res260
 -----------------------------------------------------------------}}
 
 @extends('conditionsParticulieres.master')
-@section('titrePageConditionParticuliere', 'Créer une condition particulière')
+@section('titrePageConditionParticuliere', 'Modifier: ' . $condition->nom)
 @section('contenu')
     @if(count($errors) > 0)
         <div class="alert alert-danger">
@@ -17,21 +19,23 @@
             @endforeach
         </div>
     @endif
-    <form method="POST" action="{!! URL::route('conditionsParticulieres.store') !!}">
-        {!! csrf_field() !!}
+    {!! Form::open(['action' => ['ConditionsParticulieresController@update', $condition->id],
+                    'method' => 'PUT']) !!}
         <div class="container-fluid">
             <div class="form-group {!! $errors->has('nom') ? 'has-error' : '' !!}">
                 <label for="nom">Nom:</label>
-                <input type="text" id="nom" name="nom" class="form-control" />
+                <input type="text" id="nom" name="nom"
+                       value="{{ $condition->nom }}" class="form-control" />
             </div>
             <div class="form-group {!! $errors->has('description') ? 'has-error' : '' !!}">
                 <label for="description">Description:</label>
-                <input type="text" id="description" name="description" class="form-control" />
+                <input type="text" id="description" name="description"
+                       value="{{ $condition->description }}" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-success btn-md"
-                       value="Créer la condition particulière"/>
+                       value="Modifier la condition particulière"/>
             </div>
         </div>
-    </form>
+    {!! Form::close() !!}
 @endsection

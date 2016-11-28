@@ -6,7 +6,7 @@ use App;
 use App\Http\Requests\ConditionParticuliereRequest;
 use App\Models\ConditionParticuliere;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Redirect;
 use Session;
 use Throwable;
@@ -45,6 +45,24 @@ class ConditionsParticulieresController extends Controller
 	}
 
 	/**
+	 * Affiche la vue de mise à jour d'une condition particulière.
+	 *
+	 * @param int $id L'id de la condition particulière à modifier.
+	 *
+	 * @return \Illuminate\Contracts\View\View La vue de mise à jour
+	 *                                         d'une condition particulière.
+	 */
+	public function edit($id) {
+		try {
+				return View::make('conditionsParticulieres.edit',
+				['condition' => ConditionParticuliere::findOrFail($id)]);
+		} catch (ModelNotFoundException $e) {
+			App::abort(404);
+		}
+		return null;
+	}
+
+	/**
 	 * Enregistre une nouvelle condition particulière dans la base de données.
 	 *
 	 * @param ConditionParticuliereRequest $request La requête http avec les
@@ -62,6 +80,25 @@ class ConditionsParticulieresController extends Controller
 		return Redirect::to('/conditionsParticulieres/' . $condition->id);
 	}
 
+	/**
+	 * Met a jour la condition particulière #$id.
+	 *
+	 * @param ConditionParticuliereRequest $request
+	 * @param int                          $id
+	 *
+	 * @return \Illuminate\Http\RedirectResponse Une redirection
+	 *                                           vers la page d'index.
+	 */
+	public function update(ConditionParticuliereRequest $request, $id) {
+		$condition = ConditionParticuliere::findOrFail($id);
+		$condition->update($request->all());
+		$condition->save();
+		Session::flash('message', 'La condition particulière 
+								   a été mise à jour avec succès!');
+		Session::flash('alert-class', 'alert-success');
+		return Redirect::to('/conditionsParticulieres');
+	}
+
 
 	/**
 	 * Affiche les détails de la condition particulière.
@@ -74,10 +111,7 @@ class ConditionsParticulieresController extends Controller
 		try {
 			return View::make('conditionsParticulieres.show',
 				['condition' => ConditionParticuliere::findOrFail($id)]);
-		} catch (Throwable $t) {
-			// POUR PHP 7 (BIENVENUE DANS LE FUTUR)
-			App::abort(404);
-		} catch (Exception $e) {
+		} catch (ModelNotFoundException $e) {
 			// POUR PHP 5 (pour benou)
 			App::abort(404);
 		}

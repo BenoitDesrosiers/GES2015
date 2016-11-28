@@ -4,7 +4,7 @@
 |              $conditionsParticulières doit être un array de
 |              ConditionParticuliere.
 | Créé le: 161120
-| Modifié le: 161122
+| Modifié le: 161127
 | Par: Res260
 -----------------------------------------------------------------}}
 
@@ -30,8 +30,8 @@
                 </a>
             </div>
             <div class="col-xs-2">
-                <button href="{!! URL::route('conditionsParticulieres.edit', $condition->id) !!}"
-                        class="btn btn-md btn-primary">Modifier</button>
+                <a href="{!! URL::route('conditionsParticulieres.edit', $condition->id) !!}"
+                        class="btn btn-md btn-primary">Modifier</a>
             </div>
             <div class="col-xs-2">
                {!! Form::open(['method' => 'delete', 'route' => ['conditionsParticulieres.destroy', $condition->id]]) !!}

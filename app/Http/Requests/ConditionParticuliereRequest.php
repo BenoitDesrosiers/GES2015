@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * Class ConditionParticuliereRequest
@@ -34,8 +35,15 @@ class ConditionParticuliereRequest extends FormRequest
      */
     public function rules()
     {
+    	$id = isset($this->segments()[1])
+		      ? $this->segments()[1]
+		      : null;
 		return [
-			'nom' => 'string|required|unique:conditions_particulieres|min:1',
+			'nom' => ['string',
+					  'required',
+					  'min:1',
+					  Rule::unique('conditions_particulieres')
+						  ->ignore($id)],
 			'description' => 'string'
 		];
     }

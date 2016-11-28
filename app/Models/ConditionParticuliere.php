@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rule;
 
 /**
  * Class ConditionParticuliere
@@ -48,7 +48,11 @@ class ConditionParticuliere extends EloquentValidating
 	 */
 	public function validationRules() {
 		return [
-			'nom' => 'string|required|unique:conditions_particulieres|min:1',
+			'nom' => [  'string',
+				'required',
+				'min:1',
+				Rule::unique('conditions_particulieres')
+					->ignore($this->id)],
 			'description' => 'string'
 		];
 	}
