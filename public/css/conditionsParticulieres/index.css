@@ -24,11 +24,11 @@ Par: Res260
 	align-self:center;
 }
 
-#conteneur-conditions-particulieres>.row {
+#conteneur-contenu>.row {
 	padding-top:5px;
 	padding-bottom:5px;
 }
 
-#conteneur-conditions-particulieres>.row:nth-child(2n) {
+#conteneur-contenu>.row:nth-child(2n) {
 	background:rgb(230,230,230);
 }

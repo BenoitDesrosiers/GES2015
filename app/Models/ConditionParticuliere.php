@@ -48,7 +48,7 @@ class ConditionParticuliere extends EloquentValidating
 	 */
 	public function validationRules() {
 		return [
-			'nom' => 'string|required|unique:conditions_particulieres',
+			'nom' => 'string|required|unique:conditions_particulieres|min:1',
 			'description' => 'string'
 		];
 	}

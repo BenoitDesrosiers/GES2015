@@ -26,7 +26,7 @@ class CRUDConditionsParticulieres extends TestCase
 	}
 
 	/**
-	 * Fait un rollback des tests.
+	 * Fait un rollback pour les tests.
 	 * DOIT ÊTRE LE DERNIER TEST.
 	 */
 	public function testFin() {
