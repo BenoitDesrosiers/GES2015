@@ -59,4 +59,19 @@ class DisponibilitesBenevoles extends TestCase
     	$this->assertTrue("1869-12-25 10:00:00"==$disponibilite->end);
     
     }
+    
+
+    /**
+     *
+    * @test
+    * Le test pour les routes de base d’un crud
+    */
+    public function les_routes_CRUD_existent()
+    {
+    	$this->visit("/disponibilites"); //index
+    	$this->visit("/disponibilites/create"); //create
+    	$this->visit("/disponibilites/edit"); //update
+    	$this->visit("/disponibilites/show"); //read
+    
+    }
 }
