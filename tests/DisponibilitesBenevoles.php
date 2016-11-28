@@ -63,9 +63,9 @@ class DisponibilitesBenevoles extends TestCase
 
     /**
      *
-    * @test
-    * Le test pour les routes de base d’un crud
-    */
+     * @test
+     * Le test pour les routes de base d’un crud
+     */
     public function les_routes_CRUD_existent()
     {
     	$this->visit("/disponibilites"); //index
