@@ -25,12 +25,13 @@
             <div class="form-group {!! $errors->has('nom') ? 'has-error' : '' !!}">
                 <label for="nom">Nom:</label>
                 <input type="text" id="nom" name="nom"
-                       value="{{ $condition->nom }}" class="form-control" />
+                       value="{{ old('nom') ? old('nom') : $condition->nom }}" class="form-control" required />
             </div>
             <div class="form-group {!! $errors->has('description') ? 'has-error' : '' !!}">
                 <label for="description">Description:</label>
                 <input type="text" id="description" name="description"
-                       value="{{ $condition->description }}" class="form-control" />
+                       value="{{ old('description') ? old('description') : $condition->description }}"
+                       class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-success btn-md"

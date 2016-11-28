@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Validation\Rule;
-
 /**
  * Class ConditionParticuliere
  *
@@ -28,7 +26,11 @@ class ConditionParticuliere extends EloquentValidating
 	 *
 	 * @var array La liste des valeurs qui ne peuvent être modifiées.
 	 */
-	protected $guarded = array('id');
+	protected $guarded = [
+		'id',
+		'created_at',
+		'updated_at'
+	];
 
 	protected $fillable = [
 		'nom',
@@ -43,17 +45,13 @@ class ConditionParticuliere extends EloquentValidating
 	/**
 	 * Retourne les règles de validation pour l'ajout
 	 * ou la modification d'une condition particulière.
+	 * Vide puisque les données sont validées dans
+	 * la ConditionParticuliereRequest.
 	 *
-	 * @return array Les règles de validation.
+	 * @return array Un array vide.
 	 */
 	public function validationRules() {
 		return [
-			'nom' => [  'string',
-				'required',
-				'min:1',
-				Rule::unique('conditions_particulieres')
-					->ignore($this->id)],
-			'description' => 'string'
 		];
 	}
 }

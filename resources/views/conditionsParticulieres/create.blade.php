@@ -19,14 +19,16 @@
     @endif
     <form method="POST" action="{!! URL::route('conditionsParticulieres.store') !!}">
         {!! csrf_field() !!}
-        <div class="container-fluid">
+        <div class="container-fluid no-padding">
             <div class="form-group {!! $errors->has('nom') ? 'has-error' : '' !!}">
                 <label for="nom">Nom:</label>
-                <input type="text" id="nom" name="nom" class="form-control" />
+                <input type="text" id="nom" name="nom" value="{{ old('nom') }}"
+                       class="form-control" required />
             </div>
             <div class="form-group {!! $errors->has('description') ? 'has-error' : '' !!}">
                 <label for="description">Description:</label>
-                <input type="text" id="description" name="description" class="form-control" />
+                <input type="text" id="description" name="description"
+                       value="{{ old('description') }}" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-success btn-md"

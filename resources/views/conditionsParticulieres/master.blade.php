@@ -9,6 +9,7 @@
 
 @extends('layout')
 @section('content')
+    <link rel="stylesheet" href="{!! asset('css/conditionsParticulieres/master.css') !!}">
     @stack('stylesheets')
     @if(Session::has('message'))
         <div class="alert {!! Session::has('alert-class')
