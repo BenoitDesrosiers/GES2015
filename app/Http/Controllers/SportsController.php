@@ -77,14 +77,14 @@ class SportsController extends BaseController {
 			$arbitresSports = $sport->arbitres;
 			$arbitres = SportsController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresSports);
 			if($sport->save()) {
-				if (is_array(Input::get('terrain'))) {
+				if (is_array(Input::get('terrain'))) { //FIXME: protéger par une transaction dans le try/catch
 					$sport->terrains()->sync(array_keys(Input::get('terrain')));
 				}
 				else {
 					$sport->terrains()->detach();
 				}
 				$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
-				//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
+				//Vérification qu'il y ait bien un arbitre à entrer dans la BD.
 				if (SportsController::verifier_existence($arbitresAEntrer)) {
 					 
 					$sport->arbitres()->sync($arbitresAEntrer);
@@ -164,7 +164,7 @@ class SportsController extends BaseController {
 			$sport->url_page_officielle = $input['url_page_officielle'];
 			$sport->tournoi = $input['tournoi'];
 			if($sport->save()) {
-				if (is_array(Input::get('terrain'))) {
+				if (is_array(Input::get('terrain'))) { //FIXME: protéger par une transaction dans le try/catch
                     $sport->terrains()->sync(array_keys(Input::get('terrain')));
                 } 
                 else {
@@ -199,7 +199,7 @@ class SportsController extends BaseController {
 	{
 		try {
 			$sport = Sport::findOrFail($id);
-			$sport->delete();
+			$sport->delete(); //FIXME: protéger par une transaction dans le try/catch
 			
 			return Redirect::action('SportsController@index');
 		} catch(Exception $e) {
@@ -209,22 +209,20 @@ class SportsController extends BaseController {
 
 	/**
 	 * Vérifie si les arbitres sont sous formes d'array et si il y en a 0, ça veut dire qu'il n'y a pas d'arbitres.
-	 * @param $arbitres
+	 * @param int $arbitresAEntrer
 	 * @return boolean
 	 */
 	protected function verifier_existence($arbitresAEntrer) {
-		if (is_array($arbitresAEntrer) AND ($arbitresAEntrer[0] != "0") AND ($arbitresAEntrer[0] !="")) {
-			$retour = TRUE;  //FIXME: pourquoi ne pas juste retourner le résultat du IF?
-		}else{
-			$retour = FALSE;
-		}
-		return $retour;
+		return (is_array($arbitresAEntrer) AND ($arbitresAEntrer[0] != "0") AND ($arbitresAEntrer[0] !=""));
+
+		
 	}
 	
 	/**
 	 * filtre les arbitres pour retirer ceux déjà attribués à un sport.
 	 * @param array $arbitres
 	 * @param array $arbitresSports
+	 * @return $arbitres
 	 */
 	protected function filtrer_arbitres($arbitres, $arbitresSports){
 		if ($arbitresSports){

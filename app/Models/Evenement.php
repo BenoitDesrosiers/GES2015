@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Evenement extends Model {
 	protected $guarded = array('id');
-
 	/** 
 	 * Eloquent relationship: un événement appartient à une épreuve
 	 */

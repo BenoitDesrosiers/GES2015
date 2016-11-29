@@ -5,6 +5,9 @@
 		<h2 class="panel-title">{{ $epreuve->nom }}</h2>
 	</div>
 	<div class="panel-body">
+		<p>
+			Genre: {{ucwords($epreuve->genre)}}
+		</p>
 		<p>Description: <?php if ($epreuve->description == "") {echo "Aucune description";} else {echo $epreuve->description;} ?></p>
 @if (count($arbitresEpreuves) > 0)
 		<div class="col-sm-4">

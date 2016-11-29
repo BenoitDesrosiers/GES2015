@@ -18,23 +18,24 @@
 namespace App\Models;
 
 class Epreuve extends EloquentValidating {
-	protected $guarded = array('id');
 
-/** 
- * Eloquent relationship: une épreuve appartient à un sport
- */
+    protected $guarded = array('id');
 
-public function sport() {
-	return $this->belongsTo('App\Models\Sport');
-}
+    /**
+     * Eloquent relationship: une épreuve appartient à un sport
+     */
 
-public function evenements() {
-	return $this->hasMany('App\Models\Evenement');
-}
-	
-public function participants() {
-	return $this->belongsToMany('App\Models\Participant');
-}
+    public function sport() {
+        return $this->belongsTo('App\Models\Sport');
+    }
+
+    public function evenements() {
+        return $this->hasMany('App\Models\Evenement');
+    }
+
+    public function participants() {
+        return $this->belongsToMany('App\Models\Participant');
+    }
 
 /**
  * Eloquent relationship: une épreuve est associée à plusieurs arbitres
@@ -59,13 +60,12 @@ public function terrains()
  *  - Les autres champs sont falcultatifs.
  */
 
-public $validationMessages;
+    public $validationMessages;
 
-public function validationRules() {
-	return [
-		'nom' => 'required',
-		];
-}
-
-
+    public function validationRules() {
+        return [
+            'nom' => 'required',
+            'genre' => 'in:masculin,féminin,mixte',
+            ];
+    }
 }
