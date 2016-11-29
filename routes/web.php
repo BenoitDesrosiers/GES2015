@@ -63,6 +63,9 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::resource('roles','RolesController');
     Route::resource('evenements','EvenementsController');
 
+	Route::get('/get_liste_evenements', 'EvenementsController@getListeEvenements');
+	Route::get('/get_liste_sports', 'EvenementsController@getListeSports');
+
 });
 
 

@@ -74,6 +74,7 @@
         		<p></p>
       		</div>
 			@yield('script')
+			@stack('scripts')
     	</div> <!-- /container -->
 	</body>
 </html>

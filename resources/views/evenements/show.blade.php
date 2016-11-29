@@ -6,6 +6,7 @@
     </div>
     <div class="panel-body">
         <p>Type: {{ $evenement->type->titre }}</p>
+        <p>Sport: {{ $evenement->epreuve->sport->nom }}</p>
         <p>Épreuve: {{ $evenement->epreuve->nom }}</p>
         <p>Date: {{ substr($evenement->date_heure, 0, 16) }}</p>
     </div>

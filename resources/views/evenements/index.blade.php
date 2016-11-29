@@ -16,19 +16,48 @@
         <p>Aucun événement</p>
     </div>
 @else
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover" id="liste_evenements">
         <thead>
             <tr>
         <!-- Titre des colonnes du tableau (s'adapte aux différentes dimensions selon les types de Bootstrap) -->
                 <th>Nom</th>
                 <th class="hidden-xs">Date</th>
+                <th class="hidden-xs"><a v-on:click="toggleInverse"><em>Sport</em></a></th>
                 <th class="hidden-xs">Type</th>
                 <th class="col-sm-1"></th>
                 <th class="col-sm-1"></th>
             </tr>
         </thead>
         <tbody>
-@foreach($evenements as $evenement)
+            <tr v-for="evenement in filteredData" :key="evenement.epreuve.sport.nom">
+                <td>
+                    <a :href="evenement.url_show">
+                        @{{ evenement.nom }}
+                    </a>
+                </td>
+                <td class="hidden-xs">
+                    @{{ evenement.date_heure }}
+                </td>
+                <td class="hidden-xs">
+                    @{{ evenement.epreuve.sport.nom }}
+                </td>
+                <td class="hidden-xs">
+                    @{{ evenement.type.titre }}
+                </td>
+                <td>
+                    <a :href="evenement.url_edit" class="btn btn-info">
+                        Modifier
+                    </a>
+                </td>
+                <td>
+                    {!! Form::open(array(':action' => 'evenement.url_destroy', 'method' => 'delete', 'onsubmit' => 'return confirmDelete()')) !!}
+                    <button type="submit" :href="evenement.url_destroy" class="btn btn-danger btn-mini confirm">
+                        Effacer
+                    </button>
+                    {!! Form::close() !!}
+                </td>
+            </tr>
+{{--@foreach($evenements as $evenement)
 
         <!-- Ajout de chaque événement de la base de données dans table des événements -->
             <tr>
@@ -39,6 +68,9 @@
                 </td>
                 <td class="hidden-xs">
                     {{$evenement->date_heure}}
+                </td>
+                <td class="hidden-xs">
+                    {{$evenement->epreuve->sport->nom}}
                 </td>
                 <td class="hidden-xs">
                     {{$evenement->type->titre}}
@@ -56,9 +88,14 @@
                     {!! Form::close() !!}
                 </td>
             </tr>
-@endforeach
+@endforeach--}}
         </tbody>
     </table>
 @endif
 </div>
 @stop
+
+@push('scripts')
+    <script src="{!! asset('js/vue.js') !!}"></script>
+    <script src="{!! asset('js/evenements_index.js') !!}"></script>
+@endpush

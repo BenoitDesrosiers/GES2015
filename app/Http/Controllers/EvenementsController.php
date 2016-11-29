@@ -159,4 +159,17 @@ class EvenementsController extends BaseController
             App::abort(404);
         }
     }
+
+    public function getListeEvenements() {
+		$evenements = Evenement::all();
+		foreach($evenements as $evenement) {
+			// Accès aux valeurs pour que le Eager Loading "fetch" les attributs
+			$evenement["nom_sport"] = $evenement->epreuve->sport->nom;
+			$evenement["titre_type"] = $evenement->type->titre;
+			$evenement["url_show"] = action("EvenementsController@show", ["id" => $evenement->id]);
+			$evenement["url_edit"] = action("EvenementsController@edit", ["id" => $evenement->id]);
+			$evenement["url_destroy"] = action("EvenementsController@destroy", ["id" => $evenement->id]);
+		}
+		return response()->json($evenements);
+	}
 }
