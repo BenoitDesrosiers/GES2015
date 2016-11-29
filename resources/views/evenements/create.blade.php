@@ -49,6 +49,16 @@
             {!! Form::label('epreuve_id', '* Épreuve:') !!} <br/>
             {!! Form::select('epreuve_id', $epreuveArray, null, ['class' => 'form-control largeurPetite']) !!}
         </div>
+        <?php
+            $terrainArray = array();
+            for ($i=0; $i<count($terrains); $i++) {
+                $terrainArray[$terrains[$i]['id']]  = $terrains[$i]['nom'];
+            }
+        ?>
+        <div class="form-group">
+            {!! Form::label('terrain_id', '* Terrain:') !!} <br/>
+            {!! Form::select('terrain_id', $terrainArray, null, ['class' => 'form-control largeurPetite']) !!}
+        </div>
         <div class="form-group">
             {!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
             <a href="{{ action('EvenementsController@index') }}" class="btn btn-danger">Annuler</a>

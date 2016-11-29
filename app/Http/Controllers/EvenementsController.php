@@ -11,6 +11,7 @@ use Input;
 
 use App\Models\Evenement;
 use App\Models\Epreuve;
+use App\Models\Terrain;
 use App\Models\TypeEvenement;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -48,7 +49,8 @@ class EvenementsController extends BaseController
         try {
             $types = TypeEvenement::all();
             $epreuves = Epreuve::all();
-            return View::make('evenements.create', compact('types', 'epreuves'));
+            $terrains = Terrain::all();
+            return View::make('evenements.create', compact('types', 'epreuves', 'terrains'));
         } catch(Exception $e) {
             App::abort(404);
         }
@@ -107,10 +109,11 @@ class EvenementsController extends BaseController
             $evenement = Evenement::findOrFail($id);
             $types = TypeEvenement::all();
             $epreuves = Epreuve::all();
+            $terrains = Terrain::all();
             // La 'date' dans 'date_heure' est enmagasinée avec des '-' comme séparateurs, mais la fonction 'strtotime' utilise des '/' pour séparer la date
             $date = date('Y-m-d', strtotime(str_replace('-', '/', $evenement->date_heure)));
             $heure = date('G:i', strtotime($evenement->date_heure));
-            return View::make('evenements.edit', compact('evenement', 'types', 'epreuves', 'date', 'heure'));
+            return View::make('evenements.edit', compact('evenement', 'types', 'epreuves', 'terrains', 'date', 'heure'));
         } catch(Exception $e) {
             App::abort(404);
         }
