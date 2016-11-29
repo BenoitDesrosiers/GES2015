@@ -102,7 +102,17 @@ class CafeteriasController extends Controller
      */
     public function edit($id)
     {
-        dd('edit #' . $id);
+        //dd('edit #' . $id);
+        try {
+
+            $cafeteria = Cafeteria::findOrFail($id);
+            $cafeteria->load('responsable');
+            return view('cafeterias.edit', compact('cafeteria'));
+
+        } catch (ModelNotFoundException $e) {
+
+            App::abort(404);
+        }
     }
 
     /**
@@ -114,7 +124,7 @@ class CafeteriasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd('Update #' . $id);
     }
 
     /**
