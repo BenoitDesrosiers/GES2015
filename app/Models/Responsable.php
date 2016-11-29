@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Cafeterias;
 use Illuminate\Database\Eloquent\Model;
 
 class Responsable extends Model
 {
-    public function Cafeteria()
+
+	protected $guarded = ['id'];
+
+    public function cafeteria()
     {
-    	return $this->belongsTo('Cafeterias');
+    	return $this->belongsTo('App\Models\Cafeteria');
     }
 }

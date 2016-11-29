@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cafeteria extends Model
 {
-    public function Responsable()
+
+	protected $guarded = ['id'];
+
+    public function responsable()
     {
-    	return $this->hasMany('Responsable');
+    	return $this->hasMany('App\Models\Responsable');
     }
 }

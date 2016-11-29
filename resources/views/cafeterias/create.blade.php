@@ -34,21 +34,17 @@
                 </div>
 
                 <div class="col-xs-3">
-                    {!! Form::text('responsableNom', Input::old('responsableNom'), ['placeholder' => 'Nom', 'class' => 'form-control']) !!}
+                    <input type="text" name="responsableNom[]" placeholder="Nom" class="form-control" required>
                     {{ $errors->first('responsableNom') }}
                 </div>
                 <div class="col-xs-3">
-                    {!! Form::text('responsableTelephone', Input::old('responsableTelephone'), ['placeholder' => 'Téléphone', 'class' => 'form-control']) !!}
+                    <input type="text" name="responsableTelephone[]" placeholder="Téléphone" class="form-control" required>
                     {{ $errors->first('responsableTelephone') }}
                 </div>
 
-                <div class="col-xs-1 no-padding-right">
+                <div class="col-xs-1">
                     {!! Form::button('+', ['class' => 'btn btn-success ajouterResponsable dernierAjout']) !!}
                 </div>
-
-                <!-- <div class="col-xs-1">
-                    {!! Form::button('-', ['class' => 'btn btn-danger']) !!}
-                </div> -->
             </div>
         </div>
 
