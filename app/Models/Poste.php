@@ -8,7 +8,9 @@
 namespace App\Models;
 
 class Poste extends EloquentValidating {
+
     protected $guarded = array('id');
+    protected $fillable = ['nom', 'description'];
 
     /**
      * Eloquent relationship: un poste a plusieurs bénévoles
@@ -29,7 +31,7 @@ class Poste extends EloquentValidating {
 
     public function validationRules() {
         return [
-            'nom' => 'required|unique:roles,nom'.($this->id ? ",$this->id" : '')
+            'nom' => 'required|unique:postes,nom'.($this->id ? ",$this->id" : '')
         ];
     }
 

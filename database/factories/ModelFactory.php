@@ -66,3 +66,10 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 			'region_id' => rand(0, 100)
 	];
 });
+
+$factory->define(App\Models\Poste::class, function (Faker\Generator $faker) {
+    return [
+        'nom' => $faker->jobTitle,
+        'description'=> $faker->sentences(1, true)
+    ];
+});

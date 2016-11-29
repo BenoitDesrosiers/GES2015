@@ -6,6 +6,7 @@
  */
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Request;
 use App\Models\Poste;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use View;
@@ -79,7 +80,7 @@ class PostesController extends Controller
         try {
             $poste = Poste::findOrFail($id);
             if ($poste->description == "") {
-                $role->description = "Aucune description.";
+                $poste->description = "Aucune description.";
             }
         } catch (ModelNotFoundException $e) {
             App::abort(404);

@@ -1,6 +1,6 @@
 <?php
 /**
- * La classe Poste.
+ * La migration pour la table Postes.
  *
  * @author Nicolas Bisson (ProgBiss)
  */
@@ -8,7 +8,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePosteTable extends Migration
+class CreatePostesTable extends Migration
 {
     /**
      * Run the migrations.
