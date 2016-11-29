@@ -49,6 +49,21 @@
 			</ul>
         @endif
 
+         <!--    Afficher les tâches du benevole      -->
+		@if (!$benevole->taches->isEmpty())
+			<p>Tâches:</p>
+			<ul>
+				@foreach ($benevole->taches as $tache)
+					<li>
+						<a href="{!! action('TachesController@show', $tache->id) !!}">
+							{!!$tache->nom!!}
+						</a>
+					</li>
+				@endforeach
+			</ul>
+        @endif
+
+
 	</div>
 </div>
 @stop

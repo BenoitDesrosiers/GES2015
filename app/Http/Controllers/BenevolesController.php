@@ -11,6 +11,7 @@ use App;
 use App\Models\Benevole;
 use App\Models\Sport;
 use App\Models\Terrain;
+use App\Models\Taches;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -49,6 +50,7 @@ class BenevolesController extends BaseController {
 		try {
 			$sports = Sport::all();
 			$terrains = Terrain::all();
+			$taches = Taches::all();
 			$anneeDefaut = date ( 'Y' ) - 20;
 			$moisDefaut = 0;
 			$jourDefaut = 0;
@@ -60,7 +62,7 @@ class BenevolesController extends BaseController {
 		} catch (Exception $e) {
 			App:abort(404);
 		}
-		return View::make('benevoles.create', compact('terrains', 'sports', 'benevoleSports', 'benevoleTerrains', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut' ));
+		return View::make('benevoles.create', compact('terrains', 'sports', 'benevoleSports', 'benevoleTerrains', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut', 'taches' ));
 	}
 
 
@@ -112,6 +114,12 @@ class BenevolesController extends BaseController {
 				} else {
 					$benevole->terrain()->detach();
 				}
+				// Association avec les tâches sélectionnées
+				if (is_array(Input::get('taches'))) {  //FIXME: protéger avec une transaction dans le try/catch
+					$benevole->taches()->sync(array_keys(Input::get('taches')));
+				} else {
+					$benevole->taches()->detach();
+				}
 				// Message de confirmation si la sauvegarde a réussi
 				return Redirect::action('BenevolesController@create')->with ( 'status', 'Le bénévole a été créé.' );
 			} else {
@@ -158,6 +166,8 @@ class BenevolesController extends BaseController {
 		    $benevoleSports = Benevole::find($id)->sports;
 		    $terrains = Terrain::all();
 			$benevoleTerrains = Benevole::find($id)->terrains;
+			$taches = Taches::all();
+			$benevoleTaches = Benevole::find($id)->taches;
 			$anneeDefaut = date('Y')- 20;
 			$moisDefaut = 0;
 			$jourDefaut = 0;
@@ -177,7 +187,7 @@ class BenevolesController extends BaseController {
             App::abort(404);
         }
 
-		return View::make('benevoles.edit', compact('benevole', 'terrains', 'sports', 'benevoleSports', 'benevoleTerrains', 'listeAnnees', 'listeMois', 'listeJours','anneeDefaut','moisDefaut','jourDefaut'));
+		return View::make('benevoles.edit', compact('benevole', 'terrains', 'sports', 'benevoleSports', 'benevoleTerrains', 'listeAnnees', 'listeMois', 'listeJours','anneeDefaut','moisDefaut','jourDefaut', 'taches', 'benevoleTaches'));
 	}
 
 
@@ -207,59 +217,83 @@ class BenevolesController extends BaseController {
 	public function update($id)
 {
         try {
-	        $input = Input::all();
-	
-	        $benevole = Benevole::findOrFail($id);
-	        $benevole->prenom = $input['prenom'];
-            $benevole->nom = $input['nom'];
-	        $benevole->adresse = $input['adresse'];
-	        $benevole->numTel = $input['numTel'];
-            $benevole->numCell = $input['numCell'];
-            $benevole->courriel = $input['courriel'];
-	        $benevole->accreditation = $input['accreditation'];
+		        $input = Input::all();
+		
+		        $benevole = Benevole::findOrFail($id);
+		        $benevole->prenom = $input['prenom'];
+	            $benevole->nom = $input['nom'];
+		        $benevole->adresse = $input['adresse'];
+		        $benevole->numTel = $input['numTel'];
+	            $benevole->numCell = $input['numCell'];
+	            $benevole->courriel = $input['courriel'];
+		        $benevole->accreditation = $input['accreditation'];
 
-	        $benevole->sexe = $input['sexe'];
+		        $benevole->sexe = $input['sexe'];
 
-	        $benevole->verification = $input['verification'];
+		        $benevole->verification = $input['verification'];
 
-	        //      	Création de la date de naissance à partir des valeurs des trois comboboxes
-			$anneeNaissance = $input['annee_naissance']-1;
-			$moisNaissance = $input['mois_naissance']-1;
-			$jourNaissance = $input['jour_naissance']-1;
-			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
-				$dateTest = new DateTime;
-				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
-				$benevole->naissance=$dateTest;
-			} else {
-// 				Un message d'erreur sera généré lors de la validation
-				$benevole->naissance = "invalide";
-			}
-	
-	        if($benevole->save()) {
-	        	
-	        	// Association avec les sports sélectionnés
-	        	if (is_array(Input::get('sport'))) {//FIXME: protéger avec une transaction dans le try/catch
-	        		$benevole->sports()->sync(array_keys(Input::get('sport')));
-	        	} else {
-	        		$benevole->sports()->detach();
-	        	}
-	        	// Association avec les terrains sélectionnés
-	        	if (is_array(Input::get('terrain'))) {//FIXME: protéger avec une transaction dans le try/catch
-					$benevole->terrains()->sync(array_keys(Input::get('terrain')));
+		        //      	Création de la date de naissance à partir des valeurs des trois comboboxes
+				$anneeNaissance = $input['annee_naissance']-1;
+				$moisNaissance = $input['mois_naissance']-1;
+				$jourNaissance = $input['jour_naissance']-1;
+				if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
+					$dateTest = new DateTime;
+					$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
+					$benevole->naissance=$dateTest;
 				} else {
-					$benevole->terrains()->detach();
+	// 				Un message d'erreur sera généré lors de la validation
+					$benevole->naissance = "invalide";
 				}
-				// Message de confirmation si la sauvegarde a réussi
-				return Redirect::action('BenevolesController@show', $benevole->id)->with ( 'status', 'Le benevole a été mis a jour!' );
-	        } else {
-		        return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
-	        }
-        }
-        catch (ModelNotFoundException $e) {
-                    App::abort(404);
-        }
+			}
 
-	}
+			catch (ModelNotFoundException $e) {
+                    App::abort(404);
+        	}
+		
+
+
+	        if($benevole->save()) 
+	        {
+
+	        	try
+            	{
+            		DB::beginTransaction();
+	        	
+		        	// Association avec les sports sélectionnés
+		        	if (is_array(Input::get('sport'))) {//FIXME: protéger avec une transaction dans le try/catch
+		        		$benevole->sports()->sync(array_keys(Input::get('sport')));
+		        	} else {
+		        		$benevole->sports()->detach();
+		        	}
+		        	// Association avec les terrains sélectionnés
+		        	if (is_array(Input::get('terrain'))) {//FIXME: protéger avec une transaction dans le try/catch
+						$benevole->terrains()->sync(array_keys(Input::get('terrain')));
+					} else {
+						$benevole->terrains()->detach();
+					}
+					// Association avec les tâches sélectionnées
+					if (is_array(Input::get('taches'))) { 
+						$benevole->taches()->sync(array_keys(Input::get('taches')));
+					} else {
+						$benevole->taches()->detach();
+					}
+				}
+        	
+        		catch (ModelNotFoundException $e) {
+        			DB::rollBack();
+		            App::abort(404);
+		        }
+		    DB::commit();    
+    		// Message de confirmation si la sauvegarde a réussi
+			return Redirect::action('BenevolesController@show', $benevole->id)->with ( 'status', 'Le benevole a été mis a jour!' );
+	        } 
+	        else 
+	        {
+	        	DB::rollBack();
+		    	return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
+	        }
+
+		}
 
     
 

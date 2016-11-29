@@ -33,6 +33,14 @@ class Benevole extends EloquentValidating {
 		return $this->belongsToMany('App\Models\Terrain', 'benevole_terrain', 'benevole_id', 'terrain_id');
 	}
 
+	/** 
+	 * Eloquent relationship: un bénévole peux avoir plusieurs tâches 
+	 */
+
+	public function taches() {
+		return $this->belongsToMany('App\Models\Taches');
+	}
+
 
 	/**
 	 * Validation

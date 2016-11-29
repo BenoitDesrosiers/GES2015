@@ -120,6 +120,32 @@
 				?>
 			</div>
 		</div>
+		 <!--    Affiche les tâches et indique celles qui sont associées au bénévole -->
+		<div class="form-group">
+			{!! Form::label('taches', 'Tâches:') !!} 
+			<div class="row">
+				<?php
+					foreach ($taches as $tache) {
+						$checked = "";
+						$active = "";
+						foreach ($benevoleTaches as $benTache) {
+							if ($benTache->id == $taches->id) {
+								$checked = " checked";
+								$active = " active";
+								continue;
+							}
+						}
+				?>
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
+			        <label class="btn btn-default btn-block<?=$active?>">
+			            <input name="taches[{{ $tache->id }}]" type="checkbox"<?=$checked?>> {{ $tache->nom }}
+			        </label><br/>
+			    </div>
+				<?php
+					}
+				?>
+			</div>
+		</div>
 		<div class="form-group">
 			{!! Form::button('Modifier', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
             <a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>

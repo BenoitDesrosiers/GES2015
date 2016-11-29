@@ -9,11 +9,11 @@ class Taches extends Model
 	protected $guarded = array('id');
 
 	/** 
-	 * Eloquent relationship: un rôle a plusieurs bénévoles 
+	 * Eloquent relationship: une tâches peux être assigné plusieurs bénévoles 
 	 */
 
 	public function benevoles() {
-		return $this->hasMany('App\Models\Benevole');
+		return $this->belongsToMany('App\Models\Benevole');
 	}
 	/**
 	 * Validation

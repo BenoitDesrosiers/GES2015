@@ -103,6 +103,23 @@
 				?>
 			</div>
 		</div>
+
+		<div class="form-group">
+			{!! Form::label('taches', 'Tâches:') !!} 
+			<div class="row">
+				<?php
+					foreach ($taches as $tache) {
+				?>
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
+			        <label class="btn btn-default btn-block">
+			            <input name="taches[{{ $tache->id }}]" type="checkbox"> {{ $tache->nom }}
+			        </label><br/>
+			    </div>
+				<?php
+					}
+				?>
+			</div>
+		</div>
 		<div class="form-group">
 			{!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ action('BenevolesController@index') }}" class="btn btn-danger">Annuler</a>
