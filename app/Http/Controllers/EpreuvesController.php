@@ -160,7 +160,7 @@ class EpreuvesController extends BaseController {
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		return View::make('Epreuves.show', compact('epreuve', 'arbitresEpreuves'));
+		return View::make('epreuves.show', compact('epreuve', 'arbitresEpreuves'));
 	}	
 
 	
