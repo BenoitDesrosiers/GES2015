@@ -62,6 +62,7 @@ Route::group(['middleware'=>'auth'], function() {
 
 	Route::resource('roles','RolesController');
     Route::resource('evenements','EvenementsController');
+    Route::get('verifierdoublons', 'BenevolesController@verifierdoublons');
 
 });
 

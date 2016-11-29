@@ -65,6 +65,7 @@ class BenevolesController extends BaseController {
 
 
 
+
 	/**
 	 * Enregistre dans la bd la ressource qui vient d'être créée.
 	 *
@@ -280,5 +281,39 @@ class BenevolesController extends BaseController {
         }
 		return Redirect::action('BenevolesController@index');
 	
+	}
+
+
+	/**
+	 * Vérifier les doublons dans les bénévoles
+	 *
+	 * @return Response
+	 */
+	public function verifierdoublons()
+	{
+			$listeBenevoleDoublons = array();
+			$benevoles = Benevole::all();
+			
+			foreach ($benevoles as $benevole){
+				$benevoleDoublesList = Benevole::where('id','!=', $benevole->id)->get();
+		 		foreach ($benevoleDoublesList as $benevole2){
+		 			if($benevole->nom == $benevole2->nom || $benevole->prenom == $benevole2->prenom){
+		 				if($benevole->naissance == $benevole2->naissance){
+			 				array_push($listeBenevoleDoublons, $benevole, $benevole2);
+			 				
+		 				}
+		 			
+		 			}
+		 		}
+		 	}
+			if ($listeBenevoleDoublons->isEmpty()){
+				return View::make('benevoles.index', compact('benevoles'));
+			}
+			else
+			{
+				return View::make('benevoles.index', compact('listeBenevoleDoublons'));
+			}
+			
+
 	}
 }

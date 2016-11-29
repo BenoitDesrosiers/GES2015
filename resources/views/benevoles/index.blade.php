@@ -3,7 +3,8 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Liste des Bénévoles</h2>
-		<a href="{{ action('BenevolesController@create') }}" class="btn btn-info">Créer un bénévole</a>						
+		<a href="{{ action('BenevolesController@create') }}" class="btn btn-info">Créer un bénévole</a>	
+		<a href="{{ action('BenevolesController@verifierdoublons') }}"class="btn btn-info">Vérifier doublons</a>					
 	</div>
 @if ($benevoles->isEmpty())
 	<div class="panel-body">
