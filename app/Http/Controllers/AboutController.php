@@ -124,6 +124,11 @@ class AboutController extends BaseController {
             		"Francis Mathieu",
            			"Ajouter un arbitre à un sport"
             	),
+				
+				array(
+            		"Maxime Laflamme",
+           			"Associer des terrains aux bénévoles. Associer les bénévoles à une épreuve."
+            	)
             )
         );
 
