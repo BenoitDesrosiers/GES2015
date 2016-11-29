@@ -1,4 +1,9 @@
 <?php
+/**
+ * La classe Poste.
+ *
+ * @author Nicolas Bisson (ProgBiss)
+ */
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
