@@ -19,6 +19,7 @@ Route::get('/','HomeController@index');
 Route::get('/home','HomeController@index');
 Route::get('/about','AboutController@index');
 Route::get('/tableau_participants', 'sportParticipantController@listerParticipants');
+Route::get('/tableau_delegues', 'DeleguesController@listerDelegues');
 
 Auth::routes();
 

@@ -10,7 +10,9 @@ use View;
 use Redirect;
 use Input;
 use DateTime;
-
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use League\Flysystem\Exception;
 use App\Models\Delegue;
 use App\Models\Region;
 use App\Models\Role;
@@ -33,7 +35,8 @@ class DeleguesController extends BaseController {
 	{
 		try {
 			$delegues = Delegue::all()->sortby('nom');
-			return View::make('delegues.index', compact('delegues'));
+            $regions = Region::all()->sortby('nom');
+			return View::make('delegues.index', compact('delegues','regions'));
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -302,4 +305,26 @@ class DeleguesController extends BaseController {
 		return Redirect::action('DeleguesController@index');
 	
 	}
+
+    /**
+     * liste les délégués d'une région.
+     * @param Request $request L'id d'un région.
+     * @return mixed $delegues La liste des délégués selon une région.
+     */
+    public function listerDelegues(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $region_id = $request->input('region_id');
+            if ( isset($region_id) )
+            {
+                return Delegue::with('roles','region')
+                    ->where('region_id', $region_id)
+                    ->orderBy('nom')
+                    ->get();
+            }
+        }
+        App::abort(403);
+    }
 }
+

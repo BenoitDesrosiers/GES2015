@@ -7,9 +7,21 @@
 	</div>
 	@if ($delegues->isEmpty())
 		<div class="panel-body">
-			<p>Aucun rôle</p>
+			<p>Aucun délégué</p>
 		</div>
 	@else
+		@if ($regions->isEmpty())
+			<p>Il n'existe aucune région dans le système.</p>
+		@else
+			<?php $regionListe = ["Toutes les régions"]?>
+			@foreach($regions as $region)
+				<?php $regionListe[$region->id] = $region->nom; ?>
+			@endforeach
+			<div>
+				{!! Form::select('region_id', $regionListe) !!}
+				{{ $errors->first('region_id') }}
+			</div>
+		@endif
 		<table class="table table-condensed table-hover">
 			<thead>
 				<tr>
@@ -68,27 +80,7 @@
 	@endif
 </div>
 
-<script>
-	// 	Affiche ou masque les rôles d'un délégué donné
-	function afficherRoles(bouton) {
-		rangee = bouton.parentNode.parentNode;
-		if (rangee.classList.contains("actif")) {
-			bouton.classList.remove("glyphicon-minus");
-			bouton.classList.add("glyphicon-plus");
-			rangee.classList.remove("actif");
-		} else {
-			bouton.classList.remove("glyphicon-plus");
-			bouton.classList.add("glyphicon-minus");
-			rangee.classList.add("actif");
-		}
-	}
-</script>
-
-<script>
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-	})
-</script>
+<script src="{!! asset('/js/delegue_index.js') !!}"></script>
 
 <style>
 	/* Masquer les rôles par défaut */
