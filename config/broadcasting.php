@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('BROADCAST_DRIVER', 'pusher'),
+    'default' => env('BROADCAST_DRIVER', 'null'),
 
     /*
     |--------------------------------------------------------------------------
@@ -44,6 +44,9 @@ return [
             'driver' => 'log',
         ],
 
+    	'null' => [
+    			'driver' => 'null',
+   		],
     ],
 
 ];

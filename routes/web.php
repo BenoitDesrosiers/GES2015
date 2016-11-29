@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +18,18 @@ use App\Http\Controllers\Auth\AuthController;
 Route::get('/','HomeController@index');
 Route::get('/home','HomeController@index');
 Route::get('/about','AboutController@index');
+Route::get('/tableau_participants', 'sportParticipantController@listerParticipants');
+
+Auth::routes();
 
 Route::group(['middleware'=>'auth'], function() {
+
+	Route::resource('organismes','OrganismesController');
 	
 	Route::resource('sports','SportsController');
 	Route::resource('sports.epreuves','SportsEpreuvesController');
 	Route::resource('sports.participants','sportParticipantController');
+	Route::resource('sports.arbitres', 'SportsArbitresController');
 	
 	Route::get ( 'ajtParticipant/{epreuveId}', 'EpreuvesController@ajtParticipant' );
 	Route::post ( 'storeParticipants/{epreuveId}', 'EpreuvesController@storeParticipants' );
@@ -36,20 +45,14 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('benevoles','BenevolesController');
 	Route::resource('roles','RolesController');
 	Route::resource('codes','CodesController');
-	
-
-    //Route::get('disponibilites/{id}/create', 'DisponibilitesController@create');
-    //Route::post('disponibilites/store', 'DisponibilitesController@store');
-	//Route::get('disponibilites/{id}/show', 'DisponibilitesController@showDisponibilites');    
-    //Route::post('disponibilites/update', 'DisponibilitesController@update');
-    //Route::post('disponibilites/destroy', 'DisponibilitesController@destroy');
+	Route::resource('taches','TachesController');
     Route::resource('disponibilites','DisponibilitesController');
 
 	Route::post('pointagesPourSport', 'PointagesController@pointagesPourSport');
 	Route::resource('pointages','PointagesController');
 
 	Route::resource('delegues','DeleguesController');
-	
+
 	Route::post('epreuvesPourSport', 'EpreuvesController@epreuvesPourSport');
 	Route::post('epreuvesPourSportResultats', 'ResultatsController@epreuvesPourSport');
 	Route::post('evenementsPourEpreuveResultats', 'ResultatsController@evenementsPourEpreuve');
@@ -58,31 +61,8 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('benevoles','BenevolesController');
 
 	Route::resource('roles','RolesController');
-   
+    Route::resource('evenements','EvenementsController');
+
 });
 
-// Authentication routes...
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
-// Registration routes...
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
-	
-	
-/*	obsolete
- *
-// Confide routes
-
-Route::post('users', 'UsersController@store');
-Route::get('users/create', 'UsersController@create');
-Route::get('users/login', 'UsersController@login');
-Route::post('users/login', 'UsersController@doLogin');
-Route::get('users/confirm/{code}', 'UsersController@confirm');
-Route::get('users/forgot_password', 'UsersController@forgotPassword');
-Route::post('users/forgot_password', 'UsersController@doForgotPassword');
-Route::get('users/reset_password/{token}', 'UsersController@resetPassword');
-Route::post('users/reset_password', 'UsersController@doResetPassword');
-Route::get('users/logout', 'UsersController@logout');
-*/

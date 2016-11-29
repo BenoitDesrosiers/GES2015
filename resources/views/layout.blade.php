@@ -26,23 +26,44 @@
           			<li<?php if ($route == "") { ?> class="active"<?php } ?>><a href="{{ action('HomeController@index') }}">Accueil</a></li>
          			<li<?php if ($route == "sports") { ?> class="active"<?php } ?>><a href="{{ action('SportsController@index') }}">Sports</a></li>
           			<li<?php if ($route == "epreuves") { ?> class="active"<?php } ?>><a href="{{ action('EpreuvesController@index') }}">Épreuves</a></li>
+          			<li<?php if ($route == "organismes") { ?> class="active"<?php } ?>><a href="{{ action('OrganismesController@index') }}">Organismes</a></li>
           			<li<?php if ($route == "participants") { ?> class="active"<?php } ?>><a href="{{ action('ParticipantsController@index') }}">Participants</a></li>
           			<li<?php if ($route == "equipes") { ?> class="active"<?php } ?>><a href="{{ action('EquipesController@index') }}">Équipes</a></li>
          			<li<?php if ($route == "systeme") { ?> class="active"<?php } ?>><a href="{{ action('SystemeController@index') }}">Système</a></li>
                     <li<?php if ($route == "terrains") { ?> class="active"<?php } ?>><a href="{{ action('TerrainsController@index') }}">Terrains</a></li>
+					<li<?php if ($route == "evenements") { ?> class="active"<?php } ?>><a href="{{ action('EvenementsController@index') }}">Événements</a></li>
           			<li<?php if ($route == "resultats") { ?> class="active"<?php } ?>><a href="{{ action('ResultatsController@index') }}">Résultats</a></li>
           			<li<?php if ($route == "benevoles") { ?> class="active"<?php } ?>><a href="{{ action('BenevolesController@index') }}">Bénévoles</a></li>
+          			<li<?php if ($route == "taches") { ?> class="active"<?php } ?>><a href="{{ action('TachesController@index') }}">Tâches</a></li>
           			<li<?php if ($route == "arbitres") { ?> class="active"<?php } ?>><a href="{{ action('ArbitresController@index') }}">Arbitres</a></li>
 					<li<?php if ($route == "pointages") { ?> class="active"<?php } ?>><a href="{{ action('PointagesController@index') }}">Pointages</a></li>
 					<li<?php if ($route == "codes") { ?> class="active"<?php } ?>><a href="{{ action('CodesController@index') }}">Codes</a></li>
 					<li<?php if ($route == "delegues") { ?> class="active"<?php } ?>><a href="{{ action('DeleguesController@index') }}">Délégués</a></li>
 					<li<?php if ($route == "roles") { ?> class="active"<?php } ?>><a href="{{ action('RolesController@index') }}">Rôles</a></li>
-          			<?php if (Auth::user() == "") { ?>
-          			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Connexion</a></li>
-          			<li><a href="{{ action('Auth\AuthController@getLogin') }}">Inscription</a></li>
-          			<?php } else { ?>
-          			<li><a href="{{ action('Auth\AuthController@getLogout') }}">Déconnexion [{{ Auth::user()->username }}]</a></li>
-					<?php } ?>
+          			@if (Auth::user() == "")
+          				<li><a href="{{ url('/login') }}">Connexion</a></li>
+          				<li><a href="{{ url('/register') }}">Inscription</a></li>
+          			@else 
+	          			<li class="dropdown">
+	                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+	                                {{ Auth::user()->name }} <span class="caret"></span>
+	                            </a>
+	
+	                            <ul class="dropdown-menu" role="menu">
+	                                <li>
+	                                    <a href="{{ url('/logout') }}"
+	                                        onclick="event.preventDefault();
+	                                                 document.getElementById('logout-form').submit();">
+	                                        Déconnexion
+	                                    </a>
+	
+	                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+	                                        {{ csrf_field() }}
+	                                    </form>
+	                                </li>
+	                            </ul>
+	                        </li>
+					@endif
           		</ul>
      		</div>
       		

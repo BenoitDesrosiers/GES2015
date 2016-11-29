@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use Illuminate\Support\Facades\DB;
 use View;
 use Redirect;
 use Input;
@@ -10,6 +11,8 @@ use DateTime;
 use App\Models\Delegue;
 use App\Models\Region;
 use App\Models\Role;
+use App\Models\DelegueCourriel;
+use App\Models\DelegueTelephone;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
@@ -46,6 +49,7 @@ class DeleguesController extends BaseController {
 		try {
 			
 			$regions = Region::all();
+            $telephones = array();
 			$roles = Role::all();
 			//      La date par défaut du formulaire est <cette année> - 20 ans
 			//      pour être plus prêt de l'âge moyen attendu
@@ -55,7 +59,7 @@ class DeleguesController extends BaseController {
 			$listeAnnees = ParticipantsController::generer_liste(date('Y')-100, 101); //FIXME: les délégués ne devraient pas être dépendant des Participants. Mettre cette fonction dans un helper. 
 			$listeMois = ParticipantsController::generer_liste(1, 12);
 			$listeJours = ParticipantsController::generer_liste(1, 31);
-			return View::make('delegues.create', compact('regions', 'roles', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+			return View::make('delegues.create', compact('regions', 'telephones', 'roles', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -64,61 +68,77 @@ class DeleguesController extends BaseController {
 
 	/**
 	 * Enregistre dans la bd la ressource qui vient d'être créée.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{ //FIXME:: identique à update
-		try {
-			$input = Input::all();
-			$delegue = new Delegue;
-			$delegue->nom = $input['nom'];
-			$delegue->prenom = $input['prenom'];
+     *
+     * @author Steve L, Marc P
+     *
+     * @return Response
+    */
+    public function store()
+    {
+        try {
+            $input = Input::all();
+            $delegue = new Delegue;
+            $delegue->nom = $input['nom'];
+            $delegue->prenom = $input['prenom'];
             $delegue->region_id = $input['region_id'];
-			$roles = Input::get('role');
-			
-			//      Le champ 'accreditation' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement.
+            $roles = Input::get('role');
+            //      Le champ 'accreditation' n'est pas transmis s'il n'est pas coché, il faut vérifier autrement.
             if(Input::has('accreditation')) {
                 $delegue->accreditation = true;
             } else {
                 $delegue->accreditation = false;
             }
-			$delegue->sexe = $input['sexe'];
-			
-			//      Création de la date de naissance à partir des valeurs des trois comboboxes
-			$anneeNaissance = $input['annee_naissance']-1;
-			$moisNaissance = $input['mois_naissance']-1;
-			$jourNaissance = $input['jour_naissance']-1;
-			if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
-				$dateTest = new DateTime;
-				$dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
-				$delegue->date_naissance=$dateTest;
-			} else {
-				$delegue->date_naissance = "invalide";
-			}
-			$delegue->adresse = $input['adresse'];
-			$delegue->telephone = $input['telephone'];
-			$delegue->courriel = $input['courriel'];
+            $delegue->sexe = $input['sexe'];
 
-			if($delegue->save()) {
-				//		Associer les rôles au délégué.
-				if ($roles) {
-					if (is_array($roles)) {
-						$delegue->roles()->sync($roles);
-					} else {
-						$delegue->roles()->sync([$roles]);
-					}
-				} else {
-					$delegue->roles()->detach();
-				}
-				return Redirect::action('DeleguesController@index');
-			} else {
-				return Redirect::back()->withInput()->withErrors($delegue->validationMessages());
-			}
-		} catch(ModelNotFoundException $e) {
-			App::abort(404);
-		}
-	}
+            //      Création de la date de naissance à partir des valeurs des trois comboboxes
+            $anneeNaissance = $input['annee_naissance']-1;
+            $moisNaissance = $input['mois_naissance']-1;
+            $jourNaissance = $input['jour_naissance']-1;
+            if (checkdate($moisNaissance, $jourNaissance, $anneeNaissance)) {
+                $dateTest = new DateTime;
+                $dateTest->setDate($anneeNaissance, $moisNaissance, $jourNaissance);
+                $delegue->date_naissance=$dateTest;
+            } else {
+                $delegue->date_naissance = "invalide";
+            }
+            $delegue->adresse = $input['adresse'];
+
+            if($delegue->save()) {
+				//FIXME protéger par une transaction dans le try/catch
+                //		Associer les téléphones au délégué.
+                $telephones = Input::get('telephone');
+                foreach($telephones as $telephone) {
+                    $objet_telephone = New DelegueTelephone();
+                    $objet_telephone->telephone = $telephone;
+                    $objet_telephone->delegue()->associate($delegue);
+                    $objet_telephone->save();
+                }
+                //		Associer les courriels au délégué.
+                $courriels = Input::get('courriel');
+                foreach($courriels as $courriel) {
+                    $objet_courriel = New DelegueCourriel();
+                    $objet_courriel->courriel = $courriel;
+                    $objet_courriel->delegue()->associate($delegue);
+                    $objet_courriel->save();
+                }
+                //		Associer les rôles au délégué.
+                if ($roles) {
+                    if (is_array($roles)) {
+                        $delegue->roles()->sync($roles);
+                    } else {
+                        $delegue->roles()->sync([$roles]);
+                    }
+                } else {
+                    $delegue->roles()->detach();
+                }
+                return Redirect::action('DeleguesController@index');
+            } else {
+                return Redirect::back()->withInput()->withErrors($delegue->validationMessages());
+            }
+        } catch(ModelNotFoundException $e) {
+            App::abort(404);
+        }
+    }
 
 
 	/**
@@ -176,16 +196,29 @@ class DeleguesController extends BaseController {
 
 	/**
 	 * Mise à jour de la ressource dans la bd.
+     *
+     * @author Steve L, Marc P
 	 *
 	 * @param  int  $id l'id du rôle à changer.
 	 * @return Response
 	 */
 	public function update($id)
-	{  //FIXME: identique à store()
+	{
 		try {
-			$input = Input::all();
-			$delegue = Delegue::findOrFail($id);
-			$delegue->nom = $input['nom'];
+            DB::beginTransaction();
+            $input = Input::all();
+		    $ancien_delegue = Delegue::findOrFail($id);
+            foreach ($ancien_delegue->telephones()->get() as $telephone)
+            {
+                $telephone->delete();
+            }
+            foreach ($ancien_delegue->courriels()->get() as $courriel)
+            {
+                $courriel->delete();
+            }
+            $this->destroy($id);
+            $delegue = new Delegue;
+            $delegue->nom = $input['nom'];
 			$delegue->prenom = $input['prenom'];
             $delegue->region_id = $input['region_id'];
 			$roles = Input::get('role');
@@ -210,11 +243,26 @@ class DeleguesController extends BaseController {
 				$delegue->date_naissance = "invalide";
 			}
 			$delegue->adresse = $input['adresse'];
-			$delegue->telephone = $input['telephone'];
-			$delegue->courriel = $input['courriel'];
 
-			if($delegue->save()) {
-				//		Associer les rôles au délégué
+			if($delegue->save())
+			{
+                //		Associer les téléphones au délégué.
+                $telephones = Input::get('telephone');
+                foreach($telephones as $telephone) {
+                    $objet_telephone = New DelegueTelephone();
+                    $objet_telephone->telephone = $telephone;
+                    $objet_telephone->delegue()->associate($delegue);
+                    $objet_telephone->save();
+                }
+                //		Associer les courriels au délégué.
+                $courriels = Input::get('courriel');
+                foreach($courriels as $courriel) {
+                    $objet_courriel = New DelegueCourriel();
+                    $objet_courriel->courriel = $courriel;
+                    $objet_courriel->delegue()->associate($delegue);
+                    $objet_courriel->save();
+                }
+			    //		Associer les rôles au délégué
 				if ($roles) {
 					if (is_array($roles)) {
 						$delegue->roles()->sync($roles);
@@ -224,11 +272,14 @@ class DeleguesController extends BaseController {
 				} else {
 					$delegue->roles()->detach();
 				}
+                DB::commit();
 				return Redirect::action('DeleguesController@index');
 			} else {
-				return Redirect::back()->withInput()->withErrors($delegue->validationMessages());
+                DB::rollBack();
+			    return Redirect::back()->withInput()->withErrors($delegue->validationMessages());
 			}
 		} catch(ModelNotFoundException $e) {
+            DB::rollBack();
 			App::abort(404);
 		}
 	}
@@ -244,7 +295,7 @@ class DeleguesController extends BaseController {
 	{
 		try {
 			$delegue = Delegue::findOrFail($id);
-			$delegue->delete();
+			$delegue->delete(); //FIXME protéger par une transaction dans le try/catch
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}

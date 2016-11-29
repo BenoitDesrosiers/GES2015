@@ -1,12 +1,12 @@
 <?php
 /**
- * @author BinarMorker
- * @version 0.0.1 rev 1
+ * @author Jessee
+ * @version 0.0.2 rev 1
  */
 
 namespace App\Models;
 
-class Evenement extends EloquentValidating {
+class Evenement extends EloquentValidating { //FIXME: devrait hériter directement de model puisque que la validation est fait par request dans le controlleur
 	protected $guarded = array('id');
 
 /** 
@@ -17,24 +17,22 @@ public function epreuve() {
 	return $this->belongsTo('App\Models\Epreuve');
 }
 
-public function resultats() {
-	return $this->hasMany('App\Models\Resultat');
+public function type() {
+    return $this->hasOne('App\Models\TypeEvenement', 'id', 'type_id');
 }
 
 public function terrain() {
 	return $this->belongsTo('App\Models\Terrain');
 }
-	
+
 /**
  * Validation
  */
 
-public $validationMessages;
+public $validationMessages; //FIXME: plus nécessaire
 
-public function validationRules() {
-	return [
-		'nom' => 'required',
-		];
+public function validationRules() { //FIXME: plus nécessaire
+	return [];
 }
 
 

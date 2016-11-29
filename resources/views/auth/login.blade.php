@@ -19,7 +19,7 @@
     <div class="jumbotron">
 
         <div class="container">
-            <form method="POST" action="/auth/login">
+            <form method="POST" action="{{ url('/login') }}">
                 {!! csrf_field() !!}
 
                 <h2>Authentification</h2>

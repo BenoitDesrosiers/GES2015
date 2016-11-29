@@ -12,7 +12,13 @@ namespace App\Models;
 class Terrain extends EloquentValidating {
     protected $guarded = array('id');
 
-
+	/**
+	 * Eloquent relationship: un terrain peut supporter plusieurs bénévoles
+	 */
+    public function benevoles() {
+    	return $this->belongsToMany('App\Models\Benevole');
+    }
+    
     /**
      * Eloquent relationship: un terrain peut supporter plusieurs sports différents
     */
@@ -27,6 +33,14 @@ class Terrain extends EloquentValidating {
 	
 	public function evenements() {
         return $this->hasMany('App\Models\Evenement');
+	}
+    
+    /**
+     * Eloquent relationship: un terrain est associée à plusieurs épreuves
+     */
+    public function epreuves()
+    {
+    	return $this->belongsToMany('App\Models\Epreuve');
     }
 
 /**
