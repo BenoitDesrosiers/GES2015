@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Models\User;
 
 /**
  * Class CRUDConditionsParticulieres
@@ -12,16 +10,22 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
  *
  * @author Res260
  * @created_at 161122
- * @modified_at 161126
+ * @modified_at 161128
  */
 class CRUDConditionsParticulieres extends TestCase
 {
 	/**
-	 * Débute une transaction pour les tests.
+	 * Débute une transaction pour les tests et
+	 * authentifie un utilisateur.
 	 * DOIT ÊTRE LE PREMIER TEST.
 	 */
 	public function testDebut() {
 		DB::beginTransaction();
+		$this->assertTrue(true);
+		$this->actingAs(User::first());
+	}
+
+	public function testAjouterConditionParticuliere() {
 		$this->assertTrue(true);
 	}
 

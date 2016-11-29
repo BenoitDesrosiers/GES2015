@@ -8,7 +8,6 @@ use App\Models\ConditionParticuliere;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Redirect;
-use Session;
 use Throwable;
 use View;
 
@@ -18,12 +17,22 @@ use View;
  * Controlleur pour le CRUD des conditions particulières.
  *
  * @author Res260
- * @created_at 161020
- * @modified_at 161020
+ * @created_at 161120
+ * @modified_at 161129
  * @package App\Http\Controllers
  */
 class ConditionsParticulieresController extends Controller
 {
+
+	/**
+	 * Instantie le controlleur pour les conditions particulières.
+	 */
+	public function __construct()
+	{
+		$this->middleware('formatterConditionsParticulieres',
+			['only' => ['store', 'update']]);
+	}
+
 	/**
 	 * Affiche la page d'index des conditions particulières.
 	 *
@@ -75,9 +84,9 @@ class ConditionsParticulieresController extends Controller
 	 */
 	public function store(ConditionParticuliereRequest $request) {
 		$condition = ConditionParticuliere::create($request->all());
-		Session::flash('message', 'La condition particulière a été créée avec succès!');
-		Session::flash('alert-class', 'alert-success');
-		return Redirect::to('/conditionsParticulieres/' . $condition->id);
+		return Redirect::to('/conditionsParticulieres/' . $condition->id)
+			->with('message', 'La condition particulière a été créée avec succès!')
+			->with('alert-class', 'alert-success');
 	}
 
 	/**
@@ -93,10 +102,9 @@ class ConditionsParticulieresController extends Controller
 		$condition = ConditionParticuliere::findOrFail($id);
 		$condition->update($request->all());
 		$condition->save();
-		Session::flash('message', 'La condition particulière 
-								   a été mise à jour avec succès!');
-		Session::flash('alert-class', 'alert-success');
-		return Redirect::to('/conditionsParticulieres');
+		return Redirect::to('/conditionsParticulieres')
+			->with('message', 'La condition particulière a été mise à jour avec succès!')
+			->with('alert-class', 'alert-success');
 	}
 
 
@@ -128,7 +136,6 @@ class ConditionsParticulieresController extends Controller
 	public function destroy($id) {
 		try {
 			ConditionParticuliere::findOrFail($id)->delete();
-			Session::flash('message', 'La condition particulière a bien été supprimée!');
 		} catch (Throwable $t) {
 			// POUR PHP 7 (BIENVENUE DANS LE FUTUR)
 			App::abort(404);
@@ -137,7 +144,8 @@ class ConditionsParticulieresController extends Controller
 			App::abort(404);
 		}
 
-		return Redirect::action('ConditionsParticulieresController@index');
+		return Redirect::action('ConditionsParticulieresController@index')
+			->with('message', 'La condition particulière a bien été supprimée!');
 	}
 
 

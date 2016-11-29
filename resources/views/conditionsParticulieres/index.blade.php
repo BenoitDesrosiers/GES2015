@@ -22,7 +22,7 @@
             <strong>Condition particulière</strong>
         </div>
     </div>
-    @foreach($conditionsParticulieres as $condition)
+    @forelse($conditionsParticulieres as $condition)
         <div class="row contenu-condition-particuliere flex-ran">
             <div class="col-xs-8">
                 <a href="{!! URL::route('conditionsParticulieres.show', $condition->id) !!}">
@@ -40,5 +40,9 @@
                 {!! Form::close() !!}
             </div>
         </div>
-    @endforeach
+    @empty
+        <div class="col-xs-12">
+            <span>Aucune condition particulière.</span>
+        </div>
+    @endforelse
 @endsection
