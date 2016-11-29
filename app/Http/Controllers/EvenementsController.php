@@ -63,12 +63,12 @@ class EvenementsController extends BaseController
     public function store(EvenementsRequest $request)
     {
         try {
-            $input = Input::all();
+            $donnees = $request->all();
             $evenement = new Evenement();
-            $evenement->nom = $input['nom'];
-            $evenement->type_id = $input['type_id'];
-            $evenement->epreuve_id = $input['epreuve_id'];
-            $evenement->date_heure = $input['date'].' '.$input['heure'];
+            $evenement->nom = $donnees['nom'];
+            $evenement->type_id = $donnees['type_id'];
+            $evenement->epreuve_id = $donnees['epreuve_id'];
+            $evenement->date_heure = $donnees['date'].' '.$donnees['heure'];
             if($evenement->save()) {
                 return Redirect::action('EvenementsController@index')->with('status', 'Événement ajouté!');
             } else {
