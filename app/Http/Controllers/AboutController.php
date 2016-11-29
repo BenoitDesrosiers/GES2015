@@ -82,6 +82,11 @@ class AboutController extends BaseController {
 					"Alexandre Caron",
 					"Association d'un sport à un participant à partir d'un sport"
 				),
+				
+				array(
+					"Jessee Lefebvre",
+					"Ajout du CRUD des événements, association des participants et des événements à partir de l'épreuve choisie"
+				),
 
 				array(
 					"Émilio Gonzalez",
