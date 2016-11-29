@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\EvenementsRequest;
+use Illuminate\Support\Facades\DB;
 
 use View;
 use Redirect;
@@ -135,9 +136,18 @@ class EvenementsController extends BaseController
             $evenement->nom = $input['nom'];
             $evenement->type_id = $input['type_id'];
             $evenement->epreuve_id = $input['epreuve_id'];
-            $evenement->terrain_id = $input['terrain_id'];
             $evenement->date_heure = $input['date'].' '.$input['heure'];
             if($evenement->save()) {
+            	//Association du terrain
+            	DB::beginTransaction();
+            	if ($this->terrainLibre($evenement->date_heure, $input['terrain_id'])) { //FIXME: protéger par une transaction dans le try/catch
+            		$evenement->terrain()->associate($input['terrain_id']);
+            	}
+            	else {
+            		$evenement->terrain()->dissociate();
+            	}
+            	$evenement->save();
+            	DB::commit();
                 return Redirect::action('EvenementsController@index')->with('status', 'Événement mis à jour!');
             } else {
                 return Redirect::back()->withInput()->withErrors($evenement->validationMessages());
