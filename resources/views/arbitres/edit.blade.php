@@ -102,28 +102,37 @@
     	<div class="form-group">
 			{!! Form::label('sports', 'Sports:') !!} 
 			<div class="row">
-				<?php
-					foreach ($sports as $sport) {
-						$checked = "";
-						$active = "";
-						foreach ($arbitre->sports as $arbitreSport) {
-							if ($arbitreSport->id == $sport->id) {
-								$checked = " checked";
-								$active = " active";
-							}
-						}
-				?>
-				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
-			        <label class="btn btn-default btn-block<?=$active?>">
-			            <input name="sport[{{ $sport->id }}]" type="checkbox"<?=$checked?>> {{ $sport->nom }}
-			        </label><br/>
-			    </div>
-				<?php
-					}
-				?>
+				@foreach ($sports as $sport)
+					@php
+						$class_active = "btn btn-default btn-block";
+						$checked = False;
+					@endphp
+					@foreach ($arbitre->sports as $arbitreSport)
+						@if ($arbitreSport->id == $sport->id)
+							$class_active = $class_active . " active";
+							$checked = True;
+						@endif
+					@endforeach
+					<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
+			        	{{ Form::label('sport[' . $sport->id . ']', $sport->nom, ['class' => $class_active]) }}
+			            {{ Form::checkbox('sport[' . $sport->id . ']', null, $checked) }}
+				        <br/>
+				    </div>
+			    @endforeach
 			</div>
 		</div>
-		
+		<!--  blade select multiple: http://laravel-recipes.com/recipes/163/creating-a-select-box-field 	-->
+		<div id="epreuves">
+			<select name="select_epreuves" multiple="multiple">
+			@foreach ($sports as $sport)
+				<optgroup label="{{ $sport->nom }}">
+				@foreach($sport->epreuves as $epreuve)
+					<option value="$epreuve->id">{{ $epreuve->nom }}</option>
+				@endforeach
+				</optgroup>
+			@endforeach
+			</select>
+		</div>
 	<!--    Boutons Sauvegarder et Annuler -->
 		<div class="form-group">
 			{!! Form::button('Sauvegarder', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
