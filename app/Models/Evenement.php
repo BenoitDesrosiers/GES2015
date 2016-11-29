@@ -9,18 +9,21 @@ namespace App\Models;
 class Evenement extends EloquentValidating { //FIXME: devrait hériter directement de model puisque que la validation est fait par request dans le controlleur
 	protected $guarded = array('id');
 
-/** 
- * Eloquent relationship: un événement appartient à une épreuve
- */
+    /**
+     * Eloquent relationship: un événement appartient à une épreuve
+     */
 
-public function epreuve() {
-	return $this->belongsTo('App\Models\Epreuve');
-}
+    public function epreuve() {
+        return $this->belongsTo('App\Models\Epreuve');
+    }
 
-public function type() {
-    return $this->hasOne('App\Models\TypeEvenement', 'id', 'type_id');
-}
+    public function type() {
+        return $this->hasOne('App\Models\TypeEvenement', 'id', 'type_id');
+    }
 
+    public function participants() {
+        return $this->belongsToMany('App\Models\Participant');
+    }
 /**
  * Validation
  */

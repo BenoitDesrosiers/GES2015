@@ -25,6 +25,7 @@
                 <th class="hidden-xs">Type</th>
                 <th class="col-sm-1"></th>
                 <th class="col-sm-1"></th>
+                <th class="col-sm-1"></th>
             </tr>
         </thead>
         <tbody>
@@ -42,6 +43,11 @@
                 </td>
                 <td class="hidden-xs">
                     {{$evenement->type->titre}}
+                </td>
+                <td>
+                    <a href="{{ action('EvenementParticipantController@afficher',$evenement->id) }}" class="btn btn-info">
+                        Participants
+                    </a>
                 </td>
                 <td>
                     <a href="{{ action('EvenementsController@edit',$evenement->id) }}" class="btn btn-info">

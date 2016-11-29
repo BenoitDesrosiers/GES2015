@@ -32,6 +32,9 @@ class Participant extends EloquentValidating {
 		return $this->belongsToMany('App\Models\Epreuve');
 	}
 
+    public function evenements() {
+        return $this->belongsToMany('App\Models\Evenement', 'evenement_participant', 'participant_id', 'evenement_id');
+    }
 	/**
 	* Les équipes dont fait partie le participant
 	* hasManyThrough ne fonctionne pas dans ce cas donc impossible de retourner les chefs directement
