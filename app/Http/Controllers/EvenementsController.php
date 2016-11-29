@@ -70,6 +70,7 @@ class EvenementsController extends BaseController
             $evenement->nom = $input['nom'];
             $evenement->type_id = $input['type_id'];
             $evenement->epreuve_id = $input['epreuve_id'];
+            $evenement->terrain_id = $input['terrain_id'];
             $evenement->date_heure = $input['date'].' '.$input['heure'];
             if($evenement->save()) {
                 return Redirect::action('EvenementsController@index')->with('status', 'Événement ajouté!');
@@ -134,6 +135,7 @@ class EvenementsController extends BaseController
             $evenement->nom = $input['nom'];
             $evenement->type_id = $input['type_id'];
             $evenement->epreuve_id = $input['epreuve_id'];
+            $evenement->terrain_id = $input['terrain_id'];
             $evenement->date_heure = $input['date'].' '.$input['heure'];
             if($evenement->save()) {
                 return Redirect::action('EvenementsController@index')->with('status', 'Événement mis à jour!');
