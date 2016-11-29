@@ -164,4 +164,17 @@ class EvenementsController extends BaseController
             App::abort(404);
         }
     }
+    
+    /**
+     * Vérifie si un terrain est libre à une certaine date et heure.
+     *
+     * @param  String  $date_heure La date et l'heure de l'événement.
+     * @param  int  $terrain_id l'id du terrain à vérifier.
+     * @return Vrai si le terrain est libre, sinon faux.
+     */
+    public function terrainLibre($date_heure, $terrain_id)
+    {
+    	$evenements = Evenement::where(['date_heure' => $date_heure, 'terrain_id' => $terrain_id])->get();
+    	return $evenements->isEmpty();
+    }
 }
