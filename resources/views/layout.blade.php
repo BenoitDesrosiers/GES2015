@@ -29,7 +29,7 @@
 							<li><a href="{{ url('/register') }}">Inscription</a></li>
 						@else
 							@if(Entrust::hasrole('admin'))
-								<li<?php if ($route == "users") { ?> class="active"<?php } ?>><a href="{{ action('UserController@index') }}">Gestion&nbsp;d'usager</a></li>
+								<li<?php if ($route == "usagers") { ?> class="active"<?php } ?>><a href="{{ action('UsagersController@index') }}">Gestion&nbsp;d'usager</a></li>
 							@endif
 
 							<li {!! ($route == "conditionsParticulieres") ? 'class="active"' : '' !!}>
@@ -60,7 +60,7 @@
 
 								<ul class="dropdown-menu" role="menu">
 									<li>
-										<a href="{{ url('/compte') }}">Mon compte</a>
+										<a href="{{ url('/users/MonCompte') }}">Mon compte</a>
 									</li>
 									<li>
 										<a href="{{ url('/logout') }}"

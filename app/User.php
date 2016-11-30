@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\EloquentValidating;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -9,7 +10,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
-class User extends Model  implements AuthenticatableContract, CanResetPasswordContract
+class User extends EloquentValidating implements AuthenticatableContract, CanResetPasswordContract
 {
     use Authenticatable, CanResetPassword, EntrustUserTrait;
 
@@ -19,6 +20,13 @@ class User extends Model  implements AuthenticatableContract, CanResetPasswordCo
      * @var string
      */
     protected $table = 'users';
+
+    /**
+     *
+     */
+    public function role(){
+        return $this->roles()->first()[0];
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -33,4 +41,15 @@ class User extends Model  implements AuthenticatableContract, CanResetPasswordCo
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+
+    public $validationMessages;
+
+    public function validationRules() {
+        return [
+            'name' => 'required|max:255',
+            'email' => 'required|max:255',
+            'password' => 'max:60'
+        ];
+    }
 }

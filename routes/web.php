@@ -22,8 +22,14 @@ Route::get('/tableau_participants', 'sportParticipantController@listerParticipan
 
 Auth::routes();
 
+Route::group(['middleware' => 'auth'], function (){
+    Route::get('/users/MonCompte', 'UsagersController@editCurrentUser');
+    Route::put('/users/MonCompteUpdate', 'UsagersController@updateCurrentUser');
+
+});
+
 Route::group(['middleware' => ['role:admin']], function (){
-    Route::resource('users', 'UserController');
+    Route::resource('users', 'UsagersController');
 });
 
 Route::group(['middleware' => ['role:admin|responsable']], function (){
@@ -67,9 +73,6 @@ Route::group(['middleware' => ['role:admin|responsable']], function (){
     Route::resource('evenements','EvenementsController');
 });
 
-Route::group(['middleware' => ['role:admin|responsable|employe']], function (){
-    Route::resource('usagers', 'UserController',
-        ['only' => ['monCompte']]);
-});
+
 
 

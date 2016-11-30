@@ -14,7 +14,7 @@ class RolesSeeder extends Seeder {
             //Name, Display_name, Description
             ["admin","Administration","Ce rôle a accès à la section administrative, normal et invite."],
             ["responsable","Responsable","Ce rôle a accès à la section normal et invite."],
-            ["employe","Administration","Ce rôle a accès à la section invite."],
+            ["employe","Employe","Ce rôle a accès à la section invite."],
         ];
 
         DB::table('Roles')->delete();
