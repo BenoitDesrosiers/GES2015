@@ -315,6 +315,7 @@ class DeleguesController extends BaseController {
     {
         if ($request->ajax())
         {
+
             $region_id = $request->input('region_id');
             if ( isset($region_id) )
             {

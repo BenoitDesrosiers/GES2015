@@ -3,10 +3,12 @@
  */
 $(function () {
     $('#region').change(function (event) {
-        listerDelegues($(this).val());
+        console.log('hhi');
+        listerDelegues($(this).val(), $('meta[name="csrf-token"]').attr('content'));
     });
 
-    listerDelegues($('#region').val());
+    //listerDelegues($('#region').val(), $('meta[name="csrf-token"]').attr('content'));
+    listerDelegues(1, $('meta[name="csrf-token"]').attr('content'));
 });
 
 $("body").bind("ajaxSend", function(elm, xhr, s){
@@ -21,14 +23,15 @@ $("body").bind("ajaxSend", function(elm, xhr, s){
  * @param delegues
  *
  */
-function listerDelegues(regionId) {
+function listerDelegues(regionId, csrf) {
+    console.log(csrf);
     $.ajax({
         method: "GET",
         url: "/tableau_delegues",
-        data: {region_id: regionId, CSRF: getCSRFTokenValue()}
+        data: {region_id: regionId}
     })
         .done(function (delegues) {
-            var tableau = creerTableau(delegues);
+            var tableau = creerTableau(delegues, csrf);
             $('#listeDelegues').html(tableau);
         });
 }
@@ -40,9 +43,9 @@ function listerDelegues(regionId) {
  * @param delegues
  *
  */
-function creerTableau(delegues){
+function creerTableau(delegues, crsf){
     var tableau = document.createElement('table');
-
+    var token = crsf;
     if (delegues.length < 1){
         var texte = document.createElement('h3')
         texte.innerHTML = "Il n'y a pas de délégué dans cette région."
@@ -52,16 +55,17 @@ function creerTableau(delegues){
         bodyTableau.className = 'table table-striped table hover';
         var entente = creerEntete();
 
-        tableau.appendChild(entente)
+        tableau.appendChild(entente);
         $.each(delegues, function (index, delegue) {
 
-            var ligne = creerLigne(index, delegue);
+
+            var ligne = creerLigne(index, delegue, token);
 
             bodyTableau.appendChild(ligne);
         })
     }
 
-    tableau.appendChild(bodyTable)
+    tableau.appendChild(bodyTableau)
     return tableau;
 }
 
@@ -112,10 +116,11 @@ function creerEntete()
  * @return {Element} Une ligne du tableau en html
  *
  */
-function creerLigne(index, delegue){
+function creerLigne(index, delegue, csrf){
 
     var ligne = document.createElement('tr');
     var nomDelegue = document.createElement('td');
+    var nomDelegueRef = document.createElement('a');
     var regionDelegue = document.createElement('td');
     var roleDelegue = document.createElement('td');
     var accreditationDelegue = document.createElement('td');
@@ -124,21 +129,25 @@ function creerLigne(index, delegue){
 
     // Nom
 
-    nomDelegue.innerHTML = "<a href='/delegues/'" + delegue.id + ">  delegue.nom + ', ' + delegue.prenom</a>";
+    nomDelegueRef.innerHTML = delegue.nom + ', ' + delegue.prenom;
+    nomDelegueRef.setAttribute('href', 'delegues/' + delegue.id);
+    nomDelegue.appendChild(nomDelegueRef);
     ligne.appendChild(nomDelegue);
 
     // Région
 
-    regionDelegue.innerHTML = "class='hidden-sm hidden-xs'><span data-toggle='tooltip' data-placement='bottom' title= delegue.region.nom > delegue.region.nom_court </span>";
+    //regionDelegue.innerHTML = "class='hidden-sm hidden-xs'><span data-toggle='tooltip' data-placement='bottom' title= delegue.region.nom > delegue.region.nom_court </span>";
+    regionDelegue.innerHTML = delegue.region.nom_court;
     ligne.appendChild(regionDelegue);
 
     // Rôles
 
-    if (delegue.roles.count() >= 2){
+    if (delegue.roles.length >= 2){
         roleDelegue.innerHTML = "<button type='submit' class='btn btn-default btn-mini glyphicon glyphicon-plus' onClick='afficherRoles(this)'/>";
         ligne.appendChild(roleDelegue);
-    }else if (delegue.roles.count() == 1){
-        roleDelegue.innerHTML = delegue.roles.name
+    }else if (delegue.roles.length == 1){
+        roleDelegue.innerHTML = delegue.roles.nom;
+        ligne.appendChild(roleDelegue);
     }else{
         ligne.appendChild(roleDelegue);
     }
@@ -162,8 +171,10 @@ function creerLigne(index, delegue){
 
     // Effacer
 
-    effacerDelegue.innerHTML = "<form method='POST' action='/delegues/" + delegue.id + "' accept-charset='UTF-8' data-confirm='Êtes-vous certain?'><input name='_method' type='hidden' value='DELETE'><input name='_token' type='hidden' value= " + CSRF + " > <button type=submit href='/delegues/" + delegue.id + "' class='btdfn btn-danger btn-mini'>Effacer</button> </form>";
+    effacerDelegue.innerHTML = "<form method='POST' action='/delegues/" + delegue.id + "' accept-charset='UTF-8' onsubmit='return confirmDelete()'><input name='_method' type='hidden' value='DELETE'><input name='_token' type='hidden' value= " + csrf + " > <button type=submit href='/delegues/" + delegue.id + "' class='btdfn btn-danger btn-mini'>Effacer</button> </form>";
     ligne.appendChild(effacerDelegue)
+
+    return ligne;
 
 }
 
@@ -182,18 +193,15 @@ function afficherRoles(bouton) {
     }
 }
 
-
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-})
-
-
 /**
- * Lance la fonction pour afficher tous les délégués au chargement de la page.
+ *
+ * Fonction pour confirmer, car le data-confirm ne fonctionne pas
+ *
  */
-$(document).ready(function () {
-    var delegues_region = [];
-    delegues_region = delegues;
+function confirmDelete() {
+    return confirm('Êtes-vous certain?');
+}
 
-    listerParticipants(delegues_region);
-});
+//$(function () {
+//    $('[data-toggle="tooltip"]').tooltip()
+//})
