@@ -61,7 +61,6 @@ class PostesController extends Controller
         } catch (ModelNotFoundException $e) {
             App::abort(404);
         }
-
         if ($poste->save()) {
             return Redirect::action('PostesController@index');
         } else {

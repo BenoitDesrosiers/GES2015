@@ -12,7 +12,7 @@ use App\Models\Poste;
 
 class PosteTest extends TestCase
 {
-    //use DatabaseTransactions;
+    use DatabaseTransactions;
 
     /** @test */
     public function verification_table_postes_existe()
@@ -23,18 +23,24 @@ class PosteTest extends TestCase
     /** @test */
     public function creation_d_un_poste()
     {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+
         $poste = factory(App\Models\Poste::class)->make();
         $input = ['nom' => $poste->nom, 'description' => $poste->description];
-        $this->call('POST', '/postes', $input);
+        $this->call('POST', '/postes', ['input' => $input]);
         $this->assertSessionMissing(['errors']);
     }
 
     /** @test */
     public function sauvegarde_d_un_poste_dans_BD()
     {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+
         $poste = factory(App\Models\Poste::class)->make();
         $input = ['nom' => $poste->nom, 'description' => $poste->description];
-        $this->call('POST', '/postes/store', $input);
+        $this->call('POST', '/postes', $input);
         $this->assertSessionMissing(['errors']);
         $this->seeInDatabase('postes',
             ['nom' => $poste->nom,
@@ -45,12 +51,15 @@ class PosteTest extends TestCase
     /** @test */
     public function modification_d_un_poste()
     {
-        $poste = factory(App\Models\Poste::class)->make();
-        $input = ['nom' => $poste->nom, 'description' => $poste->description];
-        $this->call('PUT', '/postes/update', $input);
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+
+        $poste = factory(App\Models\Poste::class)->create();
+        $input = ['nom' => $poste->nom . '1', 'description' => $poste->description];
+        $this->call('PUT', '/postes', $input);
         $this->assertSessionMissing(['errors']);
         $this->seeInDatabase('postes',
-            ['nom' => $poste->nom,
+            ['nom' => $poste->nom . '1',
             'description' => $poste->description
             ]);
     }
@@ -58,9 +67,12 @@ class PosteTest extends TestCase
     /** @test */
     public function suppression_d_un_poste()
     {
-        $poste = factory(App\Models\Poste::class)->make();
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+
+        $poste = factory(App\Models\Poste::class)->create();
         $input = ['nom' => $poste->nom, 'description' => $poste->description];
-        $this->call('DELETE', '/postes/destroy', $input);
+        $this->call('DELETE', '/postes', $input);
         $this->assertSessionMissing(['errors']);
         $this->dontSeeInDatabase('postes',
             ['nom' => $poste->nom,
