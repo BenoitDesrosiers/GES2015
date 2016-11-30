@@ -56,7 +56,7 @@ class PosteTest extends TestCase
 
         $poste = factory(App\Models\Poste::class)->create();
         $input = ['nom' => $poste->nom . '1', 'description' => $poste->description];
-        $this->call('PUT', '/postes', $input);
+        $this->call('PUT', '/postes/' . $poste->id, $input);
         $this->assertSessionMissing(['errors']);
         $this->seeInDatabase('postes',
             ['nom' => $poste->nom . '1',
@@ -71,13 +71,9 @@ class PosteTest extends TestCase
         $this->actingAs($user);
 
         $poste = factory(App\Models\Poste::class)->create();
-        $input = ['nom' => $poste->nom, 'description' => $poste->description];
-        $this->call('DELETE', '/postes', $input);
+        $this->call('DELETE', '/postes/' . $poste->id);
         $this->assertSessionMissing(['errors']);
-        $this->dontSeeInDatabase('postes',
-            ['nom' => $poste->nom,
-            'description' => $poste->description
-            ]);
+        $this->dontSeeInDatabase('postes', ['id' => $poste->id]);
     }
 
     /**
