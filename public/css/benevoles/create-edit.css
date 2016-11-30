@@ -1,0 +1,49 @@
+/*******************************************************************************
+Fichier: create-edit.css
+Description: Fichier de style pour la page d'ajout (et de modification)
+             d'un bénévole.
+Créé le: 161129
+Modifié le: 161129
+Par: Steve D.
+*******************************************************************************/
+
+.conteneur-disponibilite {
+    border-radius:5px;
+    border: 1px solid #777;
+    padding: 5px;
+    
+    float: left;
+    width: 300px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.conteneur-disponibilite .btn-danger {
+    border:2px solid #DD0000;
+}
+
+.btn-success{
+    border-radius:5px;
+    margin-top: 4px;
+}
+
+.btn-success {
+    border:2px solid #00DD00;
+    margin-bottom: 4px;
+}
+
+.btn-success[disabled] {
+    background: #005500;
+    color: #777;
+    cursor:not-allowed;
+}
+
+.btn-success[disabled]:hover {
+    background: #005500;
+    color: #777;
+}
+
+.disponibilite-bouton {
+	clear:left;
+	margin-bottom: 20px;
+}
