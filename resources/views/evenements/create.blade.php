@@ -7,7 +7,7 @@
     <div class="panel-heading">
         <h2>Création d'un événement</h2>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" id="vueEvenement">
         {!! Form::open(['action'=> 'EvenementsController@index', 'class' => 'form']) !!}
         @foreach ($errors->all() as $error)
             <p class="alert alert-danger">{{ $error }}</p>
@@ -39,15 +39,21 @@
             {!! Form::label('type_id', '* Type:') !!} <br/>
             {!! Form::select('type_id', $typeArray, null, ['class' => 'form-control largeurPetite']) !!}
         </div>
-        <?php
-            $epreuveArray = array();
-            for ($i=0; $i<count($epreuves); $i++) {
-                $epreuveArray[$epreuves[$i]['id']]  = $epreuves[$i]['nom'];
-            }
-        ?>
+        <div class="form-group">
+            {!! Form::label('sport', '* Sport:') !!} <br/>
+            <select v-model="sportSelectionne" class="form-control largeurPetite">
+                <option v-for="sport in listeSports" v-bind:value="sport">
+                    @{{ sport }}
+                </option>
+            </select>
+        </div>
         <div class="form-group">
             {!! Form::label('epreuve_id', '* Épreuve:') !!} <br/>
-            {!! Form::select('epreuve_id', $epreuveArray, null, ['class' => 'form-control largeurPetite']) !!}
+            <select v-model="epreuveSelectionne" name="epreuve_id" class="form-control largeurPetite">
+                <option v-for="option in listeEpreuves" v-bind:value="option.valeur">
+                    @{{ option.texte }}
+                </option>
+            </select>
         </div>
         <div class="form-group">
             {!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
@@ -57,3 +63,8 @@
     </div>
 </div>
 @stop
+
+@push('scripts')
+<script src="{!! asset('js/vue.js') !!}"></script>
+<script src="{!! asset('js/evenements_create_edit.js') !!}"></script>
+@endpush

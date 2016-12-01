@@ -9,42 +9,54 @@
  * Par: ZeLarpMaster
  ******************************************************************************/
 
-var liste_evenements = new Vue({
+var vueListeEvenements = new Vue({
 	el: "#liste_evenements",
 	data: {
-		liste_evenements: [],
-		sortKey: "nom_sport",
-		inverse: 1
+		listeEvenements: [],
+		colonneTriee: "nom_sport",
+		direction: 1
 	},
 	methods: {
+		/**
+		 * Méthode qui inverse l'état de `direction`
+		 */
 		toggleInverse: function () {
-			this.inverse = -this.inverse;
+			this.direction = -this.direction;
 		}
 	},
 	computed: {
+		/**
+		 * Trie selon la colonne `colonneTriee` dans la `direction`
+		 * @returns {Array} La liste d'événements triée
+		 */
 		filteredData: function () {
-			var sortKey = this.sortKey;
-			var data = this.liste_evenements;
-			var invert = this.inverse;
-			if (sortKey) {
-				data.sort(function (a, b) {
-					a = a[sortKey];
-					b = b[sortKey];
-					return (a === b ? 0 : a > b ? 1 : -1) * invert;
+			var colonneTriee = this.colonneTriee;
+			var donnees = this.listeEvenements;
+			var direction = this.direction;
+			if (colonneTriee) {
+				donnees.sort(function (a, b) {
+					a = a[colonneTriee];
+					b = b[colonneTriee];
+					return (a === b ? 0 : a > b ? 1 : -1) * direction;
 				});
 			}
-			return data;
+			return donnees;
 		}
 	}
 });
 
+// Requête AJAX qui obtient la liste d'événements
 $.ajax({
 	method: "GET",
 	url: "/get_liste_evenements"
-}).done(function( evenements ) {
-	liste_evenements.liste_evenements = evenements;
+}).done(function(evenements) {
+	vueListeEvenements.listeEvenements = evenements;
 });
 
+/**
+ * Demande à l'utilisateur de confirmer la suppression d'un élément
+ * @return {boolean} Si oui ou non la suppression a été confirmée
+ */
 function confirmDelete() {
 	return confirm('Êtes-vous certain?');
 }

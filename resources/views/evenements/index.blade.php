@@ -57,38 +57,6 @@
                     {!! Form::close() !!}
                 </td>
             </tr>
-{{--@foreach($evenements as $evenement)
-
-        <!-- Ajout de chaque événement de la base de données dans table des événements -->
-            <tr>
-                <td>
-                    <a href="{{ action('EvenementsController@show', $evenement->id) }}">
-                        {{ $evenement->nom }}
-                    </a>
-                </td>
-                <td class="hidden-xs">
-                    {{$evenement->date_heure}}
-                </td>
-                <td class="hidden-xs">
-                    {{$evenement->epreuve->sport->nom}}
-                </td>
-                <td class="hidden-xs">
-                    {{$evenement->type->titre}}
-                </td>
-                <td>
-                    <a href="{{ action('EvenementsController@edit',$evenement->id) }}" class="btn btn-info">
-                        Modifier
-                    </a>
-                </td>
-                <td>
-                    {!! Form::open(array('action' => array('EvenementsController@destroy',$evenement->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}
-                    <button type="submit" href="{{ URL::route('evenements.destroy', $evenement->id) }}" class="btn btn-danger btn-mini">
-                        Effacer
-                    </button>
-                    {!! Form::close() !!}
-                </td>
-            </tr>
-@endforeach--}}
         </tbody>
     </table>
 @endif

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\EvenementsRequest;
 
+use App\Models\Sport;
 use View;
 use Redirect;
 use Input;
@@ -160,6 +161,18 @@ class EvenementsController extends BaseController
         }
     }
 
+	/**
+	 * Génère et formatte la liste d'événements.
+	 *
+	 * La liste contient toutes les colonnes d'un événement ainsi que:
+	 * 		nom_sport --> Le nom du sport associé à l'événement
+	 * 		titre_type --> Le titre du type de l'événement
+	 * 		url_show --> L'URL d'affichage de l'événement
+	 * 		url_edit --> L'URL de modification de l'événement
+	 * 		url_destroy --> L'URL de suppression de l'événement
+	 *
+	 * @return \Illuminate\Http\JsonResponse La liste d'événements
+	 */
     public function getListeEvenements() {
 		$evenements = Evenement::all();
 		foreach($evenements as $evenement) {
@@ -171,5 +184,32 @@ class EvenementsController extends BaseController
 			$evenement["url_destroy"] = action("EvenementsController@destroy", ["id" => $evenement->id]);
 		}
 		return response()->json($evenements);
+	}
+
+	/**
+	 * Génère et formatte la liste d'épreuves.
+	 *
+	 * La liste d'épreuves suit le format suivant:
+	 * 	Clé => Valeur
+	 * 		Où Clé est le nom d'un sport et Valeur est une liste qui contient:
+	 * 			"value" => Le ID de l'épreuve,
+	 * 			"text" => Le nom de l'épreuve
+	 *
+	 * @return \Illuminate\Http\JsonResponse La liste d'épreuves
+	 */
+	public function getListeSports() {
+		$sports = Sport::with("epreuves")->get();
+		$resultat = array();
+		foreach($sports as $sport) {
+			$epreuves = array();
+			foreach($sport->epreuves as $epreuve) {
+				$epreuves[] = [
+					"valeur" => $epreuve->id,
+					"texte" => $epreuve->nom
+				];
+			}
+			$resultat[$sport->nom] = $epreuves;
+		}
+		return response()->json($resultat);
 	}
 }
