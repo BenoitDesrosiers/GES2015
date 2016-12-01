@@ -20,16 +20,6 @@
                     {!! Form::select('region_id', $regionArray) !!}
                     {{ $errors->first('region_id') }}
                 </div>
-                @foreach ($participants as $participant)
-                    <?php $checked = " "; ?>
-                    <!-- FIXME: se servir des fonctions de collections: $listeIds = $epreuveParticipants->pluck('id'); ....  if($listeIds->contains($participant->id))... -->
-                    @foreach ($epreuveParticipants as $epreuvePart)
-                        @if ($epreuvePart->id == $participant->id)
-                            <?php $checked = " checked"; ?>
-                        @endif
-                    @endforeach
-                <?php $region = $participant->region; ?>
-                @endforeach
         </tbody>
     </table>
     <div class="form-group">
@@ -47,11 +37,11 @@
         var participants = {
             @foreach($participants as $participant)
                 <?php $checked = false; ?>
-                    @foreach($epreuveParticipants as $epreuvePart)
-                        @if($epreuvePart->id == $participant->id)
-                            <?php $checked = true; ?>
-                        @endif
-                    @endforeach
+                @foreach($epreuveParticipants as $epreuvePart)
+                    @if($epreuvePart->id == $participant->id)
+                        <?php $checked = true; ?>
+                    @endif
+                @endforeach
                 {{ $participant->id }}: {
                     numero: "{{ $participant->numero  }}",
                     nom:"{{ $participant->nom }}, {{ $participant->prenom }}",
@@ -69,10 +59,7 @@
          * Lance la fonction pour afficher tous les participants au chargement de la page.
          */
         $(document).ready(function () {
-            var participants_region = [];
-            participants_region = participants;
-
-            listerParticipants(participants_region);
+            listerParticipants(participants);
         });
     </script>
 </div>
