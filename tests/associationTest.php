@@ -62,7 +62,29 @@ class associationTest extends TestCase
     }
     
     /** @test */
-    public function tempter_d_ajouter_deux_elements_pareil_dans_la_BD()
+    public function tempter_d_ajouter_deux_noms_pareil_dans_la_BD()
+    {
+    	$user = factory(App\User::class)->create();
+    	$this->actingAs($user);
+    	 
+    	$association = factory(App\Models\Association::class)->create();
+    	$input = ['nom'=>'allo toi',
+    			'abreviation'=>'AT',
+    			'description'=>'Gens qui se disent le bonjour'];
+    	$this->call('POST', '/associations/', $input);
+    	$input = [
+    			'nom'=>'allo toi',
+    			'abreviation'=>'AT1',
+    			'description'=>'Gens qui se disent le bonjour'];
+    	$this->call('POST', '/associations/', $input);
+    	$this->assertSessionHas(['errors']);
+    	$this->seeInDatabase('associations', ['nom'=>$association->nom,
+    			'abreviation'=>$association->abreviation,
+    			'description'=>$association->description]);
+    }
+    
+    /** @test */
+    public function tempter_d_ajouter_deux_abreviations_pareilles_dans_la_BD()
     {
     	$user = factory(App\User::class)->create();
     	$this->actingAs($user);
@@ -70,12 +92,12 @@ class associationTest extends TestCase
     	$association = factory(App\Models\Association::class)->create();
     	$input = ['nom'=>'allo toi',
     			'abreviation'=>'AT',
-    			'description'=>'gens qui se disent le bonjour'];
+    			'description'=>'Gens qui se disent le bonjour'];
     	$this->call('POST', '/associations/', $input);
     	$input = [
     			'nom'=>'allo toi 1',
     			'abreviation'=>'AT',
-    			'description'=>'gens qui se disent le bonjour'];
+    			'description'=>'Gens qui se disent le bonjour'];
     	$this->call('POST', '/associations/', $input);
     	$this->assertSessionHas(['errors']);
     	$this->seeInDatabase('associations', ['nom'=>$association->nom,
@@ -93,5 +115,56 @@ class associationTest extends TestCase
     	 $this->call('DELETE', '/associations/' . $association->id);
     	 $this->assertSessionMissing(['errors']);
     	 $this->dontSeeInDatabase('associations', ['id' => $association->id]);
+    }
+    
+    /** @test */
+    public function tester_l_entrer_un_null_au_nom_dans_la_BD()
+    {
+    	$user = factory(App\User::class)->create();
+    	$this->actingAs($user);
+    	
+    	$association = factory(App\Models\Association::class)->create();
+    	$input = ['nom'=>null,
+    			'abreviation'=>'AT',
+    			'description'=>'Gens qui se disent le bonjour'];
+    	$this->call('POST', '/associations/', $input);
+    	$this->assertSessionHas(['errors']);
+    	$this->seeInDatabase('associations', ['nom'=>$association->nom,
+    											'abreviation'=>$association->abreviation,
+    											'description'=>$association->description]);
+    }
+    
+    /** @test */
+    public function tester_l_entrer_un_null_dans_l_abreviation_dans_la_BD()
+    {
+    	$user = factory(App\User::class)->create();
+    	$this->actingAs($user);
+    	 
+    	$association = factory(App\Models\Association::class)->create();
+    	$input = ['nom'=>'Allo Toi',
+    			'abreviation'=>null,
+    			'description'=>'Gens qui se disent le bonjour'];
+    	$this->call('POST', '/associations/', $input);
+    	$this->assertSessionHas(['errors']);
+    	$this->seeInDatabase('associations', ['nom'=>$association->nom,
+    			'abreviation'=>$association->abreviation,
+    			'description'=>$association->description]);
+    }
+    
+    /** @test */
+    public function tester_l_entrer_un_null_dans_la_description_dans_la_BD()
+    {
+    	$user = factory(App\User::class)->create();
+    	$this->actingAs($user);
+    	 
+    	$association = factory(App\Models\Association::class)->create();
+    	$input = ['nom'=>'Allo Toi',
+    			'abreviation'=>'AT',
+    			'description'=>null];
+    	$this->call('POST', '/associations/', $input);
+    	$this->assertSessionMissing(['errors']);
+    	$this->seeInDatabase('associations', ['nom'=>$association->nom,
+    			'abreviation'=>$association->abreviation,
+    			'description'=>$association->description]);
     }
 }
