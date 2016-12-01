@@ -26,8 +26,8 @@ public $validationMessages;
 
 public function validationRules() {
 	return [
-		'nom' => 'required|unique:codes,nom'.($this->id ? ",$this->id" : ''),
-		'abreviation' => 'required|unique:codes,abreviation'.($this->id ? ",$this->id" : '')
+		'nom' => 'required|unique:associations,nom'.($this->id ? ",$this->id" : ''),
+		'abreviation' => 'required|unique:associations,abreviation'.($this->id ? ",$this->id" : '')
 		];
 }
 

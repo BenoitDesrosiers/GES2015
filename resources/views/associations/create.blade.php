@@ -16,21 +16,18 @@
 			<!--  !!Obligatoire!! -->
 			{!! Form::label('nom', 'Nom:') !!}
 			{!! Form::text('nom',null, ['class' => 'form-control']) !!}
-			{{ $errors->first('nom') }}
 		</div>
 		<div class="form-group">
 			<!--  L'emplacement où l'on entre l'abréviation d'une nouvelle association -->
 			<!--  !!Obligatoire!! -->
 			{!! Form::label('abreviation', 'Abréviation:') !!}
 			{!! Form::text('abreviation',null, ['class' => 'form-control']) !!}
-			{{ $errors->first('abreviation') }}
 		</div>
 		<div class="form-group">
 			<!--  L'emplacement où l'on entre la description d'une nouvelle association -->
 			<!--  Peut être vide! -->
 			{!! Form::label('description', 'Description:') !!} 
 			{!! Form::text('description',null, ['class' => 'form-control']) !!}
-			{{ $errors->first('description') }}
 		</div>
 		<div class="form-group">
 			{!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}

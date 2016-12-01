@@ -17,7 +17,7 @@ class CreateAssociationTable extends Migration
 			$table->increments('id');
 			$table->string('nom');
 			$table->string('abreviation');
-			$table->string('description');
+			$table->string('description')->nullable();
 			$table->timestamps();
 			
 		});

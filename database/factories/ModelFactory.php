@@ -66,3 +66,12 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 			'region_id' => rand(0, 100)
 	];
 });
+
+// Pour les tests de 'associationTest'
+	$factory->define(App\Models\Association::class, function (Faker\Generator $faker) {
+		return [
+				'nom'=> $faker->state,
+				'abreviation'=> $faker->stateAbbr,
+				'description' => $faker->sentence(3, TRUE)
+		];
+	});

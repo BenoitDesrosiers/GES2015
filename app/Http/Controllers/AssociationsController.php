@@ -75,7 +75,7 @@ class AssociationsController extends BaseController
             $association->abreviation = $input['abreviation'];
             $association->description = $input['description'];
         } 
-        catch(ModelNotFoundException $e) //FIXME: est-ce qu'on peut vraiment avoir un modelnotfound ici?
+        catch(ModelNotFoundException $e)
         {
             App::abort(404);
         }
@@ -154,7 +154,7 @@ class AssociationsController extends BaseController
             $association->abreviation = $input['abreviation'];
             $association->description = $input['description'];
         } 
-        catch(ModelNotFoundException $e) //FIXME: c'est pas juste un modelnotfound qu'on peut pogner ici. Les input peuvent ne pas être bon aussi. 
+        catch(ModelNotFoundException $e)
         {
             App::abort(404);
         }
