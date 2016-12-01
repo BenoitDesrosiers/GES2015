@@ -46,12 +46,19 @@
         */
         var participants = {
             @foreach($participants as $participant)
+                <?php $checked = false; ?>
+                    @foreach($epreuveParticipants as $epreuvePart)
+                        @if($epreuvePart->id == $participant->id)
+                            <?php $checked = true; ?>
+                        @endif
+                    @endforeach
                 {{ $participant->id }}: {
                     numero: "{{ $participant->numero  }}",
                     nom:"{{ $participant->nom }}, {{ $participant->prenom }}",
                     region:"{{ $participant->region->nom }}",
                     participant_region_id:"{{ $participant->region->id }}",
-                    participant_id:"{{ $participant->id }}"
+                    participant_id:"{{ $participant->id }}",
+                    is_checked: {!! $checked ? "true" : "false" !!}
                 },
             @endforeach
         };

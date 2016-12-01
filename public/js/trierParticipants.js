@@ -69,7 +69,14 @@ function listerParticipants(participants_region) {
             var headerCheckbox = document.createElement('th');
             var checkbox = document.createElement('input');
             checkbox.name = 'participants[' + participants_region[participant]["participant_id"] + ']';
+            checkbox.setAttribute('id', participants_region[participant]["participant_id"]);
             checkbox.type = 'checkbox';
+
+            console.log(participants_region[participant]['is_checked']);
+
+            if (participants_region[participant]['is_checked']) {
+                checkbox.setAttribute('checked', 'checked');
+            }
 
             headerCheckbox.appendChild(checkbox);
             ligneParticipant.appendChild(headerCheckbox);
