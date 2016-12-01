@@ -78,12 +78,36 @@ class PosteTest extends TestCase
 
     /**
      * @test
+     * @expectedException PDOException
      * @dataProvider nullProvider
      */
+    public function champ_nom_est_pas_null($nom, $description)
+    {
+        $poste = factory(App\Models\Poste::class)
+            ->create(['nom' => $nom, 'description' => $description]);
+    }
+
     public function nullProvider()
     {
         return [
-            'poste' => [null, 'Une description descriptive.']
+            'nom' => [null, 'Une description descriptive.']
         ];
+    }
+
+    /** @test */
+    public function verification_doublon_nom_poste()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+
+        $poste = factory(App\Models\Poste::class)->create();
+        $input1 = ['nom' => 'Poste', 'description' => 'Poste1'];
+        $this->call('POST', '/postes', $input1);
+
+        $input2 = ['nom' => 'Poste', 'description' => 'Poste2'];
+        $this->call('POST', '/postes', $input2);
+        $this->assertSessionHas(['errors']);
+
+        $this->seeInDatabase('postes', ['nom' => $poste->nom]);
     }
 }

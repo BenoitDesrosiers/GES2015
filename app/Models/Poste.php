@@ -15,18 +15,17 @@ class Poste extends EloquentValidating {
     /**
      * Eloquent relationship: un poste a plusieurs bénévoles
      */
-
     public function benevoles() {
         return $this->hasMany('App\Models\Benevole');
     }
+
     /**
      * Validation
      *
-     * un poste doit avoir:
-     * - nom: obligatoire, et unique dans toute la table
+     * Un poste doit avoir:
+     * - nom: obligatoire, et unique dans toute la table.
      * - Les autres champs sont falcultatifs.
      */
-
     public $validationMessages;
 
     public function validationRules() {
