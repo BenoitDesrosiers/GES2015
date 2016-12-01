@@ -314,12 +314,7 @@ class EpreuvesController extends BaseController
      */
     protected function verifier_existence($arbitresAEntrer)
     {
-        if (is_array($arbitresAEntrer) AND ($arbitresAEntrer[0] != "0") AND ($arbitresAEntrer[0] != "")) {
-            $retour = TRUE;  //FIXME: pourquoi ne pas juste retourner le résultat du IF?
-        } else {
-            $retour = FALSE;
-        }
-        return $retour;
+        return (is_array($arbitresAEntrer) AND ($arbitresAEntrer[0] != "0") AND ($arbitresAEntrer[0] != ""));
     }
 
     /**
