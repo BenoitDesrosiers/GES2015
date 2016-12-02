@@ -124,13 +124,13 @@ class associationTest extends TestCase
     	$user = factory(App\User::class)->create();
     	$this->actingAs($user);
     	
-    	$association = factory(App\Models\Association::class)->create();
+    	$association = factory(App\Models\Association::class)->make();
     	$input = ['nom'=>null,
     			'abreviation'=>'AT',
     			'description'=>'Gens qui se disent le bonjour'];
     	$this->call('POST', '/associations/', $input);
     	$this->assertSessionHas(['errors']);
-    	$this->seeInDatabase('associations', ['nom'=>$association->nom,
+    	$this->dontSeeInDatabase('associations', ['nom'=>$association->nom,
     											'abreviation'=>$association->abreviation,
     											'description'=>$association->description]);
     }
@@ -141,13 +141,13 @@ class associationTest extends TestCase
     	$user = factory(App\User::class)->create();
     	$this->actingAs($user);
     	 
-    	$association = factory(App\Models\Association::class)->create();
+    	$association = factory(App\Models\Association::class)->make();
     	$input = ['nom'=>'Allo Toi',
     			'abreviation'=>null,
     			'description'=>'Gens qui se disent le bonjour'];
     	$this->call('POST', '/associations/', $input);
     	$this->assertSessionHas(['errors']);
-    	$this->seeInDatabase('associations', ['nom'=>$association->nom,
+    	$this->dontSeeInDatabase('associations', ['nom'=>$association->nom,
     											'abreviation'=>$association->abreviation,
     											'description'=>$association->description]);
     }
@@ -158,13 +158,13 @@ class associationTest extends TestCase
     	$user = factory(App\User::class)->create();
     	$this->actingAs($user);
     	 
-    	$association = factory(App\Models\Association::class)->create();
+    	$association = factory(App\Models\Association::class)->make();
     	$input = ['nom'=>'Allo Toi',
     			'abreviation'=>'AT',
     			'description'=>null];
     	$this->call('POST', '/associations/', $input);
     	$this->assertSessionMissing(['errors']);
-    	$this->seeInDatabase('associations', ['nom'=>$association->nom,
+    	$this->dontSeeInDatabase('associations', ['nom'=>$association->nom,
     											'abreviation'=>$association->abreviation,
     											'description'=>$association->description]);
     }
