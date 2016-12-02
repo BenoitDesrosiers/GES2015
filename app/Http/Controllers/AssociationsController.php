@@ -33,14 +33,9 @@ class AssociationsController extends BaseController
             $associations = Association::all()->sortby('nom');
             foreach($associations as $association)
             {
-                if ($association->abreviation == "")
-                {
-                        $association->abreviation = "Aucune abréviation disponible";
-                }
-
                 if ($association->description == "")
                 {
-                        $association->description = "Aucune description disponible";
+                        $association->description = "Aucune description disponible.";
                 }
             }
         } 
@@ -103,14 +98,9 @@ class AssociationsController extends BaseController
         try 
         {
             $association = Association::findOrFail($id);
-            if ($association->abreviation == "") 
-            {
-                $association->abreviation = "Aucune abréviation disponible";
-            }
-
             if ($association->description == "") 
             {
-                $association->description = "Aucune description disponible";
+                $association->description = "Aucune description disponible.";
             }
         } 
         catch(ModelNotFoundException $e) 

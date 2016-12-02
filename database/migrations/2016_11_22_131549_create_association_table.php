@@ -12,7 +12,7 @@ class CreateAssociationTable extends Migration
      */
     public function up()
     {
-	        Schema::create('associations', function ($table) 
+	        Schema::create('associations', function (Blueprint $table) 
 		{
 			$table->increments('id');
 			$table->string('nom');
