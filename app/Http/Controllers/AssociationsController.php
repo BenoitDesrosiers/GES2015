@@ -1,6 +1,8 @@
 <?php
 /** 
- * @author GBEY0402
+ * Le controller des associations
+ * 
+ * @author Francis M
  * @version 0.1
  */
 

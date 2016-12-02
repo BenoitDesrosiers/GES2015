@@ -13,7 +13,7 @@
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<!--  Les différents champs d'un code -->
+				<!--  Les différents champs d'une association -->
 				<th>Nom</th>
 				<th class="hidden-xs">Abréviation</th>
 				<th class="hidden-xs">Description</th>
@@ -21,7 +21,7 @@
 			</tr>
 		</thead>
 		<tbody>
-<!--  Pour chaque code trouvé dans la base de données, affiche le nom, l'abréviation et la description  -->
+<!--  Pour chaque association trouvée dans la base de données, affiche le nom, l'abréviation et la description  -->
 @foreach($associations as $association)
 			<tr>
 				<td><a href="{{ action('AssociationsController@show', $association->id) }}">{{ $association->nom }}</a></td>

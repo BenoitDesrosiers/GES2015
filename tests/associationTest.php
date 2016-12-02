@@ -94,6 +94,7 @@ class associationTest extends TestCase
     			'abreviation'=>'AT',
     			'description'=>'Gens qui se disent le bonjour'];
     	$this->call('POST', '/associations/', $input);
+    	
     	$input = [
     			'nom'=>'allo toi 1',
     			'abreviation'=>'AT',
@@ -147,8 +148,8 @@ class associationTest extends TestCase
     	$this->call('POST', '/associations/', $input);
     	$this->assertSessionHas(['errors']);
     	$this->seeInDatabase('associations', ['nom'=>$association->nom,
-    			'abreviation'=>$association->abreviation,
-    			'description'=>$association->description]);
+    											'abreviation'=>$association->abreviation,
+    											'description'=>$association->description]);
     }
     
     /** @test */
@@ -164,7 +165,7 @@ class associationTest extends TestCase
     	$this->call('POST', '/associations/', $input);
     	$this->assertSessionMissing(['errors']);
     	$this->seeInDatabase('associations', ['nom'=>$association->nom,
-    			'abreviation'=>$association->abreviation,
-    			'description'=>$association->description]);
+    											'abreviation'=>$association->abreviation,
+    											'description'=>$association->description]);
     }
 }

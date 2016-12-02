@@ -3,7 +3,7 @@
  * La classe Association
  * 
  * 
- * @author GBEY0402
+ * @author Francis M
  * @version 0.1
  */
  
@@ -16,7 +16,7 @@ class Association extends EloquentValidating {
 /**
  * Validation
  *
- * un code doit avoir:
+ * une association doit avoir:
  * - nom: obligatoire et unique dans toute la table.
  * - abréviation: obligatoire et unique dans toute la table.
  * - Les autres champs sont falcultatifs.
