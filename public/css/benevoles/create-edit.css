@@ -8,7 +8,7 @@ Par: Steve D.
 *******************************************************************************/
 
 .conteneur-disponibilite {
-    border-radius:5px;
+    border-radius: 5px;
     border: 1px solid #777;
     padding: 5px;
     
@@ -19,23 +19,23 @@ Par: Steve D.
 }
 
 .conteneur-disponibilite .btn-danger {
-    border:2px solid #DD0000;
+    border: 2px solid #DD0000;
 }
 
 .btn-success{
-    border-radius:5px;
+    border-radius: 5px;
     margin-top: 4px;
 }
 
 .btn-success {
-    border:2px solid #00DD00;
+    border: 2px solid #00DD00;
     margin-bottom: 4px;
 }
 
 .btn-success[disabled] {
     background: #005500;
     color: #777;
-    cursor:not-allowed;
+    cursor: not-allowed;
 }
 
 .btn-success[disabled]:hover {
@@ -44,6 +44,6 @@ Par: Steve D.
 }
 
 .disponibilite-bouton {
-	clear:left;
+	clear: left;
 	margin-bottom: 20px;
 }

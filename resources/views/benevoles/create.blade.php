@@ -116,36 +116,28 @@
         <div id="conteneur-disponibilites">
             <div class="form-group conteneur-disponibilite">
                 {!! Form::label('disponibilite-disponibilite-1', 'Description de la disponibilite:') !!}
-                {!! Form::text('disponibilite_disponibilite[]','', 
-                	['id' => 'disponibilite-disponibilite-1', 'class' => 'form-control']) !!}
+                {!! Form::text('disponibilite_disponibilite[]','', ['id' => 'disponibilite-disponibilite-1', 'class' => 'form-control']) !!}
                 	
                 {!! Form::label('disponibilite-jour-1', 'Jour:') !!}
-                {!! Form::text('disponibilite_jour[]','', 
-                	['id' => 'disponibilite-jour-1', 'class' => 'form-control']) !!}
+                {!! Form::text('disponibilite_jour[]','', ['id' => 'disponibilite-jour-1', 'class' => 'form-control']) !!}
                 	
                 {!! Form::label('disponibilite-mois-1', 'Mois (en chiffre):') !!}
-                {!! Form::text('disponibilite_mois[]','', 
-                	['id' => 'disponibilite-mois-1', 'class' => 'form-control']) !!}
+                {!! Form::text('disponibilite_mois[]','', ['id' => 'disponibilite-mois-1', 'class' => 'form-control']) !!}
                 	
                 {!! Form::label('disponibilite-annee-1', 'Année:') !!}
-                {!! Form::text('disponibilite_annee[]','', 
-                	['id' => 'disponibilite-annee-1', 'class' => 'form-control']) !!}
+                {!! Form::text('disponibilite_annee[]','', ['id' => 'disponibilite-annee-1', 'class' => 'form-control']) !!}
                 	
                 {!! Form::label('disponibilite-debut-heure-1', 'Heure de début:') !!}
-                {!! Form::text('disponibilite_debut_heure[]','', 
-                	['id' => 'disponibilite-debut-heure-1', 'class' => 'form-control']) !!}
+                {!! Form::text('disponibilite_debut_heure[]','', ['id' => 'disponibilite-debut-heure-1', 'class' => 'form-control']) !!}
                 	
                 {!! Form::label('disponibilite-debut-minute-1', 'Minute de début:') !!}
-                {!! Form::text('disponibilite_debut_minute[]','', 
-                	['id' => 'disponibilite-debut-minute-1', 'class' => 'form-control']) !!}
+                {!! Form::text('disponibilite_debut_minute[]','', ['id' => 'disponibilite-debut-minute-1', 'class' => 'form-control']) !!}
                 	
                 {!! Form::label('disponibilite-fin-heure-1', 'Heure de fin:') !!}
-                {!! Form::text('disponibilite_fin_heure[]','', 
-                	['id' => 'disponibilite-fin-heure-1', 'class' => 'form-control']) !!}
+                {!! Form::text('disponibilite_fin_heure[]','', ['id' => 'disponibilite-fin-heure-1', 'class' => 'form-control']) !!}
                 	
                 {!! Form::label('disponibilite-fin-minute-1', 'Minute de fin:') !!}
-                {!! Form::text('disponibilite_fin_minute[]','', 
-                	['id' => 'disponibilite-fin-minute-1', 'class' => 'form-control']) !!}
+                {!! Form::text('disponibilite_fin_minute[]','', ['id' => 'disponibilite-fin-minute-1', 'class' => 'form-control']) !!}
             </div>
         </div>
         <div class="disponibilite-bouton">
