@@ -340,7 +340,7 @@ class BenevolesController extends BaseController {
 		$minuteFin = isset($input['disponibilite_fin_minute'][$index]) ? $input['disponibilite_fin_minute'][$index] : null;
 		$isAllDay = 0;
 
-		if (checkdate($mois, $jour, $annee)) {
+		if (checkdate((int)$mois, (int)$jour, (int)$annee)) {
 			$dateDebut = new DateTime($annee."-".$mois."-".$jour." ".$heureDebut.":".$minuteDebut.":00");
 			$dateFin = new DateTime($annee."-".$mois."-".$jour." ".$heureFin.":".$minuteFin.":00");
 			

@@ -115,29 +115,30 @@
 		{!! Form::label('disponibilites', 'Disponibilités:') !!} 
         <div id="conteneur-disponibilites">
             <div class="form-group conteneur-disponibilite">
-                {!! Form::label('disponibilite-disponibilite-1', 'Description de la disponibilité:') !!}
-                {!! Form::text('disponibilite_disponibilite[]','', ['id' => 'disponibilite-disponibilite-1', 'class' => 'form-control']) !!}
+                
+                <label for="disponibilite_disponibilite[]">Description de la disponibilité:</label>
+                <input type="text" name="disponibilite_disponibilite[]" id="disponibilite-disponibilite-1" class="form-control" maxlength="255" required/>
                 	
-                {!! Form::label('disponibilite-annee-1', 'Année:') !!}
-                {!! Form::text('disponibilite_annee[]','', ['id' => 'disponibilite-annee-1', 'class' => 'form-control']) !!}
-                	
-                {!! Form::label('disponibilite-mois-1', 'Mois:') !!}
-                {!! Form::text('disponibilite_mois[]','', ['id' => 'disponibilite-mois-1', 'class' => 'form-control']) !!}
+				<label for="disponibilite_annee[]">Année:</label>
+				<input type="number" name="disponibilite_annee[]" id="disponibilite-annee-1" class="form-control" step="1" min="2016" max="9999" required/>              	
                 
-                {!! Form::label('disponibilite-jour-1', 'Jour:') !!}
-                {!! Form::text('disponibilite_jour[]','', ['id' => 'disponibilite-jour-1', 'class' => 'form-control']) !!}
+                <label for="disponibilite_mois[]">Mois (en chiffre):</label>
+				<input type="number" name="disponibilite_mois[]" id="disponibilite-mois-1" class="form-control" step="1" min="1" max="12" required/>
                 
-                {!! Form::label('disponibilite-debut-heure-1', 'Heure de début:') !!}
-                {!! Form::text('disponibilite_debut_heure[]','', ['id' => 'disponibilite-debut-heure-1', 'class' => 'form-control']) !!}
+                <label for="disponibilite_jour[]">Jour:</label>
+				<input type="number" name="disponibilite_jour[]" id="disponibilite-jour-1" class="form-control" step="1" min="1" max="31" required/>
                 
-                {!! Form::label('disponibilite-debut-minute-1', 'Minute de début:') !!}
-                {!! Form::text('disponibilite_debut_minute[]','', ['id' => 'disponibilite-debut-minute-1', 'class' => 'form-control']) !!}
+                <label for="disponibilite_debut_heure[]">Heure de début:</label>
+				<input type="number" name="disponibilite_debut_heure[]" id="disponibilite-debut-heure-1" class="form-control" step="1" min="0" max="23" required/>
                 
-                {!! Form::label('disponibilite-fin-heure-1', 'Heure de fin:') !!}
-                {!! Form::text('disponibilite_fin_heure[]','', ['id' => 'disponibilite-fin-heure-1', 'class' => 'form-control']) !!}
+                <label for="disponibilite_debut_minute[]">Minute de début:</label>
+				<input type="number" name="disponibilite_debut_minute[]" id="disponibilite-debut-minute-1" class="form-control" step="1" min="0" max="59" required/>
                 
-                {!! Form::label('disponibilite-fin-minute-1', 'Minute de fin:') !!}
-                {!! Form::text('disponibilite_fin_minute[]','', ['id' => 'disponibilite-fin-minute-1', 'class' => 'form-control']) !!}
+                <label for="disponibilite_fin_heure[]">Heure de fin:</label>
+				<input type="number" name="disponibilite_fin_heure[]" id="disponibilite-fin-heure-1" class="form-control" step="1" min="0" max="23" required/>
+                
+                <label for="disponibilite_fin_minute[]">Minute de fin:</label>
+				<input type="number" name="disponibilite_fin_minute[]" id="disponibilite-fin-minute-1" class="form-control" step="1" min="0" max="59" required/>
             </div>
         </div>
         <div class="disponibilite-bouton">
