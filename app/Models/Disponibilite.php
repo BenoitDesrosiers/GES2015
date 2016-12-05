@@ -14,7 +14,7 @@ class Disponibilite extends EloquentValidating implements \MaddHatter\LaravelFul
     protected $guarded = array('id');
 
     public function benevole() {
-	    return $this->belongsTo('Benevole');
+	    return $this->belongsTo("App\Models\Benevole");
     }
 
     public function validationRules() {

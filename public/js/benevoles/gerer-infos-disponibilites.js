@@ -44,29 +44,17 @@ function ajouterDisponibilite() {
 	var conteneur = $('#conteneur-disponibilites');
 	var elementAAjouter =
 		'<div class="form-group conteneur-disponibilite">' +
-		'	<label for="">Description de la disponibilite:</label>' +
+		'	<label for="">Description de la disponibilité:</label>' +
 		'	<input type="text" name="disponibilite_disponibilite[]" id="" class="form-control" />' +
-		
-		'	<label for="">Jour:</label>' +
-		'	<input type="text" name="disponibilite_jour[]" id="" class="form-control" />' +
-		
-		'	<label for="">Mois:</label>' +
-		'	<input type="text" name="disponibilite_mois[]" id="" class="form-control" />' +
 		
 		'	<label for="">Année:</label>' +
 		'	<input type="text" name="disponibilite_annee[]" id="" class="form-control" />' +
 		
-		'	<label for="">Heure de début:</label>' +
-		'	<input type="text" name="disponibilite_debut_heure[]" id="" class="form-control" />' +
+		'	<label for="">Mois:</label>' +
+		'	<input type="text" name="disponibilite_mois" id="" class="form-control" />' +
 		
-		'	<label for="">Minute de début:</label>' +
-		'	<input type="text" name="disponibilite_debut_minute[]" id="" class="form-control" />' +
-		
-		'	<label for="">Heure de fin:</label>' +
-		'	<input type="text" name="disponibilite_fin_heure[]" id="" class="form-control" />' +
-		
-		'	<label for="">Minute de fin:</label>' +
-		'	<input type="text" name="disponibilite_fin_minute[]" id="" class="form-control" />' +
+		'	<label for="">Jour:</label>' +
+		'	<input type="text" name="disponibilite_jour" id="" class="form-control" />' +
 		
 		'	<button onclick="retirerConteneur($(this).parent())" class="btn-danger" type="button" >Retirer</button>' +
 		'</div>';
@@ -85,16 +73,12 @@ function ajouterDisponibilite() {
 		.attr('id', 'disponibilite-disponibilite-' + nouvelleDisponibiliteId)
 		//Ajoute le 'listener' pour changer l'état du bouton d'ajout.
 		.on('input', gererEtatBoutonsAjout);
-	elementAjoute.find('input[name*="disponibilite_jour"]')
-		.attr('id', 'disponibilite-jour-' + nouvelleDisponibiliteId)
-	elementAjoute.find('input[name*="disponibilite_mois"]')
-		.attr('id', 'disponibilite-mois-' + nouvelleDisponibiliteId)
 	elementAjoute.find('input[name*="disponibilite_annee"]')
 		.attr('id', 'disponibilite-annee-' + nouvelleDisponibiliteId)
-	elementAjoute.find('input[name*="disponibilite_debut_heure"]')
-		.attr('id', 'disponibilite-debut-heure-' + nouvelleDisponibiliteId)
-	elementAjoute.find('input[name*="disponibilite_debut_minute"]')
-		.attr('id', 'disponibilite-debut-minute-' + nouvelleDisponibiliteId)
+	elementAjoute.find('input[name*="disponibilite_mois"]')
+		.attr('id', 'disponibilite-mois-' + nouvelleDisponibiliteId)
+	elementAjoute.find('input[name*="disponibilite_jour"]')
+		.attr('id', 'disponibilite-jour-' + nouvelleDisponibiliteId)
 	//S'assurer que le bouton se re-désactive.
 	gererEtatBoutonsAjout();
 }
