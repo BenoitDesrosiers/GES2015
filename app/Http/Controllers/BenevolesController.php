@@ -334,17 +334,21 @@ class BenevolesController extends BaseController {
 		$annee = isset($input['disponibilite_annee'][$index]) ? $input['disponibilite_annee'][$index] : null;
 		$mois = isset($input['disponibilite_mois'][$index]) ? $input['disponibilite_mois'][$index] : null;
 		$jour = isset($input['disponibilite_jour'][$index]) ? $input['disponibilite_jour'][$index] : null;
+		$heureDebut = isset($input['disponibilite_debut_heure'][$index]) ? $input['disponibilite_debut_heure'][$index] : null;
+		$minuteDebut = isset($input['disponibilite_debut_minute'][$index]) ? $input['disponibilite_debut_minute'][$index] : null;
+		$heureFin = isset($input['disponibilite_fin_heure'][$index]) ? $input['disponibilite_fin_heure'][$index] : null;
+		$minuteFin = isset($input['disponibilite_fin_minute'][$index]) ? $input['disponibilite_fin_minute'][$index] : null;
 		$isAllDay = 0;
 
 		if (checkdate($mois, $jour, $annee)) {
-			$dateTest = new DateTime;
-			$dateTest->setDate($annee, $mois, $jour);
+			$dateDebut = new DateTime($annee."-".$mois."-".$jour." ".$heureDebut.":".$minuteDebut.":00");
+			$dateFin = new DateTime($annee."-".$mois."-".$jour." ".$heureFin.":".$minuteFin.":00");
 			
 			$disponibilite = New Disponibilite;
 			$disponibilite->title = $title;
 			$disponibilite->isAllDay = $isAllDay;
-			$disponibilite->start=$dateTest;
-			$disponibilite->end=$dateTest;
+			$disponibilite->start=$dateDebut;
+			$disponibilite->end=$dateFin;
 		
 			$return_value = $disponibilite;
 		}
