@@ -1,5 +1,6 @@
 <?php
 
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\Models\Region;
 use App\Models\Terrain;
 
@@ -30,6 +31,7 @@ $factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) 
 			'telephone' => $faker->tollFreePhoneNumber,
 			'description' => $faker->sentence
 		];
+});
 		
 $factory->define(App\Models\Participant::class, function (Faker\Generator $faker) {
 	return [
@@ -68,9 +70,28 @@ $factory->define(App\Models\Epreuve::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 	return [
-			'nom' => 'Simple Masculin',
-			'adresse'=> $faker->address,
-			'ville'=> $faker->city,
-			'region_id' => rand(0, 100)
+		'nom' => 'Simple Masculin',
+		'adresse'=> $faker->address,
+		'ville'=> $faker->city,
+		'region_id' => rand(0, 100)
+	];
+});
+
+/**
+ * Crée une ConditionParticuliere de test avec description.
+ */
+$factory->defineAs(App\Models\ConditionParticuliere::class, 'AvecDescription', function (Faker\Generator $faker) {
+	return [
+		'nom' => $faker->text(40),
+		'description' => $faker->text(200)
+	];
+});
+
+/**
+ * Crée une ConditionParticuliere de test sans description.
+ */
+$factory->defineAs(App\Models\ConditionParticuliere::class, 'SansDescription', function (Faker\Generator $faker) {
+	return [
+		'nom' => $faker->text(40)
 	];
 });
