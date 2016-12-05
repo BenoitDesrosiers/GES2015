@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
  *
  * @author Res260
  * @created_at 161122
- * @modified_at 161128
+ * @modified_at 161204
  */
 class CRUDConditionsParticulieres extends TestCase
 {

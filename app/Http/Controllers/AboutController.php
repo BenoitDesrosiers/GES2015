@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use View;
-use App\Http\Controllers\BaseController;
 
 /**
  * Le controller pour les rôles.
@@ -89,7 +88,7 @@ class AboutController extends BaseController {
 
 				array(
 					"Émilio Gonzalez",
-					"Ajout de plusieurs téléphones et adresses pour les participants (fini le 161101)."
+					"Ajout de plusieurs téléphones et adresses pour les participants (fini le 161101), CRUD des conditions particulières (avec tests)"
 				),
 				
 				array(
