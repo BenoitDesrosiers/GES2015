@@ -126,6 +126,18 @@
                 
                 {!! Form::label('disponibilite-jour-1', 'Jour:') !!}
                 {!! Form::text('disponibilite_jour[]','', ['id' => 'disponibilite-jour-1', 'class' => 'form-control']) !!}
+                
+                {!! Form::label('disponibilite-debut-heure-1', 'Heure de début:') !!}
+                {!! Form::text('disponibilite_debut_heure[]','', ['id' => 'disponibilite-debut-heure-1', 'class' => 'form-control']) !!}
+                
+                {!! Form::label('disponibilite-debut-minute-1', 'Minute de début:') !!}
+                {!! Form::text('disponibilite_debut_minute[]','', ['id' => 'disponibilite-debut-minute-1', 'class' => 'form-control']) !!}
+                
+                {!! Form::label('disponibilite-fin-heure-1', 'Heure de fin:') !!}
+                {!! Form::text('disponibilite_fin_heure[]','', ['id' => 'disponibilite-fin-heure-1', 'class' => 'form-control']) !!}
+                
+                {!! Form::label('disponibilite-fin-minute-1', 'Minute de fin:') !!}
+                {!! Form::text('disponibilite_fin_minute[]','', ['id' => 'disponibilite-fin-minute-1', 'class' => 'form-control']) !!}
             </div>
         </div>
         <div class="disponibilite-bouton">
