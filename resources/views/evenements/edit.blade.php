@@ -5,7 +5,7 @@
 @section('content')
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h2>Modification d'un événement</h2>
+        <h2>Modification d'une compétition</h2>
     </div>
     <div class="panel-body" id="vueEvenement">
         {!! Form::open(['action'=> array('EvenementsController@update', $evenement->id), 'method' => 'PUT', 'class' => 'form']) !!}

@@ -71,7 +71,7 @@ class EvenementsController extends BaseController
             $evenement->epreuve_id = $input['epreuve_id'];
             $evenement->date_heure = $input['date'].' '.$input['heure'];
             if($evenement->save()) {
-                return Redirect::action('EvenementsController@index')->with('status', 'Événement ajouté!');
+                return Redirect::action('EvenementsController@index')->with('status', 'Compétition ajouté!');
             } else {
                 return Redirect::back()->withInput()->withErrors($evenement->validationMessages());
             }
@@ -134,7 +134,7 @@ class EvenementsController extends BaseController
             $evenement->epreuve_id = $input['epreuve_id'];
             $evenement->date_heure = $input['date'].' '.$input['heure'];
             if($evenement->save()) {
-                return Redirect::action('EvenementsController@index')->with('status', 'Événement mis à jour!');
+                return Redirect::action('EvenementsController@index')->with('status', 'Compétition mis à jour!');
             } else {
                 return Redirect::back()->withInput()->withErrors($evenement->validationMessages());
             }
@@ -155,7 +155,7 @@ class EvenementsController extends BaseController
             $evenement = Evenement::findOrFail($id);
             $evenement->delete(); //FIXME: protéger par une transaction dans le try/catch
 
-            return Redirect::action('EvenementsController@index')->with('status', 'Événement détruit!');
+            return Redirect::action('EvenementsController@index')->with('status', 'Compétition détruit!');
         } catch(Exception $e) {
             App::abort(404);
         }

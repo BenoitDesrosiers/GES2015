@@ -5,7 +5,7 @@
 @section('content')
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h2>Création d'un événement</h2>
+        <h2>Création d'une compétition</h2>
     </div>
     <div class="panel-body" id="vueEvenement">
         {!! Form::open(['action'=> 'EvenementsController@index', 'class' => 'form']) !!}

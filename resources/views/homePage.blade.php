@@ -18,7 +18,7 @@
 		<a class="btn btn-lg btn-success" href="{{ action('RolesController@index') }}" role="button">Rôles</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('PointagesController@index') }}" role="button">Pointages</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('TerrainsController@index') }}" role="button">Terrains</a></p>
-		<a class="btn btn-lg btn-success" href="{{ action('EvenementsController@index') }}" role="button">Événements</a></p>
+		<a class="btn btn-lg btn-success" href="{{ action('EvenementsController@index') }}" role="button">Compétitions</a></p>
 		<a class="btn btn-lg btn-success" href="{{ action('CodesController@index') }}" role="button">Codes</a></p>	
 		<a class="btn btn-lg btn-success" href="{{ action('AboutController@index') }}" role="button">À propos</a></p>
 

@@ -8,12 +8,12 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h2>Liste des Événements</h2>
-        <a href="{{ action('EvenementsController@create') }}" class="btn btn-info">Créer un événement</a>
+        <h2>Liste des Compétitions</h2>
+        <a href="{{ action('EvenementsController@create') }}" class="btn btn-info">Créer une compétition</a>
     </div>
 @if ($evenements->isEmpty())
     <div class="panel-body">
-        <p>Aucun événement</p>
+        <p>Aucune compétition</p>
     </div>
 @else
     <table class="table table-striped table-hover" id="liste_evenements">
