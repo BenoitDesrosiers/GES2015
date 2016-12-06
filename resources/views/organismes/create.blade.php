@@ -24,17 +24,17 @@
 
         <div class="form-group">
             {!! Form::label('nomOrganisme', '* Nom organisme:') !!} 
-            {!! Form::text('nomOrganisme', null, ['class' => 'form-control nomOrganismeBoite']) !!}
+            {!! Form::text('nomOrganisme', null, ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
             {!! Form::label('telephone', 'Téléphone:') !!}
             <br/>
-            {!! Form::text('telephone', null, ['class' => 'form-control telephone']) !!}
+            {!! Form::text('telephone', null, ['class' => 'form-control']) !!}
             <small class="form-text text-muted">ex: 819-123-4567, (819) 123-4567</small>
         </div>
         <div class="form-group">
             {!! Form::label('description', 'Description:') !!} 
-            {!! Form::text('description', null, ['class' => 'form-control boiteDescription']) !!}
+            {!! Form::text('description', null, ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
             <p>*Champ obligatoire.</p>

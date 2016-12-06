@@ -24,7 +24,6 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-
 $factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) {
 	return [
 			'nomOrganisme' => $faker->name,

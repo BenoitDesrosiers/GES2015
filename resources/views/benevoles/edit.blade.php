@@ -45,6 +45,22 @@
 			{!! Form::text('accreditation', $benevole->accreditation, ['class' => 'form-control']) !!}
 			{{ $errors->first('accreditation') }}
 		</div>
+
+		<div class="form-group">
+			{!! Form::label('sexe', 'Sexe :') !!} 
+			{!! Form::select('sexe', ['masculin' => 'Masculin', 'feminin' => 'Féminin', 'autre' => 'Autre'], $benevole->sexe); !!}
+			{{ $errors->first('sexe') }}
+		</div>
+		<div class="form-group">
+            {!! Form::label('naissance', '*Date de naissance:') !!}
+            <br/>
+            {!! Form::select('annee_naissance',$listeAnnees, $anneeDefaut,['style' => 'width:4em!important;']) !!}
+            -
+            {!! Form::select('mois_naissance',$listeMois, $moisDefaut, ['style' => 'width:3em!important;']) !!}
+            -
+            {!! Form::select('jour_naissance',$listeJours, $jourDefaut, ['style' => 'width:3em!important;']) !!}
+            {{ $errors->first('naissance') }}
+        </div>
         
         <div class="form-group">
 			{!! Form::label('verification', 'Vérification :') !!} 

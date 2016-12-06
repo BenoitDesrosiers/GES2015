@@ -75,6 +75,7 @@ class AboutController extends BaseController {
                     "Benoit Desrosiers",
                     "Gestion du projet"
                 )
+
             ),
             2016 => array(
             	array(
@@ -84,6 +85,11 @@ class AboutController extends BaseController {
 				array(
 					"Alexandre Caron",
 					"Association d'un sport à un participant à partir d'un sport"
+				),
+				
+				array(
+					"Jessee Lefebvre",
+					"Ajout du CRUD des événements, association des participants et des événements à partir de l'épreuve choisie"
 				),
 
 				array(
@@ -111,6 +117,22 @@ class AboutController extends BaseController {
                     "Ajout d'un sexe aux épreuves. Ajout d'un filtre lors de l’ajout de participants 
                     à une épreuve selon le sexe de l’épreuve et des participants."
                 ),
+
+                array(
+                    "Étienne Drolet",
+                    "CRUD des organismes."
+                ),
+
+
+            	array(
+            		"Francis Mathieu",
+           			"Ajouter un arbitre à un sport"
+            	),
+				
+				array(
+            		"Maxime Laflamme",
+           			"Associer des terrains aux bénévoles. Associer les bénévoles à une épreuve."
+            	)
             )
         );
 
