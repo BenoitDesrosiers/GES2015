@@ -21,10 +21,12 @@
 				{!! Form::select('region_id', $regionListe, null, ['id' => 'region']) !!}
 				{{ $errors->first('region_id') }}
 			</div>
-		@endif
+
 			<div id="listeDelegues">
 
 			</div>
+		@endif
+
 	@endif
 </div>
 
@@ -43,6 +45,7 @@
 		list-style: none;
 		padding: 0;
 	}
+
 </style>
 
 @stop

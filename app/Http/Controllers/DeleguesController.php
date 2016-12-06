@@ -313,18 +313,23 @@ class DeleguesController extends BaseController {
      */
     public function listerDelegues(Request $request)
     {
-        if ($request->ajax())
-        {
 
+        //if ($request->ajax())   a remettre quand on comprendra comment tester avec AJAX
+        //{
             $region_id = $request->input('region_id');
             if ( isset($region_id) )
-            {
-                return Delegue::with('roles','region')
-                    ->where('region_id', $region_id)
-                    ->orderBy('nom')
-                    ->get();
-            }
-        }
+                if ($region_id == 0){
+                    return Delegue::with('roles','region')
+                        ->orderBy('region_id')
+                        ->get();
+                }
+                else{
+                    return Delegue::with('roles','region')
+                        ->where('region_id', $region_id)
+                        ->orderBy('nom')
+                        ->get();
+                }
+       // }
         App::abort(403);
     }
 }

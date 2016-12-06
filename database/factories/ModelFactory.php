@@ -23,14 +23,14 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-<<<<<<< HEAD
 
 $factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) {
-	return [
-			'nomOrganisme' => $faker->name,
-			'telephone' => $faker->tollFreePhoneNumber,
-			'description' => $faker->sentence
-		];
+    return [
+        'nomOrganisme' => $faker->name,
+        'telephone' => $faker->tollFreePhoneNumber,
+        'description' => $faker->sentence
+    ];
+});
 		
 $factory->define(App\Models\Participant::class, function (Faker\Generator $faker) {
 	return [
@@ -45,9 +45,13 @@ $factory->define(App\Models\Participant::class, function (Faker\Generator $faker
 
 $factory->define(App\Models\Region::class, function (Faker\Generator $faker) {
 	return [
-		'nom' => $faker->lastName,
-		'tournoi' => 0,
-		'saison' => 'h'
+        'nom' => $faker->name,
+        'nom_court' => $faker->name,
+        'or' => null,
+        'argent' => null,
+        'bronze' => null,
+        'points' => null,
+        'url_logo' => ""
 	];
 
 });
@@ -59,7 +63,7 @@ $factory->define(App\Models\Sport::class, function (Faker\Generator $faker) {
         'saison' => 'e'
     ];
 });
-=======
+
 //Pour les tests 'TerrainsEpreuvesTest'
 $factory->define(App\Models\Epreuve::class, function (Faker\Generator $faker) {
 	return [
@@ -75,4 +79,17 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 			'region_id' => rand(0, 100)
 	];
 });
->>>>>>> 0a9d2a881ea95875011006d0312a0152897769c3
+
+$factory->define(App\Models\Delegue::class, function (Faker\Generator $faker) {
+    return [
+        'nom' => $faker->name,
+        'prenom' => $faker->name,
+        'region_id' => factory(App\Models\Region::class)->create()->id,
+        'role_id' => 0,
+        'accreditation' => rand(0,1),
+        'sexe' => rand(0,1),
+        'date_naissance' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'adresse' => $faker->address
+    ];
+});
+

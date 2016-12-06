@@ -3,28 +3,23 @@
  */
 $(function () {
     $('#region').change(function (event) {
-        console.log('hhi');
+
         listerDelegues($(this).val(), $('meta[name="csrf-token"]').attr('content'));
     });
 
-    //listerDelegues($('#region').val(), $('meta[name="csrf-token"]').attr('content'));
-    listerDelegues(1, $('meta[name="csrf-token"]').attr('content'));
+    listerDelegues($('#region').val(), $('meta[name="csrf-token"]').attr('content'));
 });
 
-$("body").bind("ajaxSend", function(elm, xhr, s){
-    xhr.setRequestHeader('X-CSRF-Token', getCSRFTokenValue());
-});
 
 /**
  *
  * Liste des délégués dans une région.
  *
  * @param regionId
- * @param delegues
+ * @param csrf
  *
  */
 function listerDelegues(regionId, csrf) {
-    console.log(csrf);
     $.ajax({
         method: "GET",
         url: "/tableau_delegues",
@@ -47,14 +42,13 @@ function creerTableau(delegues, crsf){
     var tableau = document.createElement('table');
     var token = crsf;
     if (delegues.length < 1){
-        var texte = document.createElement('h3')
-        texte.innerHTML = "Il n'y a pas de délégué dans cette région."
+        var bodyTableau = document.createElement('h3')
+        bodyTableau.innerHTML = "Il n'y a pas de délégué dans cette région."
     }
     else{
         var bodyTableau = document.createElement('tbody');
-        bodyTableau.className = 'table table-striped table hover';
+        tableau.className = 'table table-striped table-hover';
         var entente = creerEntete();
-
         tableau.appendChild(entente);
         $.each(delegues, function (index, delegue) {
 
@@ -64,7 +58,6 @@ function creerTableau(delegues, crsf){
             bodyTableau.appendChild(ligne);
         })
     }
-
     tableau.appendChild(bodyTableau)
     return tableau;
 }
@@ -123,6 +116,7 @@ function creerLigne(index, delegue, csrf){
     var nomDelegueRef = document.createElement('a');
     var regionDelegue = document.createElement('td');
     var roleDelegue = document.createElement('td');
+    var roleTableau = document.createElement('ul');
     var accreditationDelegue = document.createElement('td');
     var modifierDelegue = document.createElement('td');
     var effacerDelegue = document.createElement('td');
@@ -136,19 +130,33 @@ function creerLigne(index, delegue, csrf){
 
     // Région
 
-    //regionDelegue.innerHTML = "class='hidden-sm hidden-xs'><span data-toggle='tooltip' data-placement='bottom' title= delegue.region.nom > delegue.region.nom_court </span>";
     regionDelegue.innerHTML = delegue.region.nom_court;
     ligne.appendChild(regionDelegue);
 
     // Rôles
 
     if (delegue.roles.length >= 2){
+
         roleDelegue.innerHTML = "<button type='submit' class='btn btn-default btn-mini glyphicon glyphicon-plus' onClick='afficherRoles(this)'/>";
+        delegue.roles.forEach(function(role){
+
+            var roleTableauLigne = document.createElement('li');
+            roleTableauLigne.setAttribute('class', 'cacher');
+            var roleNomDelegue = document.createElement('a');
+            roleNomDelegue.innerHTML = role.nom;
+            roleTableauLigne.style.display="none";
+            roleNomDelegue.setAttribute('class', 'cacher');
+            roleNomDelegue.setAttribute('href', 'roles/' + role.id);
+            roleTableauLigne.appendChild(roleNomDelegue);
+            roleTableau.appendChild(roleTableauLigne);
+        });
+        roleDelegue.appendChild(roleTableau);
         ligne.appendChild(roleDelegue);
     }else if (delegue.roles.length == 1){
-        roleDelegue.innerHTML = delegue.roles.nom;
+        roleDelegue.innerHTML = delegue.roles[0].nom;
         ligne.appendChild(roleDelegue);
     }else{
+        roleDelegue.innerHTML = 'Aucun Rôle';
         ligne.appendChild(roleDelegue);
     }
 
@@ -171,8 +179,20 @@ function creerLigne(index, delegue, csrf){
 
     // Effacer
 
-    effacerDelegue.innerHTML = "<form method='POST' action='/delegues/" + delegue.id + "' accept-charset='UTF-8' onsubmit='return confirmDelete()'><input name='_method' type='hidden' value='DELETE'><input name='_token' type='hidden' value= " + csrf + " > <button type=submit href='/delegues/" + delegue.id + "' class='btdfn btn-danger btn-mini'>Effacer</button> </form>";
+    effacerDelegue.innerHTML = "<form method='POST' action='/delegues/" + delegue.id + "' accept-charset='UTF-8' onsubmit='return confirmDelete()'>" +
+        "<input name='_method' type='hidden' value='DELETE'><input name='_token' type='hidden' value= " + csrf + " > " +
+        "<button type=submit href='/delegues/" + delegue.id + "' class='btn btn-danger'>Effacer</button> </form>";
     ligne.appendChild(effacerDelegue)
+
+    var x = document.getElementsByClassName("cacher");
+    console.log(x);
+    var i;
+    var j;
+    for (i = 0; i < x.length; i++) {
+       for (j = 0; j < x[i].length; j++) {
+           x[i][j].style.display = 'none';
+       }
+    }
 
     return ligne;
 
@@ -186,10 +206,21 @@ function afficherRoles(bouton) {
         bouton.classList.remove("glyphicon-minus");
         bouton.classList.add("glyphicon-plus");
         rangee.classList.remove("actif");
+        var x = document.getElementsByClassName("cacher");
+        var i;
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = 'none';
+        }
+
     } else {
         bouton.classList.remove("glyphicon-plus");
         bouton.classList.add("glyphicon-minus");
         rangee.classList.add("actif");
+        var x = document.getElementsByClassName("cacher");
+        var i;
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = 'block';
+        }
     }
 }
 
@@ -202,6 +233,6 @@ function confirmDelete() {
     return confirm('Êtes-vous certain?');
 }
 
-//$(function () {
-//    $('[data-toggle="tooltip"]').tooltip()
-//})
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})

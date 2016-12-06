@@ -6,24 +6,36 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class delegueTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $this->assertTrue(true);
-    }
 
-    public function test_affiche_le_boutton_pour_ajouter_telephone_et_le_bouton_courriel()
+    use DatabaseTransactions;
+
+    public function test_delegue_dans_une_region()
     {
         $user = factory(App\User::class)->create();
         $this->actingAs($user);
-        $this->visit('/delegues/create');
-        $this->see('test1');
-        $this->see('test2');
+
+        $region = factory(App\Models\Region::class)->create();
+        $delegue = factory(App\Models\Delegue::class)->create(['region_id' => $region->id]);
+        $this->json('GET','/tableau_delegues', ['region_id' => $region->id])
+           ->seeJson([
+                'nom' => $delegue->nom,
+            ]);
     }
+
+    public function test_delegue_dans_une_region_invalide()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+
+        $region = factory(App\Models\Region::class)->create();
+        $delegue = factory(App\Models\Delegue::class)->create(['region_id' => $region->id]);
+        $this->json('GET','/tableau_delegues', ['region_id' => 999999])
+            ->seeJson([
+                json_decode($delegue, true).emptyArray()
+            ]);
+    }
+
+
 
 
 
