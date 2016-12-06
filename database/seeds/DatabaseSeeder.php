@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('DeleguesTableSeeder');
 		$this->call('DeleguesRolesTableSeeder');
 		$this->call('TachesTableSeeder');
+		$this->call('ConditionsParticulieresSeeder');
 		//$this->call('ResultatTournoisTableSeeder');
 		
 		Model::reguard();
