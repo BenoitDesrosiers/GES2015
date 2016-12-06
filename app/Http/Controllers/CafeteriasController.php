@@ -184,9 +184,11 @@ class CafeteriasController extends Controller
     }
 
     /**
-     * Sauvegarde des responsables.
+     * Sauvegarde des responsables. S'il une clé (nom ou téléphone) est manquante, 
+     * le array sera ignoré. 
      * @param  Int    $cafeteria_id l'id de la cafétéria des responsables
-     * @param  Array  $responsables Un array contenant les informations des responsables
+     * @param  Array  $responsables Un array contenant des arrays ayant
+     *                              une clé nom et une clé téléphone.
      */
     private function sauvegarderResponsables(Int $cafeteria_id, Array $responsables)
     {
@@ -198,7 +200,6 @@ class CafeteriasController extends Controller
                     'cafeteria_id' => $cafeteria_id,
                 ]);
             }
-                
         }
     }
 
