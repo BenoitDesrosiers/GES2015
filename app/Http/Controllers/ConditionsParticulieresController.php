@@ -63,8 +63,8 @@ class ConditionsParticulieresController extends Controller
 	 */
 	public function edit($id) {
 		try {
-				return View::make('conditionsParticulieres.edit',
-				['condition' => ConditionParticuliere::findOrFail($id)]);
+			return View::make('conditionsParticulieres.edit',
+							  ['condition' => ConditionParticuliere::findOrFail($id)]);
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -83,7 +83,11 @@ class ConditionsParticulieresController extends Controller
 	 *                                           condition particulière.
 	 */
 	public function store(ConditionParticuliereRequest $request) {
-		$condition = ConditionParticuliere::create($request->all());
+		try {
+			$condition = ConditionParticuliere::create($request->all());
+		} catch (Exception $e) {
+			App::abort(500);
+		}
 		return Redirect::to('/conditionsParticulieres/' . $condition->id)
 			->with('message', 'La condition particulière a été créée avec succès!')
 			->with('alert-class', 'alert-success');
@@ -99,9 +103,13 @@ class ConditionsParticulieresController extends Controller
 	 *                                           vers la page d'index.
 	 */
 	public function update(ConditionParticuliereRequest $request, $id) {
-		$condition = ConditionParticuliere::findOrFail($id);
-		$condition->update($request->all());
-		$condition->save();
+		try {
+			$condition = ConditionParticuliere::findOrFail($id);
+			$condition->update($request->all());
+			$condition->save();
+		} catch (Exception $e) {
+			App::abort(500);
+		}
 		return Redirect::to('/conditionsParticulieres')
 			->with('message', 'La condition particulière a été mise à jour avec succès!')
 			->with('alert-class', 'alert-success');
@@ -120,9 +128,9 @@ class ConditionsParticulieresController extends Controller
 			return View::make('conditionsParticulieres.show',
 				['condition' => ConditionParticuliere::findOrFail($id)]);
 		} catch (ModelNotFoundException $e) {
-			// POUR PHP 5 (pour benou)
 			App::abort(404);
 		}
+		return null;
 	}
 
 

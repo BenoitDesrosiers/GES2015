@@ -22,7 +22,7 @@ class CRUDConditionsParticulieres extends TestCase
 	 * Teste que l'ajout d'une condition particulière fonctionne avec description.
 	 */
 	public function testAjouterConditionParticuliereAvecDescription() {
-		$this->actingAs(factory(\App\User::class)->make()->first());
+		$this->actingAs(factory(\App\User::class)->make());
 		$this->ajouterConditionParticuliere(
 			factory(App\Models\ConditionParticuliere::class, 'AvecDescription')
 				->make()->toArray()
@@ -33,7 +33,7 @@ class CRUDConditionsParticulieres extends TestCase
 	 * Teste que l'ajout d'une condition particulière fonctionne sans description.
 	 */
 	public function testAjouterConditionParticuliereSansDescription() {
-		$this->actingAs(factory(\App\User::class)->make()->first());
+		$this->actingAs(factory(\App\User::class)->make());
 		$this->ajouterConditionParticuliere(
 			factory(App\Models\ConditionParticuliere::class, 'SansDescription')
 				->make()->toArray()
@@ -45,7 +45,7 @@ class CRUDConditionsParticulieres extends TestCase
 	 * particulière sans nom.
 	 */
 	public function testImpossibleDAjouterUneConditionParticuliereSansNom() {
-		$this->actingAs(factory(\App\User::class)->make()->first());
+		$this->actingAs(factory(\App\User::class)->make());
 		$conditionAvecDescription = factory(App\Models\ConditionParticuliere::class, 'AvecDescription')
 			->make()->toArray();
 		$conditionAvecDescription['nom'] = null;
@@ -57,10 +57,9 @@ class CRUDConditionsParticulieres extends TestCase
 	 * particulière qui existe déjà.
 	 */
 	public function testImpossibleDAjouterUneConditionParticuliereQuiExisteDeja() {
-		$this->actingAs(factory(\App\User::class)->make()->first());
+		$this->actingAs(factory(\App\User::class)->make());
 		$conditionAvecDescription = factory(App\Models\ConditionParticuliere::class, 'AvecDescription')
-			->make()->toArray();
-		$this->ajouterConditionParticuliere($conditionAvecDescription);
+			->create()->toArray();
 		$this->validerErreurLorsDeLAjout($conditionAvecDescription);
 
 		$conditionAvecDescription['nom'] = $conditionAvecDescription['nom'] . '    ';
@@ -72,10 +71,9 @@ class CRUDConditionsParticulieres extends TestCase
 	 * particulière.
 	 */
 	public function testModifierDescriptionDUneConditionParticuliere() {
-		$this->actingAs(factory(\App\User::class)->make()->first());
+		$this->actingAs(factory(\App\User::class)->make());
 		$conditionAvecDescription = factory(App\Models\ConditionParticuliere::class, 'AvecDescription')
-			->make()->toArray();
-		$this->ajouterConditionParticuliere($conditionAvecDescription);
+			->create()->toArray();
 		$conditionAvecDescriptionModifiee = $conditionAvecDescription;
 		$conditionAvecDescriptionModifiee['description'] = 'Une description modifiée!';
 		$this->modifierConditionParticuliere($this->getDerniereConditionParticuliereId(),
@@ -86,7 +84,7 @@ class CRUDConditionsParticulieres extends TestCase
 	 * Teste qu'il est possible de modifier le nom d'une condition particulière.
 	 */
 	public function testModifierNomDUneConditionParticuliere() {
-		$this->actingAs(factory(\App\User::class)->make()->first());
+		$this->actingAs(factory(\App\User::class)->make());
 		$conditionSansDescription = factory(App\Models\ConditionParticuliere::class, 'SansDescription')
 			->make()->toArray();
 		$this->ajouterConditionParticuliere($conditionSansDescription);
@@ -101,7 +99,7 @@ class CRUDConditionsParticulieres extends TestCase
 	 * pour un nom qui existe déjà.
 	 */
 	public function testImpossibleDeModifierPourUnNomQuiExisteDeja() {
-		$this->actingAs(factory(\App\User::class)->make()->first());
+		$this->actingAs(factory(\App\User::class)->make());
 		$this->ajouterConditionParticuliere(['nom' => 'UN NOM QUI EXISTE']);
 		$this->ajouterConditionParticuliere(
 			factory(App\Models\ConditionParticuliere::class, 'AvecDescription')
@@ -116,7 +114,7 @@ class CRUDConditionsParticulieres extends TestCase
 	 * Teste que l'affichage d'une condition particulière fonctionne.
 	 */
 	public function testAffichageConditionParticuliere() {
-		$this->actingAs(factory(\App\User::class)->make()->first());
+		$this->actingAs(factory(\App\User::class)->make());
 		$condition = factory(App\Models\ConditionParticuliere::class, 'AvecDescription')
 						->make()->toArray();
 		$this->ajouterConditionParticuliere($condition);
@@ -129,7 +127,7 @@ class CRUDConditionsParticulieres extends TestCase
 	 * Teste la suppression d'une condition particulière.
 	 */
 	public function testSuppressionDUneConditionParticuliere() {
-		$this->actingAs(factory(\App\User::class)->make()->first());
+		$this->actingAs(factory(\App\User::class)->make());
 		$condition = factory(App\Models\ConditionParticuliere::class, 'AvecDescription')
 						->make()->toArray();
 		$this->ajouterConditionParticuliere($condition);

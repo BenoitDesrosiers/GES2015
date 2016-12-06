@@ -35,9 +35,11 @@ class ConditionParticuliereRequest extends FormRequest
      */
     public function rules()
     {
+    	// L'id de la condition particulière, si on est en train
+	    // de modifier (et pas d'ajouter).
     	$id = isset($this->segments()[1])
-		      ? $this->segments()[1]
-		      : null;
+				? $this->segments()[1]
+				: null;
 		return [
 			'nom' => ['string',
 					  'required',

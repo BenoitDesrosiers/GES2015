@@ -32,11 +32,6 @@ class ConditionParticuliere extends EloquentValidating
 		'updated_at'
 	];
 
-	protected $fillable = [
-		'nom',
-		'description'
-	];
-
 	/**
 	 * @var String le message à récupérer en cas d'erreur de validation.
 	 */
