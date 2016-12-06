@@ -111,3 +111,18 @@ $factory->define(App\Models\Responsable::class, function (Faker\Generator $faker
 		'telephone' => $faker->numberBetween(1000000000, 9999999999),
 	];
 });
+
+$factory->define(App\Models\Arbitre::class, function (Faker\Generator $faker){
+	return [
+			'nom' => $faker->name,
+			'prenom' => $faker->name,
+			'region_id' => factory(App\Models\Region::class)->create()->id,
+			'numero_accreditation' => "3",
+			'association' => "4",
+			'numero_telephone' => $faker->phoneNumber,
+			'sexe' => $faker->numberBetween(0,1),
+			'adresse' => $faker->address,
+			'date_naissance' => $faker->dateTimeThisCentury
+	];
+});
+	
