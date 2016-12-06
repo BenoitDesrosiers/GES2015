@@ -19,6 +19,11 @@ var vueEvenement = new Vue({
 		epreuveParDefaut: 0
 	},
 	methods: {
+		/**
+		 * Définit l'épreuve et le sport sélectionnés par défaut
+		 * @param {Number} epreuveId Le id de l'épreuve par défaut
+		 * @returns null
+		 */
 		setEpreuveParDefaut: function (epreuveId) {
 			for(var nomSport in this.sportsEpreuves) {
 				var epreuves = this.sportsEpreuves[nomSport];
