@@ -1,0 +1,64 @@
+<?php
+
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Models\Benevole;
+
+
+class Doublons_benevoles extends TestCase
+{
+
+    use DatabaseTransactions;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+    }
+
+
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function testdoublons_benevoles()
+    {
+        $this->creation_benevole(); 
+        $benevoles = Benevole::all();
+        $reponse = $this->action('GET', 'BenevolesController@verifierdoublons');
+
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Cette fonction permet la création d'un benevole
+     *
+     * @return void
+     *
+     */
+    public function creation_benevole()
+    {
+        $this->visit("benevoles/create");
+            $prenom = "Sarah";
+            $nom = "Dubé";
+            $adresse = "aaa";
+            $numTel = "9999";
+            $accreditation = "hhh";
+            $sexe = "feminin";
+            $naissance = new DateTime;
+
+        
+
+    }
+
+
+
+
+
+
+
+}

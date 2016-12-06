@@ -42,6 +42,8 @@ $factory->define(App\Models\Participant::class, function (Faker\Generator $faker
 	];
 });
 
+
+
 $factory->define(App\Models\Region::class, function (Faker\Generator $faker) {
 	return [
 		'nom' => $faker->lastName,
