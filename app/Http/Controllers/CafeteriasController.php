@@ -66,7 +66,7 @@ class CafeteriasController extends Controller
             return redirect('cafeteria')->with('erreur', "Impossible d'enregistrer la cafétéria. Merci de réessayer plus tard.");
         }
 
-        return redirect('cafeterias')->with('status', 'La cafétéria a été ajouté.');
+        return redirect('cafeterias')->with('status', 'La cafétéria a été ajoutée.');
     }
 
     /**
@@ -127,11 +127,19 @@ class CafeteriasController extends Controller
             $cafeteria->adresse = $request['adresse'];
             $cafeteria->localisation = $request['localisation'];
             $cafeteria->save();
+
             $this->supprimerResponsables($cafeteria);
-            $this->sauvegarderResponsables($request['responsableNom'], $request['responsableTelephone'], $cafeteria);
+
+            foreach ($request['responsable'] as $key => $responsable) {
+                Responsable::create([
+                    'nom' => $responsable['nom'],
+                    'telephone' => $responsable['telephone'],
+                    'cafeteria_id' => $cafeteria->id,
+                ]);
+            }
 
             DB::commit();
-            return redirect('cafeterias')->with('status', 'La cafétéria a été modifié.');
+            return redirect('cafeterias')->with('status', 'La cafétéria a été modifiée.');
 
         } catch (ModelNotFoundException $e) {
 
@@ -163,7 +171,7 @@ class CafeteriasController extends Controller
                 
                 DB::commit();
                 
-                return redirect()->back()->with('status', 'La cafétéria #' .$id. ' a été supprimé avec succès.');
+                return redirect()->back()->with('status', 'La cafétéria #' .$id. ' a été supprimée avec succès.');
             
             } catch (Exception $e) {
                 DB::rollBack();
