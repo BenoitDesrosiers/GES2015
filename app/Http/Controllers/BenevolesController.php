@@ -13,6 +13,7 @@ use App\Models\Sport;
 use App\Models\Terrain;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\Epreuve;
 
 /**
  * Le controller pour les bénévoles
@@ -49,6 +50,7 @@ class BenevolesController extends BaseController {
 		try {
 			$sports = Sport::all();
 			$terrains = Terrain::all();
+			$epreuves = Epreuve::all();
 			$anneeDefaut = date ( 'Y' ) - 20;
 			$moisDefaut = 0;
 			$jourDefaut = 0;
@@ -60,7 +62,7 @@ class BenevolesController extends BaseController {
 		} catch (Exception $e) {
 			App:abort(404);
 		}
-		return View::make('benevoles.create', compact('terrains', 'sports', 'benevoleSports', 'benevoleTerrains', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut' ));
+		return View::make('benevoles.create', compact('terrains', 'sports', 'epreuves', 'benevoleSports', 'benevoleTerrains', 'benevoleEpreuves', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut' ));
 	}
 
 
@@ -112,6 +114,12 @@ class BenevolesController extends BaseController {
 				} else {
 					$benevole->terrain()->detach();
 				}
+				// Association avec les épreuves sélectionnées
+				if (is_array(Input::get('epreuve'))) { //FIXME: protéger avec une transaction dans le try/catch
+					$benevole->epreuves()->sync(array_keys(Input::get('epreuve')));
+				} else {
+					$benevole->epreuves()->detach();
+				}
 				// Message de confirmation si la sauvegarde a réussi
 				return Redirect::action('BenevolesController@create')->with ( 'status', 'Le bénévole a été créé.' );
 			} else {
@@ -158,6 +166,8 @@ class BenevolesController extends BaseController {
 		    $benevoleSports = Benevole::find($id)->sports;
 		    $terrains = Terrain::all();
 			$benevoleTerrains = Benevole::find($id)->terrains;
+			$epreuves = Epreuve::all();
+			$benevoleEpreuves = Benevole::find($id)->epreuves;
 			$anneeDefaut = date('Y')- 20;
 			$moisDefaut = 0;
 			$jourDefaut = 0;
@@ -177,7 +187,7 @@ class BenevolesController extends BaseController {
             App::abort(404);
         }
 
-		return View::make('benevoles.edit', compact('benevole', 'terrains', 'sports', 'benevoleSports', 'benevoleTerrains', 'listeAnnees', 'listeMois', 'listeJours','anneeDefaut','moisDefaut','jourDefaut'));
+		return View::make('benevoles.edit', compact('benevole', 'terrains', 'sports', 'epreuves', 'benevoleSports', 'benevoleTerrains', 'benevoleEpreuves', 'listeAnnees', 'listeMois', 'listeJours','anneeDefaut','moisDefaut','jourDefaut'));
 	}
 
 
