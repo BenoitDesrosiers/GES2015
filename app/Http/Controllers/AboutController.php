@@ -111,6 +111,11 @@ class AboutController extends BaseController {
                     "Ajout d'un sexe aux épreuves. Ajout d'un filtre lors de l’ajout de participants 
                     à une épreuve selon le sexe de l’épreuve et des participants."
                 ),
+
+                array(
+                    "Étienne Drolet",
+                    "CRUD des organismes."
+                ),
             )
         );
 
