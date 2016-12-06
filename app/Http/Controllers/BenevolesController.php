@@ -285,33 +285,38 @@ class BenevolesController extends BaseController {
 
 
 	/**
-	 * Vérifier les doublons dans les bénévoles
+	 * Vérifie les doublons dans les bénévoles
 	 *
 	 * @return Response
 	 */
 	public function verifierdoublons()
 	{
-			$listeBenevoleDoublons = array();
+			$listeBenevoleDoublons = collect();
 			$benevoles = Benevole::all();
+			$benevoleNonClasse = collect();
+
 			
 			foreach ($benevoles as $benevole){
 				$benevoleDoublesList = Benevole::where('id','!=', $benevole->id)->get();
 		 		foreach ($benevoleDoublesList as $benevole2){
 		 			if($benevole->nom == $benevole2->nom || $benevole->prenom == $benevole2->prenom){
 		 				if($benevole->naissance == $benevole2->naissance){
-			 				array_push($listeBenevoleDoublons, $benevole, $benevole2);
+			 				$listeBenevoleDoublons->push($benevole, $benevole2);
 			 				
 		 				}
 		 			
 		 			}
 		 		}
 		 	}
-			if ($listeBenevoleDoublons->isEmpty()){
+			if (!empty($listeBenevoleDoublons)){
+				$benevoleNonClasse = $listeBenevoleDoublons;
+				$benevoles = $benevoleNonClasse->sortBy('nom');
 				return View::make('benevoles.index', compact('benevoles'));
+
 			}
 			else
 			{
-				return View::make('benevoles.index', compact('listeBenevoleDoublons'));
+				return View::make('benevoles.index', compact('benevoles'));
 			}
 			
 
