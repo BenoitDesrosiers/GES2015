@@ -3,28 +3,37 @@
     <link rel="stylesheet" href="{!! asset('/css/cafeteria.css') !!}">
 @stop
 @section('content')
+
+<!-- Message d'erreurs. -->
+@if (count($errors) > 0)
+    <div class="alert alert-danger">
+        <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{$error}}</li>
+        @endforeach
+        </ul>
+    </div>
+@endif
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h2>Modification de {{ $cafeteria->nom }}</h2>
     </div>
     <div class="panel-body" id="formulaire">
-        {!! Form::open(['action'=> array('CafeteriasController@update', $cafeteria->id), 'class' => 'form container-fluid']) !!}
+        {!! Form::open(['action'=> array('CafeteriasController@update', $cafeteria->id), 'method' => 'PUT', 'class' => 'form container-fluid']) !!}
         <div class="form-group">
             {!! Form::label('nom', '* Nom:') !!} 
             {!! Form::text('nom', $cafeteria->nom, ['class' => 'form-control']) !!}
-            {{ $errors->first('nom') }}
         </div>
 
         <div class="form-group">
             {!! Form::label('adresse', '* Adresse:') !!} 
             {!! Form::text('adresse',$cafeteria->adresse, ['class' => 'form-control']) !!}
-            {{ $errors->first('adresse') }}
         </div>
 
         <div class="form-group">
             {!! Form::label('localisation', '* Localisation:') !!} 
             {!! Form::text('localisation', $cafeteria->localisation, ['class' => 'form-control']) !!}
-            {{ $errors->first('localisation') }}
         </div>
         <div id="responsables" class="form-group">
             {!! Form::label('responsable', '* Responsable:') !!}
@@ -34,12 +43,10 @@
                 <div class="form-group row rangee">
 
                     <div class="col-xs-3">
-                        <input type="text" name="responsableNom[]" placeholder="Nom" value="{{$responsable->nom}}" class="form-control" required>
-                        {{ $errors->first('responsableNom') }}
+                        <input type="text" name="responsable[0][nom]" placeholder="Nom" value="{{$responsable->nom}}" class="form-control" required>
                     </div>
                     <div class="col-xs-3">
-                        <input type="text" name="responsableTelephone[]" placeholder="Téléphone" value="{{$responsable->telephone}}" class="form-control" required>
-                        {{ $errors->first('responsableTelephone') }}
+                        <input type="text" name="responsable[0][telephone]" placeholder="Téléphone" value="{{$responsable->telephone}}" class="form-control" required>
                     </div>
 
                     <button type="button" class="btn btn-danger retirerResponsable">-</button>

@@ -6,11 +6,8 @@ use App\Http\Requests\CafeteriaRequest;
 use App\Models\Cafeteria;
 use App\Models\Responsable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CafeteriasController extends Controller
 {
@@ -22,7 +19,6 @@ class CafeteriasController extends Controller
      */
     public function index()
     {
-        //dd(phpinfo());
         $cafeterias = Cafeteria::all()->sortBy('nom');
         return view('cafeterias.index', compact('cafeterias'));
     }
@@ -39,34 +35,36 @@ class CafeteriasController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * TODO: Valider et formatter les numéros de téléphone.
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(CafeteriaRequest $request)
     {
-        //dd(Input::all());
-        $cafeteria = Cafeteria::create([
-            'nom' => $request['nom'],
-            'adresse' => $request['adresse'],
-            'localisation' => $request['localisation']
-        ]);
+        //dd($request);
+        try {
 
-        $responsables = array_map(null, $request['responsableNom'], $request['responsableTelephone']);
+            DB::beginTransaction();
 
-        foreach ($responsables as $key => $value) {
-            $nom = $value[0];
-            $telephone = $value[1];
-            
-            // Si les deux champs sont remplis.
-            if (!(empty($nom) || empty($telephone))){
-                $responsable = Responsable::create([
-                    'nom' => $value[0],
-                    'telephone' => $value[1],
+            $cafeteria = Cafeteria::create([
+                'nom' => $request['nom'],
+                'adresse' => $request['adresse'],
+                'localisation' => $request['localisation']
+            ]);
+
+            foreach ($request['responsable'] as $key => $responsable) {
+                Responsable::create([
+                    'nom' => $responsable['nom'],
+                    'telephone' => $responsable['telephone'],
+                    'cafeteria_id' => $cafeteria->id,
                 ]);
-                $responsable->cafeteria()->associate($cafeteria);
-                $responsable->save();
             }
+
+            DB::commit();
+
+        } catch (Exception $e) {
+            
+            DB::rollBack();
+            return redirect('cafeteria')->with('erreur', "Impossible d'enregistrer la cafétéria. Merci de réessayer plus tard.");
         }
 
         return redirect('cafeterias')->with('status', 'La cafétéria a été ajouté.');
@@ -80,7 +78,6 @@ class CafeteriasController extends Controller
      */
     public function show($id)
     {
-
         try {
 
             $cafeteria = Cafeteria::findOrFail($id);
@@ -102,7 +99,6 @@ class CafeteriasController extends Controller
      */
     public function edit($id)
     {
-        //dd('edit #' . $id);
         try {
 
             $cafeteria = Cafeteria::findOrFail($id);
@@ -122,9 +118,27 @@ class CafeteriasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CafeteriaRequest $request, $id)
     {
-        dd('Update #' . $id);
+        try {
+            DB::beginTransaction();
+
+            $cafeteria = Cafeteria::findOrFail($id);
+            $cafeteria->nom = $request['nom'];
+            $cafeteria->adresse = $request['adresse'];
+            $cafeteria->localisation = $request['localisation'];
+            $cafeteria->save();
+            $this->supprimerResponsables($cafeteria);
+            $this->sauvegarderResponsables($request['responsableNom'], $request['responsableTelephone'], $cafeteria);
+
+            DB::commit();
+            return redirect('cafeterias')->with('status', 'La cafétéria a été modifié.');
+
+        } catch (ModelNotFoundException $e) {
+
+            DB::rollBack();
+            App::abort(404);
+        }
     }
 
     /**
@@ -135,6 +149,7 @@ class CafeteriasController extends Controller
      */
     public function destroy($id)
     {
+        //dd($id);
         if (isset($id)){
             try {
 
@@ -158,9 +173,30 @@ class CafeteriasController extends Controller
                 return redirect()->back()->with('erreur', 'Une erreur lors de la supression de la cafétéria #' .$id. 'est survenue. Réessayer plus tard.');
             
             }
-
         }
 
         return redirect()->back()->with('erreur', "La cafétéria #" .$id. " n'existe pas.");
+    }
+
+    /**
+     * Supprimer tous les responsables d'une cafétéria.
+     * @param  Cafeteria $cafeteria La cafétéria à vider
+     */
+    private function supprimerResponsables(Cafeteria $cafeteria)
+    {
+        foreach ($cafeteria->responsable()->get() as $key => $responsable) {
+            $responsable->delete();
+        }
+    }
+
+    /**
+     * Formate un numéro de téléphone pour l'inscrire dans la base de données.
+     * @param  String $numero Le numéro de téléphone
+     * @return String         Le numéro formaté.
+     */
+    private function formaterTelephonePourBD(String $numero)
+    {
+        $numeroFormatte = str_replace(['(', ')', '-', ' ', '.'], "", $numero);
+        return $numeroFormatte;
     }
 }

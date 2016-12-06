@@ -27,6 +27,8 @@ class CafeteriaRequest extends FormRequest
             'nom' => 'required',
             'adresse' => 'required',
             'localisation' => 'required',
+            'responsable.*.nom' => 'required',
+            'responsable.*.telephone' => 'required|est_numero_telephone',
         ];
     }
 
@@ -36,7 +38,9 @@ class CafeteriaRequest extends FormRequest
     public function messages()
     {
         return [
-            
+            'responsable.*.nom.required' => 'Tous les champs noms doivent être remplis',
+            'responsable.*.telephone.required' => 'Tous les champs téléphones doivent être remplis',
+            'responsable.*.telephone.est_numero_telephone' => 'Un des champs téléphones est invalides'
         ];
     }
 }

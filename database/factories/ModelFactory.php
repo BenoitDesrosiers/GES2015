@@ -47,3 +47,19 @@ $factory->define(App\Models\Sport::class, function (Faker\Generator $faker) {
         'saison' => 'e'
     ];
 });
+
+$factory->define(App\Models\Cafeteria::class, function (Faker\Generator $faker){
+	return  [
+		'nom' => $faker->company,
+		'adresse' => $faker->streetAddress,
+		'localisation' => $faker->city,		
+	];
+});
+
+$factory->define(App\Models\Responsable::class, function (Faker\Generator $faker){
+	return [
+		'nom' => $faker->name,
+		// Le téléphone doit être 10 nombres collés. 
+		'telephone' => $faker->numberBetween(1000000000, 9999999999),
+	];
+});

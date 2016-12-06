@@ -66,8 +66,11 @@ function creerRangee()
 	retirer.innerHTML = '-';
 	retirer.type = 'button';
 
-	nom.name = 'ResponsableNom[]';
-	telephone.name = 'ResponsableTelephone[]';
+	// Compte le nombre de rangée de responsable.
+	var id = document.querySelectorAll('#inputResponsables .rangee').length;
+
+	nom.name = 'responsable['+ id + '][nom]';
+	telephone.name = 'responsable['+ id + '][telephone]';
 
 	nom.placeholder = 'Nom';
 	telephone.placeholder = 'Téléphone';
