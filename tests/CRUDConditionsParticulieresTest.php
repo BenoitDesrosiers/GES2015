@@ -42,6 +42,18 @@ class CRUDConditionsParticulieres extends TestCase
 
 	/**
 	 * Teste qu'il est impossible d'ajouter une condition
+	 * particulière sans nom.
+	 */
+	public function testImpossibleDAjouterUneConditionParticuliereSansNom() {
+		$this->actingAs(factory(\App\User::class)->make()->first());
+		$conditionAvecDescription = factory(App\Models\ConditionParticuliere::class, 'AvecDescription')
+			->make()->toArray();
+		$conditionAvecDescription['nom'] = null;
+		$this->validerErreurLorsDeLAjout($conditionAvecDescription);
+	}
+
+	/**
+	 * Teste qu'il est impossible d'ajouter une condition
 	 * particulière qui existe déjà.
 	 */
 	public function testImpossibleDAjouterUneConditionParticuliereQuiExisteDeja() {
