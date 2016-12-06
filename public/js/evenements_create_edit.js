@@ -2,7 +2,6 @@
  * Fichier: evenements_create_edit.js
  *
  * Description: Script qui gère le dropdown des sports et des épreuves
- * Est inclus dans /evenements/create.blade.php et /evenements/edit.blade.php.
  *
  * Créé le: 161129
  * Modifié le: 161129

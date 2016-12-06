@@ -2,13 +2,13 @@
  * Fichier: evenements_index.js
  *
  * Description: Script qui gère le tri des événements par sport
- * Est inclus dans /evenements/index.blade.php.
  *
  * Créé le: 161129
  * Modifié le: 161129
  * Par: ZeLarpMaster
  ******************************************************************************/
 
+// Vue ayant effet sur la liste d'événements
 var vueListeEvenements = new Vue({
 	el: "#liste_evenements",
 	data: {

@@ -71,7 +71,7 @@ class EvenementsController extends BaseController
             $evenement->epreuve_id = $input['epreuve_id'];
             $evenement->date_heure = $input['date'].' '.$input['heure'];
             if($evenement->save()) {
-                return Redirect::action('EvenementsController@index')->with('status', 'Compétition ajouté!');
+                return Redirect::action('EvenementsController@index')->with('status', 'Compétition ajoutée!');
             } else {
                 return Redirect::back()->withInput()->withErrors($evenement->validationMessages());
             }
@@ -134,7 +134,7 @@ class EvenementsController extends BaseController
             $evenement->epreuve_id = $input['epreuve_id'];
             $evenement->date_heure = $input['date'].' '.$input['heure'];
             if($evenement->save()) {
-                return Redirect::action('EvenementsController@index')->with('status', 'Compétition mis à jour!');
+                return Redirect::action('EvenementsController@index')->with('status', 'Compétition mise à jour!');
             } else {
                 return Redirect::back()->withInput()->withErrors($evenement->validationMessages());
             }
@@ -155,7 +155,7 @@ class EvenementsController extends BaseController
             $evenement = Evenement::findOrFail($id);
             $evenement->delete(); //FIXME: protéger par une transaction dans le try/catch
 
-            return Redirect::action('EvenementsController@index')->with('status', 'Compétition détruit!');
+            return Redirect::action('EvenementsController@index')->with('status', 'Compétition détruite!');
         } catch(Exception $e) {
             App::abort(404);
         }
@@ -198,9 +198,8 @@ class EvenementsController extends BaseController
 	 * @return \Illuminate\Http\JsonResponse La liste d'épreuves
 	 */
 	public function getListeSports() {
-		$sports = Sport::with("epreuves")->get();
 		$resultat = array();
-		foreach($sports as $sport) {
+		foreach(Sport::with("epreuves")->get() as $sport) {
 			$epreuves = array();
 			foreach($sport->epreuves as $epreuve) {
 				$epreuves[] = [
