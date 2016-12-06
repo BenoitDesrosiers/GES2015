@@ -328,7 +328,7 @@ class BenevolesController extends BaseController {
 	 */
 	public function construireDisponibilite($input, $index)
 	{
-		$return_value = null;
+		$disponibilite = New Disponibilite;
 		
 		$title = isset($input['disponibilite_disponibilite'][$index])? $input['disponibilite_disponibilite'][$index]: null;
 		$annee = isset($input['disponibilite_annee'][$index]) ? $input['disponibilite_annee'][$index] : null;
@@ -344,13 +344,14 @@ class BenevolesController extends BaseController {
 			$dateDebut = new DateTime($annee."-".$mois."-".$jour." ".$heureDebut.":".$minuteDebut.":00");
 			$dateFin = new DateTime($annee."-".$mois."-".$jour." ".$heureFin.":".$minuteFin.":00");
 			
-			$disponibilite = New Disponibilite;
-			$disponibilite->title = $title;
-			$disponibilite->isAllDay = $isAllDay;
-			$disponibilite->start=$dateDebut;
-			$disponibilite->end=$dateFin;
-		
-			$return_value = $disponibilite;
+			if ( (int)$heureDebut < (int)$heureFin OR ((int)$heureDebut = (int)$heureFin AND (int)$minuteDebut < (int)$minuteFin) ) {
+				
+				$disponibilite->title = $title;
+				$disponibilite->isAllDay = $isAllDay;
+				$disponibilite->start=$dateDebut;
+				$disponibilite->end=$dateFin;
+			}
+			$return_value = $disponibilite->title ? $disponibilite : null;
 		}
 		
 		return $return_value;
