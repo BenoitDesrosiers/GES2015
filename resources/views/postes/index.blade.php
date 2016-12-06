@@ -17,7 +17,6 @@
                     <th class="hidden-xs">Description</th>
                     <th></th>
                     <th></th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>

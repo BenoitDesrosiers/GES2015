@@ -128,7 +128,7 @@ class AboutController extends BaseController {
                     "Nicolas Bisson",
                     "Grouper les participants par région dans 'Ajouter un participant à une épreuve'.
                     CRUD des postes pour les bénévoles."
-                ),
+                )
             )
         );
 
