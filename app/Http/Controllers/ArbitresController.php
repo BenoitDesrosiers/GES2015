@@ -138,7 +138,7 @@ class ArbitresController extends BaseController {
 			$arbitre = Arbitre::findOrFail($id);
 			$regions = Region::all();
 			$sports = Sport::all();
-			$selectedEpreuves = $arbitre->epreuves->list('id');
+			$selectedEpreuves = $arbitre->epreuves->pluck('id');
 			
 			// La date par défaut du formulaire est <cette année> - 20 ans
 			// pour être plus prêt de l'âge moyen attendu
@@ -151,7 +151,7 @@ class ArbitresController extends BaseController {
 	        $listeMois = ArbitresController::generer_liste(1, 12);
 	        $listeJours = ArbitresController::generer_liste(1, 31);
 	        
-	        return View::make('arbitres.edit', compact('arbitre', 'regions', 'sports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+	        return View::make('arbitres.edit', compact('arbitre', 'regions', 'sports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut', 'selectedEpreuves'));
 	    
 	    } catch (Exception $e) {
 	    	App:abort(404);

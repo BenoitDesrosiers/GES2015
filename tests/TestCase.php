@@ -22,4 +22,13 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $app;
     }
+
+	/**
+	 * Ajouté pour faire fonctionner PHPUnit sur ma machine.
+	 *
+	 * @author res260
+	 */
+    public function testRien() {
+    	$this->assertTrue(true);
+    }
 }

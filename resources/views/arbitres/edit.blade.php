@@ -123,7 +123,8 @@
 				?>
 			</div>
 		</div>
-		<!--  blade select multiple: http://laravel-recipes.com/recipes/163/creating-a-select-box-field 	-->
+		
+		<!--  Association sport épreuves 	-->
 		<div id="epreuves" class="form-group">
 			{{ Form::label('choixEpreuve', 'Choisissez une épreuve:') }}
 			<p>(Tenir Ctrl pour sélection multiple)</p>
@@ -131,7 +132,7 @@
 			@foreach ($arbitre->sports as $arbitreSport)
 					<optgroup label="{{ $arbitreSport->nom }}">
 					@foreach($arbitreSport->epreuves as $epreuve)
-						<option value="{{ $epreuve->id }}" {{ (in_array($epreuve->id, $selectedEpreuves)) ? ' selected="selected"' : '' }}>{{ $epreuve->nom }}</option>
+						<option value="{{ $epreuve->id }}" {{ $selectedEpreuves->contains($epreuve->id) ? ' selected="selected"' : '' }}>{{ $epreuve->nom }}</option>
 					@endforeach
 					</optgroup>
 			@endforeach

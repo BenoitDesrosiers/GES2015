@@ -11,8 +11,9 @@
  * - pour Baseball
  *   - Tournoi masculin
  * 
- * @author BinarMorker, obnosim
+ * @author BinarMorker, obnosim, Res260
  * @version 2
+ * @date 161030
  */
 
 namespace App\Models;
@@ -47,6 +48,24 @@ class Participant extends EloquentValidating {
 	}
 
 	/**
+	 * Un participant a plusieurs téléphones.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function telephones() {
+		return $this->hasMany('App\Models\Telephone');
+	}
+
+	/**
+	 * Un participant a plusieurs adresses.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function adresses() {
+		return $this->hasMany('App\Models\Adresse');
+	}
+
+	/**
 	* Identifie les colonnes qui peuvent être modifiées
 	*/
 	protected $fillable = [
@@ -58,7 +77,6 @@ class Participant extends EloquentValidating {
 			'numero',
 			'sexe',
 			'naissance',
-			'adresse',
 			'region_id'
 		];
 

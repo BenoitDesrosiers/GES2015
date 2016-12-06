@@ -22,8 +22,6 @@ class CreateDeleguesTable extends Migration
 			$table->boolean('sexe');
 			$table->date('date_naissance');
 			$table->string('adresse')->nullable();
-			$table->string('telephone')->nullable();
-			$table->string('courriel')->nullable();
             $table->timestamps();
         });
     }

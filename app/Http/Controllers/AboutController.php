@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use View;
-use App\Http\Controllers\BaseController;
 
 /**
  * Le controller pour les rôles.
@@ -23,7 +22,7 @@ class AboutController extends BaseController {
             	array(
             			"Benoit Desrosiers",
                			"Prof du cours 420-CN2-DM, design original du projet"
-         	), 
+         	    ),
             	array(
             			"Guillaume Boudreau, Jaymz Latour, Cédric Lemire, Anthony Martel, Philippe Paquette, Marc-Antoine Renaud",
            				"Étudiants du cours à l'automne 2014 ayant développé une copie du projet."
@@ -32,7 +31,7 @@ class AboutController extends BaseController {
                     "François Allard",
                     "Conception de la version originale du projet qui a été conservé pour les années suivantes."
                 )
-                ),
+            ),
             2015 => array(
                 
                 
@@ -75,10 +74,67 @@ class AboutController extends BaseController {
                 array(
                     "Benoit Desrosiers",
                     "Gestion du projet"
+                )
 
-                )
-                )
-            );
+            ),
+            2016 => array(
+            	array(
+           			"Benoit Desrosiers",
+         			"Gestion du projet"
+           		),
+				array(
+					"Alexandre Caron",
+					"Association d'un sport à un participant à partir d'un sport et CRUD des cafétérias."
+				),
+				
+				array(
+					"Jessee Lefebvre",
+					"Ajout du CRUD des événements, association des participants et des événements à partir de l'épreuve choisie"
+				),
+
+				array(
+					"Émilio Gonzalez",
+					"Ajout de plusieurs téléphones et adresses pour les participants (fini le 161101), CRUD des conditions particulières (avec tests)"
+				),
+				
+				array(
+					"Steve Duquet",
+					"Association de sports à un bénévole à partir d'un bénévole."
+				),
+				
+				array(
+					"Charles Lemay",
+					"Association des terrains aux épreuves."
+				),
+				
+				array(
+					"Pascal Belisle",
+					"Afficher les participants par région dans AjtParticipant."
+				),
+
+                array(
+                    "Guillaume Hamel-Gagné",
+                    "Ajout d'un sexe aux épreuves. Ajout d'un filtre lors de l’ajout de participants 
+                    à une épreuve selon le sexe de l’épreuve et des participants."
+                ),
+
+                array(
+                    "Étienne Drolet",
+                    "CRUD des organismes."
+                ),
+
+
+            	array(
+            		"Francis Mathieu",
+           			"Ajouter un arbitre à un sport"
+            	),
+				
+				array(
+            		"Maxime Laflamme",
+           			"Associer des terrains aux bénévoles. Associer les bénévoles à une épreuve."
+            	)
+            )
+        );
 
         return View::make('about', compact('liste_etudiants'));
     }

@@ -11,7 +11,7 @@ class info_event extends Seeder
      */
     public function run()
     {
-    	DB::table('Infos_events')->delete();
-        DB::table('Infos_events')->insert(array('nomEvenement' => 'Evenement par defaut'));
+    	DB::table('infos_events')->delete();
+        DB::table('infos_events')->insert(array('nomEvenement' => 'Evenement par defaut'));
     }
 }
