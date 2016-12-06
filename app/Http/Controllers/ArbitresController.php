@@ -169,6 +169,7 @@ class ArbitresController extends BaseController {
 	{   //FIXME: meme code que store, DRY
 		try {
 			$input = Input::all();
+			
 			$arbitre = Arbitre::findOrFail($id);
 			$arbitre->prenom = $input['prenom'];
 			$arbitre->nom = $input['nom'];
@@ -178,9 +179,9 @@ class ArbitresController extends BaseController {
 			$arbitre->numero_telephone = $input['numero_telephone'];
 			$arbitre->adresse = $input['adresse'];
 			$arbitre->sexe = $input['sexe'];
-
+				
 	        $arbitre->date_naissance = $arbitre->date_naissance = ArbitresController::construire_date($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
-			
+	         
 			if($arbitre->save()) {
 				
 				// Association avec les sports sélectionnés

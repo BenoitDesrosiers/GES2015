@@ -116,13 +116,13 @@ $factory->define(App\Models\Arbitre::class, function (Faker\Generator $faker){
 	return [
 			'nom' => $faker->name,
 			'prenom' => $faker->name,
-			'region_id' => factory(App\Models\Region::class)->create()->id,
+			'region_id' => 1,
 			'numero_accreditation' => "3",
 			'association' => "4",
 			'numero_telephone' => $faker->phoneNumber,
 			'sexe' => $faker->numberBetween(0,1),
 			'adresse' => $faker->address,
-			'date_naissance' => $faker->dateTimeThisCentury
+			'date_naissance' => $faker->date
 	];
 });
 	
