@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Le controller pour les cafétérias
+ *
+ * @author Alexandre
+ */
 class CafeteriasController extends Controller
 {
 

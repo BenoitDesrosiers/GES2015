@@ -80,7 +80,7 @@ class AboutController extends BaseController {
             2016 => array(
 				array(
 					"Alexandre Caron",
-					"Association d'un sport à un participant à partir d'un sport"
+					"Association d'un sport à un participant à partir d'un sport et CRUD des cafétérias."
 				),
 
 				array(
