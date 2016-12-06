@@ -50,13 +50,7 @@ class CafeteriasController extends Controller
                 'localisation' => $request['localisation']
             ]);
 
-            foreach ($request['responsable'] as $key => $responsable) {
-                Responsable::create([
-                    'nom' => $responsable['nom'],
-                    'telephone' => $responsable['telephone'],
-                    'cafeteria_id' => $cafeteria->id,
-                ]);
-            }
+            $this->sauvegarderResponsables($cafeteria->id, $request['responsable']);
 
             DB::commit();
 
@@ -130,13 +124,7 @@ class CafeteriasController extends Controller
 
             $this->supprimerResponsables($cafeteria);
 
-            foreach ($request['responsable'] as $key => $responsable) {
-                Responsable::create([
-                    'nom' => $responsable['nom'],
-                    'telephone' => $responsable['telephone'],
-                    'cafeteria_id' => $cafeteria->id,
-                ]);
-            }
+            $this->sauvegarderResponsables($cafeteria->id, $request['responsable']);
 
             DB::commit();
             return redirect('cafeterias')->with('status', 'La cafétéria a été modifiée.');
@@ -192,6 +180,25 @@ class CafeteriasController extends Controller
     {
         foreach ($cafeteria->responsable()->get() as $key => $responsable) {
             $responsable->delete();
+        }
+    }
+
+    /**
+     * Sauvegarde des responsables.
+     * @param  Int    $cafeteria_id l'id de la cafétéria des responsables
+     * @param  Array  $responsables Un array contenant les informations des responsables
+     */
+    private function sauvegarderResponsables(Int $cafeteria_id, Array $responsables)
+    {
+        foreach ($responsables as $key => $responsable) {
+            if (isset($responsable['nom']) && isset($responsable['telephone'])){
+                Responsable::create([
+                    'nom' => $responsable['nom'],
+                    'telephone' => $responsable['telephone'],
+                    'cafeteria_id' => $cafeteria_id,
+                ]);
+            }
+                
         }
     }
 
