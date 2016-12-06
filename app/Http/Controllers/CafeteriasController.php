@@ -40,7 +40,6 @@ class CafeteriasController extends Controller
      */
     public function store(CafeteriaRequest $request)
     {
-        //dd($request);
         try {
 
             DB::beginTransaction();
@@ -149,7 +148,6 @@ class CafeteriasController extends Controller
      */
     public function destroy($id)
     {
-        //dd($id);
         if (isset($id)){
             try {
 
