@@ -40,7 +40,14 @@ class EvenementsRequest extends FormRequest
             'heure' => array('required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'),
             'type_id' => 'required',
             'epreuve_id' => 'required',
-        	'terrain_id' => 'nullable|unique:evenements,terrain_id,NULL,id,date_heure,'.$this->get('date_heure')
+        	'terrain_id' => 'nullable|unique:evenements,terrain_id,'.$this->get('nom').',nom,date_heure,'.$this->get('date_heure')
         ];
+    }
+    
+    public function messages()
+    {
+    	return [
+    		"terrain_id.unique" => "Le terrain sélectionné n'est pas disponnible pour cette date et heure."
+    	];
     }
 }

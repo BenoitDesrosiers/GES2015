@@ -137,17 +137,8 @@ class EvenementsController extends BaseController
             $evenement->type_id = $input['type_id'];
             $evenement->epreuve_id = $input['epreuve_id'];
             $evenement->date_heure = $input['date'].' '.$input['heure'];
+            $evenement->terrain()->associate($input['terrain_id']);
             if($evenement->save()) {
-            	//Association du terrain
-            	DB::beginTransaction();
-            	if ($this->terrainLibre($evenement->date_heure, $input['terrain_id'])) { //FIXME: protéger par une transaction dans le try/catch
-            		$evenement->terrain()->associate($input['terrain_id']);
-            	}
-            	else {
-            		$evenement->terrain()->dissociate();
-            	}
-            	$evenement->save();
-            	DB::commit();
                 return Redirect::action('EvenementsController@index')->with('status', 'Événement mis à jour!');
             } else {
                 return Redirect::back()->withInput()->withErrors($evenement->validationMessages());
@@ -173,18 +164,5 @@ class EvenementsController extends BaseController
         } catch(Exception $e) {
             App::abort(404);
         }
-    }
-    
-    /**
-     * Vérifie si un terrain est libre à une certaine date et heure.
-     *
-     * @param  String  $date_heure La date et l'heure de l'événement.
-     * @param  int  $terrain_id l'id du terrain à vérifier.
-     * @return Vrai si le terrain est libre, sinon faux.
-     */
-    public function terrainLibre($date_heure, $terrain_id)
-    {
-    	$evenements = Evenement::where(['date_heure' => $date_heure, 'terrain_id' => $terrain_id])->get();
-    	return $evenements->isEmpty();
     }
 }
