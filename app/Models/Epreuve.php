@@ -36,6 +36,10 @@ class Epreuve extends EloquentValidating {
     public function participants() {
         return $this->belongsToMany('App\Models\Participant');
     }
+    
+    public function benevoles() {
+    	return $this->belongsToMany('App\Models\Benevole');
+    }
 
 /**
  * Eloquent relationship: une épreuve est associée à plusieurs arbitres
