@@ -183,17 +183,7 @@ function creerLigne(index, delegue, csrf){
         "<input name='_method' type='hidden' value='DELETE'><input name='_token' type='hidden' value= " + csrf + " > " +
         "<button type=submit href='/delegues/" + delegue.id + "' class='btn btn-danger'>Effacer</button> </form>";
     ligne.appendChild(effacerDelegue)
-
-    var x = document.getElementsByClassName("cacher");
-    console.log(x);
-    var i;
-    var j;
-    for (i = 0; i < x.length; i++) {
-       for (j = 0; j < x[i].length; j++) {
-           x[i][j].style.display = 'none';
-       }
-    }
-
+    
     return ligne;
 
 }
