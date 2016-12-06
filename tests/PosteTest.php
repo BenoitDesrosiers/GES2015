@@ -76,24 +76,6 @@ class PosteTest extends TestCase
         $this->dontSeeInDatabase('postes', ['id' => $poste->id]);
     }
 
-    /**
-     * @test
-     * @expectedException PDOException
-     * @dataProvider nullProvider
-     */
-    public function champ_nom_est_pas_null($nom, $description)
-    {
-        $poste = factory(App\Models\Poste::class)
-            ->create(['nom' => $nom, 'description' => $description]);
-    }
-
-    public function nullProvider()
-    {
-        return [
-            'nom' => [null, 'Une description descriptive.']
-        ];
-    }
-
     /** @test */
     public function verification_doublon_nom_poste()
     {
@@ -109,5 +91,40 @@ class PosteTest extends TestCase
         $this->assertSessionHas(['errors']);
 
         $this->seeInDatabase('postes', ['nom' => $poste->nom]);
+    }
+
+    /**
+     * @test
+     * @dataProvider nullProvider
+     */
+    public function champ_nom_est_pas_null_bd($nom, $description)
+    {
+        $poste = factory(App\Models\Poste::class)
+            ->create(['nom' => $nom, 'description' => $description]);
+        $this->assertNotEquals($poste->validationMessages('nom'), '');
+    }
+
+    /**
+     * @test
+     * @dataProvider nullProvider
+     */
+    public function champ_nom_est_pas_null_controller($nom, $description)
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+
+        $poste = factory(App\Models\Poste::class)->make();
+        $input = ['nom' => $nom, 'description' => $description];
+        $this->call('POST', '/postes', $input);
+        $this->assertSessionHas(['errors']);
+        $this->dontSeeInDatabase('postes', ['nom'=>$poste->nom,
+            'description'=>$poste->description]);
+    }
+
+    public function nullProvider()
+    {
+        return [
+            'nom' => [null, 'Une description descriptive.']
+        ];
     }
 }
