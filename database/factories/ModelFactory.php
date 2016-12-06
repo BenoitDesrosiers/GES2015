@@ -92,5 +92,22 @@ $factory->defineAs(App\Models\ConditionParticuliere::class, 'AvecDescription', f
 $factory->defineAs(App\Models\ConditionParticuliere::class, 'SansDescription', function (Faker\Generator $faker) {
 	return [
 		'nom' => $faker->text(40)
+		];
+});
+
+
+$factory->define(App\Models\Cafeteria::class, function (Faker\Generator $faker){
+	return  [
+		'nom' => $faker->company,
+		'adresse' => $faker->streetAddress,
+		'localisation' => $faker->city,		
+	];
+});
+
+$factory->define(App\Models\Responsable::class, function (Faker\Generator $faker){
+	return [
+		'nom' => $faker->name,
+		// Le téléphone doit être 10 nombres collés. 
+		'telephone' => $faker->numberBetween(1000000000, 9999999999),
 	];
 });

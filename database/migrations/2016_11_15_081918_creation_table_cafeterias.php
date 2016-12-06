@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInfosEventsTable extends Migration
+class CreationTableCafeterias extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +13,12 @@ class CreateInfosEventsTable extends Migration
      */
     public function up()
     {
-        Schema::create('infos_events', function(Blueprint $table)
-        {
+        Schema::create('cafeterias', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nomEvenement');
-            $table->datetime('updated_at');
+            $table->string('nom');
+            $table->string('adresse');
+            $table->string('localisation');
+            $table->timestamps();
         });
     }
 
@@ -27,6 +29,6 @@ class CreateInfosEventsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('infos_events');
+        Schema::dropIfExists('cafeterias');
     }
 }
