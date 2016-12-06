@@ -122,7 +122,7 @@ class AboutController extends BaseController {
 
             	array(
             		"Francis Mathieu",
-           			"Ajouter un arbitre à un sport"
+           			"Ajouter un arbitre à un sport et CRUD des associations"
             	),
             )
         );
