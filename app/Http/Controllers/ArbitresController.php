@@ -137,7 +137,8 @@ class ArbitresController extends BaseController {
 		try {
 			$arbitre = Arbitre::findOrFail($id);
 			$regions = Region::all();
-			$sports = Sport::with('epreuves')->get();
+			$sports = Sport::all();
+			$selectedEpreuves = $arbitre->epreuves->list('id');
 			
 			// La date par défaut du formulaire est <cette année> - 20 ans
 			// pour être plus prêt de l'âge moyen attendu
@@ -189,6 +190,12 @@ class ArbitresController extends BaseController {
                     $arbitre->sports()->detach();
                 }
 
+                // Association sports-épreuves
+                if (is_array(Input::get('epreuves'))){
+                	$arbitre->epreuves()->sync((Input::get('epreuves')));
+                } else {
+                	$arbitre->epreuves()->detach();
+                }
 				return Redirect::action('ArbitresController@index');
 			} else {
 				return Redirect::back()->withInput()->withErrors($arbitre->validationMessages());
