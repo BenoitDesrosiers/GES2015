@@ -109,63 +109,45 @@ class associationTest extends TestCase
     /** @test */
     public function une_association_est_supprime_de_la_bd()
     {
-    	$user = factory(App\User::class)->create();
-    	$this->actingAs($user);
+		$user = factory(App\User::class)->create();
+		$this->actingAs($user);
     	
-    	 $association = factory(App\Models\Association::class)->create();
-    	 $this->call('DELETE', '/associations/' . $association->id);
-    	 $this->assertSessionMissing(['errors']);
-    	 $this->dontSeeInDatabase('associations', ['id' => $association->id]);
+		$association = factory(App\Models\Association::class)->create();
+		$this->call('DELETE', '/associations/' . $association->id);
+		$this->assertSessionMissing(['errors']);
+		$this->dontSeeInDatabase('associations', ['id' => $association->id]);
     }
     
-    /** @test */
-    public function tester_l_entrer_un_null_au_nom_dans_la_BD()
+	/** @test
+     * @dataProvider nullProvider */
+    public function tester_les_null_dans_la_bd($nom, $abreviation, $description)
     {
-    	$user = factory(App\User::class)->create();
-    	$this->actingAs($user);
-    	
-    	$association = factory(App\Models\Association::class)->make();
-    	$input = ['nom'=>null,
-    			'abreviation'=>'AT',
-    			'description'=>'Gens qui se disent le bonjour'];
-    	$this->call('POST', '/associations/', $input);
-    	$this->assertSessionHas(['errors']);
-    	$this->dontSeeInDatabase('associations', ['nom'=>$association->nom,
-    											'abreviation'=>$association->abreviation,
-    											'description'=>$association->description]);
+     $association = factory(App\Models\Association::class)
+     ->create(['nom'=>$nom, 'abreviation'=>$abreviation, 'description'=>$description]);
+	 $this->assertNotEquals($association->validationMessages('nom', 'abreviation'), '');
     }
     
-    /** @test */
-    public function tester_l_entrer_un_null_dans_l_abreviation_dans_la_BD()
+    /** @test 
+     * @dataProvider nullProvider */
+    public function tester_l_entree_de_null_dans_le_controller($nom, $abreviation, $description)
     {
     	$user = factory(App\User::class)->create();
     	$this->actingAs($user);
     	 
     	$association = factory(App\Models\Association::class)->make();
-    	$input = ['nom'=>'Allo Toi',
-    			'abreviation'=>null,
-    			'description'=>'Gens qui se disent le bonjour'];
+    	$input = ['nom'=>$nom, 'abreviation'=>$abreviation, 'description'=>$description];
     	$this->call('POST', '/associations/', $input);
     	$this->assertSessionHas(['errors']);
     	$this->dontSeeInDatabase('associations', ['nom'=>$association->nom,
-    											'abreviation'=>$association->abreviation,
-    											'description'=>$association->description]);
+					    			'abreviation'=>$association->abreviation,
+					    			'description'=>$association->description]);
     }
     
-    /** @test */
-    public function tester_l_entrer_un_null_dans_la_description_dans_la_BD()
+    public function nullProvider()
     {
-    	$user = factory(App\User::class)->create();
-    	$this->actingAs($user);
-    	 
-    	$association = factory(App\Models\Association::class)->make();
-    	$input = ['nom'=>'Allo Toi',
-    			'abreviation'=>'AT',
-    			'description'=>null];
-    	$this->call('POST', '/associations/', $input);
-    	$this->assertSessionMissing(['errors']);
-    	$this->dontSeeInDatabase('associations', ['nom'=>$association->nom,
-    											'abreviation'=>$association->abreviation,
-    											'description'=>$association->description]);
+    	return [
+    			'nom' => [null, 'AT', 'Gens qui se parlent.'],
+    			'abreviation' => ['Allo Toi', null, 'Gens qui se parlent.']
+    	];
     }
 }
