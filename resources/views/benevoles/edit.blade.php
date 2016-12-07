@@ -1,5 +1,13 @@
+{{-----------------------------------------------------------------
+| edit.blade.php
+| Description: Vue de modification d'un bénévole.
+| Créé le: Avant automne 2016
+| Modifié le: 161207
+| Par: (Auteur précédent inconnu), Steve D.
+-----------------------------------------------------------------}}
 @extends('layout')
 @section('content')
+<link rel="stylesheet" href="{!! asset('/css/benevoles/create-edit.css') !!}">
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h2>Modification d'un bénévole</h2>
@@ -120,11 +128,46 @@
 				?>
 			</div>
 		</div>
+		{!! Form::label('disponibilites', 'Disponibilités:') !!} 
+        <div id="conteneur-disponibilites">
+            <div class="form-group conteneur-disponibilite">
+                
+                <label for="disponibilite_disponibilite[]">Description de la disponibilité:</label>
+                <input type="text" name="disponibilite_disponibilite[]" id="disponibilite-disponibilite-1" class="form-control" maxlength="255"/>
+                	
+				<label for="disponibilite_annee[]">Année:</label>
+				<input type="number" name="disponibilite_annee[]" id="disponibilite-annee-1" class="form-control" step="1" min="2016" max="9999"/>
+                
+                <label for="disponibilite_mois[]">Mois (en chiffre):</label>
+				<input type="number" name="disponibilite_mois[]" id="disponibilite-mois-1" class="form-control" step="1" min="1" max="12"/>
+                
+                <label for="disponibilite_jour[]">Jour:</label>
+				<input type="number" name="disponibilite_jour[]" id="disponibilite-jour-1" class="form-control" step="1" min="1" max="31"/>
+                
+                <label for="disponibilite_debut_heure[]">Heure de début (format 24h):</label>
+				<input type="number" name="disponibilite_debut_heure[]" id="disponibilite-debut-heure-1" class="form-control" step="1" min="0" max="23"/>
+                
+                <label for="disponibilite_debut_minute[]">Minute de début:</label>
+				<input type="number" name="disponibilite_debut_minute[]" id="disponibilite-debut-minute-1" class="form-control" step="1" min="0" max="59"/>
+                
+                <label for="disponibilite_fin_heure[]">Heure de fin (format 24h):</label>
+				<input type="number" name="disponibilite_fin_heure[]" id="disponibilite-fin-heure-1" class="form-control" step="1" min="0" max="23"/>
+                
+                <label for="disponibilite_fin_minute[]">Minute de fin:</label>
+				<input type="number" name="disponibilite_fin_minute[]" id="disponibilite-fin-minute-1" class="form-control" step="1" min="0" max="59"/>
+            </div>
+        </div>
+        <div class="disponibilite-bouton">
+        	<button onclick="ajouterDisponibilite()" id="bouton-ajouter-disponibilite" 
+        		class="btn-success" type="button">Ajouter une disponibilité</button>
+		</div>
+		
 		<div class="form-group">
 			{!! Form::button('Modifier', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-            <a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
+			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
 		</div>
 		{!! Form::close() !!}
 	</div>
 </div>
+<script src="{!! asset('/js/benevoles/gerer-infos-disponibilites.js') !!}"></script>
 @stop
