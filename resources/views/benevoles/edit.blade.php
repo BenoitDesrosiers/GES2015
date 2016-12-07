@@ -128,7 +128,7 @@
 				?>
 			</div>
 		</div>
-		{!! Form::label('disponibilites', 'Disponibilités:') !!} 
+		{!! Form::label('disponibilites', 'Ajout de nouvelles disponibilités:') !!} 
         <div id="conteneur-disponibilites">
             <div class="form-group conteneur-disponibilite">
                 

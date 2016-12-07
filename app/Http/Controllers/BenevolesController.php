@@ -263,6 +263,17 @@ class BenevolesController extends BaseController {
 					$benevole->terrains()->detach();
 				}
 				// Message de confirmation si la sauvegarde a réussi
+				
+				$disponibilites = $this->construireListeDisponibilites($input);
+				//Sauvegarde toutes les diponibilités. Si erreur, annule tout.
+				foreach($disponibilites as $disponibilite) {
+					// sauvegarderDisponibilite() retourne true s'il n'y a pas
+					// de diponibilité ou si l'insertion s'est bien passée.
+					if(!$this->sauvegarderDisponibilite($disponibilite, $benevole)) {
+						return Redirect::back()->withInput()->withErrors($disponibilite->validationMessages());
+					}
+				}
+				
 				return Redirect::action('BenevolesController@show', $benevole->id)->with ( 'status', 'Le benevole a été mis a jour!' );
 	        } else {
 		        return Redirect::back()->withInput()->withErrors($benevole->validationMessages());
