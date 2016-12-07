@@ -13,7 +13,6 @@ class EvenementsRequest extends FormRequest
 		$heure = $this->get('heure');
 		$date_heure = $date.' '.$heure;
 		$this->merge(['date_heure' => $date_heure]);
-		
 		return $factory->make($this->input(), $this->rules(), $this->messages());
 	}
 	
@@ -40,6 +39,8 @@ class EvenementsRequest extends FormRequest
             'heure' => array('required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'),
             'type_id' => 'required',
             'epreuve_id' => 'required',
+        		/*La règle 'terrain_id' vérifie qu'aucun autre événement utilise 
+        		le terrain au même moment, mais ignore les événements ayant le nom choisi.*/
         	'terrain_id' => 'nullable|unique:evenements,terrain_id,'.$this->get('nom').',nom,date_heure,'.$this->get('date_heure')
         ];
     }

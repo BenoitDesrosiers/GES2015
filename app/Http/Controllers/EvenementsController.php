@@ -73,6 +73,7 @@ class EvenementsController extends BaseController
             $evenement->epreuve_id = $input['epreuve_id'];
             $evenement->terrain_id = $input['terrain_id'];
             $evenement->date_heure = $input['date'].' '.$input['heure'];
+            $evenement->terrain()->associate($input['terrain_id']);
             if($evenement->save()) {
                 return Redirect::action('EvenementsController@index')->with('status', 'Événement ajouté!');
             } else {
