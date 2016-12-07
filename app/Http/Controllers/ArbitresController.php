@@ -117,7 +117,8 @@ class ArbitresController extends BaseController {
 	{
 		try {
 			$arbitre = Arbitre::findOrFail($id);
-			return View::make('arbitres.show', compact('arbitre'));
+			$selectedEpreuves = $arbitre->epreuves->pluck('id');
+			return View::make('arbitres.show', compact('arbitre', 'selectedEpreuves'));
 
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
