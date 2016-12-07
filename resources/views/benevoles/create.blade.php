@@ -120,7 +120,7 @@
                 <input type="text" name="disponibilite_disponibilite[]" id="disponibilite-disponibilite-1" class="form-control" maxlength="255" required/>
                 	
 				<label for="disponibilite_annee[]">Année:</label>
-				<input type="number" name="disponibilite_annee[]" id="disponibilite-annee-1" class="form-control" step="1" min="2016" max="9999" required/>              	
+				<input type="number" name="disponibilite_annee[]" id="disponibilite-annee-1" class="form-control" step="1" min="2016" max="9999" required/>
                 
                 <label for="disponibilite_mois[]">Mois (en chiffre):</label>
 				<input type="number" name="disponibilite_mois[]" id="disponibilite-mois-1" class="form-control" step="1" min="1" max="12" required/>
@@ -128,13 +128,13 @@
                 <label for="disponibilite_jour[]">Jour:</label>
 				<input type="number" name="disponibilite_jour[]" id="disponibilite-jour-1" class="form-control" step="1" min="1" max="31" required/>
                 
-                <label for="disponibilite_debut_heure[]">Heure de début:</label>
+                <label for="disponibilite_debut_heure[]">Heure de début (format 24h):</label>
 				<input type="number" name="disponibilite_debut_heure[]" id="disponibilite-debut-heure-1" class="form-control" step="1" min="0" max="23" required/>
                 
                 <label for="disponibilite_debut_minute[]">Minute de début:</label>
 				<input type="number" name="disponibilite_debut_minute[]" id="disponibilite-debut-minute-1" class="form-control" step="1" min="0" max="59" required/>
                 
-                <label for="disponibilite_fin_heure[]">Heure de fin:</label>
+                <label for="disponibilite_fin_heure[]">Heure de fin (format 24h):</label>
 				<input type="number" name="disponibilite_fin_heure[]" id="disponibilite-fin-heure-1" class="form-control" step="1" min="0" max="23" required/>
                 
                 <label for="disponibilite_fin_minute[]">Minute de fin:</label>
