@@ -199,9 +199,10 @@ class CafeteriasController extends Controller
     {
         foreach ($responsables as $key => $responsable) {
             if (isset($responsable['nom']) && isset($responsable['telephone'])){
+                $numero = $this->formaterTelephonePourBD($responsable['telephone']);
                 Responsable::create([
                     'nom' => $responsable['nom'],
-                    'telephone' => $responsable['telephone'],
+                    'telephone' => $numero,
                     'cafeteria_id' => $cafeteria_id,
                 ]);
             }
