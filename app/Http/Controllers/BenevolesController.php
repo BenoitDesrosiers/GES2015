@@ -351,8 +351,9 @@ class BenevolesController extends BaseController {
 				$disponibilite->start=$dateDebut;
 				$disponibilite->end=$dateFin;
 			}
-			$return_value = $disponibilite->title ? $disponibilite : null;
 		}
+		
+		$return_value = $disponibilite->title ? $disponibilite : null;
 		
 		return $return_value;
 	}
