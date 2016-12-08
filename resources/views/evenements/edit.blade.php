@@ -17,6 +17,7 @@
             {{ session('status') }}
         </div>
         @endif
+        {!! Form::hidden('id', $evenement->id) !!}
         <div class="form-group">
             {!! Form::label('nom', '* Nom:') !!} 
             {!! Form::text('nom', $evenement->nom, ['class' => 'form-control']) !!}

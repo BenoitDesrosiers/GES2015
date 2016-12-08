@@ -100,7 +100,7 @@ class AboutController extends BaseController {
 				
 				array(
 					"Charles Lemay",
-					"Association des terrains aux épreuves."
+					"Association des terrains aux épreuves. Association des terrains aux événements."
 				),
 				
 				array(
