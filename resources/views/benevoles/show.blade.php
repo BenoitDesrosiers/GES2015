@@ -17,7 +17,7 @@
 		<p>Vérification : {{ $benevole->verification }}</p>
         <p>Sexe : {{ $benevole->sexe }}</p>
         <p>Date de naissance: {!! $benevole->naissance !!}</p>
-        <p><a href="{{ action('DisponibilitesController@show',$benevole->id) }}" class="btn btn-info">Afficher Disponibilités</a></p>
+        <p><a href="{{ action('DisponibilitesController@edit',$benevole->id) }}" class="btn btn-info">Gestion des disponibilités</a></p>
         <p>Accréditation : {{ $benevole->accreditation }}</p>
 
         <p>Vérification : {{ $benevole->verification }}</p>
