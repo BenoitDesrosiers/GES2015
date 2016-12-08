@@ -125,7 +125,7 @@ class DisponibilitesController extends BaseController {
                     'lang' => 'fr'
                 ]);
             $calendrier->setCallbacks([
-                    'select' => $this->getSelectCallback($id, $calendrier),
+                   /* 'select' => $this->getSelectCallback($id, $calendrier),*/
                     'eventClick' => $this->getClickCallback($calendrier),
                     'eventDrop' => $this->getDropCallback($calendrier),
                     'eventResize' => $this->getEventResizeCallback($calendrier)
