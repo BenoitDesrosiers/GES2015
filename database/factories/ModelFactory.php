@@ -2,6 +2,8 @@
 
 use App\Models\Region;
 use App\Models\Terrain;
+use App\Models\Taches;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +32,7 @@ $factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) 
 			'telephone' => $faker->tollFreePhoneNumber,
 			'description' => $faker->sentence
 		];
+	});
 		
 $factory->define(App\Models\Participant::class, function (Faker\Generator $faker) {
 	return [
@@ -73,4 +76,29 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 			'ville'=> $faker->city,
 			'region_id' => rand(0, 100)
 	];
+});
+
+$factory->define(App\Models\Benevole::class, function (Faker\Generator $faker) {
+	return [
+		'nom' => $faker->lastName,
+		'prenom' => $faker->firstName,
+		'adresse'=> $faker->address,
+		'numTel' => $faker->tollFreePhoneNumber,
+		'numCell' => $faker->tollFreePhoneNumber,
+		'courriel' => $faker->email,
+		'accreditation' => '123CD',
+		'sexe' => 'masculin',
+		'verification' => 'AF',
+		'naissance' => $faker->date(),
+		'sport_id' => factory(App\Models\Sport::class)->create()->id,
+		'terrain_id' => factory(App\Models\Terrain::class)->create()->id,
+		'taches_id' => factory(App\Models\Taches::class)->create()->id,
+		];
+});
+
+$factory->define(App\Models\Taches::class, function (Faker\Generator $faker) {
+	return [
+		'nom' => $faker->lastName,
+		'description' => $faker->firstName,
+		];
 });
