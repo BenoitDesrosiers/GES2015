@@ -87,6 +87,11 @@ class AboutController extends BaseController {
 					"Alexandre Caron",
 					"Association d'un sport à un participant à partir d'un sport"
 				),
+				
+				array(
+					"Jessee Lefebvre",
+					"Ajout du CRUD des événements, association des participants et des événements à partir de l'épreuve choisie"
+				),
 
 				array(
 					"Émilio Gonzalez",
@@ -124,6 +129,11 @@ class AboutController extends BaseController {
             		"Francis Mathieu",
            			"Ajouter un arbitre à un sport"
             	),
+				
+				array(
+            		"Maxime Laflamme",
+           			"Associer des terrains aux bénévoles. Associer les bénévoles à une épreuve."
+            	)
             )
         );
 
