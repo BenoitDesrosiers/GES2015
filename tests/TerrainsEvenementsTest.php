@@ -61,7 +61,19 @@ class TerrainsEvenementsTest extends TestCase
      */
     public function testTerrainInnexistant()
     {
-    	$this->assertTrue(true);
+    	$evenement = factory(App\Models\Evenement::class)->make();
+    	$date_heure_array = explode(' ', $evenement->date_heure);
+    	$input = [
+    			'nom' => $evenement->nom,
+    			'date' => $date_heure_array[0],
+    			'heure' => $date_heure_array[1],
+    			'type_id' => $evenement->type_id,
+    			'epreuve_id' => $evenement->epreuve_id,
+    			'terrain_id' => $evenement->terrain_id
+    	];
+    	App\Models\Terrain::destroy($evenement->terrain_id);
+    	$this->call('POST', '/evenements', $input);
+    	$this->assertSessionHas(['errors']);
     }
     
     /**
@@ -72,6 +84,18 @@ class TerrainsEvenementsTest extends TestCase
      */
     public function testTerrainNonLibre()
     {
-    	$this->assertTrue(true);
+    	$evenement1 = factory(App\Models\Evenement::class)->create();
+    	$evenement2 = factory(App\Models\Evenement::class)->make();
+    	$date_heure_array = explode(' ', $evenement1->date_heure);
+    	$input = [
+    			'nom' => $evenement2->nom,
+    			'date' => $date_heure_array[0],
+    			'heure' => $date_heure_array[1],
+    			'type_id' => $evenement2->type_id,
+    			'epreuve_id' => $evenement2->epreuve_id,
+    			'terrain_id' => $evenement1->terrain_id
+    	];
+    	$this->call('POST', '/evenements', $input);
+    	$this->assertSessionHas(['errors']);
     }
 }
