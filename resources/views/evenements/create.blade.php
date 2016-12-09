@@ -51,13 +51,14 @@
         </div>
         <?php
             $terrainArray = array();
+            $terrainArray[''] = 'Sélectionnez un terrain';
             for ($i=0; $i<count($terrains); $i++) {
                 $terrainArray[$terrains[$i]['id']]  = $terrains[$i]['nom'];
             }
         ?>
         <div class="form-group">
             {!! Form::label('terrain_id', '* Terrain:') !!} <br/>
-            {!! Form::select('terrain_id', $terrainArray, null, ['class' => 'form-control largeurPetite']) !!}
+            {!! Form::select('terrain_id', $terrainArray, '', ['class' => 'form-control largeurPetite']) !!}
         </div>
         <div class="form-group">
             {!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}

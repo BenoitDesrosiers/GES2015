@@ -52,6 +52,7 @@
         </div>
         <?php
             $terrainArray = array();
+            $terrainArray[''] = 'Sélectionnez un terrain';
             for ($i=0; $i<count($terrains); $i++) {
                 $terrainArray[$terrains[$i]['id']]  = $terrains[$i]['nom'];
             }
