@@ -17,8 +17,8 @@ class ArbitreCourriel extends EloquentValidating {
 	/** 
 	 * Eloquent relationship: 
 	 * - Un courriel est associé à un arbitre
+     * PS: Un arbitre n'a pas nécéssairement une/des adresse(s) courriel
 	 */
-
 	public function arbitre() {
 		return $this->belongsTo('App\Models\Arbitre');
 	}
@@ -28,8 +28,9 @@ class ArbitreCourriel extends EloquentValidating {
 	 * Identifie les colonnes qui peuvent être modifiées
 	 */
 	protected $fillable = [
-	        'courriel',
-	        'description'
+        'arbitre_id',
+        'courriel',
+        'description'
 	    ];
 		
 	/**
@@ -46,6 +47,7 @@ class ArbitreCourriel extends EloquentValidating {
 
 	public function validationRules() {
 		return [
+		    'arbitre_id'=>'required|integer',
 			'courriel' => 'required|string',
 			'description' => 'string',
 		];

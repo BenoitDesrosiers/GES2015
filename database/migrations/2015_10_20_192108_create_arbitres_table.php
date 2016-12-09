@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateArbitresTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée les migrations
      *
      * @return void
      */
@@ -33,7 +33,7 @@ class CreateArbitresTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Défait les migrations.
      *
      * @return void
      */

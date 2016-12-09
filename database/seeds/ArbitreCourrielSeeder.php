@@ -28,10 +28,8 @@ class ArbitreCourrielTableSeeder extends Seeder {
 		foreach($entrees as $entree) {
 			$arbitreCourriel = new ArbitreCourriel();
 			
-			//Ce insert la est fucked up pcq ca l'arbitre dans lequel on insert est basé sur sa position dans le array
-			//Ça fait qu'il faut que le seed soit 1 plus petit que la valeur réellement désirée
+			//arbitre_id correspond à la position de l'arbitre voulu dans $arbitres[]
 			$arbitreCourriel->arbitre_id = $arbitres[$entree[0]]->id;
-			//$participant->region_id = $regions[$entree[3]]->id;
 			
 			$arbitreCourriel->courriel = $entree[1];
 			$arbitreCourriel->description = $entree[2];

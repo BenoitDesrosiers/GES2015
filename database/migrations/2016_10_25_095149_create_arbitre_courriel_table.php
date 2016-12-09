@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateArbitreCourrielTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée les migrations
      *
      * @return void
      */
@@ -29,7 +29,7 @@ public function up()
     }
 
     /**
-     * Reverse the migrations.
+     * Défait les migrations
      *
      * @return void
      */

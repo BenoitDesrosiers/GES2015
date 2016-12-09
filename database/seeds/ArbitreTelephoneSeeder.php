@@ -27,11 +27,9 @@ class ArbitreTelephoneTableSeeder extends Seeder {
 		
 		foreach($entrees as $entree) {
 			$arbitreTelephone = new ArbitreTelephone();
-			
-			//Ce insert la est fucked up pcq ca l'arbitre dans lequel on insert est basé sur sa position dans le array
-			//Ça fait qu'il faut que le seed soit 1 plus petit que la valeur réellement désirée
+
+            ///arbitre_id correspond à la position de l'arbitre voulu dans $arbitres[]
 			$arbitreTelephone->arbitre_id = $arbitres[$entree[0]]->id;
-			//$participant->region_id = $regions[$entree[3]]->id;
 			
 			$arbitreTelephone->numero_telephone = $entree[1];
 			$arbitreTelephone->description = $entree[2];

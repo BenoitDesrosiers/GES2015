@@ -18,7 +18,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($arbitre->arbitreTelephone as $telephone){echo "<tr><td>".$telephone->numero_telephone."</td><td>".$telephone->description."</td></tr>";}?>
+				<?php foreach ($arbitre->arbitreTelephone as $telephone){echo "<tr><td class='dataTelephone'>".$telephone->numero_telephone."</td><td class='dataDescTelephone'>".$telephone->description."</td></tr>";}?>
 			</tbody>
 		</table>
 		<br>
@@ -35,7 +35,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach ($arbitre->arbitreCourriel as $courriel){echo "<tr><td>".$courriel->courriel."</td><td>".$courriel->description."</td></tr>";}?>
+					<?php foreach ($arbitre->arbitreCourriel as $courriel){echo "<tr><td class='dataCourriel'>".$courriel->courriel."</td><td class='dataDescCourriel'>".$courriel->description."</td></tr>";}?>
 				</tbody>
 			</table>
 			<br>

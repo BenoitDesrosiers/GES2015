@@ -44,6 +44,7 @@
 			{!! Form::select('region_id', $regionArray, $arbitre->region_id) !!}
 			{{ $errors->first('region_id') }}
 		</div>
+			
 
 		<!--    Champ de texte pour le numéro d'accréditation -->
 		<div class="form-group">
@@ -59,11 +60,104 @@
 			{{ $errors->first('association') }}
 		</div>
 
-		<!--    Champ de texte pour le numéro de téléphone -->
+		<!--    Tableau d'entrées pour les téléphones -->
 		<div class="form-group">
-			{!! Form::label('numero_telephone', '* Numéro de téléphone :') !!} 
-			{!! Form::text('numero_telephone',$arbitre->numero_telephone, ['class' => 'form-control']) !!}
-			{{ $errors->first('numero_telephone') }}
+			{!! Form::label('numero_telephone', '* Numéro(s) de téléphone :') !!}
+			<br>
+			<button id="ajoutTelephone" class="btn btn-info" type="button" onClick="ajouterTelephone()">Ajouter un téléphone</button>
+			<br>
+			<table id="tableTelephone" class="tableTelephoneCourrielArbitre">
+				<thead>
+				<tr>
+					<th>Numéro</th>
+					<th>Description</th>
+				</tr>
+				</thead>
+				<tbody >
+				<?php
+					$i = 1;
+					foreach ($arbitre->arbitreTelephone as $arbitreTelephone) {
+						if($i == 1){
+				?>
+				<tr class="rowTelephone">
+					<td class="dataTelephone">{!! Form::text('telephone['.$i.']',$arbitreTelephone->numero_telephone, ['class' => 'form-control' ]) !!}</td>
+					<td class="dataDescTelephone">{!! Form::text('descriptionTelephone['.$i.']',$arbitreTelephone->description, ['class' => 'form-control']) !!}</td>
+				</tr>
+				<?php
+					}else{
+				?>
+				<!-- Si n'est pas la première rangée, on rajoute le bouton pour enlever la rangée-->
+				<tr class="rowTelephone">
+					<td class="dataTelephone">{!! Form::text('telephone['.$i.']',$arbitreTelephone->numero_telephone, ['class' => 'form-control' ]) !!}</td>
+					<td class="dataDescTelephone">{!! Form::text('descriptionTelephone['.$i.']',$arbitreTelephone->description, ['class' => 'form-control']) !!}</td>
+					<td class="imageRetirer"><button class="btn btn-default btn-mini glyphicon glyphicon-minus"
+						type = "button" onclick="retirerTelephone(this)"></button></td>
+				</tr>
+				<?php
+					}
+					$i++;
+					}
+				?>
+				</tbody>
+			</table>
+			<br>
+			{{ $errors->first('telephone') }}
+			{{ $errors->first('descriptionTelephone') }}
+		</div>
+
+		<div class="form-group">
+			{!! Form::label('adresse_courriel', 'Adresse(s) courriel :') !!}
+			<br>
+			<button id="ajoutCourriel" class="btn btn-info" type="button" onClick="ajouterCourriel()">Ajouter un courriel</button>
+			<br>
+			<table id="tableCourriel" class="tableTelephoneCourrielArbitre">
+				<thead>
+				<tr>
+					<th>Courriel</th>
+					<th>Description</th>
+				</tr>
+				</thead>
+				<tbody >
+				<?php
+					$i = 1;
+					foreach ($arbitre->arbitreCourriel as $arbitreCourriel) {
+						if($i == 1){
+				?>
+				<!-- La première rangée n'a pas de bouton pour la retirer-->
+				<tr class="rowCourriel">
+					<td class="dataCourriel">{!! Form::text('courriel['.$i.']',$arbitreCourriel->courriel, ['class' => 'form-control' ]) !!}</td>
+					<td class="dataDescCourriel">{!! Form::text('descriptionCourriel['.$i.']',$arbitreCourriel->description, ['class' => 'form-control']) !!}</td>
+				</tr>
+				<?php
+					}else{
+				?>
+				<!-- Si n'est pas la première rangée, on rajoute le bouton pour enlever la rangée-->
+				<tr class="rowCourriel">
+					<td class="dataCourriel">{!! Form::text('courriel['.$i.']',$arbitreCourriel->courriel, ['class' => 'form-control' ]) !!}</td>
+					<td class="dataDescCourriel">{!! Form::text('descriptionCourriel['.$i.']',$arbitreCourriel->description, ['class' => 'form-control']) !!}</td>
+					<td class="imageRetirer"><button class="btn btn-default btn-mini glyphicon glyphicon-minus"
+													 type = "button" onclick="retirerCourriel(this)"></button></td>
+				</tr>
+				<?php
+					}
+					$i++;
+					}
+					if($i == 1){
+				?>
+				<tr>
+				<!-- Si l'arbitre n'a aucun courriel (on est pas entré dans le foreach), on crée un rangée vide-->
+				<tr class="rowCourriel">
+					<td class="dataCourriel">{!! Form::text('courriel['.$i.']',null, ['class' => 'form-control' ]) !!}</td>
+					<td class="dataDescCourriel">{!! Form::text('descriptionCourriel['.$i.']',null, ['class' => 'form-control']) !!}</td>
+				</tr>
+				<?php
+				}
+				?>
+				</tbody>
+			</table>
+			<br>
+			{{ $errors->first('courriel') }}
+			{{ $errors->first('descriptionCourriel') }}
 		</div>
 
 		<!--    Boutons radio pour le sexe -->
@@ -132,4 +226,6 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+
+<script src="{!! asset('/js/script_arbitres.js') !!}"></script>
 @stop

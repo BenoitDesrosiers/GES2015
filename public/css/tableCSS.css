@@ -5,12 +5,20 @@
   flex-flow: column wrap;
 }
 
-.tableTelephoneCourrielArbitre{
-	margin-left:50px;
-}
-
-.tableTelephoneCourrielArbitre th, .tableTelephoneCourrielArbitre td{
+.tableTelephoneCourrielArbitre th, .dataTelephone, .dataDescTelephone,
+.dataCourriel, .dataDescCourriel{
 	padding:5px;
 	border: 1px solid black;
 	text-align:center;
+	min-width:200px
+}
+
+.imageRetirer{
+	padding:5px;
+	border: 1px solid black;
+	text-align:center;
+}
+
+.tableTelephoneCourrielArbitre{
+	margin-top: 10px;
 }

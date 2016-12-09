@@ -17,8 +17,8 @@ class ArbitreTelephone extends EloquentValidating {
 	/** 
 	 * Eloquent relationship: 
 	 * - Un téléphone est associé à un arbitre
+     * PS: Un arbitre doit minimalement avoir un numéro de téléphone.
 	 */
-
 	public function arbitre() {
 		return $this->belongsTo('App\Models\Arbitre');
 	}
@@ -28,6 +28,7 @@ class ArbitreTelephone extends EloquentValidating {
 	 * Identifie les colonnes qui peuvent être modifiées
 	 */
 	protected $fillable = [
+	        'arbitre_id',
 	        'numero_telephone',
 	        'description'
 	    ];
@@ -46,6 +47,7 @@ class ArbitreTelephone extends EloquentValidating {
 
 	public function validationRules() {
 		return [
+		    'arbitre_id'=> 'required|integer',
 			'numero_telephone' => 'required|string',
 			'description' => 'string',
 		];

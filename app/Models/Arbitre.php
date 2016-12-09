@@ -69,18 +69,4 @@ class Arbitre extends EloquentValidating {
 	 *  - Les autres champs sont falcultatifs.
 	 */
 
-	public $validationMessages;
-
-	public function validationRules() {
-		return [
-			'nom' => 'required|string',
-			'prenom' => 'required|string',
-			'region_id' => 'required|integer',
-			'numero_accreditation' => 'required|string',
-			'association' => 'required|string',
-			'sexe' => 'required|boolean',
-			'adresse' => 'string',
-			'date_naissance' => 'date'
-		];
-	}
 }

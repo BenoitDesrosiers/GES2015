@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateArbitreTelephoneTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Creé les migrations.
      *
      * @return void
      */
@@ -29,7 +29,7 @@ class CreateArbitreTelephoneTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Défait les migrations.
      *
      * @return void
      */

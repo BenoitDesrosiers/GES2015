@@ -60,28 +60,54 @@
 			{{ $errors->first('association') }}
 		</div>
 
-		<!--    Champ de texte pour le numéro de téléphone -->
+		<!--    Tableau d'entrées pour les téléphones -->
 		<div class="form-group">
-			{!! Form::label('numero_telephone', '* Numéro de téléphone :') !!}
-			<table class="tableTelephoneCourrielArbitre">
-			<thead>
+			{!! Form::label('numero_telephone', '* Numéro(s) de téléphone :') !!}
+			<br>
+			<button id="ajoutTelephone" class="btn btn-info" type="button" onClick="ajouterTelephone()">Ajouter un téléphone</button>
+			<br>
+			<table id="tableTelephone" class="tableTelephoneCourrielArbitre">
+				<thead>
+					<tr>
+						<th>Numéro</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody >
+					<tr class="rowTelephone">
+						<td class="dataTelephone">{!! Form::text('telephone[1]',null, ['class' => 'form-control' ]) !!}</td>
+						<td class="dataDescTelephone">{!! Form::text('descriptionTelephone[1]',null, ['class' => 'form-control']) !!}</td>
+					</tr>
+				</tbody>
+			</table>
+		<br>
+			{{ $errors->first('telephone') }}
+			{{ $errors->first('descriptionTelephone') }}
+		</div>
+
+		<!--    Tableau d'entrées pour les adresses courriel -->
+		<div class="form-group">
+			{!! Form::label('adresse_courriel', 'Adresse(s) courriel :') !!}
+			<br>
+			<button id="ajoutCourriel" class="btn btn-info" type="button" onClick="ajouterCourriel()">Ajouter un courriel</button>
+			<br>
+			<table id="tableCourriel" class="tableTelephoneCourrielArbitre">
+				<thead>
 				<tr>
-					<th>Numéro</th>
+					<th>Courriel</th>
 					<th>Description</th>
 				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>{!! Form::text('numero_telephone',null, ['class' => 'form-control']) !!}</td>
-					<td>{!! Form::text('description',null, ['class' => 'form-control']) !!}</td>
-					<td><button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="ajouterTelephone(this)"/></td>
+				</thead>
+				<tbody >
+				<tr class="rowCourriel">
+					<td class="dataCourriel">{!! Form::text('courriel[1]',null, ['class' => 'form-control' ]) !!}</td>
+					<td class="dataDescCourriel">{!! Form::text('descriptionCourriel[1]',null, ['class' => 'form-control']) !!}</td>
 				</tr>
-			</tbody>
-		</table>
-		<br>
-			
-			{!! Form::text('numero_telephone',null, ['class' => 'form-control']) !!}
-			{{ $errors->first('numero_telephone') }}
+				</tbody>
+			</table>
+			<br>
+			{{ $errors->first('courriel') }}
+			{{ $errors->first('descriptionCourriel') }}
 		</div>
 
 		<!--    Boutons radio pour le sexe -->
@@ -145,19 +171,7 @@
 	</div>
 </div>
 
-<script>
-// 	Ajoute un champ de téléphone
-	function ajouterTelephone(bouton) {
-		rangee = bouton.parentNode.parentNode;
-		if (rangee.classList.contains("actif")) {
-			bouton.classList.remove("glyphicon-minus");
-			bouton.classList.add("glyphicon-plus");
-			rangee.classList.remove("actif");
-		} else {
-			bouton.classList.remove("glyphicon-plus");
-			bouton.classList.add("glyphicon-minus");
-			rangee.classList.add("actif");
-		}
-	}
-</script>
+<script src="{!! asset('/js/script_arbitres.js') !!}"></script>
+
+
 @stop
