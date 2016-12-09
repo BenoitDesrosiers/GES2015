@@ -66,3 +66,24 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 			'region_id' => rand(0, 100)
 	];
 });
+
+$factory->define(App\Models\Benevole::class, function (Faker\Generator $faker) {
+	return [
+			'nom' => $faker->lastName,
+			'prenom' => $faker->firstName,
+			'adresse' => $faker->address,
+			'numTel' => rand(1111111111, 9999999999),
+			'accreditation' => $faker->text,
+			'sexe' => $faker->numberBetween(0,1)
+	];
+});
+	
+$factory->define(App\Models\Disponibilite::class, function (Faker\Generator $faker) {
+	return [
+			'benevole_id' => factory(App\Models\Benevole::class)->create()->id,
+			'title' => $faker->Text,
+			'isAllDay' => 0,
+			'start' => $faker->date(),
+			'end' => $faker->date()
+	];
+});
