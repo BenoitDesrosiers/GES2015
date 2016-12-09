@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\DisponibilitesController;
 use View;
 use Redirect;
 use Input;
@@ -114,15 +115,7 @@ class BenevolesController extends BaseController {
 					$benevole->terrain()->detach();
 				}
 				
-				$disponibilites = $this->construireListeDisponibilites($input);
-				//Sauvegarde toutes les diponibilités. Si erreur, annule tout.
-				foreach($disponibilites as $disponibilite) {
-					// sauvegarderDisponibilite() retourne true s'il n'y a pas
-					// de diponibilité ou si l'insertion s'est bien passée.
-					if(!$this->sauvegarderDisponibilite($disponibilite, $benevole)) {
-						return Redirect::back()->withInput()->withErrors($disponibilite->validationMessages());
-					}
-				}
+				DisponibilitesController::store($benevole);
 				
 				// Message de confirmation si la sauvegarde a réussi
 				return Redirect::action('BenevolesController@show', $benevole->id)->with ( 'status', 'Le bénévole a été créé.' );
@@ -134,12 +127,6 @@ class BenevolesController extends BaseController {
 			App:abort(404);
 		}
 	}
-
-  
-		
-
-
-
 
 	/**
 	 * Affiche la ressource.
@@ -264,15 +251,7 @@ class BenevolesController extends BaseController {
 				}
 				// Message de confirmation si la sauvegarde a réussi
 				
-				$disponibilites = $this->construireListeDisponibilites($input);
-				//Sauvegarde toutes les diponibilités. Si erreur, annule tout.
-				foreach($disponibilites as $disponibilite) {
-					// sauvegarderDisponibilite() retourne true s'il n'y a pas
-					// de diponibilité ou si l'insertion s'est bien passée.
-					if(!$this->sauvegarderDisponibilite($disponibilite, $benevole)) {
-						return Redirect::back()->withInput()->withErrors($disponibilite->validationMessages());
-					}
-				}
+				DisponibilitesController::store($benevole);
 				
 				return Redirect::action('BenevolesController@show', $benevole->id)->with ( 'status', 'Le benevole a été mis a jour!' );
 	        } else {
@@ -284,9 +263,6 @@ class BenevolesController extends BaseController {
         }
 
 	}
-
-    
-
 
 	/**
 	 * Efface la ressource de la bd.
@@ -304,87 +280,5 @@ class BenevolesController extends BaseController {
         }
 		return Redirect::action('BenevolesController@index');
 	
-	}
-	
-	/**
-	 * Retourne la liste des disponibilités selon $input.
-	 *
-	 * @param $input array Les valeurs entrées par l'utilisateur.
-	 * @return array[Disponibilite] La liste des disponibilités entrés par l'utilisateur.
-	 */
-	private function construireListeDisponibilites($input)
-	{
-		$disponibilites = [];
-		$i = 0;
-		// Tant qu'il y a des entrées de disponibilité à ajouter, on boucle et on ajoute à la liste.
-		while ($i == count($disponibilites)) {
-			array_push($disponibilites, $this->construireDisponibilite($input, $i));
-			if(array_last($disponibilites)) {
-				$i++;
-			}
-		}
-		// Le dernier élément sera toujours null.
-		array_pop($disponibilites);
-	
-		return $disponibilites;
-	}
-	
-	/**
-	 * Construit et retourne la disponibilité entrée par l'utilisateur.
-	 * Si aucune disponibilité n'est spécifiée, retourne null.
-	 *
-	 * @param $input array Les valeurs entrées par l'utilisateur.
-	 * @param $index int L'index à aller chercher.
-	 * @return Disponibilite L'objet de disponibilité à ajouter, ou null.
-	 */
-	public function construireDisponibilite($input, $index)
-	{
-		$disponibilite = New Disponibilite;
-		
-		$title = isset($input['disponibilite_disponibilite'][$index])? $input['disponibilite_disponibilite'][$index]: null;
-		$annee = isset($input['disponibilite_annee'][$index]) ? $input['disponibilite_annee'][$index] : null;
-		$mois = isset($input['disponibilite_mois'][$index]) ? $input['disponibilite_mois'][$index] : null;
-		$jour = isset($input['disponibilite_jour'][$index]) ? $input['disponibilite_jour'][$index] : null;
-		$heureDebut = isset($input['disponibilite_debut_heure'][$index]) ? $input['disponibilite_debut_heure'][$index] : null;
-		$minuteDebut = isset($input['disponibilite_debut_minute'][$index]) ? $input['disponibilite_debut_minute'][$index] : null;
-		$heureFin = isset($input['disponibilite_fin_heure'][$index]) ? $input['disponibilite_fin_heure'][$index] : null;
-		$minuteFin = isset($input['disponibilite_fin_minute'][$index]) ? $input['disponibilite_fin_minute'][$index] : null;
-		$isAllDay = 0;
-
-		if (checkdate((int)$mois, (int)$jour, (int)$annee)) {
-			$dateDebut = new DateTime($annee."-".$mois."-".$jour." ".$heureDebut.":".$minuteDebut.":00");
-			$dateFin = new DateTime($annee."-".$mois."-".$jour." ".$heureFin.":".$minuteFin.":00");
-			
-			if ( (int)$heureDebut < (int)$heureFin OR ((int)$heureDebut = (int)$heureFin AND (int)$minuteDebut < (int)$minuteFin) ) {
-				
-				$disponibilite->title = $title;
-				$disponibilite->isAllDay = $isAllDay;
-				$disponibilite->start=$dateDebut;
-				$disponibilite->end=$dateFin;
-			}
-		}
-		
-		$return_value = $disponibilite->title ? $disponibilite : null;
-		
-		return $return_value;
-	}
-
-	/**
-	 * Sauvegarde l'$disponibilite de $benevole dans la BD.
-	 *
-	 * @param $disponibilite Disponibilite|void L'objet de disponibilité à sauvegarder.
-	 * @param $benevole Bénévole Le bénévole à qui la disponibilité appartient.
-	 * @return bool True si la sauvegarde a fonctionné, false sinon.
-	 */
-	private function sauvegarderDisponibilite($disponibilite, $benevole)
-	{
-		// Null si il la disponibilité n'a pas été spécifiée.
-		if($disponibilite) {
-			$disponibilite->benevole()->associate($benevole);
-			if (!$disponibilite->save()) {
-				return false;
-			}
-		}
-		return true;
 	}
 }
