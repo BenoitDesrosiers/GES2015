@@ -29,7 +29,7 @@
 							<li><a href="{{ url('/register') }}">Inscription</a></li>
 						@else
 							@if(Entrust::hasrole('admin'))
-								<li<?php if ($route == "usagers") { ?> class="active"<?php } ?>><a href="{{ action('UsagersController@index') }}">Gestion&nbsp;d'usager</a></li>
+								<li @if($route == "users") class="active" @endif><a href="{{ action('UsagersController@index') }}">Gestion&nbsp;d'usager</a></li>
 							@endif
 
 							<li {!! ($route == "conditionsParticulieres") ? 'class="active"' : '' !!}>

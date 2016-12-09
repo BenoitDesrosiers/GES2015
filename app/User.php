@@ -43,13 +43,14 @@ class User extends EloquentValidating implements AuthenticatableContract, CanRes
     protected $hidden = ['password', 'remember_token'];
 
 
+
     public $validationMessages;
 
     public function validationRules() {
         return [
             'name' => 'required|max:255',
             'email' => 'required|max:255',
-            'password' => 'max:60'
+            'password' => 'min:6|max:60|regex:/[a-z|A-Z]/gi'
         ];
     }
 }

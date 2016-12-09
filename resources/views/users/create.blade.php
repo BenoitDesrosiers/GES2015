@@ -47,7 +47,6 @@
             <!-- Cette forme rassemble une liste des roles possible. -->
             <div class="form-group">
                 {{ Form::label('roles', 'Roles:') }}
-
                 @foreach($roles as $role)
                     <ul>
                         {{ Form::checkbox('role[]', $role->name) }}

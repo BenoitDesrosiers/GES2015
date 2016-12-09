@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Http\Requests\StoreUsager;
+use App\Http\Requests\UpdateCurrentUserRequest;
 use App\Models\Role;
 use App\User;
 use Auth;
+use DB;
 use Entrust;
 use Exception;
 use Hash;
@@ -18,6 +20,7 @@ use View;
 
 class UsagersController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -55,23 +58,32 @@ class UsagersController extends Controller
     public function store(StoreUsager $request)
     {
         try {
-            $input = Input::all();
-            $usager = new User();
-            $usager->name = $input['nom'];
-            $usager->email = $input['courriel'];
-            $usager->password = Hash::make($input['mot_de_passe']);
-            if ($usager->save()){
-                try{
-                    $rolesUsager = $input['role'];
-                    $usager->attachRoles($rolesUsager);
-                } catch (Exception $e){
-                    return Redirect::back()->withInput()->withErrors("Un des roles sélectionner est innexistant.");  // Utilité?
-                }
+            if (Entrust::hasRole('admin')){
+                $input = Input::all();
+                $usager = new User();
+                $usager->name = $input['nom'];
+                $usager->email = $input['courriel'];
+                $usager->password = Hash::make($input['mot_de_passe']);
+                if ($usager->save()){
+                    try{
+                        $rolesUsager = $input['role'];
+                        foreach($rolesUsager as $roleUsager){
+                            $roleTemp = $this->getRoleWithName($roleUsager);
+                            $usager->attachRole($roleTemp);
+                        }
 
-                return Redirect::action('UsagersController@index');
-            }else{
-                return Redirect::back()->withInput()->withErrors($usager->validationMessages());
+                    } catch (Exception $e){
+                        return Redirect::back()->withInput()->withErrors($usager->validationMessages());  // Utilité?
+                    }
+
+                    return Redirect::action('UsagersController@index');
+                }else{
+                    return Redirect::back()->withInput()->withErrors($usager->validationMessages());
+                }
+            } else {
+                App::abort(403);
             }
+
         } catch (Exception $e){
             App:abort(404);
         }
@@ -86,9 +98,14 @@ class UsagersController extends Controller
     public function show($id)
     {
         try {
-            $usager = User::findOrFail($id);
-            $roles = $usager->roles()->get();
-            return View::make('users.show', compact('usager','roles'));
+            if (Entrust::hasRole('admin')){
+                $usager = User::findOrFail($id);
+                $roles = $usager->roles()->get();
+                return View::make('users.show', compact('usager','roles'));
+            } else {
+                App::abort(403);
+            }
+
         } catch(ModelNotFoundException $e) {
             App::abort(404);
         }
@@ -103,9 +120,14 @@ class UsagersController extends Controller
     public function edit($id)
     {
         try {
-            $usager = User::findOrFail($id);
-            $roles = Role::all();
-            return View::make('users.edit', compact('usager', 'roles'));
+            if (Entrust::hasRole('admin')){
+                $usager = User::findOrFail($id);
+                $roles = Role::all();
+                return View::make('users.edit', compact('usager', 'roles'));
+            } else {
+                App::abort(403);
+            }
+
         } catch (ModelNotFoundException $e) {
             App::abort(404);
         }
@@ -121,41 +143,45 @@ class UsagersController extends Controller
     public function update(StoreUsager $request, $id)
     {
         try {
-            $input = Input::all();
-            $usager = User::findOrFail($id);
-            $usager->name = $input['nom'];
-            $usager->email = $input['courriel'];
-            if ($input['mot_de_passe'] != ""){
-                $usager->password = Hash::make($input['mot_de_passe']);
-            }
-            if ($usager->save()){
-                try{
-                    $roles = $usager->roles()->get()->toArray();
-                    $rolesPresent = array();
-                    foreach ($roles as $role){
-                        array_push($rolesPresent, $role['name']);
-                    }
-                    $rolesUsager = $input['role'];
-                    $rolesManquant = array_diff($rolesPresent, $rolesUsager);
-
-                    foreach($rolesManquant as $roleManquant){
-                        $roleTemp = $this->getRoleWithName($roleManquant);
-                        $usager->detachRole($roleTemp);
-                    }
-
-                    foreach($rolesUsager as $roleUsager){
-                        if (!($usager->hasRole($roleUsager))){
-                            $roleTemp = $this->getRoleWithName($roleUsager);
-                            $usager->attachRole($roleTemp);
-                        }
-                    }
-
-                } catch (Exception $e){
-                    dd($e);
+            if (Entrust::hasRole('admin')){
+                $input = Input::all();
+                $usager = User::findOrFail($id);
+                $usager->name = $input['nom'];
+                $usager->email = $input['courriel'];
+                if ($input['mot_de_passe'] != ""){
+                    $usager->password = Hash::make($input['mot_de_passe']);
                 }
-                return Redirect::action('UsagersController@index');
-            }else{
-                return Redirect::back()->withInput()->withErrors($usager->validationMessages());
+                if ($usager->save()){
+                    try{
+                        $roles = $usager->roles()->get()->toArray();
+                        $rolesPresent = array();
+                        foreach ($roles as $role){
+                            array_push($rolesPresent, $role['name']);
+                        }
+                        $rolesUsager = $input['role'];
+                        $rolesManquant = array_diff($rolesPresent, $rolesUsager);
+
+                        foreach($rolesManquant as $roleManquant){
+                            $roleTemp = $this->getRoleWithName($roleManquant);
+                            $usager->detachRole($roleTemp);
+                        }
+
+                        foreach($rolesUsager as $roleUsager){
+                            if (!($usager->hasRole($roleUsager))){
+                                $roleTemp = $this->getRoleWithName($roleUsager);
+                                $usager->attachRole($roleTemp);
+                            }
+                        }
+
+                    } catch (Exception $e){
+                        return Redirect::back()->withInput()->withErrors($usager->validationMessages());
+                    }
+                    return Redirect::action('UsagersController@index');
+                }else{
+                    return Redirect::back()->withInput()->withErrors($usager->validationMessages());
+                }
+            } else {
+                App::abort(403);
             }
         } catch (Exception $e){
             App:abort(404);
@@ -170,8 +196,12 @@ class UsagersController extends Controller
      * @return mixed
      */
     public function getRoleWithName($name){
-        $role = Role::all()->where('name',$name)->first();
-        return $role;
+        try{
+            $role = Role::all()->where('name',$name)->first();
+            return $role;
+        } catch (Exception $e){
+            App:abort(404);
+        }
     }
 
 
@@ -193,8 +223,8 @@ class UsagersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param StoreUsager|Request $request
-     * @param  int $id
+     * @param UpdateCurrentUserRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateCurrentUser(UpdateCurrentUserRequest $request)
@@ -235,7 +265,7 @@ class UsagersController extends Controller
             }
             return $reussi;
         }catch (Exception $e){
-
+            App:abort(404);
         }
     }
 
@@ -250,7 +280,6 @@ class UsagersController extends Controller
         try {
             $usager = User::findOrFail($id);
             $usager->delete();
-
             return Redirect::action('UsagersController@index');
         } catch (Exception $e) {
             App:abort(404);

@@ -25,11 +25,12 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 
 $factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) {
-	return [
-			'nomOrganisme' => $faker->name,
-			'telephone' => $faker->tollFreePhoneNumber,
-			'description' => $faker->sentence
-		];
+    return [
+        'nomOrganisme' => $faker->name,
+        'telephone' => $faker->tollFreePhoneNumber,
+        'description' => $faker->sentence
+    ];
+});
 		
 $factory->define(App\Models\Participant::class, function (Faker\Generator $faker) {
 	return [
