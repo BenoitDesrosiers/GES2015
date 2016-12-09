@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateCurrentUserRequest;
 use App\Models\Role;
 use App\User;
 use Auth;
-use DB;
 use Entrust;
 use Exception;
 use Hash;

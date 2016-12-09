@@ -23,7 +23,7 @@
         		<h1 class="text-muted">Événement Sportif</h1>
         		<ul class="nav nav-justified">
 					<?php $route = explode('.', Route::currentRouteName())[0] ?>
-          			<li<?php if ($route == "") { ?> class="active"<?php } ?>><a href="{{ action('HomeController@index') }}">Accueil</a></li>
+						<li @if($route == "") class="active" @endif><a href="{{ action('HomeController@index') }}">Accueil</a></li>
 						@if (Auth::user() == "")
 							<li><a href="{{ url('/login') }}">Connexion</a></li>
 							<li><a href="{{ url('/register') }}">Inscription</a></li>
@@ -52,7 +52,7 @@
 							<li<?php if ($route == "pointages") { ?> class="active"<?php } ?>><a href="{{ action('PointagesController@index') }}">Pointages</a></li>
 							<li<?php if ($route == "codes") { ?> class="active"<?php } ?>><a href="{{ action('CodesController@index') }}">Codes</a></li>
 							<li<?php if ($route == "delegues") { ?> class="active"<?php } ?>><a href="{{ action('DeleguesController@index') }}">Délégués</a></li>
-							<li<?php if ($route == "roles") { ?> class="active"<?php } ?>><a href="{{ action('RolesPourDeleguesController@index') }}">Rôles</a></li>
+							<li @if($route == "roles") class="active" @endif><a href="{{ action('RolesPourDeleguesController@index') }}">Rôles&nbsp;pour&nbsp;délégué</a></li>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 									{{ Auth::user()->name }}<span class="caret"></span>
@@ -76,7 +76,7 @@
 								</ul>
 							</li>
 						@endif
-						<li<?php if ($route == "about") { ?> class="active"<?php } ?>><a href="{{ action('AboutController@index') }}">À&nbsp;propos</a></li>
+						<li @if($route == "about") class="active" @endif><a href="{{ action('AboutController@index') }}">À&nbsp;propos</a></li>
           		</ul>
      		</div>
 
