@@ -51,6 +51,16 @@ $factory->define(App\Models\Sport::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Models\Evenement::class, function (Faker\Generator $faker) {
+	return [
+			'nom' => $faker->word,
+			'date_heure' => $faker->date($format = 'Y-m-d').' '.$faker->time($format = 'H:i'),
+			'type_id' => App\Models\TypeEvenement::inRandomOrder()->get()->first()->id,
+			'epreuve_id' => App\Models\Epreuve::inRandomOrder()->get()->first()->id,
+			'terrain_id' => App\Models\Terrain::inRandomOrder()->get()->first()->id
+	];
+});
+
 //Pour les tests 'TerrainsEpreuvesTest'
 $factory->define(App\Models\Epreuve::class, function (Faker\Generator $faker) {
 	return [
@@ -63,6 +73,7 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 			'nom' => 'Simple Masculin',
 			'adresse'=> $faker->address,
 			'ville'=> $faker->city,
-			'region_id' => rand(0, 100)
+			'region_id' => factory(App\Models\Region::class)->create()->id
 	];
 });
+

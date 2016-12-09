@@ -30,8 +30,12 @@ class EvenementsRequest extends FormRequest
             'heure' => array('required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'),
             'type_id' => 'required',
             'epreuve_id' => 'required',
-        		//La règle 'terrain_id' vérifie qu'aucun autre événement utilise le terrain au même moment.
-        	'terrain_id' => 'nullable|unique:evenements,terrain_id,'.$this->get('id').',id,date_heure,'.$this->get('date').' '.$this->get('heure')
+        	'terrain_id' => array(
+        			'required',
+        			'exists:terrains,id',
+        			/*Règle qui vérifie qu'aucun autre événement utilise le terrain au même moment.
+        			Elle vérfie que la combinaison du 'terrain_id' de la date et de l'heure est unique.*/
+        			'unique:evenements,terrain_id,'.$this->get('id').',id,date_heure,'.$this->get('date').' '.$this->get('heure'))
         ];
     }
     
