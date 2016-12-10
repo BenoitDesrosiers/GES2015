@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\OrganismesRequest;
 use Input;
 use Redirect;
+use App;
 use App\Models\Organisme;
 use App\Models\Contact;
 use View;
@@ -48,9 +49,13 @@ class OrganismesController extends Controller
      */
     public function store(OrganismesRequest $request)
     {
-        $organisme = new Organisme($request->all());
-        $organisme->save(); //FIXME: bien qu'on soit protégé par le request, ca peut quand même planté au niveau de la BD. Protéger par un try/catch
-        return Redirect::action('OrganismesController@index');
+        try {
+            $organisme = new Organisme($request->all());
+            $organisme->save();
+            return Redirect::action('OrganismesController@index');
+        } catch (Exception $e) {
+            App:abort(404);
+        }
     }
 
     /**
@@ -86,13 +91,16 @@ class OrganismesController extends Controller
      */
     public function update(OrganismesRequest $request, $id)
     {
-        $organisme = Organisme::findOrFail($id);
-        $organisme->nomOrganisme = Input::get('nomOrganisme');
-        $organisme->telephone = Input::get('telephone');
-        $organisme->description = Input::get('description');
-
-        $organisme->save(); //FIXME: bien qu'on soit protégé par le request, ca peut quand même planté au niveau de la BD. Protéger par un try/catch
-        return Redirect::action('OrganismesController@index');
+        try {
+            $organisme = Organisme::findOrFail($id);
+            $organisme->nomOrganisme = Input::get('nomOrganisme');
+            $organisme->telephone = Input::get('telephone');
+            $organisme->description = Input::get('description');
+            $organisme->save();
+            return Redirect::action('OrganismesController@index');
+        } catch (Exception $e) {
+            App:abort(404);
+        }
     }
 
     /**
@@ -103,12 +111,16 @@ class OrganismesController extends Controller
      */
     public function destroy($id)
     {
-        $organisme = Organisme::findOrFail($id);
-        $contacts = Contact::where('organisme_id', $id)->get();
-        foreach ($contacts as $contact) {
-            $contact->delete();
+        try {
+            $organisme = Organisme::findOrFail($id);
+            $contacts = Contact::where('organisme_id', $id)->get();
+            foreach ($contacts as $contact) {
+                $contact->delete();
+            }
+            $organisme->delete(); //FIXME: proteger par un try/catch et une transaction
+            return Redirect::action('OrganismesController@index');
+        } catch (Exception $e) {
+            App:abort(404);
         }
-        $organisme->delete(); //FIXME: proteger par un try/catch et une transaction
-        return Redirect::action('OrganismesController@index');
     }
 }

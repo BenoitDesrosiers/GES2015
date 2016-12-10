@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class ContactsRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine si l'utilisateur est autorisé à faire cette requête.
      *
      * @return bool
      */
@@ -17,7 +17,7 @@ class ContactsRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Les règles à vérifier lorsqu'on créer ou modifie un organisme.
      *
      * @return array
      */

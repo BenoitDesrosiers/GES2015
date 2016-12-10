@@ -66,3 +66,21 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 			'region_id' => rand(0, 100)
 	];
 });
+
+$factory->define(App\Models\Contact::class, function (Faker\Generator $faker) {
+	return [
+			'prenom' => $faker->firstNameFemale,
+			'nom'=> $faker->lastName,
+			'telephone'=> $faker->tollFreePhoneNumber,
+			'role' => $faker->jobTitle,
+			'organisme_id' => factory(App\Models\Organisme::class)->create()->id
+	];
+});
+
+$factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) {
+	return [
+			'nomOrganisme' => $faker->company,
+			'telephone'=> $faker->tollFreePhoneNumber,
+			'description'=> $faker->catchPhrase,
+	];
+});

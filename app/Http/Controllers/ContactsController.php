@@ -9,22 +9,13 @@ use App\Models\Contact;
 use Session;
 use View;
 use Input;
+use App;
 
 class ContactsController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index($id)
-    {
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
+     * Affiche la vue pour créer un contact.
      *
      * @return \Illuminate\Http\Response
      */
@@ -35,40 +26,35 @@ class ContactsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Inscrit un nouveau contact dans la table 'contacts'.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function store(ContactsRequest $request, $id)
     {
-        $data = $request->all();
-        $contact = new Contact();
-        $contact->prenom = $data['prenom'];
-        $contact->nom = $data['nom'];
-        $contact->telephone = $data['telephone'];
-        $contact->role = $data['role'];
-        $contact->organisme_id = $id;
-        $contact->save();
-        Session::flash('success_create', 'Le contact a été ajouté avec succès!');
-        return redirect()->action('OrganismesController@show', ['id' => $id]);
+        try {
+            $data = $request->all();
+            $contact = new Contact();
+            $contact->prenom = $data['prenom'];
+            $contact->nom = $data['nom'];
+            $contact->telephone = $data['telephone'];
+            $contact->role = $data['role'];
+            $contact->organisme_id = $id;
+            $contact->save();
+            $request->session()->flash('success_create', 'Le contact a été ajouté avec succès!');
+            return redirect()->action('OrganismesController@show', ['id' => $id]);
+        } catch (Exception $e) {
+            App:abort(404);
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Affiche la vue pour modifier un contact.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
+     * @param  int  $organismeId
+     * @param  int  $contactId
      * @return \Illuminate\Http\Response
      */
     public function edit($organismeId, $contactId)
@@ -79,36 +65,45 @@ class ContactsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour le contact choisit dans la table 'contacts'.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\ContactsRequest  $request
+     * @param  int  $organismeId
+     * @param  int  $contactId
      * @return \Illuminate\Http\Response
      */
-    public function update($organismeId, $contactId)
+    public function update(ContactsRequest $request, $organismeId, $contactId)
     {
-        $contact = Contact::findOrFail($contactId);
-        $contact->prenom = Input::get('prenom');
-        $contact->nom = Input::get('nom');
-        $contact->telephone = Input::get('telephone');
-        $contact->role = Input::get('role');
-
-        $contact->save(); //FIXME: bien qu'on soit protégé par le request, ca peut quand même planté au niveau de la BD. Protéger par un try/catch
-        Session::flash('success_update', 'Le contact a été modifié avec succès!');
-        return redirect()->action('OrganismesController@show', ['id' => $organismeId]);
+        try {
+            $contact = Contact::findOrFail($contactId);
+            $contact->prenom = Input::get('prenom');
+            $contact->nom = Input::get('nom');
+            $contact->telephone = Input::get('telephone');
+            $contact->role = Input::get('role');
+            $contact->save();
+            $request->session()->flash('success_update', 'Le contact a été modifié avec succès!');
+            return redirect()->action('OrganismesController@show', ['id' => $organismeId]);
+        } catch (Exception $e) {
+            App:abort(404);
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprime le contact choisit de la table 'contacts'.
      *
-     * @param  int  $id
+     * @param  int  $organismeId
+     * @param  int  $contactId
      * @return \Illuminate\Http\Response
      */
     public function destroy($organismeId, $contactId)
     {
-        $contact = Contact::findOrFail($contactId);
-        $contact->delete(); //FIXME: proteger par un try/catch et une transaction
-        Session::flash('success_delete', 'Le contact a été supprimé avec succès!');
-        return redirect()->action('OrganismesController@show', ['id' => $organismeId]);
+        try {
+            $contact = Contact::findOrFail($contactId);
+            $contact->delete();
+            $request->session()->flash('success_delete', 'Le contact a été supprimé avec succès!');
+            return redirect()->action('OrganismesController@show', ['id' => $organismeId]);
+        } catch (Exception $e) {
+            App:abort(404);
+        }
     }
 }

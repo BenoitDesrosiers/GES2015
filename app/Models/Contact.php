@@ -20,7 +20,10 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     public $table = "contacts";
+
     protected $guarded = array('id');
+
+    protected $fillable = ['prenom', 'nom', 'telephone', 'role'];
 
     public function organisme()
     {

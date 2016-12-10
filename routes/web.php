@@ -24,12 +24,8 @@ Auth::routes();
 
 Route::group(['middleware'=>'auth'], function() {
 
-	// Routes pour les organismes et les contacts.
 	Route::resource('organismes','OrganismesController');
 	Route::resource('organismes.contacts', 'ContactsController');
-
-	//Route::get('organismes/ajtContact', 'ContactsController@index');
-	//Route::resource('contacts', 'ContactsController');
 	
 	Route::resource('sports','SportsController');
 	Route::resource('sports.epreuves','SportsEpreuvesController');
