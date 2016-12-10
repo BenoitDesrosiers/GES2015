@@ -3,6 +3,13 @@
  */
 
 /**
+ * Lance la fonction pour afficher tous les participants au chargement de la page.
+ */
+$(document).ready(function () {
+    listerParticipants(participants);
+});
+
+/**
  * Fonction qui mets les participants de la région choisie dans une liste pour l'affichage.
  */
 $('#region_id').change(function() {
@@ -72,8 +79,6 @@ function listerParticipants(participants_region) {
             checkbox.setAttribute('id', participants_region[participant]["participant_id"]);
             checkbox.type = 'checkbox';
 
-            console.log(participants_region[participant]['is_checked']);
-
             if (participants_region[participant]['is_checked']) {
                 checkbox.setAttribute('checked', 'checked');
             }
@@ -111,4 +116,5 @@ function detruireTable(tableId) {
     if (table) {
         table.parentNode.removeChild(table);
     }
+
 }
