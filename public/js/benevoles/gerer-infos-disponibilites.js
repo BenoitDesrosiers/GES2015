@@ -5,7 +5,7 @@
  * pour les disponibilités d'un bénévole.
  *
  * Créé le: 161129
- * Modifié le: 161129
+ * Modifié le: 161209
  * Par: Steve D.
 ******************************************************************************/
 
@@ -19,7 +19,7 @@ $(document).ready(function() {
 
 /**
  * Procédure qui retire de la page 'conteneur' et ses enfants.
- * @param conteneur l'élément à supprimer.
+ * @param conteneur L'élément à supprimer.
  */
 function retirerConteneur(conteneur) {
 	var nombreEnfants = $(conteneur).parent().children().length;
@@ -32,7 +32,7 @@ function retirerConteneur(conteneur) {
 		});
 		conteneur.on('input', gererEtatBoutonsAjout);
 	}
-	//S'assurer que le bouton se ré-active.
+	//S'assurer que le bouton s'active.
 	gererEtatBoutonsAjout();
 }
 
@@ -89,39 +89,48 @@ function ajouterDisponibilite() {
 		.attr('id', 'disponibilite-disponibilite-' + nouvelleDisponibiliteId)
 		//Ajoute le 'listener' pour changer l'état du bouton d'ajout.
 		.on('input', gererEtatBoutonsAjout);
+	
 	elementAjoute.find('input[name*="disponibilite_annee"]')
 		.attr('id', 'disponibilite-annee-' + nouvelleDisponibiliteId)
+		
 	elementAjoute.find('input[name*="disponibilite_mois"]')
 		.attr('id', 'disponibilite-mois-' + nouvelleDisponibiliteId)
+		
 	elementAjoute.find('input[name*="disponibilite_jour"]')
 		.attr('id', 'disponibilite-jour-' + nouvelleDisponibiliteId)
+		
 	elementAjoute.find('input[name*="disponibilite_isAllDay"]')
 		.attr('id', 'disponibilite-isAllDay-' + nouvelleDisponibiliteId)
+		
 	elementAjoute.find('input[name*="disponibilite_debut_heure"]')
 		.attr('id', 'disponibilite-debut-heure-' + nouvelleDisponibiliteId)
+		
 	elementAjoute.find('input[name*="disponibilite_debut_minute"]')
 		.attr('id', 'disponibilite-debut-minute-' + nouvelleDisponibiliteId)
+		
 	elementAjoute.find('input[name*="disponibilite_fin_heure"]')
 		.attr('id', 'disponibilite-fin-heure-' + nouvelleDisponibiliteId)
+		
 	elementAjoute.find('input[name*="disponibilite_fin_minute"]')
 		.attr('id', 'disponibilite-fin-minute-' + nouvelleDisponibiliteId)
-	//S'assurer que le bouton se re-désactive.
+		
+	//S'assurer que le bouton se désactive.
 	gererEtatBoutonsAjout();
 }
 
 /**
  * Procédure qui s'occupe d'activer ou désactiver le
  * bouton d'ajout d'une disponibilité selon si le contenu
- * du dernier champ de description de disponibilité est vide (désactive)
+ * du premier champ de description de disponibilité est vide (désactive)
  * ou non-vide (active).
  */
 function gererEtatBoutonsAjout() {
-	var derniereEntreeDisponibilite= $('#conteneur-disponibilites')
+	var premierEntreeDisponibilite= $('#conteneur-disponibilites')
 		.children()
 		.last()
 		.find('input[name*="disponibilite_disponibilite"]')
 		[0];
-	if(derniereEntreeDisponibilite.value != "") {
+	if(premierEntreeDisponibilite.value != "") {
 		$('#bouton-ajouter-disponibilite').removeAttr("disabled");
 	} else {
 		$('#bouton-ajouter-disponibilite').attr("disabled","disabled");

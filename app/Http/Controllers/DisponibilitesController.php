@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  * Le controller pour les disponibilités
  * 
  * @author dada
+ * @author Steve D.
  * @version 0.1
  */
 class DisponibilitesController extends BaseController {
@@ -43,19 +44,19 @@ class DisponibilitesController extends BaseController {
 	}
 
     /**
-	 * Enregistre dans la BD sur le serveur et retourne le message d'erreur
-     * approprié si ça plante.
-	 *
+	 * Enregistre les disponibilités dans la BD ou retourne un message d'erreur.
+	 * @param $benevole Benevole Le bénévole crée.
 	 * @return Response
 	 */
     public static function store($benevole)
 	{ 
 		$input = Input::all();
 		$disponibilites = DisponibilitesController::construireListeDisponibilites($input);
-		//Sauvegarde toutes les diponibilités. Si erreur, annule tout.
+		
+		//Sauvegarde toutes les disponibilités. Si erreur, retourne un message d'erreur.
 		foreach($disponibilites as $disponibilite) {
 			// sauvegarderDisponibilite() retourne true s'il n'y a pas
-			// de diponibilité ou si l'insertion s'est bien passée.
+			// de disponibilité ou si l'insertion s'est bien passée.
 			if(!DisponibilitesController::sauvegarderDisponibilite($disponibilite, $benevole)) {
 				return Redirect::back()->withInput()->withErrors($disponibilite->validationMessages());
 			}
@@ -385,7 +386,7 @@ class DisponibilitesController extends BaseController {
      * Retourne la liste des disponibilités selon $input.
      *
      * @param $input array Les valeurs entrées par l'utilisateur.
-     * @return array[Disponibilite] La liste des disponibilités entrés par l'utilisateur.
+     * @return $disponibilites array[Disponibilite] La liste des disponibilités entrés par l'utilisateur.
      */
     public static function construireListeDisponibilites($input)
     {
@@ -410,30 +411,35 @@ class DisponibilitesController extends BaseController {
      *
      * @param $input array Les valeurs entrées par l'utilisateur.
      * @param $index int L'index à aller chercher.
-     * @return Disponibilite L'objet de disponibilité à ajouter, ou null.
+     * @return $return_value Disponibilite L'objet de disponibilité à ajouter, ou null.
      */
     public static function construireDisponibilite($input, $index)
     {
     	$disponibilite = New Disponibilite;
-    
+    	
+    	//On attribue d'abord le titre et la date pour les vérifier en premier.
     	$title = isset($input['disponibilite_disponibilite'][$index])? $input['disponibilite_disponibilite'][$index]: null;
     	$annee = isset($input['disponibilite_annee'][$index]) ? $input['disponibilite_annee'][$index] : null;
     	$mois = isset($input['disponibilite_mois'][$index]) ? $input['disponibilite_mois'][$index] : null;
     	$jour = isset($input['disponibilite_jour'][$index]) ? $input['disponibilite_jour'][$index] : null;
     	
+    	//On vérifie si l'option «isAllDay» est cochée ou non.
     	if(isset($input['disponibilite_isAllDay'][$index])) {
-    		$isAllDay = "1";
+    		$isAllDay = "1";	//Cochée
     	} else {
-    		$isAllDay = "0";
+    		$isAllDay = "0";	//Non cochée
     	}
     	
+    	//On vérifie si la date est correcte.
     	if (checkdate((int)$mois, (int)$jour, (int)$annee)) {
     		
     		if ($isAllDay == 1) {
+    			//Heure de début et de fin de toute une journée.
     			$heureDebut = "08";
     			$minuteDebut = "00";
     			$heureFin = "17";
     			$minuteFin = "30";
+    			//Puisque ce n'est pas toute la journée, on prend les heures entrées.
     		} else {
     			$heureDebut = isset($input['disponibilite_debut_heure'][$index]) ? $input['disponibilite_debut_heure'][$index] : null;
     			$minuteDebut = isset($input['disponibilite_debut_minute'][$index]) ? $input['disponibilite_debut_minute'][$index] : null;
@@ -441,11 +447,18 @@ class DisponibilitesController extends BaseController {
     			$minuteFin = isset($input['disponibilite_fin_minute'][$index]) ? $input['disponibilite_fin_minute'][$index] : null;
     		}
     		
-    		if(strval($heureDebut) != "" AND strval($minuteDebut) != "" AND strval($heureFin) != "" AND strval($minuteFin) != "") {
+    		//Si ce n'est pas toute la journée, l'usager n'a peut-être rien entré, 
+    		// on doit s'assurer d'avoir des heures à entrer.
+    		if(strval($heureDebut) != "" AND strval($minuteDebut) != "" AND strval($heureFin) != "" 
+    				AND strval($minuteFin) != "") {
+    					
 	    		$dateDebut = new DateTime($annee."-".$mois."-".$jour." ".$heureDebut.":".$minuteDebut.":00");
 	    		$dateFin = new DateTime($annee."-".$mois."-".$jour." ".$heureFin.":".$minuteFin.":00");
 	    		
-	    		if ( (int)$heureDebut < (int)$heureFin OR ((int)$heureDebut = (int)$heureFin AND (int)$minuteDebut < (int)$minuteFin) ) {
+	    		//On vérifie que l'heure de début est plus petite que l'heure de fin.
+	    		if ( (int)$heureDebut < (int)$heureFin OR 
+	    				((int)$heureDebut = (int)$heureFin AND (int)$minuteDebut < (int)$minuteFin) ) {
+	    			//Une fois que tout est correct, on attribue les colonnes d'une disponibilité.
 	    			$disponibilite->title = $title;
 	    			$disponibilite->isAllDay = $isAllDay;
 	    			$disponibilite->start=$dateDebut;
@@ -453,14 +466,15 @@ class DisponibilitesController extends BaseController {
 	    		}
     		}
     	}
-    
+    	
+    	//Si le titre est null, c'est qu'il a eu une erreur, on envoie donc null plutôt qu'une disponibilité erronée.
     	$return_value = $disponibilite->title ? $disponibilite : null;
     	
     	return $return_value;
     }
     
     /**
-     * Sauvegarde l'$disponibilite de $benevole dans la BD.
+     * Sauvegarder $disponibilite de $benevole dans la BD.
      *
      * @param $disponibilite Disponibilite|void L'objet de disponibilité à sauvegarder.
      * @param $benevole Bénévole Le bénévole à qui la disponibilité appartient.
