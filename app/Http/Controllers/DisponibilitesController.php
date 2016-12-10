@@ -420,27 +420,42 @@ class DisponibilitesController extends BaseController {
     	$annee = isset($input['disponibilite_annee'][$index]) ? $input['disponibilite_annee'][$index] : null;
     	$mois = isset($input['disponibilite_mois'][$index]) ? $input['disponibilite_mois'][$index] : null;
     	$jour = isset($input['disponibilite_jour'][$index]) ? $input['disponibilite_jour'][$index] : null;
-    	$heureDebut = isset($input['disponibilite_debut_heure'][$index]) ? $input['disponibilite_debut_heure'][$index] : null;
-    	$minuteDebut = isset($input['disponibilite_debut_minute'][$index]) ? $input['disponibilite_debut_minute'][$index] : null;
-    	$heureFin = isset($input['disponibilite_fin_heure'][$index]) ? $input['disponibilite_fin_heure'][$index] : null;
-    	$minuteFin = isset($input['disponibilite_fin_minute'][$index]) ? $input['disponibilite_fin_minute'][$index] : null;
-    	$isAllDay = 0;
-    
+    	
+    	if(isset($input['disponibilite_isAllDay'][$index])) {
+    		$isAllDay = "1";
+    	} else {
+    		$isAllDay = "0";
+    	}
+    	
     	if (checkdate((int)$mois, (int)$jour, (int)$annee)) {
-    		$dateDebut = new DateTime($annee."-".$mois."-".$jour." ".$heureDebut.":".$minuteDebut.":00");
-    		$dateFin = new DateTime($annee."-".$mois."-".$jour." ".$heureFin.":".$minuteFin.":00");
-    			
-    		if ( (int)$heureDebut < (int)$heureFin OR ((int)$heureDebut = (int)$heureFin AND (int)$minuteDebut < (int)$minuteFin) ) {
-    
-    			$disponibilite->title = $title;
-    			$disponibilite->isAllDay = $isAllDay;
-    			$disponibilite->start=$dateDebut;
-    			$disponibilite->end=$dateFin;
+    		
+    		if ($isAllDay == 1) {
+    			$heureDebut = "08";
+    			$minuteDebut = "00";
+    			$heureFin = "17";
+    			$minuteFin = "30";
+    		} else {
+    			$heureDebut = isset($input['disponibilite_debut_heure'][$index]) ? $input['disponibilite_debut_heure'][$index] : null;
+    			$minuteDebut = isset($input['disponibilite_debut_minute'][$index]) ? $input['disponibilite_debut_minute'][$index] : null;
+    			$heureFin = isset($input['disponibilite_fin_heure'][$index]) ? $input['disponibilite_fin_heure'][$index] : null;
+    			$minuteFin = isset($input['disponibilite_fin_minute'][$index]) ? $input['disponibilite_fin_minute'][$index] : null;
+    		}
+    		
+    		if(strval($heureDebut) != "" AND strval($minuteDebut) != "" AND strval($heureFin) != "" AND strval($minuteFin) != "") {
+	    		$dateDebut = new DateTime($annee."-".$mois."-".$jour." ".$heureDebut.":".$minuteDebut.":00");
+	    		$dateFin = new DateTime($annee."-".$mois."-".$jour." ".$heureFin.":".$minuteFin.":00");
+	    		
+	    		if ( (int)$heureDebut < (int)$heureFin OR ((int)$heureDebut = (int)$heureFin AND (int)$minuteDebut < (int)$minuteFin) ) {
+	    			$disponibilite->title = $title;
+	    			$disponibilite->isAllDay = $isAllDay;
+	    			$disponibilite->start=$dateDebut;
+	    			$disponibilite->end=$dateFin;
+	    		}
     		}
     	}
     
     	$return_value = $disponibilite->title ? $disponibilite : null;
-    
+    	
     	return $return_value;
     }
     

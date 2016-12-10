@@ -56,6 +56,10 @@ function ajouterDisponibilite() {
 		'	<label for="disponibilite_jour[]">Jour:</label>' +
 		'	<input type="number" name="disponibilite_jour[]" id="disponibilite-jour-1" class="form-control" step="1" min="1" max="31"/>' +
 		
+        '   <label for="disponibilite_isAllDay[]">Toute la journée:</label>' +
+		'   <input type="checkbox" name="disponibilite_isAllDay[]" id="disponibilite-isAllDay-1">' +
+		'   <label for="isAllDay">Si coché, les heures et les minutes ne seront pas prises en compte.</label>' +
+		
 		'	<label for="disponibilite_debut_heure[]">Heure de début (format 24h):</label>' +
 		'	<input type="number" name="disponibilite_debut_heure[]" id="disponibilite-debut-heure-1" class="form-control" step="1" min="0" max="23"/>' +
 		
@@ -91,7 +95,9 @@ function ajouterDisponibilite() {
 		.attr('id', 'disponibilite-mois-' + nouvelleDisponibiliteId)
 	elementAjoute.find('input[name*="disponibilite_jour"]')
 		.attr('id', 'disponibilite-jour-' + nouvelleDisponibiliteId)
-		elementAjoute.find('input[name*="disponibilite_debut_heure"]')
+	elementAjoute.find('input[name*="disponibilite_isAllDay"]')
+		.attr('id', 'disponibilite-isAllDay-' + nouvelleDisponibiliteId)
+	elementAjoute.find('input[name*="disponibilite_debut_heure"]')
 		.attr('id', 'disponibilite-debut-heure-' + nouvelleDisponibiliteId)
 	elementAjoute.find('input[name*="disponibilite_debut_minute"]')
 		.attr('id', 'disponibilite-debut-minute-' + nouvelleDisponibiliteId)

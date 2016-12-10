@@ -141,6 +141,10 @@
                 <label for="disponibilite_mois[]">Mois (en chiffre):</label>
 				<input type="number" name="disponibilite_mois[]" id="disponibilite-mois-1" class="form-control" step="1" min="1" max="12"/>
                 
+                <label for="disponibilite_isAllDay[]">Toute la journée:</label>
+				<input type="checkbox" name="disponibilite_isAllDay[]" id="disponibilite-isAllDay-1">
+				<label for="isAllDay">Si coché, les heures et les minutes ne seront pas prises en compte.</label>
+                
                 <label for="disponibilite_jour[]">Jour:</label>
 				<input type="number" name="disponibilite_jour[]" id="disponibilite-jour-1" class="form-control" step="1" min="1" max="31"/>
                 
