@@ -13,11 +13,16 @@ class UpdateCurrentUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * La regex du mot de passe est:
+     *      - Minimum 1 chiffre [0-9]
+     *      - Minimum 1 caractère minuscule [a-z]
+     *      - Minimum 1 caractère majuscule [A-Z]
      *
      * @return array
      */
@@ -27,7 +32,7 @@ class UpdateCurrentUserRequest extends FormRequest
             'nom' => 'required|max:255',
             'courriel' => 'required|max:255',
             'old_mot_de_passe' => 'required|max:60',
-            'mot_de_passe' => 'max:60'
+            'mot_de_passe' => 'min:6|max:60|regex:/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+)$/'
         ];
     }
 }

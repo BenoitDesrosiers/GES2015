@@ -6,7 +6,7 @@
             <h2>Modification du compte</h2>
         </div>
         <div class="panel-body">
-        {!! Form::open(['action'=> array('UsagersController@updateCurrentUser', Auth::user()->getAttribute('id')), 'method' => 'PUT', 'class' => 'form']) !!}
+        {!! Form::open(['action'=> array('UsagersController@updateCurrentUser', Auth::id()), 'method' => 'PUT', 'class' => 'form']) !!}
 
         <!--    Affiche les messages d'erreur après un enregistrement raté -->
             @foreach ($errors->all() as $error)

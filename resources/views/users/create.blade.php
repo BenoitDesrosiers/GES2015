@@ -38,7 +38,7 @@
             <!--    Champ de texte pour le mot de passe. -->
             <div class="form-group">
                 <!-- Ceci est un faux champs afin de contourner le auto-complete de Chrome. -->
-                <input style="display:none" type="password" name="mot_de_passe"/>
+                <input style="display:none" type="password" name="mot_de_passe2"/>
                 {!! Form::label('mot_de_passe', 'Mot de passe:') !!}
                 {!! Form::password('mot_de_passe', ['class' => 'form-control']) !!}
                 {{ $errors->first('adresse') }}

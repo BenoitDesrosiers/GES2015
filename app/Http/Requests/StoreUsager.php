@@ -20,14 +20,19 @@ class StoreUsager extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * La regex du mot de passe est:
+     *      - Minimum 1 chiffre [0-9]
+     *      - Minimum 1 caractère minuscule [a-z]
+     *      - Minimum 1 caractère majuscule [A-Z]
+     *
      * @return array
      */
     public function rules()
     {
         return [
             'nom' => 'required|max:255',
-            'courriel' => 'required|max:255',
-            'mot_de_passe' => 'max:60',
+            'courriel' => 'unique:users,email|required|max:255',
+            'mot_de_passe' => 'min:6|max:60|regex:/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+)$/',
             'role.*' => 'exists:roles,name'
         ];
     }

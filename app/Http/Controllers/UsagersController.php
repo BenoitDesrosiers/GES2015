@@ -70,7 +70,6 @@ class UsagersController extends Controller
                             $roleTemp = $this->getRoleWithName($roleUsager);
                             $usager->attachRole($roleTemp);
                         }
-
                     } catch (Exception $e){
                         return Redirect::back()->withInput()->withErrors($usager->validationMessages());  // Utilité?
                     }
@@ -232,6 +231,7 @@ class UsagersController extends Controller
             $input = Input::all();
             $usager = Entrust::user();
             $userId = Auth::id();
+
             // On test le mot de passe avant de faire tout changement.
             if ($this->testMotDePasse($userId, $input['old_mot_de_passe'])){
                 $usager->name = $input['nom'];
