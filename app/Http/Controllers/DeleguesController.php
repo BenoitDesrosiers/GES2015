@@ -314,8 +314,8 @@ class DeleguesController extends BaseController {
     public function listerDelegues(Request $request)
     {
 
-        //if ($request->ajax())   a remettre quand on comprendra comment tester avec AJAX
-        //{
+        if ($request->ajax())   
+        {
             $region_id = $request->input('region_id');
             if ( isset($region_id) )
                 if ($region_id == 0){
@@ -329,7 +329,7 @@ class DeleguesController extends BaseController {
                         ->orderBy('nom')
                         ->get();
                 }
-       // }
+        }
         App::abort(403);
     }
 }
