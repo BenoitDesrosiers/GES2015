@@ -15,6 +15,11 @@
 	<div class="panel-body">
 		{!! Form::open(['action'=> 'BenevolesController@index', 'class' => 'form']) !!}
         <!--    Affiche les messages d'erreur après un enregistrement raté -->
+		@if (session('status'))
+            <div class="alert alert-danger">
+                {!! session('status') !!}
+            </div>
+        @endif
         @foreach ($errors->all() as $error)
             <p class="alert alert-danger">{{ $error }}</p>
         @endforeach
@@ -131,10 +136,11 @@
                 <label for="disponibilite_jour[]">Jour:</label>
 				<input type="number" name="disponibilite_jour[]" id="disponibilite-jour-1" 
 					class="form-control" step="1" min="1" max="31"/>
-                
+					
+                <!--  La partie toute la journée ne fait que boguer.
 				<label for="disponibilite_isAllDay[]">Toute la journée:</label>
 				<input type="checkbox" name="disponibilite_isAllDay[]" id="disponibilite-isAllDay-1">
-				<label for="isAllDay">Si coché, les heures et les minutes ne seront pas prises en compte.</label>
+				<label for="isAllDay">Si coché, les heures et les minutes ne seront pas prises en compte.</label>-->
                 
                 <label for="disponibilite_debut_heure[]">Heure de début (format 24h):</label>
 				<input type="number" name="disponibilite_debut_heure[]" id="disponibilite-debut-heure-1" 
