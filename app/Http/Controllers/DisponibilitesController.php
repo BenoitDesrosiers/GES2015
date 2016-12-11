@@ -50,17 +50,25 @@ class DisponibilitesController extends BaseController {
 	 */
     public static function store($benevole)
 	{ 
-		$input = Input::all();
-		$disponibilites = DisponibilitesController::construireListeDisponibilites($input);
-		
-		//Sauvegarde toutes les disponibilités. Si erreur, retourne un message d'erreur.
-		foreach($disponibilites as $disponibilite) {
-			// sauvegarderDisponibilite() retourne true s'il n'y a pas
-			// de disponibilité ou si l'insertion s'est bien passée.
-			if(!DisponibilitesController::sauvegarderDisponibilite($disponibilite, $benevole)) {
-				return Redirect::back()->withInput()->withErrors($disponibilite->validationMessages());
+		try {
+			$input = Input::all();
+			$disponibilites = DisponibilitesController::construireListeDisponibilites($input);
+			
+			//Sauvegarde toutes les disponibilités. Si erreur, retourne un message d'erreur.
+			foreach($disponibilites as $disponibilite) {
+				// sauvegarderDisponibilite() retourne true s'il n'y a pas
+				// de disponibilité ou si l'insertion s'est bien passée.
+				if(!DisponibilitesController::sauvegarderDisponibilite($disponibilite, $benevole)) {
+					return Redirect::back()->withInput()->withErrors($disponibilite->validationMessages());
+				}
 			}
+		} catch(ModelNotFoundException $e) {
+			$response = array(
+					'status' => 'fail',
+					'msg' => 'Impossible de créer la disponibilité.',);
 		}
+			
+		return $response;
 		
 		//Ancien code difficile à utiliser par l'usager et qui fini par un bogue.
         /*if(Request::ajax()) {
@@ -463,12 +471,16 @@ class DisponibilitesController extends BaseController {
 	    			$disponibilite->isAllDay = $isAllDay;
 	    			$disponibilite->start=$dateDebut;
 	    			$disponibilite->end=$dateFin;
+	    			
+	    		} else {
+	    			$return_value = false;
 	    		}
+    		} else {
+    			$return_value = false;
     		}
+    	} else {
+    		$return_value = false;
     	}
-    	
-    	//Si le titre est null, c'est qu'il a eu une erreur, on envoie donc null plutôt qu'une disponibilité erronée.
-    	$return_value = $disponibilite->title ? $disponibilite : null;
     	
     	return $return_value;
     }
