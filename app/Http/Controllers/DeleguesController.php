@@ -314,7 +314,7 @@ class DeleguesController extends BaseController {
     public function listerDelegues(Request $request)
     {
 
-        if ($request->ajax())   
+        if ($request->ajax())
         {
             $region_id = $request->input('region_id');
             if ( isset($region_id) )
