@@ -22,14 +22,7 @@ class ModifyEvenementsTable extends Migration
 			$table->dropColumn('section');
             $table->dropColumn('type');
 			
-			$table->unsignedInteger('terrain_id');
 			$table->unsignedInteger('type_id');
-		
-			$table->foreign('terrain_id')
-					->references('id')
-					->on('terrains')
-					->onDelete('restrict')
-					->onUpdate('cascade');
 					
 			$table->foreign('type_id')
 					->references('id')
@@ -53,7 +46,6 @@ class ModifyEvenementsTable extends Migration
 			$table->char('section',1)->nullable();
 			$table->string('type')->nullable();
 
-            $table->dropColumn('terrain_id');
             $table->dropColumn('type_id');
         });
     }
