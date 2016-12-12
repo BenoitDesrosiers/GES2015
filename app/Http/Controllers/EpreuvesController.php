@@ -416,5 +416,68 @@ class EpreuvesController extends BaseController {
 		}
 		return $arbitres;
 	}
+	
+	/**
+	 * Affiche le formulaire permettant d'ajouter un ou des bénévoles à une épreuve.
+	 *
+	 * @param[in] get int $epreuveId l'id de l'épreuve qu'on sélectionne.
+	 */
+	public function ajtBenevole($epreuveId) {
+		try{
+			$epreuve = Epreuve::findOrFail ( $epreuveId );
+			$sport = Sport::findOrFail( $epreuve->sport_id);
+			$benevoles = $sport->benevoles->sortBy('prenom');
+			$epreuveBenevoles = ($epreuve::find($epreuveId)->benevoles);
+		} catch ( ModelNotFoundException $e ) {
+			App::abort ( 404 );
+		}
+		return View::make ( 'epreuves.ajtBenevole', compact ( 'epreuve', 'sport', 'benevoles', 'epreuveBenevoles') );
+	}
+	
+	/**
+	 * Entrepose dans la bd un ou des bénévoles qui seront associés à une épreuve.
+	 */
+	public function storeBenevoles($epreuveId) {
+		$input = Input::all ();
+		try {
+			$epreuve = Epreuve::findOrFail($epreuveId);
+			$sportId = $epreuve->sport->id;
+			$sports = Sport::all();
+			$arbitresEpreuves = $epreuve->arbitres;
+			$arbitres = EpreuvesController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresEpreuves);
+			//FIXME: au lieu d'avoir une fonction pour filtrer les arbitres déjà associés à une épreuve, on peut se servir du whereNotIn
+			//       et fournir la liste des ids des arbitresEpreuves
+			//       $arbitres = Arbitre::all()->whereNotIn('id', $arbitresEpreuves->pluck('id')) ->get();
+			$sportId = $this->checkSportId($sports, $sportId);
+		} catch (ModelNotFoundException $e) {
+			App::abort(404);
+		}
+	
+		if ($epreuve->save ()) {
+			if (is_array ( Input::get ( 'benevoles' ) )) { //FIXME: protéger par une transaction dans le try/catch
+				$epreuve->benevoles()->sync ( array_keys ( Input::get ( 'benevoles' )));
+			} else {
+				$epreuve->benevoles()->detach();
+			}
+			return Redirect::action ( 'EpreuvesController@index');
+		} else {
+			return Redirect::back ()->withInput ()->withErrors ( $epreuve->validationMessages () );
+		}
+	}
+	
+	/**
+	 * Affiche les benevoles associés à l'épreuve sélectionnée.
+	 *
+	 * @param[in] get int $epreuveId l'id de l'épreuve qu'on sélectionne.
+	 */
+	public function listeBenevole($epreuveId) {
+		try{
+			$epreuve = Epreuve::findOrFail ( $epreuveId );
+			$benevoles = $epreuve->benevoles; //->sortBy('region_id');
+		} catch ( ModelNotFoundException $e ) {
+			App::abort ( 404 );
+		}
+		return View::make ( 'epreuves.listeBenevole', compact ( 'epreuve', 'benevoles') );
+	}
 
 }
