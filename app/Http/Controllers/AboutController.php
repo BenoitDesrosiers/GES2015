@@ -118,6 +118,12 @@ class AboutController extends BaseController {
                     "Étienne Drolet",
                     "CRUD des organismes."
                 ),
+                array(
+                    "Steve Caya",
+                    "CRUD des tâches."
+                    "Associations des tâches aux bénévoles."
+                ),
+
             )
         );
 

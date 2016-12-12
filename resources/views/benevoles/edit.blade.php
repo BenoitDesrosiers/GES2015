@@ -129,7 +129,7 @@
 						$checked = "";
 						$active = "";
 						foreach ($benevoleTaches as $benTache) {
-							if ($benTache->id == $taches->id) {
+							if ($benTache->id == $tache->id) {
 								$checked = " checked";
 								$active = " active";
 								continue;
@@ -142,8 +142,7 @@
 			        </label><br/>
 			    </div>
 				<?php
-					}
-				?>
+					}?>
 			</div>
 		</div>
 		<div class="form-group">

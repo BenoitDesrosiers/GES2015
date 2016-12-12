@@ -14,6 +14,7 @@ class CreateTachesTable extends Migration
             $table->string('nom');
             $table->string('description')->nullable();
             $table->timestamps();
+
         });             
     }
     public function down()

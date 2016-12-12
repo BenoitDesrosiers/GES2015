@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Database\Eloquent\Collection;
 
 class TestAssociationsBenevolesTaches extends TestCase
 {
@@ -16,16 +17,45 @@ class TestAssociationsBenevolesTaches extends TestCase
         $this->assertTrue(Schema::hasTable('benevole_taches'), "La table d'associations 'benevole_taches' n'existe pas!");
     }
 
-    /** @test */
-	//test si on supprime le bénévole si sa supprime la relation entre la tâche et le bénévole.
- 
-    public function un_benevole_est_supprime_de_la_bd()
+     /**
+     * On vérifie que l'association bénévole tâche est enlevée de la BD correctement
+     */
+     /** @test */
+    public function test_supprimer_benevole()
     {
-    	$user = factory(App\User::class)->create();
-    	$this->actingAs($user);
-    	$benevole = factory(App\Models\Benevole::class)->create();
-    	$this->call('DELETE', '/benevoles/' , $benevole->id);
-    	$this->assertSessionMissing(['errors']);
-    	$this->dontSeeInDatabase('benevoles', ['id' => $benevole->id]);
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+        
+        $tache = factory(App\Models\Taches::class)->create();
+        $benevole = factory(App\Models\Benevole::class)->create();
+        // associer une tâche à un bénévole
+        $benevole->taches()->id = $tache->id;
+        
+        $this->call('DELETE', '/benevoles/' . $benevole->id);
+        $this->assertSessionMissing(['errors']);
+        $this->dontSeeInDatabase('benevole_taches', ['benevole_id' => $benevole->id, 'taches_id' => $tache->id]);
+    
     }
+
+    /**
+     * On vérifie que l'association bénévole tâche est enlevée de la BD correctement
+     */
+    /** @test */
+    public function test_tache_supprimee()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+    
+        $tache = factory(App\Models\Taches::class)->create();
+        $benevole = factory(App\Models\Benevole::class)->create();
+        // associer une tâche à un bénévole
+        $benevole->taches()->id = $tache->id;
+    
+        $this->call('DELETE', '/taches/' . $tache->id);
+        $this->assertSessionMissing(['errors']);
+        $this->dontSeeInDatabase('benevole_taches', ['benevole_id' => $benevole->id, 'taches_id' => $tache->id]);
+    }
+    
+   
+   
 }

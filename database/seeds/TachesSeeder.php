@@ -14,7 +14,7 @@ class TachesTableSeeder extends Seeder {
 
 		$items = [
 		//Nom, Description
-		["Balais","Préposé au ménages."],
+		["Balais","Préposé au ménage."],
 		["Sécurité","Fait la sécurité dans les différentes zones de sports."],
 		["Accompagnateur","Un accompagnateur accompagne un athlète pour qu'il ne soit pas seul."]
 		];

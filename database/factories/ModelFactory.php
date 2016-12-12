@@ -90,9 +90,6 @@ $factory->define(App\Models\Benevole::class, function (Faker\Generator $faker) {
 		'sexe' => 'masculin',
 		'verification' => 'AF',
 		'naissance' => $faker->date(),
-		'sport_id' => factory(App\Models\Sport::class)->create()->id,
-		'terrain_id' => factory(App\Models\Terrain::class)->create()->id,
-		'taches_id' => factory(App\Models\Taches::class)->create()->id,
 		];
 });
 

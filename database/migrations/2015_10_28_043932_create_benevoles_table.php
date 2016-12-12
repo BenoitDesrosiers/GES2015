@@ -25,7 +25,7 @@ class CreateBenevolesTable extends Migration
             $table->string('sexe');
             $table->string('verification')->nullable();
             $table->date('naissance');
-
+        
 			$table->timestamps();
 		});
     }
