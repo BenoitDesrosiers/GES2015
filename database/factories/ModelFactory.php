@@ -107,8 +107,10 @@ $factory->define(App\Models\Cafeteria::class, function (Faker\Generator $faker){
 $factory->define(App\Models\Responsable::class, function (Faker\Generator $faker){
 	return [
 		'nom' => $faker->name,
-		// Le téléphone doit être 10 nombres collés. 
-		'telephone' => $faker->numberBetween(1000000000, 9999999999),
+		// Le téléphone doit être 10 nombres collés et $faker->tollFreePhoneNumber ne 
+		// retourne pas une valeur valide pour le système et 2147483647 sinon ça donne
+		// une erreur sur Windows. 
+		'telephone' => $faker->numberBetween(1000000000, 2147483647),
 	];
 });
 
