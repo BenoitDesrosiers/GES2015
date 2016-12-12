@@ -14,9 +14,23 @@
 			{!! Form::select('sportsListe', $sportsListe, $sportId, array('id' => 'sportsListe')) !!}
 		</div> <!-- liste-sports -->
 		<div class="form-group">
-			{!! Form::label('nom', 'Nom:') !!} 
+			{!! Form::label('nom', '*Nom:') !!}
 			{!! Form::text('nom',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('nom') }}
+		</div>
+		<div class="form-group">
+			{!! Form::label('genre', '*Genre:') !!}
+			<br/>
+			{!! Form::radio('genre', 'mixte', true) !!}
+			{!! Form::label('mixte', 'Mixte') !!}
+			<br/>
+			{!! Form::radio('genre', 'masculin') !!}
+			{!! Form::label('masculin', 'Masculin') !!}
+			<br/>
+			{!! Form::radio('genre', 'féminin') !!}
+			{!! Form::label('féminin', 'Féminin') !!}
+			<br/>
+			{{ $errors->first('genre') }}
 		</div>
 		<div class="form-group">
 			{!! Form::label('description', 'Description courte:') !!} 

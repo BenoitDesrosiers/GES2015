@@ -37,6 +37,7 @@
 			{!! Form::checkbox('tournoi',$sport->tournoi==true,$sport->tournoi==true) !!}
 			{{ $errors->first('tournoi') }}				
 		</div>
+		
 		<div class="form-group">
             {!! Form::label('terrains', 'Terrains:') !!} 
             <div class="row">
@@ -63,10 +64,50 @@
             </div>
         </div>
 		<div class="form-group">
+			<label>Arbitres: </label>
+			<!-- Code original par "Dey-Dey" adapté pour le site -->
+			<div class="container bootstrap snippet">
+				<div class="row">
+		      		<div class="col-sm-4 col-sm-offset-1">
+		          		<div class="list-group" id="list1">
+			          	<a class="list-group-item active"><span class="glyphicon glyphicon-user"></span>Arbitres Disponibles<input title="toggle all" type="checkbox" class="all pull-right"></a>
+@foreach($arbitres as $arbitre)
+						<a name="{{ $arbitre->id }}" class="list-group-item">{{ $arbitre->nom }}, {{ $arbitre->prenom }}<input type="checkbox" class="pull-right"></a>
+@endforeach
+			      		</div>
+					</div>
+						<div class="col-md-2 boutonTableSports-center">
+			     			<a title="Ajouter" class="btn btn-default center-block ajouter"><i class="glyphicon glyphicon-chevron-right"></i></a>
+			        	    <a title="Retirer" class="btn btn-default center-block retirer"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						</div>
+					<div class="col-sm-4">
+		    		  	<div class="list-group" id="list2">
+			  	        	<a class="list-group-item active"><span class="glyphicon glyphicon-user"></span>Arbitres attitrés<input title="toggle all" type="checkbox" class="all pull-right"></a>
+ @foreach($arbitresSports as $arbitresSport) 
+							<a name="{{ $arbitresSport->id }}" class="list-group-item">{{ $arbitresSport->nom }}, {{ $arbitresSport->prenom }}<input type="checkbox" class="pull-right"></a>  									   	
+  @endforeach
+		        	  	</div>
+					<div>
+						<input type="hidden" name="arbitresUtilises" id="arbitresUtilises"></input>
+		      	  	</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
 			{!! Form::button('Sauvegarder', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
 		</div>
 		{!! Form::close() !!}
 	</div>
 </div>
+@stop
+
+@section('script')
+	<script src="{{ asset('js/script_transfererArbitre.js') }}"></script>
+	<script src="{{ asset('js/tableScript.js') }}"></script>
+@stop
+
+@section('stylesheet')
+	<link rel="stylesheet" href="{{ asset('/css/tableCSS.css') }}">
 @stop

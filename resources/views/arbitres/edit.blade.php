@@ -124,6 +124,20 @@
 			</div>
 		</div>
 		
+		<!--  Association sport épreuves 	-->
+		<div id="epreuves" class="form-group">
+			{{ Form::label('choixEpreuve', 'Choisissez une épreuve:') }}
+			<p>(Tenir Ctrl pour sélection multiple)</p>
+			<select name="epreuves[]" multiple="multiple" size="8" class="form-control">
+			@foreach ($arbitre->sports as $arbitreSport)
+					<optgroup label="{{ $arbitreSport->nom }}">
+					@foreach($arbitreSport->epreuves as $epreuve)
+						<option value="{{ $epreuve->id }}" {{ $selectedEpreuves->contains($epreuve->id) ? ' selected="selected"' : '' }}>{{ $epreuve->nom }}</option>
+					@endforeach
+					</optgroup>
+			@endforeach
+			</select>
+		</div>
 	<!--    Boutons Sauvegarder et Annuler -->
 		<div class="form-group">
 			{!! Form::button('Sauvegarder', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}

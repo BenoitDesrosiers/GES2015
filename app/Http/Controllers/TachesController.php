@@ -133,7 +133,7 @@ class TachesController extends Controller
 	/**
 	 * Efface la ressource de la bd.
 	 *
-	 * @param  int  $id l'id du tâche à effacer
+	 * @param  int  $id l'id de la tâche à effacer
 	 * @return Response
 	 */
 	public function destroy($id)

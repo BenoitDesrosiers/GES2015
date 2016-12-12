@@ -7,6 +7,7 @@ $(function () {
     $('#region').change(function (event) {
         listerParticipants($(this).val());
     });
+
     listerParticipants($('#region').val());
 });
 
@@ -17,7 +18,6 @@ $(function () {
  */
 function listerParticipants(regionId)
 {
-    console.log(region);
     $.ajax({
         method: "GET",
         url: "/tableau_participants",

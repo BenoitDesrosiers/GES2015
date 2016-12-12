@@ -10,7 +10,6 @@
 namespace App\Models;
 
 class Arbitre extends EloquentValidating {
-	protected $guarded = array('id');
 
 	/** 
 	 * Eloquent relationship: 

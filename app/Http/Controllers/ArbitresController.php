@@ -12,6 +12,7 @@ use App\Models\Region;
 use App\Models\Sport;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\Epreuve;
 
 /**
  * Le contrôleur pour les arbitres
@@ -116,7 +117,8 @@ class ArbitresController extends BaseController {
 	{
 		try {
 			$arbitre = Arbitre::findOrFail($id);
-			return View::make('arbitres.show', compact('arbitre'));
+			$selectedEpreuves = $arbitre->epreuves->pluck('id');
+			return View::make('arbitres.show', compact('arbitre', 'selectedEpreuves'));
 
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
@@ -137,6 +139,7 @@ class ArbitresController extends BaseController {
 			$arbitre = Arbitre::findOrFail($id);
 			$regions = Region::all();
 			$sports = Sport::all();
+			$selectedEpreuves = $arbitre->epreuves->pluck('id');
 			
 			// La date par défaut du formulaire est <cette année> - 20 ans
 			// pour être plus prêt de l'âge moyen attendu
@@ -148,8 +151,8 @@ class ArbitresController extends BaseController {
 	        $listeAnnees = ArbitresController::generer_liste(date('Y')-100, 101);
 	        $listeMois = ArbitresController::generer_liste(1, 12);
 	        $listeJours = ArbitresController::generer_liste(1, 31);
-
-	        return View::make('arbitres.edit', compact('arbitre', 'regions', 'sports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+	        
+	        return View::make('arbitres.edit', compact('arbitre', 'regions', 'sports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut', 'selectedEpreuves'));
 	    
 	    } catch (Exception $e) {
 	    	App:abort(404);
@@ -167,6 +170,7 @@ class ArbitresController extends BaseController {
 	{   //FIXME: meme code que store, DRY
 		try {
 			$input = Input::all();
+			
 			$arbitre = Arbitre::findOrFail($id);
 			$arbitre->prenom = $input['prenom'];
 			$arbitre->nom = $input['nom'];
@@ -176,9 +180,9 @@ class ArbitresController extends BaseController {
 			$arbitre->numero_telephone = $input['numero_telephone'];
 			$arbitre->adresse = $input['adresse'];
 			$arbitre->sexe = $input['sexe'];
-
+				
 	        $arbitre->date_naissance = $arbitre->date_naissance = ArbitresController::construire_date($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
-			
+	         
 			if($arbitre->save()) {
 				
 				// Association avec les sports sélectionnés
@@ -188,6 +192,12 @@ class ArbitresController extends BaseController {
                     $arbitre->sports()->detach();
                 }
 
+                // Association sports-épreuves
+                if (is_array(Input::get('epreuves'))){
+                	$arbitre->epreuves()->sync((Input::get('epreuves')));
+                } else {
+                	$arbitre->epreuves()->detach();
+                }
 				return Redirect::action('ArbitresController@index');
 			} else {
 				return Redirect::back()->withInput()->withErrors($arbitre->validationMessages());

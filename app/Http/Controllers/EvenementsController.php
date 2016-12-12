@@ -63,12 +63,12 @@ class EvenementsController extends BaseController
     public function store(EvenementsRequest $request)
     {
         try {
-            $input = Input::all();
+            $donnees = $request->all();
             $evenement = new Evenement();
-            $evenement->nom = $input['nom'];
-            $evenement->type_id = $input['type_id'];
-            $evenement->epreuve_id = $input['epreuve_id'];
-            $evenement->date_heure = $input['date'].' '.$input['heure'];
+            $evenement->nom = $donnees['nom'];
+            $evenement->type_id = $donnees['type_id'];
+            $evenement->epreuve_id = $donnees['epreuve_id'];
+            $evenement->date_heure = $donnees['date'].' '.$donnees['heure'];
             if($evenement->save()) {
                 return Redirect::action('EvenementsController@index')->with('status', 'Événement ajouté!');
             } else {
@@ -107,8 +107,7 @@ class EvenementsController extends BaseController
             $evenement = Evenement::findOrFail($id);
             $types = TypeEvenement::all();
             $epreuves = Epreuve::all();
-            // La 'date' dans 'date_heure' est enmagasinée avec des '-' comme séparateurs, mais la fonction 'strtotime' utilise des '/' pour séparer la date
-            $date = date('Y-m-d', strtotime(str_replace('-', '/', $evenement->date_heure)));
+            $date = date('Y-m-d', strtotime($evenement->date_heure));
             $heure = date('G:i', strtotime($evenement->date_heure));
             return View::make('evenements.edit', compact('evenement', 'types', 'epreuves', 'date', 'heure'));
         } catch(Exception $e) {
@@ -126,12 +125,12 @@ class EvenementsController extends BaseController
     public function update(EvenementsRequest $request, $id)
     {
         try {
-            $input = Input::all($request->all());
+            $donnees = $request->all();
             $evenement = Evenement::findOrFail($id);
-            $evenement->nom = $input['nom'];
-            $evenement->type_id = $input['type_id'];
-            $evenement->epreuve_id = $input['epreuve_id'];
-            $evenement->date_heure = $input['date'].' '.$input['heure'];
+            $evenement->nom = $donnees['nom'];
+            $evenement->type_id = $donnees['type_id'];
+            $evenement->epreuve_id = $donnees['epreuve_id'];
+            $evenement->date_heure = $donnees['date'].' '.$donnees['heure'];
             if($evenement->save()) {
                 return Redirect::action('EvenementsController@index')->with('status', 'Événement mis à jour!');
             } else {
@@ -152,7 +151,7 @@ class EvenementsController extends BaseController
     {
         try {
             $evenement = Evenement::findOrFail($id);
-            $evenement->delete();
+            $evenement->delete(); //FIXME: protéger par une transaction dans le try/catch
 
             return Redirect::action('EvenementsController@index')->with('status', 'Événement détruit!');
         } catch(Exception $e) {

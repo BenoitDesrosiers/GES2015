@@ -21,9 +21,4 @@ class Organisme extends Model
 {
 	public $table = "organismes";
     protected $guarded = array('id');
-
-    public function contacts()
-    {
-    	return $this->hasMany('App\Models\Contact');
-    }
 }

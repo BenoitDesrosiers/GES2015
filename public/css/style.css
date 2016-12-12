@@ -115,3 +115,11 @@ body.signin {
 .signin input[type="checkbox"] {
   margin-left: 5px;
 }
+
+.hidden {
+	display: none;
+}
+
+.show-tbody {
+	display:table-row-group;
+}

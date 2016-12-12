@@ -25,9 +25,27 @@
    			<p>Date de naissance : {{ $arbitre->date_naissance }}</p>
    		@endif
 
+   		<!--  On liste les sports et les épreuves associés à l'arbitre -->
+   		<p>Sports et leurs épreuves: <ul>
    		@if (count($arbitre->sports) > 0)
-   			<p>Sports: <ul> <?php foreach($arbitre->sports as $sport) { echo "<li>".$sport->nom."</li>"; } ?></ul></p>
-   		@endif
+	   		@foreach ($arbitre->sports as $sport)
+	   			@if (count($sport->epreuves) > 0)
+	   				<li>{{ $sport->nom }}
+	   					<ul>
+							@foreach($sport->epreuves as $epreuve)						
+								@if ($selectedEpreuves->contains($epreuve->id))
+									<li>{{ $epreuve->nom }}</li>
+								@endif				
+							@endforeach
+						</ul>
+					</li>
+				@endif	
+			@endforeach
+		@else
+			<li>Aucun sport ni épreuve d'associé</li>
+		@endif
+			</ul>
+		</p>
 	</div>
 </div>
 @stop

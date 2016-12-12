@@ -6,17 +6,17 @@ use App\Http\Controllers\BaseController;
 use View;
 use Redirect;
 use Input;
-
+use Request;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use DB;
+
 use App\Models\Sport;
 use App\Models\Arbitre;
 use App\Models\Region;
 use App\Models\Epreuve;
 use App\Models\Participant;
 use App\Models\EpreuveParticipants;
-use Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\Collection;
 use App\Models\Terrain;
 
 /**
@@ -69,11 +69,20 @@ class EpreuvesController extends BaseController {
 	 * @param[in] get int $epreuveId l'id de l'épreuve qu'on sélectionne.
 	 */
 	public function ajtParticipant($epreuveId) {
+		
 		try{
+			
 			$epreuve = Epreuve::findOrFail ( $epreuveId );
 			$sport = Sport::findOrFail( $epreuve->sport_id);
-			$participants = $sport->participants->sortBy('prenom');
+			$participants = $sport->participants->sortBy('region');
 			$epreuveParticipants = $epreuve::find($epreuveId)->participants;
+            if($epreuve->genre == 'mixte'){
+                $participants = $sport->participants->sortBy('prenom');
+            }else{
+                $genreRequis = ($epreuve->genre == 'féminin');
+                $participants = $sport->participants->where('sexe',$genreRequis)->sortBy('prenom');
+            }
+			$epreuveParticipants = ($epreuve::find($epreuveId)->participants);
 		} catch ( ModelNotFoundException $e ) {
 			App::abort ( 404 );
 		}
@@ -100,8 +109,8 @@ class EpreuvesController extends BaseController {
 		}
 
 		if ($epreuve->save ()) {
-			if (is_array ( Input::get ( 'participants' ) )) { //FIXME: si participants n'existe pas, $epreuve est déjà sauvegardée, et ca va planter. 
-				$epreuve->participants()->sync ( array_keys ( Input::get ( 'participants' )));
+			if (is_array ( Input::get ( 'participants' ) )) { //FIXME: protéger par une transaction dans le try/catch
+                $epreuve->participants()->sync ( array_keys ( Input::get ( 'participants' )));
 			} else {
 				$epreuve->participants()->detach();
 			}
@@ -135,56 +144,28 @@ class EpreuvesController extends BaseController {
 	{
 		try {
 			$epreuve = Epreuve::findOrFail($epreuveId);
-			$sportId = $epreuve->sport->id;
+            $sportId = $epreuve->sport->id;
 			$sports = Sport::all();
 			$arbitresEpreuves = $epreuve->arbitres;
+
+            // Cette partie dénombre le nombre de participants dans l'épreuve qui sont de genre
+            // masculin (false) ou féminin (true)
+            $participantsMasculin = $epreuve->participants->where('sexe', false);
+            $participantsFeminin = $epreuve->participants->where('sexe', true);
+            $proportionGenre = array(count($participantsMasculin),count($participantsFeminin));
 			$arbitres = EpreuvesController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresEpreuves);
 			//FIXME: au lieu d'avoir une fonction pour filtrer les arbitres déjà associés à une épreuve, on peut se servir du whereNotIn
 			//       et fournir la liste des ids des arbitresEpreuves
 			//       $arbitres = Arbitre::all()->whereNotIn('id', $arbitresEpreuves->pluck('id')) ->get();
 			$sportId = $this->checkSportId($sports, $sportId);
 			$epreuveTerrains = $this->listerTerrains($epreuveId);
-				
-			return View::make('epreuves.edit', compact('epreuve', 'sports', 'sportId', 'arbitres', 'arbitresEpreuves', 'epreuveTerrains'));
+
+			return View::make('epreuves.edit', compact('epreuve', 'sports', 'sportId', 'proportionGenre', 'arbitres', 'arbitresEpreuves', 'epreuveTerrains'));
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
-	}
-	
-	/**
-	 * Retourne une collection des terrains qui sont associés au sport
-	 * de l'épreuve. Les propriétés 'checked' et 'active' sont ajoutées
-	 * aux terrains pour indiquer si le terrain est associé à l'épreuve.
-	 * 
-	 * @param
-	 * 			[in] int $epreuveId l'id de l'épreuve
-	 * @return
-	 * 			Collection de terrrains
-	 */
-	public function listerTerrains($epreuveId) {
-		$epreuve = Epreuve::findOrFail($epreuveId);
-		$epreuveTerrains = new Collection();
-		$terrains = Terrain::all();
-		foreach ($terrains as $terrain) {
-			foreach ($terrain->sports as $terrSport) {
-				//Vérifie que le sport de l'épreuve est le même que celui du terrain
-				if ($terrSport->id == $epreuve->sport->id) {
-					$terrain->checked = "";
-					$terrain->active = "";
-					//Vérifie que le terrain est déjà associé à l'épreuve
-					foreach ($epreuve->terrains as $terrainAssocie) {
-						if ($terrain->id == $terrainAssocie->id) {
-							$terrain->checked = " checked";
-							$terrain->active = " active";
-						}
-					}
-					$epreuveTerrains->add($terrain);
-				}
-			}
-		}
-		return $epreuveTerrains;
-	}
-	
+    }
+
 	/**
 	 * Affiche une épreuve
 	 *
@@ -199,10 +180,10 @@ class EpreuvesController extends BaseController {
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
 		}
-		return View::make('Epreuves.show', compact('epreuve', 'arbitresEpreuves', 'terrainsEpreuve'));
+
+		return View::make('epreuves.show', compact('epreuve', 'arbitresEpreuves'));
 	}	
 
-	
 	/**
 	 * Entrepose dans la bd une nouvelle épreuve qui sera associée à un sport
 	 */
@@ -216,10 +197,11 @@ class EpreuvesController extends BaseController {
 		}
 		$epreuve = new Epreuve;
 		$epreuve->nom = $input['nom'];
+        $epreuve->genre = $input['genre'];
 		$epreuve->description = $input['description'];
 		$epreuve->sport_id = $sport->id; 
 		if($epreuve->save()) {
-			try {
+			try { //FIXME: protéger par une transaction dans le try/catch
 				$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 				//Vérification qu'il y a bien un arbitre à entrer dans la BD.
                 if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
@@ -242,7 +224,7 @@ class EpreuvesController extends BaseController {
 			return Redirect::back ()->withInput ()->withErrors ( $epreuve->validationMessages () );
 		}
 	}
-	
+
 	/**
 	 * Mise à jour d'une épreuve associée
 	 *
@@ -258,6 +240,7 @@ class EpreuvesController extends BaseController {
 			App::abort ( 404 );
 		}
 		$epreuve->nom = $input ['nom'];
+        $epreuve->genre = $input ['genre'];
 		$epreuve->description = $input ['description'];
 		try {
 			$sport = Sport::findOrFail ( $input ["sportsListe"] );
@@ -265,7 +248,9 @@ class EpreuvesController extends BaseController {
 			App::abort ( 404 );
 		}
 		$epreuve->sport_id = $sport->id;
+
 		if($epreuve->save()) {
+            $epreuve->participants()->sync($this->filtrer_participants($epreuveId));
 			$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
 			//Vérification qu'il y ai bien un arbitre à entrer dans la BD.
             if (EpreuvesController::verifier_existence($arbitresAEntrer)) {
@@ -293,11 +278,45 @@ class EpreuvesController extends BaseController {
 	 */
 	public function destroy($epreuveId) {
 		$epreuve = Epreuve::findOrFail ( $epreuveId );
-		$epreuve->delete ();
+		$epreuve->delete (); //FIXME: protéger par une transaction dans un try/catch
 		
 		return Redirect::action ( 'EpreuvesController@index' );
 	}
-	
+
+    /**
+     * Retourne une collection des terrains qui sont associés au sport
+     * de l'épreuve. Les propriétés 'checked' et 'active' sont ajoutées
+     * aux terrains pour indiquer si le terrain est associé à l'épreuve.
+     *
+     * @param
+     * 			[in] int $epreuveId l'id de l'épreuve
+     * @return
+     * 			Collection de terrrains
+     */
+    public function listerTerrains($epreuveId) {
+        $epreuve = Epreuve::findOrFail($epreuveId);
+        $epreuveTerrains = new Collection();
+        $terrains = Terrain::all();
+        foreach ($terrains as $terrain) {
+            foreach ($terrain->sports as $terrSport) {
+                //Vérifie que le sport de l'épreuve est le même que celui du terrain
+                if ($terrSport->id == $epreuve->sport->id) {
+                    $terrain->checked = "";
+                    $terrain->active = "";
+                    //Vérifie que le terrain est déjà associé à l'épreuve
+                    foreach ($epreuve->terrains as $terrainAssocie) {
+                        if ($terrain->id == $terrainAssocie->id) {
+                            $terrain->checked = " checked";
+                            $terrain->active = " active";
+                        }
+                    }
+                    $epreuveTerrains->add($terrain);
+                }
+            }
+        }
+        return $epreuveTerrains;
+    }
+
 	/**
 	 * retourne la liste des epreuves pour un sport en format JSON
 	 *
@@ -361,12 +380,35 @@ class EpreuvesController extends BaseController {
 		}
 		return $retour;
 	}
-	
-	/**
-	 * filtre les arbitres pour retirer ceux déjà attribués à une épreuve.
-	 * @param array $arbitres
-	 * @param array $arbitresEpreuves
-	 */
+
+    /**
+     * Filtre les participants pour retirer ceux n'ayant pas le bon genre..
+     *
+     * @param int $epreuveId
+     *
+     * @return array
+     */
+    protected function filtrer_participants($epreuveId){
+        try{
+            $epreuve = Epreuve::findOrFail ( $epreuveId );
+            $participants = $epreuve->participants;
+            if ($epreuve->genre != 'mixte'){
+                $genreRequis = $epreuve->genre == 'féminin';
+                $participants = $epreuve->participants->where('sexe',$genreRequis);
+            }
+            return $participants;
+        } catch ( ModelNotFoundException $e ) {
+            App::abort ( 404 );
+        }
+    }
+
+    /**
+     * filtre les arbitres pour retirer ceux déjà attribués à une épreuve.
+     * @param array $arbitres
+     * @param array $arbitresEpreuves
+     *
+     * @return array
+     */
 	protected function filtrer_arbitres($arbitres, $arbitresEpreuves){
 		if ($arbitresEpreuves){
 			foreach ($arbitres as $index => $arbitre){
@@ -379,6 +421,5 @@ class EpreuvesController extends BaseController {
 		}
 		return $arbitres;
 	}
-
 
 }

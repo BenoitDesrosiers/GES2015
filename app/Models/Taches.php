@@ -9,7 +9,7 @@ class Taches extends Model
 	protected $guarded = array('id');
 
 	/** 
-	 * Eloquent relationship: un rôle a plusieurs bénévoles -- pour 
+	 * Eloquent relationship: un rôle a plusieurs bénévoles 
 	 */
 
 	public function benevoles() {
