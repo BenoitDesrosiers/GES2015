@@ -47,7 +47,7 @@ class OrganismesController extends Controller
     public function store(OrganismesRequest $request)
     {
         $organisme = new Organisme($request->all());
-        $organisme->save(); //FIXME: bien qu'on soit protégé par le request, ca peut quand même planté au niveau de la BD. Protéger par un try/catch
+        $organisme->save();
         return Redirect::action('OrganismesController@index');
     }
 
@@ -88,7 +88,7 @@ class OrganismesController extends Controller
         $organisme->telephone = Input::get('telephone');
         $organisme->description = Input::get('description');
 
-        $organisme->save(); //FIXME: bien qu'on soit protégé par le request, ca peut quand même planté au niveau de la BD. Protéger par un try/catch
+        $organisme->save();
         return Redirect::action('OrganismesController@index');
     }
 
@@ -101,7 +101,7 @@ class OrganismesController extends Controller
     public function destroy($id)
     {
         $organisme = Organisme::findOrFail($id);
-        $organisme->delete(); //FIXME: proteger par un try/catch et une transaction
+        $organisme->delete();
         return Redirect::action('OrganismesController@index');
     }
 }

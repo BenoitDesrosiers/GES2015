@@ -2,6 +2,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Models\DelegueCourriel;
+use App\Models\DelegueTelephone;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use View;
 use Redirect;
@@ -11,8 +14,6 @@ use DateTime;
 use App\Models\Delegue;
 use App\Models\Region;
 use App\Models\Role;
-use App\Models\DelegueCourriel;
-use App\Models\DelegueTelephone;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
@@ -104,7 +105,6 @@ class DeleguesController extends BaseController {
             $delegue->adresse = $input['adresse'];
 
             if($delegue->save()) {
-				//FIXME protéger par une transaction dans le try/catch
                 //		Associer les téléphones au délégué.
                 $telephones = Input::get('telephone');
                 foreach($telephones as $telephone) {
@@ -295,7 +295,7 @@ class DeleguesController extends BaseController {
 	{
 		try {
 			$delegue = Delegue::findOrFail($id);
-			$delegue->delete(); //FIXME protéger par une transaction dans le try/catch
+			$delegue->delete();
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}

@@ -3,21 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Adresse;
+use App\Models\Telephone;
 use DB;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\Collection;
+use phpDocumentor\Reflection\Types\Boolean;
 use View;
 use Redirect;
 use Input;
 use App;
 use DateTime;
-
 use App\Models\Participant;
 use App\Models\Region;
 use App\Models\Sport;
-use App\Models\Adresse;
-use App\Models\Telephone;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Le controller pour les participants

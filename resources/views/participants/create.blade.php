@@ -67,21 +67,21 @@
         </div>
         <div id="conteneur-adresses">
             <div class="form-group conteneur-adresse">
-                {!! Form::label('adresse-adresse-0', 'Adresse:') !!}
-                {!! Form::text('adresse[adresse]','', ['id' => 'adresse-adresse-0', 'class' => 'form-control']) !!}
+                {!! Form::label('adresse-adresse-1', 'Adresse:') !!}
+                {!! Form::text('adresse_adresse[]','', ['id' => 'adresse-adresse-1', 'class' => 'form-control']) !!}
 
-                {!! Form::label('adresse-description-0', 'Description de l\'adresse:') !!}
-                {!! Form::text('adresse[description]','', ['id' => 'adresse-description-0', 'class' => 'form-control']) !!}
+                {!! Form::label('adresse-description-1', 'Description de l\'adresse:') !!}
+                {!! Form::text('adresse_description[]','', ['id' => 'adresse-description-1', 'class' => 'form-control']) !!}
             </div>
         </div>
         <button onclick="ajouterAdresse()" id="bouton-ajouter-adresse" disabled class="btn-success" type="button">Ajouter une adresse</button>
         <div id="conteneur-telephones">
             <div class="form-group conteneur-telephone">
-                {!! Form::label('telephone-numero-0', 'Numéro de téléphone:') !!}
-                {!! Form::text('telephone_numero[0]','', ['id' => 'telephone-numero-0', 'class' => 'form-control']) !!}
+                {!! Form::label('telephone-numero-1', 'Numéro de téléphone:') !!}
+                {!! Form::text('telephone_numero[]','', ['id' => 'telephone-numero-1', 'class' => 'form-control']) !!}
 
-                {!! Form::label('telephone-description-0', 'Description du téléphone:') !!}
-                {!! Form::text('telephone_description[0]','', ['id' => 'telephone-description-0', 'class' => 'form-control']) !!}
+                {!! Form::label('telephone-description-1', 'Description du téléphone:') !!}
+                {!! Form::text('telephone_description[]','', ['id' => 'telephone-description-1', 'class' => 'form-control']) !!}
             </div>
         </div>
         <button onclick="ajouterTelephone()" id="bouton-ajouter-telephone" disabled class="btn-success" type="button">Ajouter un téléphone</button>

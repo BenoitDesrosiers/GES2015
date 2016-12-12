@@ -26,7 +26,6 @@ class SportsEpreuvesController extends BaseController
 	 */
 	public function index($sportId)
 	{	
-		
 		try {
 			$sport = Sport::findOrFail($sportId);
 		} catch (ModelNotFoundException $e) {
@@ -34,7 +33,7 @@ class SportsEpreuvesController extends BaseController
 		} catch (Exception $e) {
 			return  View::make('erreurs.index')->with('e',$e);
 		} 
-		$epreuves = $sport->epreuves;
+		$epreuves = $sport->epreuves; 
 		return View::make('sportsEpreuves.index', compact('sport','epreuves')); 
 	}
 	
@@ -105,7 +104,7 @@ class SportsEpreuvesController extends BaseController
 		$epreuve->nom = $input['nom'];
 		$epreuve->description = $input['description'];
 		if($epreuve->save()) {
-			try { //FIXME: protéger par une transaction dans le try/catch
+			try {
 				//associe le sport aux épreuves (one to many)
 				$epreuve = $sport->epreuves()->save($epreuve);
 			} catch (Exception $e) {
@@ -152,9 +151,9 @@ class SportsEpreuvesController extends BaseController
 	public function destroy($sportId, $epreuveId)
 	{
 		$epreuve = Epreuve::findOrFail($epreuveId);
-		$epreuve->delete(); //FIXME: protéger par une transaction dans le try/catch
+		$epreuve->delete();
 		
-		return Redirect::action('SportsEpreuvesController@index', $sportId);
+		return Redirect::action('SportsEpreuvesController@index', $sportId);		
 	}
 	
 	

@@ -14,8 +14,8 @@
  * Ajoute le 'listener' au premier champ de téléphone.
  */
 $(document).ready(function() {
-	$('#conteneur-telephones').find('#telephone-numero-0').on('input', gererEtatBoutonsAjout);
-	$('#conteneur-adresses').find('#adresse-adresse-0').on('input', gererEtatBoutonsAjout);
+	$('#conteneur-telephones').find('#telephone-numero-1').on('input', gererEtatBoutonsAjout);
+	$('#conteneur-adresses').find('#adresse-adresse-1').on('input', gererEtatBoutonsAjout);
 	gererEtatBoutonsAjout();
 });
 
@@ -63,12 +63,10 @@ function ajouterTelephone() {
 						.children().last();
 	elementAjoute.find('input[name*="telephone_numero"]')
 				 .attr('id', 'telephone-numero-' + nouveauTelephoneId)
-				 .attr('name', 'telephone-numero[' + nouveauTelephoneId + ']')
 				 //Ajoute le 'listener' pour changer l'état du bouton d'ajout.
 				 .on('input', gererEtatBoutonsAjout);
 	elementAjoute.find('input[name*="telephone_description"]')
-		.attr('id', 'telephone-description-' + nouveauTelephoneId)
-		.attr('name', 'telephone-description[' + nouveauTelephoneId + ']');
+				 .attr('id', 'telephone-description-' + nouveauTelephoneId);
 	//S'assurer que le bouton se re-désactive.
 	gererEtatBoutonsAjout();
 }
@@ -83,9 +81,9 @@ function ajouterAdresse() {
 	var elementAAjouter =
 		'<div class="form-group conteneur-adresse">' +
 		'	<label for="">Adresse:</label>' +
-		'	<input type="text" name="adresse[adresse]" id="" class="form-control" />' +
+		'	<input type="text" name="adresse_adresse[]" id="" class="form-control" />' +
 		'	<label for="">Description de l\'adresse:</label>' +
-		'	<input type="text" name="adresse[description]" id="" class="form-control" />' +
+		'	<input type="text" name="adresse_description[]" id="" class="form-control" />' +
 		'	<button onclick="retirerConteneur($(this).parent())" class="btn-danger" type="button" >Retirer</button>' +
 		'</div>';
 	var nouvelleAdresseId = parseInt(
@@ -130,7 +128,7 @@ function gererEtatBoutonsAjout() {
 	var derniereEntreeAdresse= $('#conteneur-adresses')
 		.children()
 		.last()
-		.find('input[name*="adresse[adresse]"]')
+		.find('input[name*="adresse_adresse"]')
 		[0];
 	if(derniereEntreeAdresse.value != "") {
 		$('#bouton-ajouter-adresse').removeAttr("disabled");
