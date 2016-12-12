@@ -17,6 +17,28 @@ class TestAssociationsBenevolesTaches extends TestCase
         $this->assertTrue(Schema::hasTable('benevole_taches'), "La table d'associations 'benevole_taches' n'existe pas!");
     }
 
+     
+    /**
+     * On vérifie que l'association bénévole tâche est sauvegardé de la BD correctement
+     */
+     /** @test */
+    public function test_sauvegarde_benevole_tache()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+        
+        $tache = factory(App\Models\Taches::class)->create();
+        $benevole = factory(App\Models\Benevole::class)->create();
+        // associer une tâche à un bénévole
+        $benevole->taches()->sync(['benevole_id' => $benevole->id, 'taches_id' => $tache->id]);
+        
+        
+        $this->assertSessionMissing(['errors']);
+        $this->SeeInDatabase('benevole_taches', ['benevole_id' => $benevole->id, 'taches_id' => $tache->id]);
+
+    }
+    
+
      /**
      * On vérifie que l'association bénévole tâche est enlevée de la BD correctement
      */
