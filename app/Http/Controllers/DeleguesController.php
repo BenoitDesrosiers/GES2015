@@ -2,17 +2,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Models\DelegueCourriel;
+use App\Models\DelegueTelephone;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use View;
 use Redirect;
 use Input;
 use DateTime;
-
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use League\Flysystem\Exception;
 use App\Models\Delegue;
 use App\Models\Region;
 use App\Models\Role;
-use App\Models\DelegueCourriel;
-use App\Models\DelegueTelephone;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
@@ -32,7 +35,8 @@ class DeleguesController extends BaseController {
 	{
 		try {
 			$delegues = Delegue::all()->sortby('nom');
-			return View::make('delegues.index', compact('delegues'));
+            $regions = Region::all()->sortby('nom');
+			return View::make('delegues.index', compact('delegues','regions'));
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
@@ -104,7 +108,6 @@ class DeleguesController extends BaseController {
             $delegue->adresse = $input['adresse'];
 
             if($delegue->save()) {
-				//FIXME protéger par une transaction dans le try/catch
                 //		Associer les téléphones au délégué.
                 $telephones = Input::get('telephone');
                 foreach($telephones as $telephone) {
@@ -295,11 +298,39 @@ class DeleguesController extends BaseController {
 	{
 		try {
 			$delegue = Delegue::findOrFail($id);
-			$delegue->delete(); //FIXME protéger par une transaction dans le try/catch
+			$delegue->delete();
 		} catch(ModelNotFoundException $e) {
 			App::abort(404);
 		}
 		return Redirect::action('DeleguesController@index');
 	
 	}
+
+    /**
+     * liste les délégués d'une région.
+     * @param Request $request L'id d'un région.
+     * @return mixed $delegues La liste des délégués selon une région.
+     */
+    public function listerDelegues(Request $request)
+    {
+
+        if ($request->ajax())
+        {
+            $region_id = $request->input('region_id');
+            if ( isset($region_id) )
+                if ($region_id == 0){
+                    return Delegue::with('roles','region')
+                        ->orderBy('region_id')
+                        ->get();
+                }
+                else{
+                    return Delegue::with('roles','region')
+                        ->where('region_id', $region_id)
+                        ->orderBy('nom')
+                        ->get();
+                }
+        }
+        App::abort(403);
+    }
 }
+

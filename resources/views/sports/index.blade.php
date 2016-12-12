@@ -40,7 +40,6 @@
 				<td class="hidden-sm hidden-xs"><a href="{{ $sport->url_page_officielle }}">Lien</a></td>
 				<td class="hidden-xs"><?php if ($sport->tournoi == 1) {echo "Oui";} else {echo "Non";} ?></td>
 				<td><a href="{{ action('SportsController@edit',$sport->id) }}" class="btn btn-info">Modifier</a></td>
-				<td><a href="{{ action('SportsArbitresController@index',$sport->id) }}" class="btn btn-info">Arbitres</a></td>
 				<td>{!! Form::open(array('action' => array('SportsController@destroy',$sport->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}
 					<button type="submit" href="{{ URL::route('sports.destroy', $sport->id) }}" class="btn btn-danger btn-mini">Effacer</button>
 					{!! Form::close() !!}   {{-- méthode pour faire le delete tel que décrit sur http://www.codeforest.net/laravel-4-tutorial-part-2 , 

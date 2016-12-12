@@ -20,8 +20,9 @@
 		@foreach($organismes as $organisme)
 			<tr class="rangeeOrganisme" >
 				<td>
-					<!-- Servira à afficher les contacts lorsqu'ils seront instaurés dans le site. -->
-					<!-- <button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherContacts(this)"/> -->
+					@if (!$organisme->contacts->isEmpty())
+						<button type="submit" class="btn btn-default btn-mini glyphicon glyphicon-plus" onClick="afficherContacts(this)"/>
+					@endif
 				</td>
 				<td>
 					<a href="{!! action('OrganismesController@show', $organisme->id) !!}">
@@ -46,11 +47,29 @@
 					<a href="{!! action('OrganismesController@edit', $organisme->id) !!}" class="btn btn-info">Modifier</a>
 				</td>
 				<td>
-					{{ Form::open(array('action' => array('OrganismesController@destroy',$organisme->id), 'method' => 'delete', 'data-confirm' => 'Voulez-vous vraiment supprimer cet organisme?')) }}
+					{{ Form::open(array('action' => array('OrganismesController@destroy', $organisme->id), 'method' => 'delete', 'data-confirm' => 'Voulez-vous vraiment supprimer cet organisme ainsi que tous ses contacts?')) }}
 						<button type="submit" class="btn btn-danger btn-mini">Supprimer</button>
 					{{ Form::close() }}
 				</td>
 			</tr>
+
+			@if(!$organisme->contacts->isEmpty())
+					<tr class="active rangeeContact">
+						<td/>
+						<td/>
+						<td colspan="5">
+							<ul>
+								@foreach($organisme->contacts as $contact)
+									<li>
+										<a href="{!! action('OrganismesController@show', $organisme->id) !!}">
+											{!! $contact->nom !!}, {!! $contact->prenom !!}
+										</a>
+									</li>
+								@endforeach
+							</ul>
+						</td>
+					</tr>
+				@endif
 		@endforeach
 	</table>
 @stop

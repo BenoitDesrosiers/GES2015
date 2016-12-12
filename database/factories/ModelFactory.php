@@ -22,6 +22,15 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+
+$factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) {
+    return [
+        'nomOrganisme' => $faker->name,
+        'telephone' => $faker->tollFreePhoneNumber,
+        'description' => $faker->sentence
+    ];
+});
 		
 $factory->define(App\Models\Participant::class, function (Faker\Generator $faker) {
 	return [
@@ -36,9 +45,13 @@ $factory->define(App\Models\Participant::class, function (Faker\Generator $faker
 
 $factory->define(App\Models\Region::class, function (Faker\Generator $faker) {
 	return [
-		'nom' => $faker->lastName,
-		'tournoi' => 0,
-		'saison' => 'h'
+        'nom' => $faker->name,
+        'nom_court' => $faker->name,
+        'or' => null,
+        'argent' => null,
+        'bronze' => null,
+        'points' => null,
+        'url_logo' => ""
 	];
 
 });
@@ -67,6 +80,7 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 	];
 });
 
+
 // Pour les tests de 'associationTest'
 	$factory->define(App\Models\Association::class, function (Faker\Generator $faker) {
 		return [
@@ -75,3 +89,45 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 				'description' => $faker->sentence(3, TRUE)
 		];
 	});
+
+$factory->define(App\Models\Delegue::class, function (Faker\Generator $faker) {
+    return [
+        'nom' => $faker->name,
+        'prenom' => $faker->name,
+        'region_id' => factory(App\Models\Region::class)->create()->id,
+        'role_id' => 0,
+        'accreditation' => rand(0,1),
+        'sexe' => rand(0,1),
+        'date_naissance' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'adresse' => $faker->address
+    ];
+});
+
+$factory->define(App\Models\Responsable::class, function (Faker\Generator $faker){
+	return [
+		'nom' => $faker->name,
+		// Le téléphone doit être 10 nombres collés et $faker->tollFreePhoneNumber ne 
+		// retourne pas une valeur valide pour le système et 2147483647 sinon ça donne
+		// une erreur sur Windows. 
+		'telephone' => $faker->numberBetween(1000000000, 2147483647),
+	];
+});
+
+$factory->define(App\Models\Contact::class, function (Faker\Generator $faker) {
+	return [
+			'prenom' => $faker->firstNameFemale,
+			'nom'=> $faker->lastName,
+			'telephone'=> $faker->tollFreePhoneNumber,
+			'role' => $faker->jobTitle,
+			'organisme_id' => factory(App\Models\Organisme::class)->create()->id
+	];
+});
+
+$factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) {
+	return [
+			'nomOrganisme' => $faker->company,
+			'telephone'=> $faker->tollFreePhoneNumber,
+			'description'=> $faker->catchPhrase,
+	];
+});
+

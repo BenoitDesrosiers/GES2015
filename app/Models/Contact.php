@@ -17,13 +17,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Organisme extends Model
+class Contact extends Model
 {
-	public $table = "organismes";
+    public $table = "contacts";
+
     protected $guarded = array('id');
 
-    public function contacts()
+    protected $fillable = ['prenom', 'nom', 'telephone', 'role'];
+
+    public function organisme()
     {
-    	return $this->hasMany('App\Models\Contact');
+    	return $this->belongsTo('App\Models\Organisme');
     }
 }

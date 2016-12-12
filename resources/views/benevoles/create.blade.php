@@ -45,21 +45,6 @@
 			{!! Form::text('accreditation',null, ['class' => 'form-control']) !!}
 			{{ $errors->first('accreditation') }}
 		</div>
-		    <div class="form-group">
-            {!! Form::label('naissance', '*Date de naissance:') !!}
-            <br/>
-            {!! Form::select('annee_naissance',$listeAnnees, $anneeDefaut,['style' => 'width:4em!important;']) !!}
-            -
-            {!! Form::select('mois_naissance',$listeMois, $moisDefaut, ['style' => 'width:3em!important;']) !!}
-            -
-            {!! Form::select('jour_naissance',$listeJours, $jourDefaut, ['style' => 'width:3em!important;']) !!}
-            {{ $errors->first('naissance') }}
-        </div>
-		<div class="form-group">
-			{!! Form::label('sexe', 'Sexe :') !!} 
-			{!! Form::select('sexe', ['masculin' => 'Masculin', 'feminin' => 'Féminin', 'autre' => 'Autre']); !!}
-			{{ $errors->first('sexe') }}
-		</div>
         
         <div class="form-group">
 			{!! Form::label('verification', 'Vérification :') !!} 
@@ -87,22 +72,6 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
-			{!! Form::label('terrains', 'Terrains:') !!} 
-			<div class="row">
-				<?php
-					foreach ($terrains as $terrain) {
-				?>
-				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 button-group" data-toggle="buttons">
-			        <label class="btn btn-default btn-block">
-			            <input name="terrain[{{ $terrain->id }}]" type="checkbox"> {{ $terrain->nom }}
-			        </label><br/>
-			    </div>
-				<?php
-					}
-				?>
-			</div>
-		</div>
 		<div class="form-group">
 			{!! Form::button('Créer', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
 			<a href="{{ action('BenevolesController@index') }}" class="btn btn-danger">Annuler</a>

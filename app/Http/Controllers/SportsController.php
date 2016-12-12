@@ -8,14 +8,13 @@ use Input;
 
 use App\Models\Sport;
 use App\Models\Terrain;
-use App\Models\Arbitre;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
  * Le controller pour les sports
  * 
  * @author benou
- * 		   Francis M
- * @version 0.1.1
+ * @version 0.1
  */
 class SportsController extends BaseController {
 
@@ -45,8 +44,7 @@ class SportsController extends BaseController {
 	{
 		try {
 			$terrains = Terrain::all();
-			$arbitres = Arbitre::all();
-			return View::make('sports.create', compact('terrains', 'arbitres'));
+			return View::make('sports.create', compact('terrains'));
 		} catch(Exception $e) {
 			App::abort(404);
 		}	
@@ -74,29 +72,15 @@ class SportsController extends BaseController {
 			$sport->url_logo = $input['url_logo'];
 			$sport->url_page_officielle = $input['url_page_officielle'];
 			$sport->tournoi = $input['tournoi'];
-			$arbitresSports = $sport->arbitres;
-			$arbitres = SportsController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresSports);
+			
 			if($sport->save()) {
-				if (is_array(Input::get('terrain'))) { //FIXME: protéger par une transaction dans le try/catch
-					$sport->terrains()->sync(array_keys(Input::get('terrain')));
-				}
-				else {
-					$sport->terrains()->detach();
-				}
-				$arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
-				//Vérification qu'il y ait bien un arbitre à entrer dans la BD.
-				if (SportsController::verifier_existence($arbitresAEntrer)) {
-					 
-					$sport->arbitres()->sync($arbitresAEntrer);
-				}
-				else {
-					$sport->arbitres()->detach();
-				}
-				return Redirect::action('SportsController@index')->with('status', 'Sport mis à jour!');
-			}
-			else {
+				if (is_array(Input::get('terrain'))) {
+	                    $sport->terrains()->attach(array_keys(Input::get('terrain')));
+	                }
+				return Redirect::action('SportsController@index')->with('status', 'Sport ajouté!');
+			} else {
 				return Redirect::back()->withInput()->withErrors($sport->validationMessages());
-			}
+			}	
 		} catch(Exception $e) {
 			App::abort(404);
 		}
@@ -131,10 +115,8 @@ class SportsController extends BaseController {
 			$sport = Sport::findOrFail($id);
 			$terrainSports = Sport::find($id)->terrains; //FIXME: on a déjà le sport
 			$terrains = Terrain::all();
-			$arbitres = Arbitre::all();
-			$arbitresSports = $sport->arbitres;
-			$arbitres = SportsController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresSports);
-			return View::make('sports.edit', compact('sport', 'terrainSports', 'terrains', 'arbitres', 'arbitresSports'));
+
+			return View::make('sports.edit', compact('sport', 'terrainSports', 'terrains'));
 		} catch(Exception $e) {
 			App::abort(404);
 		}
@@ -163,25 +145,15 @@ class SportsController extends BaseController {
 			$sport->url_logo = $input['url_logo'];
 			$sport->url_page_officielle = $input['url_page_officielle'];
 			$sport->tournoi = $input['tournoi'];
+			
 			if($sport->save()) {
-				if (is_array(Input::get('terrain'))) { //FIXME: protéger par une transaction dans le try/catch
+				if (is_array(Input::get('terrain'))) {
                     $sport->terrains()->sync(array_keys(Input::get('terrain')));
-                } 
-                else {
+                } else {
                     $sport->terrains()->detach();
                 }
-                $arbitresAEntrer = explode(",",Input::get('arbitresUtilises'));
-                //Vérification qu'il y ai bien un arbitre à entrer dans la BD.
-                if (SportsController::verifier_existence($arbitresAEntrer)) {
-                	
-                	$sport->arbitres()->sync($arbitresAEntrer);
-                }
-                else {
-                	$sport->arbitres()->detach();
-                }
-                return Redirect::action('SportsController@index')->with('status', 'Sport mis à jour!');
-			} 
-			else {
+				return Redirect::action('SportsController@index')->with('status', 'Sport mis à jour!');
+			} else {
 				return Redirect::back()->withInput()->withErrors($sport->validationMessages());
 			}
 		} catch(Exception $e) {
@@ -199,13 +171,14 @@ class SportsController extends BaseController {
 	{
 		try {
 			$sport = Sport::findOrFail($id);
-			$sport->delete(); //FIXME: protéger par une transaction dans le try/catch
+			$sport->delete();
 			
 			return Redirect::action('SportsController@index');
 		} catch(Exception $e) {
 			App::abort(404);
 		}
 	}
+
 
 	/**
 	 * Vérifie si les arbitres sont sous formes d'array et si il y en a 0, ça veut dire qu'il n'y a pas d'arbitres.
