@@ -91,7 +91,22 @@ class AboutController extends BaseController {
                     "Marc Plante",
                     "Ajout de plusieurs téléphones et courriels pour les délégués/
                      Grouper les délégués par région dans l'index"
-                )
+                ),
+				array(
+                    "Étienne Drolet",
+                    "CRUD des organismes.",
+					"CRUD des contacts des organismes."
+                ),
+
+            	array(
+            		"Francis Mathieu",
+           			"Ajouter un arbitre à un sport"
+            	),
+				
+				array(
+            		"Maxime Laflamme",
+           			"Associer des terrains aux bénévoles. Associer les bénévoles à une épreuve."
+            	)
             )
         );
 

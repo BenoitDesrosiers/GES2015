@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\OrganismesRequest;
 use Input;
 use Redirect;
+use App;
 use App\Models\Organisme;
+use App\Models\Contact;
 use View;
 
 /**
@@ -25,7 +27,8 @@ class OrganismesController extends Controller
     public function index()
     {
         $organismes = Organisme::all();
-        return View::make('organismes.index', compact('organismes'));
+        $contacts = Contact::all();
+        return View::make('organismes.index', compact('organismes', 'contacts'));
     }
     
     /**
@@ -46,9 +49,13 @@ class OrganismesController extends Controller
      */
     public function store(OrganismesRequest $request)
     {
-        $organisme = new Organisme($request->all());
-        $organisme->save();
-        return Redirect::action('OrganismesController@index');
+        try {
+            $organisme = new Organisme($request->all());
+            $organisme->save();
+            return Redirect::action('OrganismesController@index');
+        } catch (Exception $e) {
+            App:abort(404);
+        }
     }
 
     /**
@@ -60,7 +67,8 @@ class OrganismesController extends Controller
     public function show($id)
     {
         $organisme = Organisme::findOrFail($id);
-        return View::make('organismes.show', compact('organisme'));
+        $contacts = Contact::all();
+        return View::make('organismes.show', compact('organisme', 'contacts'));
     }
 
     /**
@@ -83,6 +91,7 @@ class OrganismesController extends Controller
      */
     public function update(OrganismesRequest $request, $id)
     {
+<<<<<<< HEAD
         $organisme = Organisme::findOrFail($id);
         $organisme->nomOrganisme = Input::get('nomOrganisme');
         $organisme->telephone = Input::get('telephone');
@@ -90,6 +99,18 @@ class OrganismesController extends Controller
 
         $organisme->save();
         return Redirect::action('OrganismesController@index');
+=======
+        try {
+            $organisme = Organisme::findOrFail($id);
+            $organisme->nomOrganisme = Input::get('nomOrganisme');
+            $organisme->telephone = Input::get('telephone');
+            $organisme->description = Input::get('description');
+            $organisme->save();
+            return Redirect::action('OrganismesController@index');
+        } catch (Exception $e) {
+            App:abort(404);
+        }
+>>>>>>> dev
     }
 
     /**
@@ -100,8 +121,22 @@ class OrganismesController extends Controller
      */
     public function destroy($id)
     {
+<<<<<<< HEAD
         $organisme = Organisme::findOrFail($id);
         $organisme->delete();
         return Redirect::action('OrganismesController@index');
+=======
+        try {
+            $organisme = Organisme::findOrFail($id);
+            $contacts = Contact::where('organisme_id', $id)->get();
+            foreach ($contacts as $contact) {
+                $contact->delete();
+            }
+            $organisme->delete(); //FIXME: proteger par un try/catch et une transaction
+            return Redirect::action('OrganismesController@index');
+        } catch (Exception $e) {
+            App:abort(404);
+        }
+>>>>>>> dev
     }
 }

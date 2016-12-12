@@ -26,6 +26,7 @@ Auth::routes();
 Route::group(['middleware'=>'auth'], function() {
 
 	Route::resource('organismes','OrganismesController');
+	Route::resource('organismes.contacts', 'ContactsController');
 	
 	Route::resource('sports','SportsController');
 	Route::resource('sports.epreuves','SportsEpreuvesController');

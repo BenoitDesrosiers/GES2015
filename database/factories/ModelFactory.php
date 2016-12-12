@@ -102,3 +102,21 @@ $factory->define(App\Models\Responsable::class, function (Faker\Generator $faker
 		'telephone' => $faker->numberBetween(1000000000, 2147483647),
 	];
 });
+
+$factory->define(App\Models\Contact::class, function (Faker\Generator $faker) {
+	return [
+			'prenom' => $faker->firstNameFemale,
+			'nom'=> $faker->lastName,
+			'telephone'=> $faker->tollFreePhoneNumber,
+			'role' => $faker->jobTitle,
+			'organisme_id' => factory(App\Models\Organisme::class)->create()->id
+	];
+});
+
+$factory->define(App\Models\Organisme::class, function (Faker\Generator $faker) {
+	return [
+			'nomOrganisme' => $faker->company,
+			'telephone'=> $faker->tollFreePhoneNumber,
+			'description'=> $faker->catchPhrase,
+	];
+});
