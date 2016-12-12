@@ -4,10 +4,8 @@ Homestead.yaml
 start_server.bat
 TODO.txt
 Proposition.txt
-#.env   <<<<< a remettre plus tard, je l'ai enlevé juste pour que ca soit moins compliqué pour le étudiants. 
+.env
 .settings/org.eclipse.core.resources.prefs
 *~
 /.idea
 composer.lock
-_ide_helper.php
-.phpstorm.meta.php
