@@ -1,5 +1,7 @@
+﻿/.idea
 /vendor
 /node_modules
+composer.lock
 Homestead.yaml
 start_server.bat
 TODO.txt
@@ -7,6 +9,7 @@ Proposition.txt
 .env
 .settings/org.eclipse.core.resources.prefs
 *~
-composer.lock
 _ide_helper.php
+.phpstorm.meta.php
+composer.lock
 .idea

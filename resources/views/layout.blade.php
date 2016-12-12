@@ -24,15 +24,23 @@
         		<ul class="nav nav-justified">
 					<?php $route = explode('.', Route::currentRouteName())[0] ?>
           			<li<?php if ($route == "") { ?> class="active"<?php } ?>><a href="{{ action('HomeController@index') }}">Accueil</a></li>
-         			<li<?php if ($route == "sports") { ?> class="active"<?php } ?>><a href="{{ action('SportsController@index') }}">Sports</a></li>
+					<li<?php if ($route == "sports") { ?> class="active"<?php } ?>><a href="{{ action('SportsController@index') }}">Sports</a></li>
+					<li {!! ($route == "conditionsParticulieres") ? 'class="active"' : '' !!}>
+						<a href="{{ action('ConditionsParticulieresController@index') }}">
+							Conditions&nbsp;particulières
+						</a>
+					</li>
           			<li<?php if ($route == "epreuves") { ?> class="active"<?php } ?>><a href="{{ action('EpreuvesController@index') }}">Épreuves</a></li>
+          			<li<?php if ($route == "organismes") { ?> class="active"<?php } ?>><a href="{{ action('OrganismesController@index') }}">Organismes</a></li>
           			<li<?php if ($route == "participants") { ?> class="active"<?php } ?>><a href="{{ action('ParticipantsController@index') }}">Participants</a></li>
           			<li<?php if ($route == "equipes") { ?> class="active"<?php } ?>><a href="{{ action('EquipesController@index') }}">Équipes</a></li>
          			<li<?php if ($route == "systeme") { ?> class="active"<?php } ?>><a href="{{ action('SystemeController@index') }}">Système</a></li>
          			<li<?php if ($route == "cafeterias") { ?> class="active"<?php } ?>><a href="{{ action('CafeteriasController@index') }}">Cafétérias</a></li>
                     <li<?php if ($route == "terrains") { ?> class="active"<?php } ?>><a href="{{ action('TerrainsController@index') }}">Terrains</a></li>
+					<li<?php if ($route == "evenements") { ?> class="active"<?php } ?>><a href="{{ action('EvenementsController@index') }}">Événements</a></li>
           			<li<?php if ($route == "resultats") { ?> class="active"<?php } ?>><a href="{{ action('ResultatsController@index') }}">Résultats</a></li>
           			<li<?php if ($route == "benevoles") { ?> class="active"<?php } ?>><a href="{{ action('BenevolesController@index') }}">Bénévoles</a></li>
+          			<li<?php if ($route == "taches") { ?> class="active"<?php } ?>><a href="{{ action('TachesController@index') }}">Tâches</a></li>
           			<li<?php if ($route == "arbitres") { ?> class="active"<?php } ?>><a href="{{ action('ArbitresController@index') }}">Arbitres</a></li>
 					<li<?php if ($route == "pointages") { ?> class="active"<?php } ?>><a href="{{ action('PointagesController@index') }}">Pointages</a></li>
 					<li<?php if ($route == "codes") { ?> class="active"<?php } ?>><a href="{{ action('CodesController@index') }}">Codes</a></li>

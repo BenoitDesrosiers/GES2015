@@ -3,7 +3,7 @@
  * La classe Delegue
  * 
  * 
- * @author SteveL
+ * @author SteveL, Marc P
  * @version 0.1
  */
  
@@ -49,6 +49,30 @@ class Delegue extends EloquentValidating {
 	public function nombreRoles() {
 		return $this->roles->count();
 	}
+
+
+    /**
+     * Un délégué a plusieurs courriels.
+     *
+     * @author Marc P
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function courriels() {
+        return $this->hasMany('App\Models\DelegueCourriel');
+    }
+
+    /**
+     *
+     * Un délégué a plusieurs téléphones.
+     *
+     * @author Marc P
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function telephones() {
+        return $this->hasMany('App\Models\DelegueTelephone');
+    }
 	
 	
 	 /**
@@ -78,9 +102,7 @@ class Delegue extends EloquentValidating {
 			'accreditation' => 'required|boolean',
 			'sexe' => 'required|boolean',
 			'date_naissance' => 'required|date',
-     		'adresse' => 'string',
-            'telephone' => 'string',
-			'courriel' => 'email|string|unique:delegues,courriel'.($this->id ? ",$this->id" : '')
+     		'adresse' => 'string'
 		    ];
     }
 }
