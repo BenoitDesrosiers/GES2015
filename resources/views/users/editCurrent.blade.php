@@ -54,7 +54,7 @@
             <!--    Boutons Sauvegarder et Annuler -->
             <div class="form-group">
                 {!! Form::button('Sauvegarder', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-                <a href="{{ action('UsagersController@index') }}" class="btn btn-danger">Annuler</a>
+                <a href="{{ action('HomeController@index') }}" class="btn btn-danger">Annuler</a>
             </div>
             {!! Form::close() !!}
         </div>

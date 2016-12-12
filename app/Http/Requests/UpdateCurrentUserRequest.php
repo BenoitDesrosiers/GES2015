@@ -35,4 +35,16 @@ class UpdateCurrentUserRequest extends FormRequest
             'mot_de_passe' => 'min:6|max:60|regex:/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+)$/'
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'mot_de_passe.min' => 'Mauvais mot de passe! Longueur minimum: 6',
+            'mot_de_passe.max' => 'Mauvais mot de passe! Longueur maximum: 60',
+            'mot_de_passe.regex' => 'Mauvais mot de passe! Au minimum: Une lettre minuscule, une lettre majuscule et un chiffre minimum.'
+        ];
+    }
 }

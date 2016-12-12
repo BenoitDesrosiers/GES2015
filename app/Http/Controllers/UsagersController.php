@@ -284,4 +284,14 @@ class UsagersController extends Controller
             App:abort(404);
         }
     }
+
+    /**
+     * @param $courriel
+     *
+     */
+    public function courriel_deja_pris($courriel){
+        $libre = false;
+
+        return $libre;
+    }
 }
