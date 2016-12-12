@@ -100,8 +100,7 @@ class ContactsController extends Controller
         try {
             $contact = Contact::findOrFail($contactId);
             $contact->delete();
-            $request->session()->flash('success_delete', 'Le contact a été supprimé avec succès!');
-            return redirect()->action('OrganismesController@show', ['id' => $organismeId]);
+            return redirect()->action('OrganismesController@show', ['id' => $organismeId])->with('success_delete', 'Le contact a été supprimé avec succès!');
         } catch (Exception $e) {
             App:abort(404);
         }
