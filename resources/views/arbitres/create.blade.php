@@ -67,6 +67,39 @@
 			{{ $errors->first('numero_telephone') }}
 		</div>
 
+		<!--    Tableau d'entrées pour les disponibilités -->
+		<div class="form-group">
+			{!! Form::label('disponibilites', 'Disponibilités :') !!}
+			<br>
+			<button id="ajoutDisponibilite" class="btn btn-info" type="button" onClick="ajouterDisponibilite()">Ajouter une disponibilité</button>
+			<br>
+			<table id="tableDisponibilite" class="tableArbitre">
+				<thead>
+				<tr>
+					<th>Jour</th>
+					<th>Mois</th>
+					<th>Annee</th>
+					<th>Heure début (HH:MM)</th>
+					<th>Heure fin (HH:MM)</th>
+					<th>Commentaire</th>
+				</tr>
+				</thead>
+				<tbody >
+				<tr class="rowDisponibilite">
+					<td class="dataJour">{!! Form::text('jour[1]',null, ['maxlength' => '2', 'class' => 'form-control']) !!}</td>
+					<td class="dataMois">{!! Form::text('mois[1]',null, ['maxlength' => '2', 'class' => 'form-control']) !!}</td>
+					<td class="dataAnnee">{!! Form::text('annee[1]',null, ['maxlength' => '4', 'class' => 'form-control']) !!}</td>
+
+					<td class="dataDebut">{!! Form::select('debut[1]',$listeHeures, null) !!} </td>
+					<td class="dataFin">{!! Form::select('fin[1]',$listeHeures, null) !!} </td>
+					<td class="dataCommentaire">{!! Form::text('commentaire[1]',null, ['class' => 'form-control']) !!}</td>
+				</tr>
+				</tbody>
+			</table>
+			<br>
+			{{ $errors->first('disponibilites') }}
+		</div>
+
 		<!--    Boutons radio pour le sexe -->
 		<div class="form-group">
             {!! Form::label('sexe', '* Sexe :') !!}
@@ -127,4 +160,6 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+
+<script src="{!! asset('/js/script_arbitres.js') !!}"></script>
 @stop

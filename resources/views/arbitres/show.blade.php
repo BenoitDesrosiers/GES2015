@@ -9,6 +9,28 @@
 		<p>Numéro d'accréditation : {{ $arbitre->numero_accreditation }}</p>
 		<p>Association : {{ $arbitre->association }}</p>
 		<p>Numéro de téléphone : {{ $arbitre->numero_telephone }}</p>
+
+		@if (count($arbitre->disponibiliteArbitre) < 1)
+			<p>Disponibilités : Aucune disponibilité enregistrée</p>
+		@else
+			<p>Disponibilités :</p>
+			<table class="tableArbitre">
+				<thead>
+				<tr>
+					<th>Jour (AAAA-MM-JJ)</th>
+					<th>Heure début</th>
+					<th>Heure fin</th>
+					<th>Commentaire</th>
+				</tr>
+				</thead>
+				<tbody>
+				<?php foreach ($arbitre->disponibiliteArbitre as $dispo){
+					echo "<tr><td class='dataDate'>".$dispo->date."</td><td class='dataDebut'>".$dispo->debut."</td><td class='dataFin'>".$dispo->fin."</td><td class='dataCommentaire'>".$dispo->commentaire."</td></tr>";}?>
+				</tbody>
+			</table>
+			<br>
+		@endif
+
 		<p>Sexe :
 	        @if (!$arbitre->sexe)
 	            Masculin

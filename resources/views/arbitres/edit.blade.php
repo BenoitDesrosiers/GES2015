@@ -66,6 +66,84 @@
 			{{ $errors->first('numero_telephone') }}
 		</div>
 
+
+		<!--    Tableau d'entrées pour les disponibilités -->
+		<div class="form-group">
+			{!! Form::label('disponibilites', 'Disponibilités :') !!}
+			<br>
+			<button id="ajoutDisponibilite" class="btn btn-info" type="button" onClick="ajouterDisponibilite()">Ajouter une disponibilité</button>
+			<br>
+			<table id="tableDisponibilite" class="tableArbitre">
+				<thead>
+				<tr>
+					<th>Jour</th>
+					<th>Mois</th>
+					<th>Annee</th>
+					<th>Heure début (HH:MM)</th>
+					<th>Heure fin (HH:MM)</th>
+					<th>Commentaire</th>
+				</tr>
+				</thead>
+				<tbody >
+				<?php
+					$i = 1;
+					foreach ($arbitre->disponibiliteArbitre as $disponibilite) {
+						if($i == 1){
+				?>
+				<!-- La première rangée n'a pas de bouton pour la retirer-->
+				<tr class="rowDisponibilite">
+					<td class="dataJour">{!! Form::text('jour['.$i.']', substr($disponibilite->date,-2),['maxlength' => '2', 'class' => 'form-control']) !!}</td>
+					<td class="dataMois">{!! Form::text('mois['.$i.']',substr($disponibilite->date,-5,2), ['maxlength' => '2', 'class' => 'form-control']) !!}</td>
+					<td class="dataAnnee">{!! Form::text('annee['.$i.']',substr($disponibilite->date,0,4), ['maxlength' => '4', 'class' => 'form-control']) !!}</td>
+
+					<td class="dataDebut">{!! Form::select('debut['.$i.']',$listeHeures, $listeIndexHeuresDebut[$i]) !!}</td>
+
+					<td class="dataFin">{!! Form::select('fin['.$i.']',$listeHeures, $listeIndexHeuresFin[$i]) !!}</td>
+					<td class="dataCommentaire">{!! Form::text('commentaire['.$i.']',$disponibilite->commentaire, ['class' => 'form-control']) !!}</td>
+				</tr>
+				<?php
+					}else{
+				?>
+				<!-- Si n'est pas la première rangée, on rajoute le bouton pour enlever la rangée-->
+				<tr class="rowDisponibilite">
+					<td class="dataJour">{!! Form::text('jour['.$i.']', substr($disponibilite->date,-2),['maxlength' => '2', 'class' => 'form-control']) !!}</td>
+					<td class="dataMois">{!! Form::text('mois['.$i.']',substr($disponibilite->date,-5,2), ['maxlength' => '2', 'class' => 'form-control']) !!}</td>
+					<td class="dataAnnee">{!! Form::text('annee['.$i.']',substr($disponibilite->date,0,4), ['maxlength' => '4', 'class' => 'form-control']) !!}</td>
+
+					<td class="dataDebut">{!! Form::select('debut['.$i.']',$listeHeures, $listeIndexHeuresDebut[$i]) !!}</td>
+
+					<td class="dataFin">{!! Form::select('fin['.$i.']',$listeHeures, $listeIndexHeuresFin[$i]) !!}</td>
+					<td class="dataCommentaire">{!! Form::text('commentaire['.$i.']',$disponibilite->commentaire, ['class' => 'form-control']) !!}</td>
+					<td class="imageRetirer"><button class="btn btn-default btn-mini glyphicon glyphicon-minus"
+													 type = "button" onclick="retirerDisponibilite(this)"></button></td>
+				</tr>
+				<?php
+					}
+					$i++;
+					}
+					if($i == 1){
+				?>
+				<!-- Si l'arbitre n'a aucune disponibilité, on affiche une rangée vide (pas rentré dans le foreach-->
+				<tr class="rowDisponibilite">
+					<td class="dataJour">{!! Form::text('jour['.$i.']', null,['maxlength' => '2', 'class' => 'form-control']) !!}</td>
+					<td class="dataMois">{!! Form::text('mois['.$i.']',null, ['maxlength' => '2', 'class' => 'form-control']) !!}</td>
+					<td class="dataAnnee">{!! Form::text('annee['.$i.']',null, ['maxlength' => '4', 'class' => 'form-control']) !!}</td>
+
+					<td class="dataDebut">{!! Form::select('debut['.$i.']',$listeHeures, null) !!} </td>
+
+					<td class="dataFin">{!! Form::select('fin['.$i.']',$listeHeures,null) !!}</td>
+					<td class="dataCommentaire">{!! Form::text('commentaire['.$i.']',null, ['class' => 'form-control']) !!}</td>
+				</tr>
+				<?php
+					}
+				?>
+				</tbody>
+			</table>
+			<br>
+			{{ $errors->first('disponibilites') }}
+		</div>
+	</div>
+
 		<!--    Boutons radio pour le sexe -->
         <div class="form-group">
             {!! Form::label('sexe', '* Sexe :') !!}
@@ -132,4 +210,5 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+<script src="{!! asset('/js/script_arbitres.js') !!}"></script>
 @stop

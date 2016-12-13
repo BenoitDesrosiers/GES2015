@@ -2,6 +2,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\ArbitreRequest;
+use App\Models\DisponibiliteArbitre;
+use Carbon\Carbon;
 use View;
 use Redirect;
 use Input;
@@ -12,6 +15,7 @@ use App\Models\Region;
 use App\Models\Sport;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Le contrôleur pour les arbitres
@@ -57,7 +61,9 @@ class ArbitresController extends BaseController {
 	        $listeMois = ArbitresController::generer_liste(1, 12);
 	        $listeJours = ArbitresController::generer_liste(1, 31);
 
-			return View::make('arbitres.create', compact('regions', 'sports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+            $listeHeures = ArbitresController::generer_heures(0, 0, 23, 45);
+
+			return View::make('arbitres.create', compact('regions', 'sports', 'listeHeures', 'listeAnnees', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
 
 		} catch (Exception $e) {
             App:abort(404);
@@ -70,7 +76,7 @@ class ArbitresController extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(ArbitreRequest $request)
 	{
 		try {
 			$input = Input::all();
@@ -87,17 +93,56 @@ class ArbitresController extends BaseController {
 
             $arbitre->date_naissance = ArbitresController::construire_date($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
 			
-			if($arbitre->save()) {
-				// Association avec les sports sélectionnés
-				if (is_array(Input::get('sport'))) {
-                    $arbitre->sports()->sync(array_keys(Input::get('sport')));
-                } else {
-                    $arbitre->sports()->detach();
+			$arbitre->save();
+
+            //Association avec les disponibilités
+            $jours = Input::get('jour');
+            $mois = Input::get('mois');
+            $annees = Input::get('annee');
+            $debuts = Input::get('debut');
+            $fins = Input::get('fin');
+            $commentaires = Input::get('commentaire');
+
+            for ($i=1; $i<= count($jours); $i++){
+                /**
+                 * S'assure que le champs date est rempli avant de valider car
+                 * un arbitre n'est pas obligé des disponibilités. Toutefois,
+                 * s'il en a une, les champs doivent être validés.
+                 */
+                if($jours[$i] != '' || $mois[$i] != '' || $annees[$i] != '') {
+                    $disponibilite_arbitre = new DisponibiliteArbitre();
+
+                    $disponibilite_arbitre->date = $this->construire_date($annees[$i], $mois[$i], $jours[$i]);
+
+                    $heuresPossibles = $this->generer_heures(0,0,23,45);
+                    $heureDebut = substr($heuresPossibles[$debuts[$i]],0,2);
+                    $minutesDebut = substr($heuresPossibles[$debuts[$i]],3);
+                    $disponibilite_arbitre->debut = Carbon::createFromTime($heureDebut, $minutesDebut)->format('H:i:s');
+                    $heureFin = substr($heuresPossibles[$fins[$i]],0,2);
+                    $minutesFin = substr($heuresPossibles[$fins[$i]],3);
+                    $disponibilite_arbitre->fin = Carbon::createFromTime($heureFin, $minutesFin)->format('H:i:s');;
+                    $disponibilite_arbitre->commentaire = $commentaires[$i];
+                    $disponibilite_arbitre->arbitre()->associate($arbitre);
+                    if (!$disponibilite_arbitre->save()) {
+                        /**
+                         * Si la disponibilité n'est pas valide, on détruit
+                         * l'arbitre préalablement crée.
+                         * Si d'autres disponibilités ont été crées avant, ils sont
+                         * détruits par le "cascade" de l'arbitre
+                         */
+                        $arbitre->delete();
+                        return Redirect::back()->withInput()->withErrors($disponibilite_arbitre->validationMessages());
+                    }
                 }
-				return Redirect::action('ArbitresController@create')->with ( 'status', 'L\'arbitre a été créé.' );
-			} else {
-				return Redirect::back()->withInput()->withErrors($arbitre->validationMessages());
-			}
+            }
+
+            // Association avec les sports sélectionnés
+            if (is_array(Input::get('sport'))) {
+                $arbitre->sports()->sync(array_keys(Input::get('sport')));
+            } else {
+                $arbitre->sports()->detach();
+            }
+            return Redirect::action('ArbitresController@create')->with ( 'status', 'L\'arbitre a été créé.' );
 
 		} catch (Exception $e) {
             App:abort(404);
@@ -149,7 +194,24 @@ class ArbitresController extends BaseController {
 	        $listeMois = ArbitresController::generer_liste(1, 12);
 	        $listeJours = ArbitresController::generer_liste(1, 31);
 
-	        return View::make('arbitres.edit', compact('arbitre', 'regions', 'sports', 'listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
+            $listeHeures = ArbitresController::generer_heures(0, 0, 23, 45);
+
+            $listeIndexHeuresDebut = array();
+            $listeIndexHeuresFin = array();
+            $i = 1;
+            foreach ($arbitre->disponibiliteArbitre as $disponibilite){
+                $heureDebut = substr($disponibilite->debut, 0,2);
+                $minutesDebut = substr($disponibilite->debut, 3);
+
+                $listeIndexHeuresDebut[$i] = ($heureDebut * 4) + ($minutesDebut / 15);
+
+                $heureFin = substr($disponibilite->fin, 0,2);
+                $minutesFin = substr($disponibilite->fin, 3);
+                $listeIndexHeuresFin[$i] = ($heureFin * 4) + ($minutesFin / 15);
+                $i++;
+            }
+
+	        return View::make('arbitres.edit', compact('arbitre', 'regions', 'sports', 'listeIndexHeuresDebut', 'listeIndexHeuresFin', 'listeHeures','listeAnnees', 'anneeDefaut', 'listeMois', 'listeJours', 'anneeDefaut', 'moisDefaut', 'jourDefaut'));
 	    
 	    } catch (Exception $e) {
 	    	App:abort(404);
@@ -163,39 +225,80 @@ class ArbitresController extends BaseController {
 	 * @param  int $id l'id de l'arbitre à changer.
 	 * @return Response
 	 */
-	public function update($id)
-	{   //FIXME: meme code que store, DRY
+	public function update(ArbitreRequest $request, $id)
+	{
 		try {
+            DB::beginTransaction();
+
 			$input = Input::all();
 			$arbitre = Arbitre::findOrFail($id);
-			$arbitre->prenom = $input['prenom'];
-			$arbitre->nom = $input['nom'];
-			$arbitre->region_id = $input['region_id'];
-			$arbitre->numero_accreditation = $input['numero_accreditation'];
-			$arbitre->association = $input['association'];
-			$arbitre->numero_telephone = $input['numero_telephone'];
-			$arbitre->adresse = $input['adresse'];
-			$arbitre->sexe = $input['sexe'];
 
-	        $arbitre->date_naissance = $arbitre->date_naissance = ArbitresController::construire_date($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
-			
-			if($arbitre->save()) {
-				
-				// Association avec les sports sélectionnés
-				if (is_array(Input::get('sport'))) {
-                    $arbitre->sports()->sync(array_keys(Input::get('sport')));
-                } else {
-                    $arbitre->sports()->detach();
+            foreach ($arbitre->disponibiliteArbitre()->get() as $disponibilite){
+                $disponibilite->delete();
+            }
+
+            $arbitre->prenom = $input['prenom'];
+            $arbitre->nom = $input['nom'];
+            $arbitre->region_id = $input['region_id'];
+            $arbitre->numero_accreditation = $input['numero_accreditation'];
+            $arbitre->association = $input['association'];
+            $arbitre->numero_telephone = $input['numero_telephone'];
+            $arbitre->adresse = $input['adresse'];
+            $arbitre->sexe = $input['sexe'];
+
+            $arbitre->date_naissance = ArbitresController::construire_date($input['annee_naissance']-1, $input['mois_naissance']-1, $input['jour_naissance']-1);
+
+            $arbitre->save();
+
+            //Association avec les disponibilités
+            $jours = Input::get('jour');
+            $mois = Input::get('mois');
+            $annees = Input::get('annee');
+            $debuts = Input::get('debut');
+            $fins = Input::get('fin');
+            $commentaires = Input::get('commentaire');
+
+            for ($i=1; $i<= count($jours); $i++){
+                /**
+                 * S'assure que le champs date est rempli avant de valider car
+                 * un arbitre n'est pas obligé des disponibilités. Toutefois,
+                 * s'il en a une, les champs doivent être validés.
+                 */
+                if($jours[$i] != '' || $mois[$i] != '' || $annees[$i] != '') {
+                    $disponibilite_arbitre = new DisponibiliteArbitre();
+
+                    $disponibilite_arbitre->date = $this->construire_date($annees[$i], $mois[$i], $jours[$i]);
+
+                    $heuresPossibles = $this->generer_heures(0,0,23,45);
+                    $heureDebut = substr($heuresPossibles[$debuts[$i]],0,2);
+                    $minutesDebut = substr($heuresPossibles[$debuts[$i]],3);
+                    $disponibilite_arbitre->debut = Carbon::createFromTime($heureDebut, $minutesDebut)->format('H:i:s');
+                    $heureFin = substr($heuresPossibles[$fins[$i]],0,2);
+                    $minutesFin = substr($heuresPossibles[$fins[$i]],3);
+                    $disponibilite_arbitre->fin = Carbon::createFromTime($heureFin, $minutesFin)->format('H:i:s');;
+                    $disponibilite_arbitre->commentaire = $commentaires[$i];
+                    $disponibilite_arbitre->arbitre()->associate($arbitre);
+                    if (!$disponibilite_arbitre->save()) {
+                        DB::rollback();
+                        return Redirect::back()->withInput()->withErrors($disponibilite_arbitre->validationMessages());
+                    }
                 }
+            }
 
-				return Redirect::action('ArbitresController@index');
-			} else {
-				return Redirect::back()->withInput()->withErrors($arbitre->validationMessages());
-			}
-		} catch (Exception $e) {
-	    	App:abort(404);
-	    }
-	}
+            // Association avec les sports sélectionnés
+            if (is_array(Input::get('sport'))) {
+                $arbitre->sports()->sync(array_keys(Input::get('sport')));
+            } else {
+                $arbitre->sports()->detach();
+            }
+            DB::commit();
+            return Redirect::action('ArbitresController@edit', $arbitre->id)->with ( 'status', 'L\'arbitre a été modifié.' );
+
+        } catch (Exception $e) {
+            App:abort(404);
+        }
+
+    }
 
 
 
@@ -227,7 +330,7 @@ class ArbitresController extends BaseController {
      * @return La liste remplie
      */
 	//todo: mettre en commun avec ParticipantsController
-    private function generer_liste($debut, $n) 
+    private function generer_liste($debut, $n)
     {
         $liste = array();
         $fin = $debut+$n-1;
@@ -258,4 +361,34 @@ class ArbitresController extends BaseController {
 			return "invalide";
 		}
 	}
+
+
+    /**
+     * Génère une liste d'heures de $nb intervalles de 15min qui part à $heureDebut, $minutesDebut
+     *
+     * @param $heureDebut       int     L'heure de départ
+     * @param $minutesDebut     int     Les minutes de l'heure de départ
+     * @param $heureFin         int     L'heure de fin
+     * @param $minutesFin       int     Les minutes de l'heure de fin
+     * @return array            Liste des heures
+     */
+    private function generer_heures($heureDebut, $minutesDebut, $heureFin, $minutesFin)
+    {
+        $liste = array();
+        $i = 0;
+
+        while ($heureDebut < $heureFin || $minutesDebut <= $minutesFin){
+
+            $liste[$i] = Carbon::createFromTime($heureDebut, $minutesDebut)->format('H:i');
+
+            if ($minutesDebut == 60){
+                $heureDebut++;
+                $minutesDebut = 0;
+            }
+
+            $minutesDebut = $minutesDebut + 15;
+            $i++;
+        }
+        return $liste;
+    }
 }

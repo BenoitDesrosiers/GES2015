@@ -11,3 +11,28 @@
   justify-content:center;
   flex-flow: column wrap;
 }
+
+.tableArbitre th, .dataJour, .dataMois, .dataAnnee, .dataDebut, .dataFin,
+.dataCommentaire, .dataDate{
+  padding:5px;
+  border: 1px solid black;
+  text-align:center;
+}
+
+.dataJour, .dataMois, .dataAnnee{
+  max-width: 100px;
+}
+
+.imageRetirer{
+  padding:5px;
+  border: 1px solid black;
+  text-align:center;
+}
+
+.tableArbitre{
+  margin-top: 10px;
+}
+
+.entreeDisposArbitres{
+  width:50px;
+}
