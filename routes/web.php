@@ -34,6 +34,7 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::get ( 'ajtParticipant/{epreuveId}', 'EpreuvesController@ajtParticipant' );
 	Route::post ( 'storeParticipants/{epreuveId}', 'EpreuvesController@storeParticipants' );
 	Route::get ( 'listeParticipant/{epreuveId}', 'EpreuvesController@listeParticipant' );
+	
 	Route::get ( 'ajtBenevole/{epreuveId}', 'EpreuveController@ajtBenevole' );
 	Route::post ( 'storeBenevoles/{epreuveId}', 'EpreuvesController@storeBenevoles' );
 	Route::get ( 'listeBenevole/{epreuveId}', 'EpreuvesController@listeBenevole' );

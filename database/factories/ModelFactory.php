@@ -66,3 +66,15 @@ $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {
 			'region_id' => rand(0, 100)
 	];
 });
+
+$factory->define(App\Models\Benevole::class, function (Faker\Generator $faker) {
+	return [
+			'nom' => $faker->lastName,
+			'prenom' => $faker->firstName,
+			'adresse' => $faker->address,
+			'numTel' => $faker->phoneNumber,
+			'accreditation' => '000A123',
+			'sexe' => 'masculin',
+			'naissance' => $faker->date()
+	];
+});

@@ -15,8 +15,8 @@
 					foreach ($benevoles as $benevole) {
 						$checked = "";
 						//FIXME: se servir des fonctions de collections: $listeIds = $epreuveBenevoles->pluck('id'); ....  if($listeIds->contains($benevole->id))... 
-						foreach ($epreuveBenevoles as $epreuvePart) {
-							if ($epreuvePart->id == $benevole->id) {
+						foreach ($epreuveBenevoles as $epreuveBene) {
+							if ($epreuveBene->id == $benevole->id) {
 								$checked = " checked";
 								continue;
 							}

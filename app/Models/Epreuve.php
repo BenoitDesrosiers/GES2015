@@ -38,7 +38,7 @@ class Epreuve extends EloquentValidating {
     }
     
     public function benevoles() {
-    	return $this->belongsToMany('App\Models\Benevole');
+    	return $this->belongsToMany('App\Models\Benevole', 'benevole_epreuve', 'epreuve_id', 'benevole_id');
     }
 
 /**

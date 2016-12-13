@@ -16,7 +16,6 @@ use App\Models\Arbitre;
 use App\Models\Region;
 use App\Models\Epreuve;
 use App\Models\Participant;
-use App\Models\EpreuveParticipants;
 use App\Models\Terrain;
 
 /**
@@ -215,6 +214,12 @@ class EpreuvesController extends BaseController {
 			}
 			return Redirect::action ( 'EpreuvesController@index', array (
 									  'sportId' => $input ["sportsListe"]));
+			// Association avec les bénévoles sélectionnés
+			if (is_array(Input::get('benevole'))) {
+				$epreuve->benevoles()->sync(array_keys(Input::get('benevole')));
+			} else {
+				$epreuve->benevoles()->detach();
+			}
 		} else {
 			return Redirect::back ()->withInput ()->withErrors ( $epreuve->validationMessages () );
 		}
@@ -258,6 +263,12 @@ class EpreuvesController extends BaseController {
             	$epreuve->terrains()->sync(array_keys(Input::get('terrain')));
             } else {
             	$epreuve->terrains()->detach();
+            }
+            // Association avec les bénévoles sélectionnés
+            if (is_array(Input::get('benevole'))) {
+            	$epreuve->benevoles()->sync(array_keys(Input::get('benevole')));
+            } else {
+            	$epreuve->benevoles()->detach();
             }
 			return Redirect::action('EpreuvesController@index',array('sportId'=>$input["sportsListe"]));
 		} else {
@@ -443,11 +454,6 @@ class EpreuvesController extends BaseController {
 			$epreuve = Epreuve::findOrFail($epreuveId);
 			$sportId = $epreuve->sport->id;
 			$sports = Sport::all();
-			$arbitresEpreuves = $epreuve->arbitres;
-			$arbitres = EpreuvesController::filtrer_arbitres(Arbitre::orderBy('nom', 'asc')->get(), $arbitresEpreuves);
-			//FIXME: au lieu d'avoir une fonction pour filtrer les arbitres déjà associés à une épreuve, on peut se servir du whereNotIn
-			//       et fournir la liste des ids des arbitresEpreuves
-			//       $arbitres = Arbitre::all()->whereNotIn('id', $arbitresEpreuves->pluck('id')) ->get();
 			$sportId = $this->checkSportId($sports, $sportId);
 		} catch (ModelNotFoundException $e) {
 			App::abort(404);
@@ -473,7 +479,7 @@ class EpreuvesController extends BaseController {
 	public function listeBenevole($epreuveId) {
 		try{
 			$epreuve = Epreuve::findOrFail ( $epreuveId );
-			$benevoles = $epreuve->benevoles; //->sortBy('region_id');
+			$benevoles = $epreuve->benevoles;
 		} catch ( ModelNotFoundException $e ) {
 			App::abort ( 404 );
 		}
