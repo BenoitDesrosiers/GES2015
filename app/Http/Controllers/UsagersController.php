@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App;
 use App\Http\Requests\StoreUsager;
 use App\Http\Requests\UpdateCurrentUserRequest;
+use App\Http\Requests\UpdateUsagerRequest;
 use App\Models\Role;
 use App\User;
 use Auth;
@@ -21,7 +22,7 @@ class UsagersController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
+     * Affiche la liste des usagers.
      *
      * @return \Illuminate\Http\Response
      */
@@ -32,26 +33,29 @@ class UsagersController extends Controller
         } catch (ModelNotFoundException $e) {
             App::abort(404);
         }
-
         return View::make('users.index', compact('usagers'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Affiche un formulaire de création d'usager.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        $usagers = User::all();
-        $roles = Role::all();
+        try {
+            $usagers = User::all();
+            $roles = Role::all();
+        } catch (ModelNotFoundException $e){
+            App::abort(404);
+        }
         return View::make('users.create', compact('usagers', 'roles'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistre le tout nouveau usager dans la base de données.
      *
-     * @param StoreUsager|Request $request
+     * @param StoreUsager $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreUsager $request)
@@ -88,7 +92,7 @@ class UsagersController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Affiche les informations de l'usager.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -110,7 +114,7 @@ class UsagersController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Affiche un formulaire afin de modifier l'usager.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -132,13 +136,13 @@ class UsagersController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour l'usager dans la base de données.
      *
-     * @param StoreUsager|Request $request
+     * @param UpdateUsagerRequest $request
      * @param  int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(StoreUsager $request, $id)
+    public function update(UpdateUsagerRequest $request, $id)
     {
         try {
             if (Entrust::hasRole('admin')){
@@ -187,7 +191,8 @@ class UsagersController extends Controller
     }
 
     /**
-     *
+     * Cette fonction permet d'aller chercher le nom
+     * d'un role dans la base de données.
      *
      * @param $name
      *
@@ -204,7 +209,8 @@ class UsagersController extends Controller
 
 
     /**
-     * Show the form for editing the specified resource.
+     * Affiche un formulaire pour modifier l'usager
+     * qui est actuellement connecté.
      *
      * @return \Illuminate\Http\Response
      */
@@ -219,7 +225,8 @@ class UsagersController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour les informations de l'usager
+     * actuellement connecté.
      *
      * @param UpdateCurrentUserRequest $request
      *
@@ -233,7 +240,7 @@ class UsagersController extends Controller
             $userId = Auth::id();
 
             // On test le mot de passe avant de faire tout changement.
-            if ($this->testMotDePasse($userId, $input['old_mot_de_passe'])){
+            if ($this->testMotDePasse($userId, $input['ancien_mot_de_passe'])){
                 $usager->name = $input['nom'];
                 $usager->email = $input['courriel'];
                 $usager->password = Hash::make($input['mot_de_passe']);
@@ -252,7 +259,7 @@ class UsagersController extends Controller
     }
 
     /**
-     * Cette fonction test le mot de passe fournie, par l'usager connecté.
+     * Cette fonction test le mot de passe fourni, par l'usager connecté.
      */
     public function testMotDePasse($userId, $password){
         try{
@@ -269,7 +276,7 @@ class UsagersController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprimer l'usager de la base de données.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -285,13 +292,4 @@ class UsagersController extends Controller
         }
     }
 
-    /**
-     * @param $courriel
-     *
-     */
-    public function courriel_deja_pris($courriel){
-        $libre = false;
-
-        return $libre;
-    }
 }

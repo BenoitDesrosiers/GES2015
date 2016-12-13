@@ -36,10 +36,10 @@
             <!-- Champ de texte pour l'ancien mot de passe. -->
             <div class="form-group">
                 <!-- Ceci est un faux champs afin de contourner le auto-complete de Chrome. -->
-                <input style="display:none" type="password" name="old_mot_de_passe"/>
-                {!! Form::label('old_mot_de_passe', 'Ancien mot de passe:') !!}
-                {!! Form::password('old_mot_de_passe', ['class' => 'form-control']) !!}
-                {{ $errors->first('old_mot_de_passe') }}
+                <input style="display:none" type="password" name="ancien_mot_de_passe"/>
+                {!! Form::label('ancien_mot_de_passe', 'Ancien mot de passe:') !!}
+                {!! Form::password('ancien_mot_de_passe', ['class' => 'form-control']) !!}
+                {{ $errors->first('ancien_mot_de_passe') }}
             </div>
 
             <!-- Champ de texte pour le nouveau mot de passe -->

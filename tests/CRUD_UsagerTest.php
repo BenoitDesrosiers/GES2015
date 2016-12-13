@@ -285,7 +285,7 @@ class CRUD_UsagerTest extends TestCase
             'nom' => $usager->name,
             'courriel' => $usager->email,
             'mot_de_passe' => $usager->password,
-            'old_mot_de_passe' => $usager->password,
+            'ancien_mot_de_passe' => $usager->password,
             'role' => [
                 0 => 'employe'
             ]

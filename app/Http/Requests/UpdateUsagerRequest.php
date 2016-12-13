@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class UpdateCurrentUserRequest extends FormRequest
+class UpdateUsagerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,8 +32,8 @@ class UpdateCurrentUserRequest extends FormRequest
         return [
             'nom' => 'required|max:255',
             'courriel' => 'required|max:255',
-            'ancien_mot_de_passe' => 'required|max:60',
-            'mot_de_passe' => 'min:6|max:60|regex:/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+)$/'
+            'mot_de_passe' => 'min:6|max:60|regex:/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+)$/',
+            'role.*' => 'exists:roles,name'
         ];
     }
 
@@ -42,6 +43,7 @@ class UpdateCurrentUserRequest extends FormRequest
     public function messages()
     {
         return [
+            'courriel.unique' => 'Le courriel déjà utilisé.',
             'mot_de_passe.min' => 'Mauvais mot de passe! Longueur minimum: 6',
             'mot_de_passe.max' => 'Mauvais mot de passe! Longueur maximum: 60',
             'mot_de_passe.regex' => 'Mauvais mot de passe! Au minimum: Une lettre minuscule, une lettre majuscule et un chiffre minimum.'

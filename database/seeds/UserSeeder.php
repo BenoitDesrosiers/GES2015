@@ -10,9 +10,9 @@ class UserTableSeeder extends Seeder {
     {
         $items = [
             //Nom, email, mot de passe
-            ["Admin","admin@cegepdrummond.ca","password"],
-            ["Responsable","responsable@cegepdrummond.ca","password"],
-            ["Employe","employe@cegepdrummond.ca","password"]
+            ["Admin","admin@cegepdrummond.ca","Password1"],
+            ["Responsable","responsable@cegepdrummond.ca","Password1"],
+            ["Employe","employe@cegepdrummond.ca","Password1"]
         ];
 
 

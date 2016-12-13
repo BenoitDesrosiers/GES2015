@@ -33,7 +33,7 @@ class StoreUsager extends FormRequest
         return [
             'nom' => 'required|max:255',
             'courriel' => 'unique:users,email,'.Auth::id().'|required|max:255',
-            'mot_de_passe' => 'min:6|max:60|regex:/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+)$/',
+            'mot_de_passe' => 'required|min:6|max:60|regex:/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+)$/',
             'role.*' => 'exists:roles,name'
         ];
     }
