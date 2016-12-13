@@ -13,15 +13,20 @@ class Evenement extends Model {
 	/** 
 	 * Eloquent relationship: un événement appartient à une épreuve
 	 */
-
 	public function epreuve() {
 		return $this->belongsTo('App\Models\Epreuve');
 	}
 
+    /**
+     * Eloquent relationship: un événement a un type
+     */
 	public function type() {
 		return $this->hasOne('App\Models\TypeEvenement', 'id', 'type_id');
 	}
 
+    /**
+     * Eloquent relationship: un événement appartient à plusieurs participants
+     */
     public function participants() {
         return $this->belongsToMany('App\Models\Participant');
     }

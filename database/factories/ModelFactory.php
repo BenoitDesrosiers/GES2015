@@ -29,6 +29,7 @@ $factory->define(App\Models\Participant::class, function (Faker\Generator $faker
 		'prenom' => $faker->firstName,
 		'region_id' => factory(App\Models\Region::class)->create()->id,
 		'equipe' => 0,
+        'numero' => $faker->numberBetween(1,99),
 		'sexe' => $faker->numberBetween(0,1),
 		'naissance' => $faker->date()
 	];
@@ -36,11 +37,9 @@ $factory->define(App\Models\Participant::class, function (Faker\Generator $faker
 
 $factory->define(App\Models\Region::class, function (Faker\Generator $faker) {
 	return [
-		'nom' => $faker->lastName,
-		'tournoi' => 0,
-		'saison' => 'h'
+		'nom' => $faker->city,
+        'nom_court' => $faker->citySuffix
 	];
-
 });
 
 $factory->define(App\Models\Sport::class, function (Faker\Generator $faker) {
@@ -56,6 +55,21 @@ $factory->define(App\Models\Epreuve::class, function (Faker\Generator $faker) {
 	return [
 			'nom' => 'Simple Masculin'
 	];
+});
+
+$factory->define(App\Models\TypeEvenement::class, function (Faker\Generator $faker) {
+    return [
+        'titre' => $faker->text(20)
+    ];
+});
+
+$factory->define(App\Models\Evenement::class, function (Faker\Generator $faker) {
+    return [
+        'nom' => $faker->text(20),
+        'type_id' => factory(App\Models\TypeEvenement::class)->create()->id,
+        'date_heure' => $faker->date('Y-m-d G:i'),
+        'epreuve_id' => factory(App\Models\Epreuve::class)->create()->id
+    ];
 });
 
 $factory->define(App\Models\Terrain::class, function (Faker\Generator $faker) {

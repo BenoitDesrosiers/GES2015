@@ -28,10 +28,16 @@ class Participant extends EloquentValidating {
 		return $this->belongsToMany('App\Models\Sport', 'participant_sport', 'participant_id', 'sport_id');
 	}
 
+    /**
+     * Eloquent relationship: un participant appartient à plusieurs épreuves
+     */
 	public function epreuves() {
 		return $this->belongsToMany('App\Models\Epreuve');
 	}
 
+    /**
+     * Eloquent relationship: un participant appartient à plusieurs événements
+     */
     public function evenements() {
         return $this->belongsToMany('App\Models\Evenement', 'evenement_participant', 'participant_id', 'evenement_id');
     }

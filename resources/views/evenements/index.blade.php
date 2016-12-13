@@ -45,7 +45,7 @@
                     {{$evenement->type->titre}}
                 </td>
                 <td>
-                    <a href="{{ action('EvenementParticipantController@afficher',$evenement->id) }}" class="btn btn-info">
+                    <a href="{{ action('EvenementParticipantController@index',$evenement->id) }}" class="btn btn-info">
                         Participants
                     </a>
                 </td>
