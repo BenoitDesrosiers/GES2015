@@ -24,7 +24,7 @@
 	function afficheListeEpreuves() {
 		$.ajax({
 			type: 'POST',
-			url: '{{ action('EpreuvesController@epreuvesPourSport') }}',
+			url: {{ action('EpreuvesController@epreuvesPourSport') }},
 			data: {  _token : $('meta[name="csrf-token"]').attr('content'),
 				     sportId : document.getElementById('sportsListe').value },
 			timeout: 10000,
