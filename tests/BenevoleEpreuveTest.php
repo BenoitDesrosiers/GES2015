@@ -15,18 +15,8 @@ class BenevoleEpreuveTest extends TestCase
      */
     public function sauvegarde_d_une_liaison_entre_benevole_et_epreuve()
     {
-    	$benevole = new Benevole;
-    	$benevole->nom = "Nom Valide";
-    	$benevole->prenom = "Prenom Valide";
-    	$benevole->adresse = "Adresse Valide";
-    	$benevole->numTel = "123-123-1234";
-    	$benevole->accreditation = "Accreditation Valide";
-    	$benevole->naissance = '2000-12-25';
-    	$this->assertTrue($benevole->save());
-    	$epreuve = new Epreuve;
-    	$epreuve->nom = "Nom Valide";
-    	$epreuve->genre = "mixte";  
-    	$this->assertTrue($epreuve->save());
+    	$benevole = factory(App\Models\Benevole::class)->create();
+    	$epreuve = factory(App\Models\Epreuve::class)->create();
     	
     	$this->seeInDatabase('benevole_epreuve', [
     			'benevole_id'=>$benevole->id,
@@ -34,23 +24,5 @@ class BenevoleEpreuveTest extends TestCase
     	]);
     	
     }
-    /**
-     * 
-     *
-     * Sauvegarder les personnes dans une BD
-     */
-    public function sauvegarde_d_un_bon_modele_sans_telephone()
-    {
-    	$personne = new Personne;
-    	$personne->nom = "Nom Valide";
-    	$personne->dateNaissance = '2000-12-25';
-    	$this->assertTrue($personne->save());
-    	$this->seeInDatabase('personnes', [
-    			'id'=>$personne->id,
-    			'nom'=>$personne->nom,
-    			'dateNaissance'=>$personne->dateNaissance,
-    			'telephone'=>$personne->telephone
-    	]);
-    	 
-    }
+    
 }
